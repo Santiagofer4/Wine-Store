@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
   sequelize.define("category", {
     name: {
       // Tinto, blanco, rosado
-      type: DataTypes.ENUM(["tinto", "blanco", "rosado"]),
+      type: DataTypes.ENUM( ["tinto", "blanco", "rosado"] ),
       allowNull: false,
     },
   });

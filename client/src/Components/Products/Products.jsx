@@ -21,19 +21,7 @@ function Products(props) {
         </div>
 )}
 
-//         <img src={image} className="ProCard__img" />
-//         <CardContent className="ProCard__Container">
-//           <Typography component="h4" className="ProCard__name">
-//             {name}
-//           </Typography>
-//         </CardContent>
-//         <CardContent className="ProCard__Container">
-//           <Typography component="h4" className="ProCard__price">
-//             ${price}
-//           </Typography>
-//         </CardContent>
 
-// Pertenecer a una o más categorías.
 
 
 export default Products
