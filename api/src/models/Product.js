@@ -41,12 +41,13 @@ module.exports = (sequelize) => {
         min: 0
       },
       allowNull: false,
-    },
-    nameDesc: {
-      type: DataTypes.VIRTUAL,
-      get() {
-        return this.getDataValue('name') + ' ' + this.getDataValue('description');
-      }
     }
   });
 };
+
+
+// set: function (val) {
+//   // Remember to set the data value, otherwise it won't be validated
+//   this.setDataValue('password', val);
+//   this.setDataValue('password_hash', this.salt + val);
+// },
