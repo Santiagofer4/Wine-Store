@@ -28,12 +28,9 @@ function CategoryForm() {
     return (
     <div className='formProd'>
         <form onSubmit={(e) => {handleOnSubmit(e)}} className="SearchBar__form" noValidate autoComplete="off">
-            <TextField id={state.price ? 'accepted' : 'error'}       name='price'       label="Precio"      type='number'  onChange={(e) => {handleOnChange(e)}}/>
-            <TextField id={state.name ? 'accepted' : 'error'}        name='name'        label="Nombre"      type='string'  onChange={(e) => {handleOnChange(e)}}/>
-            <TextField id={state.price ? 'accepted' : 'error'}       name='description' label="Descripcion" type='string'  onChange={(e) => {handleOnChange(e)}}/>
-            <TextField id={state.yearHarvest ? 'accepted' : 'error'} name='yearHarvest' label="Año cosecha" type='number'  onChange={(e) => {handleOnChange(e)}}/>
-            <TextField id={state.image ? 'accepted' : 'error'}       name='image'       label="Img"         type='string'  onChange={(e) => {handleOnChange(e)}}/>
-            <TextField id={state.stock ? 'accepted' : 'error'}       name='stock'       label="Stock"       type='number'  onChange={(e) => {handleOnChange(e)}}/>
+            <TextField id={state.price ? 'accepted' : 'error'} name='price'       label="Precio"      type='number' onChange={(e) => {handleOnChange(e)}}/>
+            <TextField id={state.name ? 'accepted' : 'error'}  name='name'        label="Nombre"      type='string' onChange={(e) => {handleOnChange(e)}}/>
+            <TextField id={state.price ? 'accepted' : 'error'} name='description' label="Descripcion" type='string' onChange={(e) => {handleOnChange(e)}}/>
             <Button type="submit">Agregar</Button>
         </form>
     </div>
