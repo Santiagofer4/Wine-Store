@@ -1,0 +1,9 @@
+#error {
+    border-bottom: 2px rgb(194, 0, 0) solid !important;
+}
+#accepted  {
+    border-bottom: 2px rgb(0, 85, 14) solid !important;
+}
+.formProd {
+    margin-bottom: 20px;
+}

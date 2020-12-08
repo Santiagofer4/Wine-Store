@@ -1,0 +1,17 @@
+.ProCard__img {
+  width: 60%;
+  
+}
+.ProCards_Card {
+  margin: 20px 10px 20px 10px;
+  width: 30% !important;
+}
+.ProCard__Container {
+  height: 70px;
+}
+#Button__Card {
+  justify-content: center;
+}
+#Button__Base {
+  margin: auto;
+}
