@@ -4,5 +4,7 @@
     margin-top: 20px ;
     flex-wrap: wrap;
     justify-content: center;
-    background-color: rgba(192, 192, 192, 0.418);
+    background-image: url('https://cdn.pixabay.com/photo/2019/12/01/18/02/vineyards-4666055_960_720.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
