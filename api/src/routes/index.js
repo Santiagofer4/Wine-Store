@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { Sequelize } = require('sequelize');
+const { Sequelize, Op } = require('sequelize');
 const { Product } = require("../db.js");
 // import all routers;
 const productRouter = require("./product.js");
@@ -13,14 +13,13 @@ const router = Router();
 router.use("/products", productRouter);
 
 router.get("/search", (req, res) => {
-  console.log("Ruta de search by query");
-
+  console.log("Ruta de search by query.");
+  let { word } = req.query;
+ 
   Product.findOne({
-    where: {
-        description: {
-        [Sequelize.Op.iLike]: `%${req.query.word}%`,
-      },
-    },
+      where: {
+        [Op.or]: [{name: {[Op.like]:`%${word}%`}},{description: {[Op.like]:`%${word}%`}} ] //falta hacerlo case sensitive
+             },
   }).then((products) => {
     return res.status(200).send(products);
   }).catch(err => {
