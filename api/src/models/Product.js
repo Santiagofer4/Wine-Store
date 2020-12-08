@@ -5,7 +5,7 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('product', {
-    name: {
+    name: { // Marca + cepa
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -41,6 +41,12 @@ module.exports = (sequelize) => {
         min: 0
       },
       allowNull: false,
+    },
+    nameDesc: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return this.getDataValue('name') + ' ' + this.getDataValue('description');
+      }
     }
   });
 };
