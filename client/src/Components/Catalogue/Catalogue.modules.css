@@ -1,0 +1,8 @@
+.Catalogue__Div {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px ;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: rgba(192, 192, 192, 0.418);
+}
