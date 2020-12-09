@@ -1,14 +1,14 @@
 .SearchBar__form{
     display: flex;
     align-items: center;
-    margin-right: 20px !important;
+    margin-right: 2rem !important;
     color: white;
 }
 .SearchBar__form div div input {
     background-color: rgb(10, 10, 10);
     border: none;
-    border-bottom: 1px solid white;
-    border-right: 1px solid white;
+    border-bottom: 0.1rem solid white;
+    border-right: 0.1rem solid white;
     border-radius: 3%;
     /* border: 2px solid white !important; */
     color : white;
@@ -18,17 +18,13 @@
 }
 .SearchBar___btn{
     margin-bottom: 0px;
-    margin-top: 15px !important;
+    margin-top: 1.5rem !important;
     color: white !important;
 }
 
 #standard-secondary div :active{
-    border: 2px solid green !important;
+    border: 0.2rem solid green !important;
 }
-/* div #standard-secondary{
-    border: 2px solid green !important;
-    color: white !important;
-} */
 
 div label{
     color: white !important;

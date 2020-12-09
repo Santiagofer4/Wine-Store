@@ -4,20 +4,20 @@
   border-radius: 100%;
 }
 .ProCards_Card {
-  margin: 20px 10px 20px 10px;
+  margin: 2rem 1rem 2rem 1rem;
   width: 30% !important;
   /* opacity: 80%; */
   background:#ffffffb8 !important;
-  padding-top: 10px;
+  padding-top: 1rem;
 }
 .ProCards_Card:hover{
-  margin: 20px 10px 20px 10px;
+  margin: 2rem 1rem 2rem 1rem;
   width: 30% !important;
   background-color: white !important;
   transition: all 550ms ease-in-out; 
 }
 .ProCard__Container {
-  height: 70px;
+  height: 4rem;
 }
 #Button__Card {
   justify-content: center;
@@ -29,7 +29,3 @@
 .ProCard__opacidad{
   opacity: 80%;
 }
-/* .div{
-  background-color: black;
-  opacity: 100%;
-} */
