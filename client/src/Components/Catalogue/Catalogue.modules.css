@@ -10,5 +10,10 @@
     background-repeat: no-repeat;
     background-attachment: fixed;
     /* background-position-y: 70px; */
-    padding-top: 80px;
+    padding-top: 8rem;
+    margin-left: 20%;
+}
+
+.Catalogue__container{
+    display: flex;
 }

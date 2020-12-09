@@ -1,15 +1,11 @@
 #error {
-    border-bottom: 2px rgb(194, 0, 0) solid !important;
+    border-bottom: 0.2rem rgb(194, 0, 0) solid !important;
 }
 #accepted  {
-    border-bottom: 2px rgb(0, 85, 14) solid !important;
+    border-bottom: 0.2rem rgb(0, 85, 14) solid !important;
 }
 .formProd {
-    margin-bottom: 20px;
-    padding-top: 100px;
+    margin-bottom: 2rem;
+    padding-top: 10rem;
     background-color: white;
 }
-/* .SearchBar__form div div input{
-    background-color: white !important;
-    color: black;
-} */
