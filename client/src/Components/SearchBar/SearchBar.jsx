@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-
+import './SearchBar.modules.css'
 function SearchBar() {
   const [inputSearch, setinputSearch] = useState("");
 
   return (
     <div>
       <form onSubmit={(e) => {e.preventDefault();}} className="SearchBar__form" noValidate autoComplete="off">
-        <TextField id="standard-basic" label="Standard" onChange={(e) => { setinputSearch(e.target.value)}}/>
-        <Button type="submit">Buscar</Button>
+        <TextField id="standard-secondary" color='secondary' label="Search" onChange={(e) => { setinputSearch(e.target.value)}}/>
+        <Button type="submit" className='SearchBar___btn'>Buscar</Button>
       </form>
     </div>
   );
