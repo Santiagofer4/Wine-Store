@@ -6,4 +6,10 @@
 }
 .formProd {
     margin-bottom: 20px;
+    padding-top: 100px;
+    background-color: white;
 }
+/* .SearchBar__form div div input{
+    background-color: white !important;
+    color: black;
+} */

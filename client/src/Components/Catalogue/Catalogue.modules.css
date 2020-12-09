@@ -1,10 +1,14 @@
 .Catalogue__Div {
     display: flex;
     flex-direction: row;
-    margin-top: 20px ;
+    /* margin-top: 20px ; */
     flex-wrap: wrap;
     justify-content: center;
-    background-image: url('https://cdn.pixabay.com/photo/2019/12/01/18/02/vineyards-4666055_960_720.jpg');
+    /* background-image: url('https://image.freepik.com/foto-gratis/bodega_181624-1264.jpg'); */
+    background-image: url('../../bodega_181624-1264Resized.jpg');
     background-size: cover;
     background-repeat: no-repeat;
+    background-attachment: fixed;
+    /* background-position-y: 70px; */
+    padding-top: 80px;
 }
