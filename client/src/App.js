@@ -7,11 +7,14 @@ import {productsList} from './Components/Products/ProductoPrueba.js'
 import Products from './Components/Products/Products.jsx'
 import { Route } from "react-router-dom";
 import NavBar from './Components/SearchBar/NavBar.jsx'
+import Inicio from './Components/Inicio/Inicio.jsx'
+
 function App() {
   return (
     <div className="App">
         <NavBar></NavBar>
       <Route path='/catalogue' component={Catalogue}></Route>
+      <Route path='/' component={Inicio}></Route>
       <Route path='/product' render={()=> <Products data={productsList} /> }/>
       <Route path='/admin/form-product' component={ProductForm}/>
 
