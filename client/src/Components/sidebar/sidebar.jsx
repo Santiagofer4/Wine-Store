@@ -20,7 +20,7 @@ function Sidebar () {
           console.log('este es el error', err)
           return err;
         })
-    }, [list] )
+    }, [] ) // Le dejo el array vacío para que busque solo en el mount
 
 
     if(list) {

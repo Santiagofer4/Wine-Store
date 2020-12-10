@@ -17,14 +17,12 @@ function Catalogue() {
     axios.get('http://localhost:3000/products')
       .then(productList => {
        setList (productList.data);
-       // console.log('array completo',list)
-       // return productList.data;
       })
       .catch(err => {
         console.log('este es el error', err)
         return err;
       })
-  }, [list] )
+  }, [] ) // Le dejo el array vacío para que busque solo en el mount
      
     console.log('array completo',list)
 
