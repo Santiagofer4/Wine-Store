@@ -1,5 +1,6 @@
 .ProCard__img {
-  width: 60%;
+  width: 60%; 
+  height: 400px;
   background-color: rgb(17, 16, 16);
   border-radius: 100%;
 }
@@ -29,3 +30,8 @@
 .ProCard__opacidad{
   opacity: 80%;
 }
+
+/* #Product__img{
+  width: 200px;
+  height: 350px;
+} */
