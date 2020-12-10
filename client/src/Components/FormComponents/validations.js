@@ -11,11 +11,12 @@ export const validationSchema = yup.object({
     .min(2, 'Nombre de bodega muy corto')
     .max(50, 'Nombre de bodega muy largo')
     .required('Bodega requerida'),
-  //   strain: yup
-  //     .string()
-  //     .min(2, 'Strain Name too short')
-  //     .max(100, 'Strain Name to long')
-  //     .required('Strain Name of wine is required'),
+  strain: yup
+    .string()
+    .min(2, 'Strain Name too short')
+    .max(100, 'Strain Name to long')
+    .required('Strain Name of wine is required'),
+  type: yup.string().required('Debe seleccionar un tipo'),
   //   year: yup
   //     .number('Harvest year must be a number')
   //     .min(4)

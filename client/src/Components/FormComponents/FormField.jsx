@@ -4,6 +4,7 @@ import TextareaField from './FieldComponents/TextareaField.jsx';
 import SelectField from './FieldComponents/SelectField.jsx';
 import CheckboxField from './FieldComponents/CheckboxField.jsx';
 import SwitchField from './FieldComponents/SwitchField.jsx';
+import RadioGroupField from './FieldComponents/RadioGroupField.jsx';
 
 function FormField(props) {
   const { fieldType, ...rest } = props;
@@ -18,7 +19,8 @@ function FormField(props) {
       return <CheckboxField {...rest} />;
     case 'switch':
       return <SwitchField {...rest} />;
-
+    case 'radio':
+      return <RadioGroupField {...rest} />;
     default:
       return null;
   }
