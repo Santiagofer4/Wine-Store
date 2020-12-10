@@ -16,7 +16,7 @@ router.get("/search", (req, res) => {
   console.log("Ruta de search by query.");
   let { word } = req.query;
  
-  Product.findOne({
+  Product.findAll({
       where: {
         [Op.or]: [{name: {[Op.like]:`%${word}%`}},{description: {[Op.like]:`%${word}%`}} ] //falta hacerlo case sensitive
              },
