@@ -13,9 +13,9 @@
     /* border: 2px solid white !important; */
     color : white;
 }
-.MuiInput-colorSecondary.MuiInput-underline:after{
+/* .MuiInput-colorSecondary.MuiInput-underline:after{
     border-bottom-color: white !important;
-}
+} */
 .SearchBar___btn{
     margin-bottom: 0px;
     margin-top: 1.5rem !important;
@@ -26,6 +26,6 @@
     border: 0.2rem solid green !important;
 }
 
-div label{
+/* div label{
     color: white !important;
-}
+} */

@@ -1,0 +1,16 @@
+.MuiMobileStepper-root {
+    background-color: black !important;
+    
+}
+
+.color__cremita {
+    color: #be9063 !important;
+}
+
+.MuiMobileStepper-dot {
+    background-color: #be9063 !important;
+}
+
+.MuiMobileStepper-dotActive {
+    background-color: #525b56 !important;
+}
