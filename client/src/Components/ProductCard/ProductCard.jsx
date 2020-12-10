@@ -14,7 +14,7 @@ function ProductCard(props) {
   return (
     <Card className='ProCards_Card' >
 
-      <img src={image}  className="ProCard__img"/>
+      <img src={image} id="Product__img" className="ProCard__img"/>
 <div className=''>
       <CardContent className="ProCard__Container">
         <Typography component="h4" className="ProCard__name">
@@ -25,6 +25,8 @@ function ProductCard(props) {
         <Typography component="h4" className="ProCard__price">
           ${price}
         </Typography>
+
+    
       </CardContent>
       <CardActions id='Button__Card'>
         <Button id='Button__Base' >Comprar</Button>
