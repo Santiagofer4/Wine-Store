@@ -25,6 +25,8 @@ function ProductCard(props) {
         <Typography component="h4" className="ProCard__price">
           ${price}
         </Typography>
+
+    
       </CardContent>
       <CardActions id='Button__Card'>
         <Button id='Button__Base' >Comprar</Button>

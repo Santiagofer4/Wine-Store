@@ -7,13 +7,18 @@ import Typography from "@material-ui/core/Typography";
 import CardActions from "@material-ui/core/CardActions";
 import "./Inicio.modules.css";
 import Carrousel from '../Carrousel/Carrousel.jsx'
+import Contenido from "../Contenido/Contenido.jsx";
 
 // Recibe props con Products.info
 
 function Inicio(props) {
-  
+
   return (
-   <center><Carrousel></Carrousel></center> 
+    <div>
+      <Carrousel></Carrousel>
+      <Contenido></Contenido>
+
+    </div>
   );
 }
 

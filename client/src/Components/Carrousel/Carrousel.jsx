@@ -3,6 +3,7 @@ import { makeStyles, useTheme, MobileStepper, Paper, Typography, Button } from "
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@material-ui/icons";
+import './Carrousel.modules.css';
 
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
@@ -10,23 +11,23 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const tutorialSteps = [
   {
       imgPath:
-      "https://cdn.discordapp.com/attachments/785850776035524649/786586596157423686/vino-tinto_144627-33208.jpg"
+      "https://ibiza.vilavins.com/images/blog/el-mundo-del-vino/la-ciencia-en-tu-copa/guardar-o-abrir/reliquias-del-almacen.jpg"
   },
   {
     
     imgPath:
-      "https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60"
+      "https://ibiza.vilavins.com/images/blog/el-mundo-del-vino/la-ciencia-en-tu-copa/guardar-o-abrir/conservacion-del-vino.jpg"
   },
   {
    
     imgPath:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250&q=80"
+      "https://ibiza.vilavins.com/images/blog/el-mundo-del-vino/la-ciencia-en-tu-copa/guardar-o-abrir/el-envejecimiento.jpg"
   }
 ];
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100vw",
+    width: "100%", // cambie de 100vw
   
     textAlign: "center",
   },
@@ -38,9 +39,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default
   },
   img: {
-    height: 255,
+    height: "25vw",
     display: "block",
-    maxWidth: 400,
     overflow: "hidden",
     width: "100%"
   }
@@ -53,11 +53,19 @@ function Carrousel() {
   const maxSteps = tutorialSteps.length;
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if(activeStep === 2) {
+      setActiveStep((prevActiveStep) => prevActiveStep = 0)
+    } else {
+      setActiveStep(prevActiveStep => prevActiveStep + 1);
+    }
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    if(activeStep === 0) {
+      setActiveStep((prevActiveStep) => prevActiveStep = 2)
+    } else {
+      setActiveStep(prevActiveStep => prevActiveStep - 1);
+    }
   };
 
   const handleStepChange = (step) => {
@@ -95,10 +103,11 @@ function Carrousel() {
         nextButton={
           <Button
             size="small"
+            className="color__cremita"
             onClick={handleNext}
-            disabled={activeStep === maxSteps - 1}
+           // disabled={activeStep === maxSteps - 1}
           >
-            Next
+            
             {theme.direction === "rtl" ? (
               <KeyboardArrowLeft />
             ) : (
@@ -107,13 +116,18 @@ function Carrousel() {
           </Button>
         }
         backButton={
-          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+          <Button 
+          size="small" 
+          className="color__cremita" 
+          onClick={handleBack} 
+          //disabled={activeStep === 0}
+          >
             {theme.direction === "rtl" ? (
               <KeyboardArrowRight />
             ) : (
               <KeyboardArrowLeft />
             )}
-            Back
+            
           </Button>
         }
       />
