@@ -10,6 +10,15 @@ server.get("/", (req, res, next) => {
     .catch(next);
 });
 
+server.get("/category", (req, res, next) => {
+	console.log('GET a categorys')
+  Category.findAll()
+    .then((cat) => {
+      res.send(cat);
+    })
+    .catch(next);
+});
+
 server.get("/category/:nameCat", (req, res) => {
   let { nameCat } = req.params;
   

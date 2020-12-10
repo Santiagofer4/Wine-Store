@@ -1,5 +1,9 @@
 .App {
   text-align: center;
+  background-image: url('./bodega_181624-1264Resized.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .App-logo {
