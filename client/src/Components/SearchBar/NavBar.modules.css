@@ -6,7 +6,15 @@ li{
     padding-bottom: 0.5rem;
     color: white;
 }
+
 li:hover{
+    height: 1.9rem;
+    border-bottom: 0.2rem solid rgb(14, 13, 13);
+    font-weight: 500;
+    color: rgb(112, 107, 107);
+}
+
+li  a:hover{
     height: 1.9rem;
     border-bottom: 0.2rem solid rgb(14, 13, 13);
     font-weight: 500;
