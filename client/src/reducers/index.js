@@ -1,11 +1,11 @@
-import { GET_PRODUCT_SEARCH } from "../actions/actions";
+import { GET_PRODUCT_SEARCH, GET_PRODUCTS_LIST } from "../actions/actions";
 
 const initialState = {
   wineList: [],
   allProducts: [],
   wineDetail: {},
   search: "",
-};
+  };
 
 const reducers = (state = initialState, action) => {
   switch (action.type) {
@@ -15,6 +15,12 @@ const reducers = (state = initialState, action) => {
             ...state,
             wineList: action.payload
         }
+        case GET_PRODUCTS_LIST:
+          console.log("GET_PRODUCTS_LIST", action.payload);
+          return {
+            ...state,
+            allProducts: action.payload
+          }
   }
 };
 

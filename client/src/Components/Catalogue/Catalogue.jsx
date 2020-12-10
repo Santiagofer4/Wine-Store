@@ -6,8 +6,11 @@ import "./Catalogue.modules.css";
 import Sidebar from "../sidebar/sidebar.jsx";
 // import axios from "axios";
 import { connect } from "react-redux";
+import { getProductsList } from "../../actions"
+
 
 function Catalogue(props) {
+
   // const [ list, setList] = useState([]);
   // useEffect(() => {
   //   axios.get('http://localhost:3000/products')
@@ -21,17 +24,22 @@ function Catalogue(props) {
   // }, [] ) // Le dejo el array vacío para que busque solo en el mount
   //   console.log('array completo',list)
 
-  console.log("PROPS EN CATALOGUE", props);
-  let list = props.wineList;
+  console.log("PROPS EN CATALOGUE", props.allProducts.data);
+ 
 
-  if (list.length > 0) {
-    console.log("array completo 1", list);
+  if (props.allProducts.length === 0) {
+    console.log('ENTRÉ')
+    props.getProductsList()
+  }
+
+  if (props.allProducts) {
+   
     return (
       <div className="Catalogue__container">
         <Sidebar></Sidebar>
         <div className="Catalogue__Div">
-          {console.log("posicion 1", list[0])}
-          {list.map((product, index) => {
+          {console.log('que mierda hay acá??', props.allProducts)}
+          {props.allProducts.data.map((product, index) => {
             return <ProductCard data={product} key={index} />;
           })}
         </div>
@@ -43,7 +51,10 @@ function Catalogue(props) {
 }
 
 function mapStateToProps(state) {
-  return { wineList: state.wineList };
+ // console.log('que soy?',state)
+  return { 
+    allProducts: state ? state.allProducts : []
+  };
 }
 
-export default connect(mapStateToProps)(Catalogue);
+export default connect(mapStateToProps,{getProductsList})(Catalogue);
