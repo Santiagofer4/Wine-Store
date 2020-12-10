@@ -1,0 +1,1 @@
+export const GET_PRODUCT_SEARCH = "GET_PRODUCT_SEARCH";
