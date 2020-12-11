@@ -1,0 +1,17 @@
+.AdminPanel {
+  background-color: blue;
+}
+.AdminPanel__Panel {
+  padding: 1rem;
+}
+.AdminPanel__Title {
+  padding-top: 8rem;
+  padding-bottom: 1rem;
+  color: blue;
+}
+
+.AdminPanel__Form {
+  background-color: rgb(204, 204, 204);
+  padding-top: 1rem;
+  padding-bottom: 3rem;
+}

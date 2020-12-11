@@ -2,8 +2,9 @@ const server = require("express").Router();
 const { Product, Category, User } = require("../db.js");
 const { Sequelize } = require('sequelize');
 
-server.get("/", (req, res, next) => {
-	console.log('GET a productos')
+
+server.get('/', (req, res, next) => {
+  console.log('GET a productos');
   Product.findAll()
     .then((products) => {
       res.send(products);
@@ -11,8 +12,8 @@ server.get("/", (req, res, next) => {
     .catch(next);
 });
 
-server.get("/category", (req, res, next) => {
-	console.log('GET a categorys')
+server.get('/category', (req, res, next) => {
+  console.log('GET a categorys');
   Category.findAll()
     .then((cat) => {
       res.send(cat);
@@ -20,10 +21,10 @@ server.get("/category", (req, res, next) => {
     .catch(next);
 });
 
-server.get("/category/:nameCat", (req, res) => {
+server.get('/category/:nameCat', (req, res) => {
   let { nameCat } = req.params;
-  
-  console.log("entré a filtro por categoría");
+
+  console.log('entré a filtro por categoría');
 
   if (nameCat) {
     Category.findAll({
@@ -34,62 +35,68 @@ server.get("/category/:nameCat", (req, res) => {
       return res.send(cat);
     });
   } else {
-    return res.status(404).send("No existe la categoría");
+    return res.status(404).send('No existe la categoría');
   }
 });
 
 
+
 server.get("/:id", (req, res) => {
+
   let { id } = req.params;
-  
-  console.log("entré a filtro por id");
+
+  console.log('entré a filtro por id');
 
   if (id) {
     Product.findByPk(id).then((product) => {
       return res.send(product);
     });
   } else {
-    return res.status(404).send("No existe el producto");
+    return res.status(404).send('No existe el producto');
   }
 });
 
-server.put("/:id", (req, res) => {
+server.put('/:id', (req, res) => {
   let { id } = req.params;
   let { name, price, description, yearHarvest, image, stock } = req.body;
-  
-  console.log("modifico producto");
+
+  console.log('modifico producto');
 
   if (id) {
     Product.update(
       { name, price, description, yearHarvest, image, stock },
       { where: { id } }
     ).then(() => {
-      return res.status(200).send("El producto ha sido actualizado");
+      return res.status(200).send('El producto ha sido actualizado');
     });
   } else {
-    return res.status(400).send("El producto no existe");
+    return res.status(400).send('El producto no existe');
   }
 });
 
-server.put("/category/:id", (req, res) => {
+server.put('/category/:id', (req, res) => {
   let { id } = req.params;
-  
-  console.log("Modifico categoría");
+
+  console.log('Modifico categoría');
 
   if (id) {
+
     Category.update({ taste }, { where: { id } }).then(() => {
       return res.status(200).send("Se ha modificado la categoría");
+
     });
   } else {
-    return res.status(400).send("La categoría no existe");
+    return res.status(400).send('La categoría no existe');
   }
 });
+
 
 
 server.delete("/:id", (req, res) => {
+
   let { id } = req.params;
-  
-  console.log("elimino un producto");
+
+  console.log('elimino un producto');
 
   if (id) {
     Product.destroy({
@@ -100,14 +107,14 @@ server.delete("/:id", (req, res) => {
       return res.status(200);
     });
   } else {
-    return res.status(400).send("No se encontró el producto a eliminar");
+    return res.status(400).send('No se encontró el producto a eliminar');
   }
 });
 
-server.delete("/category/:id", (req, res) => {
+server.delete('/category/:id', (req, res) => {
   let { id } = req.params;
-  
-  console.log("entré a borrar categoría");
+
+  console.log('entré a borrar categoría');
 
   if (id) {
     Category.destroy({
@@ -118,7 +125,7 @@ server.delete("/category/:id", (req, res) => {
       return res.status(200);
     });
   } else {
-    return res.status(400).send("No existe la categoría");
+    return res.status(400).send('No existe la categoría');
   }
 });
 
@@ -170,7 +177,7 @@ Product.create({
 server.post("/category", (req, res) => {
   let { taste } = req.body;
 
-  console.log('Creo o modifico categoría')
+  console.log('Creo o modifico categoría');
 
   if (taste) {
     Category.findOrCreate({
@@ -181,22 +188,22 @@ server.post("/category", (req, res) => {
         taste,
       },
     }).then((category) => {
-      return res.status(200).send("La categoría ha sido creada");
+      return res.status(200).send('La categoría ha sido creada');
     });
   } else {
     return res.status(400);
   }
 });
 
-server.post("/:idProduct/category/:idCategory", (req, res) => {
+server.post('/:idProduct/category/:idCategory', (req, res) => {
   let { idProduct, idCategory } = req.params;
-  
-  console.log("actualizo categoría de producto");
+
+  console.log('actualizo categoría de producto');
 
   if (idProduct && idCategory) {
     Product.findByPk(idProduct).then((product) => {
       product.idCategory = idCategory;
-      return res.send("Se actualizó la categoría");
+      return res.send('Se actualizó la categoría');
     });
   } else {
     return res.status(400);
