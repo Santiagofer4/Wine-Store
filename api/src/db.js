@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Sequelize, BelongsTo, BelongsToMany } = require('sequelize');
+const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const {
@@ -34,8 +34,8 @@ const { Product, Category, User, Strain, Brand, Cellar, Order, OrderList } = seq
 
 // Aca vendrian las relaciones
 
-Product.belongsTo(Category);
-Category.hasMany(Product);
+Product.belongsToMany(Category, { through: 'Prod_Cat' });
+Category.belongsToMany(Product, { through: 'Prod_Cat' });
 
 // Product.belongsTo(Strain);
 // Strain.hasMany(Product);
