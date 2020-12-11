@@ -28,7 +28,7 @@ server.get("/category/:nameCat", (req, res) => {
   if (nameCat) {
     Category.findAll({
       where: {
-        name: nameCat,
+        taste: nameCat,
       },
     }).then((cat) => {
       return res.send(cat);
@@ -77,7 +77,7 @@ server.put("/category/:id", (req, res) => {
   console.log("Modifico categoría");
 
   if (id) {
-    Category.update({ name }, { where: { id } }).then(() => {
+    Category.update({ taste }, { where: { id } }).then(() => {
       return res.status(200).send("Se ha modificado la categoría");
     });
   } else {
