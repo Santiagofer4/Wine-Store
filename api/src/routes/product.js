@@ -37,6 +37,7 @@ server.get("/category/:nameCat", (req, res) => {
   }
 });
 
+
 server.get("/:id", (req, res) => {
   let { id } = req.params;
   
@@ -82,6 +83,7 @@ server.put("/category/:id", (req, res) => {
     return res.status(400).send("La categoría no existe");
   }
 });
+
 
 server.delete("/:id", (req, res) => {
   let { id } = req.params;

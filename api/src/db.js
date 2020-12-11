@@ -34,25 +34,25 @@ const { Product, Category, User, Strain, Brand, Cellar, Order, OrderList } = seq
 
 // Aca vendrian las relaciones
 
-// Product.BelongsTo(Category);
-// Category.hasMany(Product);
+Product.belongsTo(Category);
+Category.hasMany(Product);
 
-// Product.BelongsTo(Strain);
+// Product.belongsTo(Strain);
 // Strain.hasMany(Product);
 
-// Product.BelongsTo(Brand);
+// Product.belongsTo(Brand);
 // Brand.hasMany(Product);
 
-// Brand.BelongsTo(Cellar);
+// Brand.belongsTo(Cellar);
 // Cellar.hasMany(Brand);
 
 // Order.hasMany(OrderList);
-// OrderList.BelongsTo(Order);
+// OrderList.belongsTo(Order);
 
 // User.hasMany(Order);
-// Order.BelongsTo(User);
+// Order.belongsTo(User);
 
-// Product.BelongsToMany(Order, { througth: OrderList })
+// Product.belongsToMany(Order, { througth: OrderList })
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

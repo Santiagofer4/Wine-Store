@@ -10,7 +10,6 @@ function SearchBar(props) {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log('inputSearch', inputSearch);
     props.getProductSearch(inputSearch);
   }
 
