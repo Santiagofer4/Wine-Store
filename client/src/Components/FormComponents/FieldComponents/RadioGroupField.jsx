@@ -8,32 +8,46 @@ import {
   FormHelperText,
 } from '@material-ui/core';
 
-function RadioGroupField({ name, label, labelPlacement, options, ...props }) {
+function RadioGroupField({
+  name,
+  label,
+  labelPlacement,
+  options,
+  radioProps,
+  ...props
+}) {
+  const handleChange = (e) => {
+    // console.log('RADIO CHANGE',form.error)
+    console.log(e);
+  };
+
   return (
-    <FormControl component="fieldset">
-      <Field name={name}>
-        {({ field, meta, form }) => {
-          return (
-            <>
-              <RadioGroup {...field} {...props}>
-                {options.map((option, idx) => (
-                  <FormControlLabel
-                    key={idx}
-                    label={option.label}
-                    value={option.value}
-                    control={<Radio />}
-                    labelPlacement={labelPlacement || 'start'}
-                  />
-                ))}
-              </RadioGroup>
-              <FormHelperText>
-                {form.errors && form.errors[name]}
-              </FormHelperText>
-            </>
-          );
-        }}
-      </Field>
-    </FormControl>
+    <Field name={name}>
+      {({ field, meta, form }) => {
+        return (
+          <FormControl
+            name={name}
+            component="fieldset"
+            error={form.errors && form.errors[name]}
+          >
+            {console.log('FIELD', field, 'META', meta, 'FORM', form)}
+            <RadioGroup {...field} {...props}>
+              {options.map((option, idx) => (
+                <FormControlLabel
+                  key={idx}
+                  label={option.label}
+                  value={option.value}
+                  control={<Radio {...radioProps} />}
+                  labelPlacement={labelPlacement || 'start'}
+                  onChange={handleChange}
+                />
+              ))}
+            </RadioGroup>
+            <FormHelperText>{form.errors && form.errors[name]}</FormHelperText>
+          </FormControl>
+        );
+      }}
+    </Field>
   );
 }
 
