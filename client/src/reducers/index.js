@@ -16,12 +16,13 @@ const reducers = (state = initialState, action) => {
             wineList: action.payload
         }
         case GET_PRODUCTS_LIST:
-          console.log("GET_PRODUCTS_LIST", action.payload);
+          console.log('datos payload', action.payload)
+          console.log("GET_PRODUCTS_LIST datos", state);
           return {
-            ...state,
-            allProducts: action.payload
-          }
+            ...state, 
+            allProducts: [action.payload]}
   }
+
 };
 
 export default reducers;

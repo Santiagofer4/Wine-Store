@@ -24,22 +24,22 @@ function Catalogue(props) {
   // }, [] ) // Le dejo el array vacío para que busque solo en el mount
   //   console.log('array completo',list)
 
-  console.log("PROPS EN CATALOGUE", props.allProducts.data);
+  console.log("PROPS EN CATALOGUE", props.allProducts);
  
 
   if (props.allProducts.length === 0) {
-    console.log('ENTRÉ')
+  
     props.getProductsList()
   }
 
-  if (props.allProducts) {
+  if (props.allProducts.length !== 0) {
    
     return (
       <div className="Catalogue__container">
         <Sidebar></Sidebar>
         <div className="Catalogue__Div">
           {console.log('que mierda hay acá??', props.allProducts)}
-          {props.allProducts.data.map((product, index) => {
+          {props.allProducts[0].data.map((product, index) => {
             return <ProductCard data={product} key={index} />;
           })}
         </div>
