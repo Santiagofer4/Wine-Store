@@ -9,6 +9,9 @@ import './TestForm.modules.css';
 const initialValues = {
   product: '',
   cellar: '',
+  strain: '',
+  wine_types: '',
+  isPremium: false,
 };
 const wine_types = [
   {
@@ -51,7 +54,6 @@ function Test() {
   const handleSubmit = (values, onSubmitProps) => {
     console.log('<----- SUBMITING FORM ----->');
     setTimeout(() => {
-      onSubmitProps.setSubmitting(true);
       console.log('VALORES SUBMITEADOS', values);
       onSubmitProps.resetForm();
     }, 2000);
@@ -91,6 +93,16 @@ function Test() {
   //? Todos los parametros opcionales que pueden pasarse a un Field de MUI, del mismo tipo a renderizar,
   //? pueden ser pasados como props adicionales.
 
+  //Proceso de submit:
+  //1. `field.touched=true` para todos los fields con `initialValues` [!IMPORTANTE SETEAR TODOS LOS initialValues]
+  //2. `setSubmitting=true`, se puede acceder a esta func desde onSubmitProps
+  //3. `submitCount+=1`, se incrementa submitCount, tambien se puede acceder desde onSubmitProps
+  //4. `isValidating=true`. Se corren todas las validaciones `field-level` y las validaciones del
+  //`validationSchema` de forma asincrona
+  // 4.1. Si hay un Error de validacion, `isValidating=false`, `errors.name=ERROR_NAME` y `isSubmiting=false`
+  // 4.2 Si NO hay error, `isValidating=false` y se procede al submit.
+  //5. Corre el codigo del submit handler
+
   return (
     <Paper className="TestForm">
       <h3>TEST FORM ONE OF EACH</h3>
@@ -114,11 +126,10 @@ function Test() {
                 label="Strain"
                 name="strain"
                 options={strains}
-                margin="normal"
               />
               <FormField
                 fieldType="switch"
-                label="Premium"
+                label="Is Premium"
                 name="isPremium"
                 color="primary"
               />
