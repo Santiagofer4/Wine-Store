@@ -33,24 +33,24 @@ sequelize.models = Object.fromEntries(capsEntries);
 const { Product, Category, User, Strain, Brand, Cellar, Order, OrderList } = sequelize.models;
 
 // Aca vendrian las relaciones
-//Product.hasMany(Reviews);
-Product.BelongsTo(Category);
-Category.hasMany(Product);
 
-Product.BelongsTo(Strain);
-Strain.hasMany(Product);
+// Product.BelongsTo(Category);
+// Category.hasMany(Product);
 
-Product.BelongsTo(Brand);
-Brand.hasMany(Product);
+// Product.BelongsTo(Strain);
+// Strain.hasMany(Product);
 
-Brand.BelongsTo(Cellar);
-Cellar.hasMany(Brand);
+// Product.BelongsTo(Brand);
+// Brand.hasMany(Product);
 
-Order.hasMany(OrderList);
-OrderList.BelongsTo(Order);
+// Brand.BelongsTo(Cellar);
+// Cellar.hasMany(Brand);
 
-User.hasMany(Order);
-Order.BelongsTo(User);
+// Order.hasMany(OrderList);
+// OrderList.BelongsTo(Order);
+
+// User.hasMany(Order);
+// Order.BelongsTo(User);
 
 // Product.BelongsToMany(Order, { througth: OrderList })
 
