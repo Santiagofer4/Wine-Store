@@ -1,28 +1,7 @@
-import { GET_PRODUCT_SEARCH, GET_PRODUCTS_LIST } from "../actions/actions";
+import { combineReducers } from 'redux';
+import productReducers from './productReducers.js';
+import formReducers from './formReducers.js';
 
-const initialState = {
-  wineList: [],
-  allProducts: [],
-  wineDetail: {},
-  search: "",
-  };
+const rootReducer = combineReducers({ productReducers, formReducers });
 
-const reducers = (state = initialState, action) => {
-  switch (action.type) {
-    case GET_PRODUCT_SEARCH:
-        console.log('reducer', action.payload);
-        return {
-            ...state,
-            wineList: action.payload
-        }
-        case GET_PRODUCTS_LIST:
-          console.log('datos payload', action.payload)
-          console.log("GET_PRODUCTS_LIST datos", state);
-          return {
-            ...state, 
-            allProducts: [action.payload]}
-  }
-
-};
-
-export default reducers;
+export default rootReducer;

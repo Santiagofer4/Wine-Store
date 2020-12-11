@@ -24,8 +24,8 @@ function SelectField({
 }) {
   const useStyles = makeStyles((theme) => ({
     formControl: {
-      // margin: theme.spacing(1),
-      minWidth: minWidth || label.length * 12,
+      margin: theme.spacing(1),
+      minWidth: minWidth || label.length * 10 + 20,
     },
   }));
   const classes = useStyles();
