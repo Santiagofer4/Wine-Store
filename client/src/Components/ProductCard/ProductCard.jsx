@@ -40,23 +40,3 @@ export default ProductCard;
 
 // Este componente es una tarjeta donde tiene la información básica del Producto.
 // Nos va a servir para ser usado en el componente Catálogo.
-
-{/* <Card className='ProCards_Card' >
-<div className='ProCard__div'>
-
-<img src={image}  className="ProCard__img"/>
-</div>
-<CardContent className="ProCard__Container">
-  <Typography component="h4" className="ProCard__name">
-    {name}
-  </Typography>
-</CardContent>
-<CardContent className="ProCard__Price">
-  <Typography component="h4" className="ProCard__price">
-    ${price}
-  </Typography>
-</CardContent>
-<CardActions id='Button__Card'>
-  <Button id='Button__Base' >Comprar</Button>
-</CardActions>
-</Card> */}
