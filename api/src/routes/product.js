@@ -1,5 +1,7 @@
-const server = require('express').Router();
-const { Product, Category, User } = require('../db.js');
+const server = require("express").Router();
+const { Product, Category, User } = require("../db.js");
+const { Sequelize } = require('sequelize');
+
 
 server.get('/', (req, res, next) => {
   console.log('GET a productos');
@@ -27,7 +29,7 @@ server.get('/category/:nameCat', (req, res) => {
   if (nameCat) {
     Category.findAll({
       where: {
-        name: nameCat,
+        taste: nameCat,
       },
     }).then((cat) => {
       return res.send(cat);
@@ -37,7 +39,10 @@ server.get('/category/:nameCat', (req, res) => {
   }
 });
 
-server.get('/:id', (req, res) => {
+
+
+server.get("/:id", (req, res) => {
+
   let { id } = req.params;
 
   console.log('entré a filtro por id');
@@ -75,15 +80,20 @@ server.put('/category/:id', (req, res) => {
   console.log('Modifico categoría');
 
   if (id) {
-    Category.update({ name }, { where: { id } }).then(() => {
-      return res.status(200).send('Se ha modificado la categoría');
+
+    Category.update({ taste }, { where: { id } }).then(() => {
+      return res.status(200).send("Se ha modificado la categoría");
+
     });
   } else {
     return res.status(400).send('La categoría no existe');
   }
 });
 
-server.delete('/:id', (req, res) => {
+
+
+server.delete("/:id", (req, res) => {
+
   let { id } = req.params;
 
   console.log('elimino un producto');
@@ -119,48 +129,63 @@ server.delete('/category/:id', (req, res) => {
   }
 });
 
-server.post('/', (req, res) => {
-  let { name, price, description, yearHarvest, image, stock } = req.body;
+// server.post("/", (req, res) => {
+//   let { name, price, description, yearHarvest, image, stock } = req.body;
 
-  console.log('POST: /products');
+//   console.log("entré a post products");
 
-  Product.findOrCreate({
-    where: {
-      name,
-    },
-    defaults: {
-      name,
-      price,
-      description,
-      yearHarvest,
-      image,
-      stock: 0,
-    },
-  })
-    //* [Flavio] Agregue al return el objeto producto y un status 500 si falla
-    .then((product) => {
-      // Asignar o sumar stock
-      product.stock = +stock; //? [Flavio] Convendria separar la actualizacion de stock de la creacion del prod?
-      return res.send(201).json(product);
-    })
-    .catch((err) => {
-      res.send(500).json(err);
-      return console.log(err);
-    });
+//   Product.findOrCreate({
+//     where: {
+//       name,
+//     },
+//     defaults: {
+//       name, price,   description,       yearHarvest,       image,       stock: 0,
+//     },
+//   })
+//     .then((product) => {
+//       // Asignar o sumar stock
+//       product.stock = +stock;
+//       return res.send(201);
+//     })
+//     .catch((err) => {
+//       return console.log(err);
+//     });
+// });
+
+server.post('/', (req, res, next) => {
+  let { name, price, description, yearHarvest, image, stock, categories } = req.body;
+  console.log("entré a post products");
+//const categories = categories; 
+Product.create({
+   name,
+   price,
+   description,
+   yearHarvest,
+   image,
+   stock
+ })
+   .then((product) =>
+       categories.forEach((categoryId) => {
+           Category.findByPk(categoryId).then((category) =>   product.addCategory(category));
+       })
+   )
+   .then(() => res.sendStatus(201))
+   .catch(next);
 });
 
-server.post('/category', (req, res) => {
-  let { name } = req.body;
+
+server.post("/category", (req, res) => {
+  let { taste } = req.body;
 
   console.log('Creo o modifico categoría');
 
-  if (name) {
+  if (taste) {
     Category.findOrCreate({
       where: {
-        name,
+        taste,
       },
       defaults: {
-        name,
+        taste,
       },
     }).then((category) => {
       return res.status(200).send('La categoría ha sido creada');

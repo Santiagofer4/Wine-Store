@@ -18,13 +18,10 @@ function Catalogue(props) {
   //      setList (productList.data);
   //     })
   //     .catch(err => {
-  //       console.log('este es el error', err)
   //       return err;
   //     })
   // }, [] ) // Le dejo el array vacío para que busque solo en el mount
-  //   console.log('array completo',list)
 
-  console.log("PROPS EN CATALOGUE", props.allProducts);
  
 
   if (props.allProducts.length === 0) {
@@ -38,7 +35,6 @@ function Catalogue(props) {
       <div className="Catalogue__container">
         <Sidebar></Sidebar>
         <div className="Catalogue__Div">
-          {console.log('que mierda hay acá??', props.allProducts)}
           {props.allProducts[0].data.map((product, index) => {
             return <ProductCard data={product} key={index} />;
           })}
@@ -51,7 +47,6 @@ function Catalogue(props) {
 }
 
 function mapStateToProps(state) {
- // console.log('que soy?',state)
   return { 
     allProducts: state ? state.allProducts : []
   };

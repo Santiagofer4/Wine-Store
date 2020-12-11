@@ -1,6 +1,7 @@
-.Nav__li {
-  list-style: none;
-  padding: 0rem 2rem;
+.Nav__li{
+    list-style: none;
+    padding: 0rem 2rem;
+   
 }
 
 .Nav__Link {
@@ -15,6 +16,7 @@
   font-weight: 500;
   color: rgb(112, 107, 107);
 }
+
 .Nav__ul {
   display: flex;
   flex-direction: row;

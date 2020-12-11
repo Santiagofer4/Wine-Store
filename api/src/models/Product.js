@@ -42,7 +42,16 @@ module.exports = (sequelize) => {
       },
       allowNull: false,
     }
-  });
+    // categories: {
+    //   type: DataTypes.ARRAY,
+    //   allowNull: true,
+    // }
+    // ,
+    // typeW: {
+    //   type: DataTypes.ENUM(["tinto", "blanco", "rosado"]),
+    //   allowNull: false,
+    // }
+  }, {timestamps: false});
 };
 
 

@@ -62,15 +62,15 @@ function Contenido(props) {
    suscipit commodi dicta quo laborum,
     est neque laudantium qui nam architecto illo repudiandae consectetur sapiente nihil? Quam? </p>
 </div>
-<img id='visionImg' src='https://o.remove.bg/downloads/199020e5-cb8c-4308-98e9-d229fcb1aab1/vission-removebg-preview.png'>
+<img id='visionImg' src='https://i.ibb.co/qMdksps/Vision.png'>
 
   
 </img>
 
-<img id='missionImg' src='https://o.remove.bg/downloads/e4581be7-9b08-4472-b7fb-43b43fc28611/values-removebg-preview.png'></img>
+<img id='missionImg' src='https://i.ibb.co/mBGfr4L/mision.png'></img>
 
 
-  <img id='missionImg' src='https://o.remove.bg/downloads/eb60a1a9-d44b-4164-96c4-2d1b8e8ab51e/mission-removebg-preview.png'></img>
+  <img id='valuesImg' src='https://i.ibb.co/882fSvc/valores.png'></img>
    </div>
 
    
