@@ -34,6 +34,7 @@ const { Product, Category, User, Strain, Brand, Cellar, Order, OrderList } = seq
 
 // Aca vendrian las relaciones
 
+//Product.belongsToMany(Category, { through: 'Prod_Cat' });
 Product.belongsToMany(Category, { through: 'Prod_Cat' });
 Category.belongsToMany(Product, { through: 'Prod_Cat' });
 

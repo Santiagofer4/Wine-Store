@@ -41,7 +41,7 @@ function Sidebar() {
           {list.map((product,index) => {
             return (
                 <a href='#' onClick={(e)=>{categoria(e) }}>
-                     {product.name}
+                     {product.taste}
                 </a>
             );
           })}

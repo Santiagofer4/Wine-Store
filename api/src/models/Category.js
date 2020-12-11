@@ -8,5 +8,5 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING, //La validación la hacemos en el front??
       allowNull: false,
     },
-  });
+  }, {timestamps: false});
 };

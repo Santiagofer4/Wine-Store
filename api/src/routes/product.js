@@ -1,5 +1,6 @@
 const server = require("express").Router();
 const { Product, Category, User } = require("../db.js");
+const { Sequelize } = require('sequelize');
 
 server.get("/", (req, res, next) => {
 	console.log('GET a productos')
@@ -121,54 +122,63 @@ server.delete("/category/:id", (req, res) => {
   }
 });
 
-server.post("/", (req, res) => {
-  let { name, price, description, yearHarvest, image, stock, typeW, categories } = req.body;
-  var prod;
-  
+// server.post("/", (req, res) => {
+//   let { name, price, description, yearHarvest, image, stock } = req.body;
+
+//   console.log("entré a post products");
+
+//   Product.findOrCreate({
+//     where: {
+//       name,
+//     },
+//     defaults: {
+//       name, price,   description,       yearHarvest,       image,       stock: 0,
+//     },
+//   })
+//     .then((product) => {
+//       // Asignar o sumar stock
+//       product.stock = +stock;
+//       return res.send(201);
+//     })
+//     .catch((err) => {
+//       return console.log(err);
+//     });
+// });
+
+server.post('/', (req, res, next) => {
+  let { name, price, description, yearHarvest, image, stock, categories } = req.body;
   console.log("entré a post products");
-
-  Product.findOrCreate({
-    where: {
-      name,
-    },
-    defaults: {
-      name,
-      price,
-      description,
-      yearHarvest,
-      image,
-      typeW,
-      stock: 0,
-    },
-  })
-  .then(newProduct => {
-    prod = newProduct
-    return prod.setCategories()
-  })
-    .then((product) => {
-      // Asignar o sumar stock
-      product.stock = +stock;
-      product.setCategories(categories)
-
-      return res.send(201);
-    })
-    .catch((err) => {
-      return console.log(err);
-    });
+//const categories = categories; 
+Product.create({
+   name,
+   price,
+   description,
+   yearHarvest,
+   image,
+   stock
+ })
+   .then((product) =>
+       categories.forEach((categoryId) => {
+           Category.findByPk(categoryId).then((category) =>   product.addCategory(category));
+       })
+   )
+   .then(() => res.sendStatus(201))
+   .catch(next);
 });
 
+
 server.post("/category", (req, res) => {
-  let { name } = req.body;
+  let { taste } = req.body;
 
   console.log('Creo o modifico categoría')
 
-  if (name) {
+  if (taste) {
     Category.findOrCreate({
       where: {
-        name,
+        taste,
       },
       defaults: {
-        name,
+        taste,
       },
     }).then((category) => {
       return res.status(200).send("La categoría ha sido creada");
