@@ -1,5 +1,5 @@
 const server = require("express").Router();
-const { Product, Category, User } = require("../db.js");
+const { Product, Category, User, Strain } = require("../db.js");
 const { Sequelize } = require('sequelize');
 
 
@@ -17,6 +17,15 @@ server.get('/category', (req, res, next) => {
   Category.findAll()
     .then((cat) => {
       res.send(cat);
+    })
+    .catch(next);
+});
+
+server.get('/strain', (req, res, next) => {
+  console.log('GET a strains');
+  Strain.findAll()
+    .then((strain) => {
+      res.json(strain);
     })
     .catch(next);
 });
@@ -189,6 +198,30 @@ server.post("/category", (req, res) => {
       },
     }).then((category) => {
       return res.status(200).send('La categoría ha sido creada');
+    });
+  } else {
+    return res.status(400);
+  }
+});
+
+server.post("/strain", (req, res) => {
+  let { name, description, pairing, origin } = req.body;
+
+  console.log('Creo o modifico cepa');
+
+  if (name) {
+    Strain.findOrCreate({
+      where: {
+        name,
+      },
+      defaults: {
+        name,
+        description,
+        pairing,
+        origin
+      },
+    }).then((strain) => {
+      return res.status(200).send('La cepa ha sido creada');
     });
   } else {
     return res.status(400);

@@ -13,7 +13,7 @@ export function getProductSearch(payload) {
         dispatch({ type: GET_PRODUCT_SEARCH, payload: response });
       })
       .catch((err) => {
-        console.log('Error en GET_PRODUCT_SEARCH', err);
+      // console.log('Error en GET_PRODUCT_SEARCH', err);
       });
   };
 }
@@ -26,7 +26,7 @@ export function getProductsList() {
         dispatch({ type: GET_PRODUCTS_LIST, payload: productList });
       })
       .catch((err) => {
-        console.log('Error en GET_PRODUCTS_LIST', err);
+        //console.log('Error en GET_PRODUCTS_LIST', err);
       });
   };
 }
