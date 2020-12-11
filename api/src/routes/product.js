@@ -122,8 +122,9 @@ server.delete("/category/:id", (req, res) => {
 });
 
 server.post("/", (req, res) => {
-  let { name, price, description, yearHarvest, image, stock } = req.body;
-
+  let { name, price, description, yearHarvest, image, stock, typeW, categories } = req.body;
+  var prod;
+  
   console.log("entré a post products");
 
   Product.findOrCreate({
@@ -136,12 +137,19 @@ server.post("/", (req, res) => {
       description,
       yearHarvest,
       image,
+      typeW,
       stock: 0,
     },
+  })
+  .then(newProduct => {
+    prod = newProduct
+    return prod.setCategories()
   })
     .then((product) => {
       // Asignar o sumar stock
       product.stock = +stock;
+      product.setCategories(categories)
+
       return res.send(201);
     })
     .catch((err) => {
