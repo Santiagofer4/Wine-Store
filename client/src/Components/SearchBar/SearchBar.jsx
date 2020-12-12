@@ -19,7 +19,7 @@ function SearchBar(props) {
   };
 
   return (
-    <div>
+    <div className="searchBar">
       <form
         onSubmit={onSubmit}
         className="SearchBar__form"
@@ -28,13 +28,13 @@ function SearchBar(props) {
       >
         <TextField
           id="standard-secondary"
-          color="secondary"
+          color="primary"
           label="Search"
           onChange={(e) => {
             setinputSearch(e.target.value);
           }}
         />
-        <Button type="submit" className="SearchBar___btn">
+        <Button type="submit" className="SearchBar___btn" id='btnSB'>
           Buscar
         </Button>
       </form>
