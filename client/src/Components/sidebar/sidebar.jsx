@@ -1,44 +1,28 @@
 import React, { useEffect, useState } from "react";
 import "./sidebar.modules.css";
 import axios from "axios";
+import { connect } from "react-redux";
+import { getCategoryList, getProductsCategory } from "../../actions"
 
-function Sidebar() {
-  const [list, setList] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/products/category")
-      .then((catList) => {
-        setList(catList.data);
-        // console.log("array completo", catList);
-      })
-      .catch((err) => {
-        // console.log("este es el error", err);
-        return err;
-      });
-  }, []); // Le dejo el array vacío para que busque solo en el mount
+
+function Sidebar(props) {
 
 
   // cuando este lista las relaciones  de la DB, esta funcion debe pisar el estado 'List' 
   //con el array de objetos devueltos. para que el map haga el render
+
   function categoria(e){
     let categoryName = e.target.innerText;
-    axios
-    .get(`http://localhost:3000/products/category/${categoryName}`)
-    .then((categoryProducts) => {
-      // setList(categoryProducts);
-    })
-    .catch((err) => {
-      return err;
-    });
+    props.getProductsCategory(categoryName)
   }
 
-  if (list) {
+  if (props.products) {
     return (
       <div className="Sidebar__container">
         <div className="Sidebar__lista">
           
-          {list.map((product,index) => {
+          {props.categories[0].data.map((product,index) => {
             return (
                 <a href='#' onClick={(e)=>{categoria(e) }}>
                      {product.taste}
@@ -49,10 +33,17 @@ function Sidebar() {
       </div>
     );
   }
-  if (!list) {
+  if (!props.products) {
     return <h3>No hay productos</h3>;
   }
-
 }
 
-export default Sidebar;
+const mapStateToProps = (state) => {
+  return {
+    products: state.productReducers ? state.productReducers.allProducts : [],
+    categories: state.productReducers ? state.productReducers.categories : []
+  }
+}
+
+
+export default connect(mapStateToProps, {getCategoryList,getProductsCategory})(Sidebar) ;
