@@ -50,6 +50,7 @@ export const getCategoryList = () => (dispatch) => {
   return axios
       .get(`http://localhost:3000/products/category`)
       .then((catList) => dispatch({ type: GET_CATEGORY_LIST, payload: catList }));
+};
   
 export const setProductDetail = (wineDetail) => (dispatch) => {
   // console.log('ACTIONS', wineDetail);
