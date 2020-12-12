@@ -4,13 +4,17 @@ import Button from '@material-ui/core/Button';
 import './SearchBar.modules.css';
 import { connect } from 'react-redux';
 import { getProductSearch } from '../../actions';
+import { useHistory } from 'react-router-dom';
 
 function SearchBar(props) {
   const [inputSearch, setinputSearch] = useState('');
 
+  const history = useHistory();
+  
   const onSubmit = (e) => {
     e.preventDefault();
     props.getProductSearch(inputSearch);
+    history.push(`/catalogue`);
     // console.log( 'estado del search',props)
   };
 
