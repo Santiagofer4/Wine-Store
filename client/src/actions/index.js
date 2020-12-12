@@ -5,6 +5,7 @@ import {
   GET_PRODUCTS_LIST,
   POST_NEW_PRODUCT,
   GET_CATEGORY_LIST,
+  SET_PRODUCT_DETAIL,
 } from './actions';
 
 export function getProductSearch(payload) {
@@ -15,7 +16,7 @@ export function getProductSearch(payload) {
         dispatch({ type: GET_PRODUCT_SEARCH, payload: response });
       })
       .catch((err) => {
-      // console.log('Error en GET_PRODUCT_SEARCH', err);
+        // console.log('Error en GET_PRODUCT_SEARCH', err);
       });
   };
 }
@@ -49,4 +50,9 @@ export const getCategoryList = () => (dispatch) => {
   return axios
       .get(`http://localhost:3000/products/category`)
       .then((catList) => dispatch({ type: GET_CATEGORY_LIST, payload: catList }));
+  
+export const setProductDetail = (wineDetail) => (dispatch) => {
+  // console.log('ACTIONS', wineDetail);
+  return dispatch({ type: SET_PRODUCT_DETAIL, payload: wineDetail });
+
 };
