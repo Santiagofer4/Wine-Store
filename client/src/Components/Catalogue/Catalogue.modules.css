@@ -13,4 +13,8 @@
 
 .Catalogue__container{
     display: flex;
+    height: 100vh;
+    width: 100vw;
+    background-image: url('https://image.freepik.com/foto-gratis/bodega_181624-1264.jpg');
+    background-size: cover;
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
-import { validationSchemaLoadCategories } from '../adminValidations.js';
+import { validationSchemaLoadStrains } from '../adminValidations.js';
 import { Container, Paper, Button } from '@material-ui/core';
 import '../LoadPorduct/LoadProduct.modules.css';
 import axios from 'axios';
@@ -14,11 +14,11 @@ export const LoadProduct = (props) => {
     origin: '',
   };
 
-  const postNewCategory = async (category) => {
+  const postNewStrain = async (strain) => {
     try {
       const resp = await axios.post(
-        'http://localhost:3000/products/category',
-        category
+        'http://localhost:3000/products/strain',
+        strain
       );
       console.log('POST', resp);
     } catch (error) {
@@ -27,16 +27,16 @@ export const LoadProduct = (props) => {
   };
   const handleSubmit = (values, onSubmitProps) => {
     // console.log('VALUES', values);
-    postNewCategory(values);
+    postNewStrain(values);
     // onSubmitProps.resetForm();
   };
 
   return (
     <Container className="">
-      <h1>Carga de categorías</h1>
+      <h1>Carga de cepas</h1>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchemaLoadCategories}
+        validationSchema={validationSchemaLoadStrains}
         onSubmit={handleSubmit}
       >
         {(formik) => (
@@ -44,15 +44,28 @@ export const LoadProduct = (props) => {
             <Form>
               <FormField
                 fieldType="input"
-                label="Nombre de categoría"
+                label="Nombre de cepa"
                 name="name"
                 required
               />
               <FormField
                 fieldType="textarea"
-                label="Descripción de la categoría"
+                label="Maridaje"
+                name="pairing"
+                rows={4}
+                required
+              />
+              <FormField
+                fieldType="textarea"
+                label="Descripcion de la cepa"
                 name="description"
                 rows={8}
+                required
+              />
+              <FormField
+                fieldType="input"
+                label="Origen de la cepa"
+                name="origin"
                 required
               />
               <br></br>

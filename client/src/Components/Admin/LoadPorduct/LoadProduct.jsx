@@ -45,7 +45,7 @@ const LoadProduct = (props) => {
   };
 
   return (
-    <Container className="">
+    <Container className="divLoadProducts">
       <h1>Carga de Productos</h1>
       <Formik
         initialValues={initialValues}
@@ -109,6 +109,7 @@ const LoadProduct = (props) => {
                   color="primary"
                   disabled={!formik.isValid}
                   type="submit"
+                  className="buttonSubmit"
                 >
                   {' '}
                   Submit
