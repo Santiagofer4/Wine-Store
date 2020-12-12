@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./sidebar.modules.css";
+import Button from '@material-ui/core/Button';
 import axios from "axios";
 import { connect } from "react-redux";
 import { getCategoryList, getProductsCategory } from "../../actions"
@@ -24,7 +25,8 @@ function Sidebar(props) {
           
           {props.categories[0].data.map((product,index) => {
             return (
-                <a href='#' onClick={(e)=>{categoria(e) }}>
+
+                <a href='#' onClick={(e)=>{categoria(e) }} key={index}>
                      {product.taste}
                 </a>
             );
