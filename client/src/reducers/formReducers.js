@@ -6,7 +6,6 @@ const initialState = {
 };
 
 const formReducers = (state = initialState, action) => {
-  // console.log('formReducers', action);
   switch (action.type) {
     case POST_NEW_PRODUCT:
       return null; // TODO: Postear el nuevo producto a la DB

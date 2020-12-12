@@ -65,6 +65,24 @@ server.get("/:id", (req, res) => {
   }
 });
 
+server.get("/ProductosPorCategoria/:categoria", (req, res) => {
+
+  let { categoria } = req.params;
+
+  if (categoria) {
+    Category.findAll({where:{taste:categoria},include:{model: Product}}  )
+
+    .then ((s) =>{
+      res.json(s)
+    })
+    // Product.findByPk(categoria).then((product) => {
+    //   return res.send(product);
+    // });
+  } else {
+    return res.status(404).send('No existe el producto');
+  }
+});
+
 server.put('/:id', (req, res) => {
   let { id } = req.params;
   let { name, price, description, yearHarvest, image, stock } = req.body;
