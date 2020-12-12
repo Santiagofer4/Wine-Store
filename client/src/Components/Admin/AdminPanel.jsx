@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Paper, Container } from '@material-ui/core';
 import './AdminPanel.modules.css';
 import { Link } from 'react-router-dom';
 import { LoadProduct } from './LoadPorduct/LoadProduct';
 import { Route, Switch } from 'react-router-dom';
+import LoadCategory from './LoadCategory/LoadCategory';
 
 export const AdminPanel = (props) => {
   return (
@@ -26,14 +26,10 @@ export const AdminPanel = (props) => {
       <br></br>
       <Container className="AdminPanel__Form">
         <Route path="/admin/loadproduct" component={LoadProduct} />
-        {/* <Route path="/admin/loadcategory" component={LoadCategory} /> */}
+        <Route path="/admin/loadcategory" component={LoadCategory} />
       </Container>
     </Container>
   );
 };
 
-const mapStateToProps = (state) => ({});
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AdminPanel);
+export default AdminPanel;
