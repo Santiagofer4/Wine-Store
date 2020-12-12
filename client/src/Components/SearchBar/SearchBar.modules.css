@@ -10,25 +10,34 @@
   border-bottom: 0.1rem solid white;
   border-right: 0.1rem solid white;
   border-radius: 3%;
-  /* border: 2px solid white !important; */
   color: white;
 }
-/* .MuiInput-colorSecondary.MuiInput-underline:after{
-    border-bottom-color: white !important;
-} */
-.SearchBar___btn {
-  margin-bottom: 0px;
-  margin-top: 1.5rem !important;
-  color: white !important;
+ .MuiInput-colorSecondary.MuiInput-underline:after{
+    border-bottom-color: #be9063 !important;
+} 
+
+.searchBar{
+  display: flex;
+  justify-content: center;
 }
 
-/* #standard-secondary div :active{
-    border: 0.2rem solid green !important;
-} */
+#btnSB {
+  background-color: #be9063;
+  color: black !important;
+  margin: 5px;
+  width:100px;
+  border-radius: 25px;
+}
 
-/* div label{
-    color: white !important;
-} */
+#standard-secondary {
+  height: 30px;
+  background-color: #525b56;
+}
+
+#standard-secondary :active{
+  border: 0.2rem solid #be9063 !important;
+  
+}
 
 @media screen and (max-width: 1000px) {
   

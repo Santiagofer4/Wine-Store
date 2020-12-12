@@ -5,21 +5,20 @@ import { autoPlay } from "react-swipeable-views-utils";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@material-ui/icons";
 import './Carrousel.modules.css';
 
-
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const tutorialSteps = [
   {
-      imgPath:
+    imgPath:
       "https://ibiza.vilavins.com/images/blog/el-mundo-del-vino/la-ciencia-en-tu-copa/guardar-o-abrir/reliquias-del-almacen.jpg"
   },
   {
-    
+
     imgPath:
       "https://ibiza.vilavins.com/images/blog/el-mundo-del-vino/la-ciencia-en-tu-copa/guardar-o-abrir/conservacion-del-vino.jpg"
   },
   {
-   
+
     imgPath:
       "https://ibiza.vilavins.com/images/blog/el-mundo-del-vino/la-ciencia-en-tu-copa/guardar-o-abrir/el-envejecimiento.jpg"
   }
@@ -27,8 +26,7 @@ const tutorialSteps = [
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%", // cambie de 100vw
-  
+    width: "100%",
     textAlign: "center",
   },
   header: {
@@ -52,16 +50,16 @@ function Carrousel() {
   const [activeStep, setActiveStep] = React.useState(0);
   const maxSteps = tutorialSteps.length;
 
-  const handleNext = () => {
-    if(activeStep === 2) {
+  const handleNext = () => { //Manejador de la próxima imágen del carrusel
+    if (activeStep === 2) {
       setActiveStep((prevActiveStep) => prevActiveStep = 0)
     } else {
       setActiveStep(prevActiveStep => prevActiveStep + 1);
     }
   };
 
-  const handleBack = () => {
-    if(activeStep === 0) {
+  const handleBack = () => { //Manejador de la imágen previa del carrusel
+    if (activeStep === 0) {
       setActiveStep((prevActiveStep) => prevActiveStep = 2)
     } else {
       setActiveStep(prevActiveStep => prevActiveStep - 1);
@@ -72,7 +70,7 @@ function Carrousel() {
     setActiveStep(step);
   };
 
-  return (
+  return (  //Renderizado del carrusel de imágenes
     <div className={classes.root}>
       <Paper square elevation={0} className={classes.header}>
         <Typography>{tutorialSteps[activeStep].label}</Typography>
@@ -105,29 +103,26 @@ function Carrousel() {
             size="small"
             className="color__cremita"
             onClick={handleNext}
-           // disabled={activeStep === maxSteps - 1}
           >
-            
             {theme.direction === "rtl" ? (
               <KeyboardArrowLeft />
             ) : (
-              <KeyboardArrowRight />
-            )}
+                <KeyboardArrowRight />
+              )}
           </Button>
         }
         backButton={
-          <Button 
-          size="small" 
-          className="color__cremita" 
-          onClick={handleBack} 
-          //disabled={activeStep === 0}
+          <Button
+            size="small"
+            className="color__cremita"
+            onClick={handleBack}
           >
             {theme.direction === "rtl" ? (
               <KeyboardArrowRight />
             ) : (
-              <KeyboardArrowLeft />
-            )}
-            
+                <KeyboardArrowLeft />
+              )}
+
           </Button>
         }
       />

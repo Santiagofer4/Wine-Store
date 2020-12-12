@@ -6,7 +6,7 @@ import Footer from "../Footer/Footer.jsx";
 
 // Recibe props con Products.info
 
-function Inicio(props) {
+function Inicio() {
 
   return (
     <div>
