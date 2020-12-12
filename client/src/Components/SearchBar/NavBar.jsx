@@ -14,7 +14,7 @@ function NavBar() {
               Home
             </Link>
           </li>
-          <li className="Nav__li">
+          <li className="Nav__li" >
             {' '}
             <Link to="/catalogue" className="Nav__Link">
               Catalogue
@@ -22,7 +22,7 @@ function NavBar() {
           </li>
           <li className="Nav__li">
             {' '}
-            <Link to="/admin" className="Nav__Link">
+            <Link to="/admin" className="Nav__Link" id="invisible">
               Admin
             </Link>
           </li>
