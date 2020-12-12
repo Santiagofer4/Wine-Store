@@ -29,3 +29,20 @@
 /* div label{
     color: white !important;
 } */
+
+@media screen and (max-width: 1000px) {
+  
+  #standard-secondary{
+    width: 75%;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  
+  #standard-secondary{
+    width: 70%;
+  }
+  .searchBar{
+    width: 40%;
+  }
+}

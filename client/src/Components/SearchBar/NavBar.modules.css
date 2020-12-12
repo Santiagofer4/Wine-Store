@@ -35,3 +35,12 @@
   z-index: +1;
   color: white;
 }
+
+@media screen and (max-width: 750px) {
+  #invisible{
+    display: none;}
+    .Nav__ul{
+      width: 50% ;
+    }
+ 
+  }

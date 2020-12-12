@@ -25,7 +25,9 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 5%;
+    padding: 0px 8% 80px 5%;
+    
+   
 }
 
 article.card {
@@ -101,4 +103,31 @@ article.card {
 .card:hover .card__back,
 .card:focus .card__back {
   transform: rotateY(0)
+}
+
+
+@media screen and (max-width: 1000px) {
+  article.card {
+     width: 25%;
+     height: 120px;
+     font-family: Cambria, serif;
+     font-weight: 120;
+     font-size: 1em;
+  }
+
+  .card__front, .card__back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 70%;
+    padding: 1em;
+    border-radius: .3em;
+    transition: transform .7s ease;
+    backface-visibility: hidden;
+   
+  }
+  .imgLogo {
+    width: 90%;
+  }
 }

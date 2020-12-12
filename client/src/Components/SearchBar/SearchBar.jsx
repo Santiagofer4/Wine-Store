@@ -15,7 +15,7 @@ function SearchBar(props) {
   };
 
   return (
-    <div>
+    <div className="searchBar">
       <form
         onSubmit={onSubmit}
         className="SearchBar__form"

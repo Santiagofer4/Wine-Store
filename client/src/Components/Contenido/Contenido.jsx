@@ -1,12 +1,5 @@
 import React from "react";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import CardActions from "@material-ui/core/CardActions";
 import "./Contenido.modules.css";
-
 
 // Recibe props con Products.info
 
@@ -15,10 +8,10 @@ function Contenido(props) {
   return (
     <div id="contenido" >
 
-      <h1 id='title'>
+      
        
-        <img src="https://i.ibb.co/x7Z2cfF/winestorelogo.png"></img> 
-</h1>
+        <img className='imgLogo' src="https://i.ibb.co/x7Z2cfF/winestorelogo.png"></img> 
+
 <div id="contenedor1"> 
       <article key="1" className="card" >
         
