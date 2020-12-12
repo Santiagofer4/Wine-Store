@@ -20,7 +20,7 @@ function Sidebar(props) {
         <div className="Sidebar__lista">
           {props.categories[0].data.map((product, index) => {
             return (
-              <Button>
+              // <Button>
                 <a
                   href="#"
                   onClick={(e) => {
@@ -29,7 +29,7 @@ function Sidebar(props) {
                 >
                   {product.taste}
                 </a>
-              </Button>
+              // </Button>
             );
           })}
         </div>
