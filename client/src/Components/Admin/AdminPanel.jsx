@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Paper, Container } from '@material-ui/core';
 import './AdminPanel.modules.css';
 import { Link } from 'react-router-dom';
-import { LoadProduct } from './LoadPorduct/LoadProduct';
+import LoadProduct from './LoadPorduct/LoadProduct';
 import { Route, Switch } from 'react-router-dom';
 import LoadCategory from './LoadCategory/LoadCategory';
 
