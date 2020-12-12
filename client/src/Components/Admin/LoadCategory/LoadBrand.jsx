@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
-import { validationSchemaLoadCategories } from '../adminValidations.js';
+import { validationSchemaLoadBrands } from '../adminValidations.js';
 import { Container, Paper, Button } from '@material-ui/core';
 import '../LoadPorduct/LoadProduct.modules.css';
 import axios from 'axios';
@@ -14,11 +14,11 @@ export const LoadProduct = (props) => {
     origin: '',
   };
 
-  const postNewCategory = async (category) => {
+  const postNewBrand = async (brand) => {
     try {
       const resp = await axios.post(
-        'http://localhost:3000/products/category',
-        category
+        'http://localhost:3000/products/brand',
+        brand
       );
       console.log('POST', resp);
     } catch (error) {
@@ -27,16 +27,16 @@ export const LoadProduct = (props) => {
   };
   const handleSubmit = (values, onSubmitProps) => {
     // console.log('VALUES', values);
-    postNewCategory(values);
+    postNewBrand(values);
     // onSubmitProps.resetForm();
   };
 
   return (
     <Container className="">
-      <h1>Carga de categorías</h1>
+      <h1>Carga de marcas</h1>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchemaLoadCategories}
+        validationSchema={validationSchemaLoadBrands}
         onSubmit={handleSubmit}
       >
         {(formik) => (
@@ -44,14 +44,14 @@ export const LoadProduct = (props) => {
             <Form>
               <FormField
                 fieldType="input"
-                label="Nombre de categoría"
+                label="Nombre de la marca"
                 name="name"
                 required
               />
               <FormField
                 fieldType="textarea"
-                label="Descripción de la categoría"
-                name="description"
+                label="Historia de la marca"
+                name="history"
                 rows={8}
                 required
               />
