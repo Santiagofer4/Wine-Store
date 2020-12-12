@@ -1,13 +1,36 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
 import { validationSchemaLoadProducts } from '../adminValidations.js';
 import { Container, Paper, Button } from '@material-ui/core';
 import './LoadProduct.modules.css';
+import { getStrainList } from '../../../actions/';
 
-export const LoadProduct = (props) => {
-  const strainOption = [{ label: 'TEST', value: 'test' }];
+//! ---- NO FUNCIONA :( ----
+//El componente `carga` un par de veces antes de que se dispare el useEffect que busca la lista de cepas, aun asi las cepas son asincronas entonces "tarda" en recibir esas props,existe la forma de que la func `getStrainList` se dispare antes de que renderice por primera vez?
+// intente con una promesa y un condicional pero no funciono...pero creo que va por ahi....ya que no deberiamos intentar mapear las cepas hasta que la promesa no se resuelva y tampoco antes de que se dispare el useffect
+
+const LoadProduct = (props) => {
+  // const [strainOptions, setStrainOptions] = useState({});
+  console.log('PROPS LOAD', props.strainList);
+  useEffect(() => {
+    strainList();
+    // setStrainOptions(props.getStrainList());
+    // console.log('STRAIN', strainOptions);
+    // const option = props.strainList.map((strain) => {
+    //   return { label: strain.name, value: strain.name };
+    // });
+    // console.log('OPTIONS', option);
+  }, []);
+
+  const strainList = async () => {
+    return await props.getStrainList();
+  };
+  const x =
+    Array.isArray(props.strainList) && props.strainList.map((x) => x.name);
+  console.log(x);
+
   const initialValues = {
     product: '',
     strain: '',
@@ -38,13 +61,13 @@ export const LoadProduct = (props) => {
                 name="product"
                 required
               />
-              <FormField
+              {/* <FormField
                 fieldType="select"
                 label="Cepa"
                 name="strain"
                 options={strainOption}
                 required
-              />
+              /> */}
               <FormField
                 fieldType="input"
                 type="number"
@@ -100,9 +123,7 @@ export const LoadProduct = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  strainOption: state.strainList,
+  strainList: state.formReducers.strainList,
 });
 
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoadProduct);
+export default connect(mapStateToProps, { getStrainList })(LoadProduct);

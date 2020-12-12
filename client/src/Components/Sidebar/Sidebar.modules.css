@@ -1,0 +1,23 @@
+.Sidebar__container {
+  position: relative;
+  position: fixed;
+  background-color: rgb(17, 16, 16);
+  height: 100%;
+  width: 20%;
+  margin-top: 5%;
+  /* z-index: -1; */
+}
+.Sidebar__lista {
+  display: flex;
+  flex-direction: column;
+  margin: 3rem auto;
+  width: 100%;
+  padding: 0px;
+  color: white;
+  font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+.h3 {
+  font-size: 1.5rem;
+}
