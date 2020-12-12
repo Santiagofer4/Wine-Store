@@ -11,6 +11,7 @@ function SearchBar(props) {
   const onSubmit = (e) => {
     e.preventDefault();
     props.getProductSearch(inputSearch);
+    // console.log( 'estado del search',props)
   };
 
   return (
@@ -36,8 +37,14 @@ function SearchBar(props) {
     </div>
   );
 }
+function mapStateToProps(state){
+  console.log('estado general',state)
+  return {
+    wineList : state.wineList
+  }
+}
 
-export default connect(null, { getProductSearch })(SearchBar);
+export default connect(mapStateToProps, { getProductSearch })(SearchBar);
 
 // El componente Search Bar es un formulario conectado de un sólo input, al submitear ejecuta una función recibida por props con el texto ingresado.
 
