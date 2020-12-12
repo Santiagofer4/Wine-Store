@@ -1,4 +1,4 @@
-.Sidebarcontainer{
+.Sidebar__container{
     position:relative;
         position: fixed;
     background-color: rgb(17, 16, 16);
@@ -7,7 +7,7 @@
     margin-top: 5%;
     /* z-index: -1; */
 }
-.Sidebarlista{
+.Sidebar__lista{
     display: flex;
     flex-direction: column;
     margin:3rem auto;
