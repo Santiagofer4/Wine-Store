@@ -18,10 +18,87 @@
     background-color: black !important;
     margin-top: 0px;
   
-    height: 20%;
-    width: 20%;
+   
 }
-/* #visionImg{
-    background-image:url("https://o.remove.bg/downloads/199020e5-cb8c-4308-98e9-d229fcb1aab1/vission-removebg-preview.png");
-        width:200px;
-} */
+
+#contenedor1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5%;
+}
+
+article.card {
+    width: 250px;
+    height: 250px;
+    font-family: Cambria, serif;
+    font-weight: 200;
+    font-size: 1em;
+    position: relative;
+    text-align: center;
+    perspective: 1000px;
+    cursor: default;
+    padding: 10px;
+        
+    cursor: pointer;
+   
+    
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+   
+  }
+  
+  .card__front, .card__back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 2em;
+    border-radius: .5em;
+    transition: transform .7s ease;
+    backface-visibility: hidden;
+   
+  }
+  
+  .card__front {
+     overflow: hidden;
+  }
+  
+  
+  @supports(background-clip: text) {
+    .card__title {
+      color: transparent;
+      text-shadow: none;
+      background-clip: text;
+     
+    }
+  }
+  
+  .card__img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 50%;
+    object-fit: cover;
+  }
+  
+  .card__back {
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transform: rotateY(-180deg);
+    color: white;
+    background-color: black;
+  }
+
+  .card:hover .card__front,
+  .card:focus .card__front {
+  transform: rotateY(180deg)
+}
+
+.card:hover .card__back,
+.card:focus .card__back {
+  transform: rotateY(0)
+}
