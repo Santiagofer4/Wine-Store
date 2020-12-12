@@ -11,6 +11,8 @@ import Inicio from './Components/Inicio/Inicio.jsx';
 import TestForm from './Components/FormComponents/TestForm.jsx';
 import { AdminPanel } from './Components/Admin/AdminPanel';
 import { LoadProduct } from './Components/Admin/LoadPorduct/LoadProduct';
+import ProductDetail from './Components/ProductDetail/ProductDetail';
+
 function App() {
   return (
     <div className="App">
@@ -19,8 +21,13 @@ function App() {
         <Route exact path="/" component={Inicio}></Route>
         <Route path="/catalogue" component={Catalogue}></Route>
         <Route
+          exact
           path="/product"
           render={() => <Products data={productsList} />}
+        />
+        <Route
+          path="/product/:id"
+          render={() => <ProductDetail data={productsList} />}
         />
         <Route path="/admin/form-product" component={ProductForm} />
         <Route path="/form/test" component={TestForm} />

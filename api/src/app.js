@@ -24,7 +24,7 @@ server.use((req, res, next) => {
   next();
 });
 
-server.use('/', routes);
+server.use('/', routes); //* import de las rutas
 
 // Error catching endware.
 server.use((err, req, res, next) => {
