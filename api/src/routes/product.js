@@ -215,12 +215,12 @@ server.post('/', (req, res, next) => {
     stock,
   })
     .then((product) =>{
-       prod = product
       categories.forEach((categoryId) => {
         Category.findByPk(categoryId).then((category) =>
-          product.addCategory(category)
+        product.addCategory(category)
         );
       })
+      prod = product
     })
     .then(() => res.status(201).send(prod))
     .catch(next);
