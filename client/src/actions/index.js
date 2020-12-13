@@ -7,10 +7,7 @@ import {
   GET_CATEGORY_LIST,
   SET_PRODUCT_DETAIL,
   GET_STRAIN_LIST,
-<<<<<<< HEAD
-=======
-  SET_HISTORY,
->>>>>>> master
+  SET_HISTORY
 } from './actions';
 
 export function getProductSearch(payload) {

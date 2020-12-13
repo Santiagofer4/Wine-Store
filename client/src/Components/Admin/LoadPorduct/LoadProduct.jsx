@@ -6,38 +6,42 @@ import { validationSchemaLoadProducts } from '../adminValidations.js';
 import { Container, Paper, Button, CircularProgress } from '@material-ui/core';
 import './LoadProduct.modules.css';
 import { getStrainList } from '../../../actions/';
+import { formatArrayToOption } from '../../utils.js';
+import axios from 'axios';
+import { Switch, useHistory } from 'react-router-dom';
+import { setProductDetail, getProductsList } from '../../../actions/';
 
 //! ---- NO FUNCIONA :( ----
 //El componente `carga` un par de veces antes de que se dispare el useEffect que busca la lista de cepas, aun asi las cepas son asincronas entonces "tarda" en recibir esas props,existe la forma de que la func `getStrainList` se dispare antes de que renderice por primera vez?
 // intente con una promesa y un condicional pero no funciono...pero creo que va por ahi....ya que no deberiamos intentar mapear las cepas hasta que la promesa no se resuelva y tampoco antes de que se dispare el useffect
 
-const LoadProduct = (props) => {
-  // const [strainOptions, setStrainOptions] = useState({});
-  console.log('PROPS LOAD', props.strainList);
-  useEffect(() => {
-    strainList();
-    // setStrainOptions(props.getStrainList());
-    // console.log('STRAIN', strainOptions);
-    // const option = props.strainList.map((strain) => {
-    //   return { label: strain.name, value: strain.name };
-    // });
-    // console.log('OPTIONS', option);
-  }, []);
+// const LoadProduct = (props) => {
+//   // const [strainOptions, setStrainOptions] = useState({});
+//   console.log('PROPS LOAD', props.strainList);
+//   useEffect(() => {
+//     strainList();
+//     // setStrainOptions(props.getStrainList());
+//     // console.log('STRAIN', strainOptions);
+//     // const option = props.strainList.map((strain) => {
+//     //   return { label: strain.name, value: strain.name };
+//     // });
+//     // console.log('OPTIONS', option);
+//   }, []);
 
-  const strainList = async () => {
-    return await props.getStrainList();
-  };
-  const x =
-    Array.isArray(props.strainList) && props.strainList.map((x) => x.name);
-  console.log(x);
+//   const strainList = async () => {
+//     return await props.getStrainList();
+//   };
+//   const x =
+//     Array.isArray(props.strainList) && props.strainList.map((x) => x.name);
+//   console.log(x);
 
-  const initialValues = {
-    product: '',
+//   const initialValues = {
+//     product: '',
 
-import { formatArrayToOption } from '../../utils.js';
-import axios from 'axios';
-import { Switch, useHistory } from 'react-router-dom';
-import { setProductDetail, getProductsList } from '../../../actions/';
+// import { formatArrayToOption } from '../../utils.js';
+// import axios from 'axios';
+// import { Switch, useHistory } from 'react-router-dom';
+// import { setProductDetail, getProductsList } from '../../../actions/';
 
 //! ---- FUNCIONA PERO TIENE MUCHAS VUELTAS :S ----
 //? el select de las options no renderizan de primera, hay que ver la forma de se rerenderize cuando el fetch termina...el fetch lo hace pero no lo renderiza correctamente
