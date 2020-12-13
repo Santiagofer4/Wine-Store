@@ -16,9 +16,9 @@ function Sidebar(props) {
   }
 
   // console.log('paso 1',props.categories)
-  if (props.categories[0] !== undefined) {
+  if (props.categories !== undefined) {
     // console.log('paso 2',props.categories)
-    if(props.categories[0].length === 0){
+    if(props.categories.length === 0){
       return(
         <div className="Sidebar__container">
           <div className="Sidebar__lista">
@@ -30,7 +30,7 @@ function Sidebar(props) {
     return (
       <div className="Sidebar__container">
         <div className="Sidebar__lista">
-          {props.categories[0].data.map((product, index) => {
+          {props.categories.map((product, index) => {
             return (
               // <Button>
                 <a
@@ -65,3 +65,4 @@ export default connect(mapStateToProps, {
   getCategoryList,
   getProductsCategory,
 })(Sidebar);
+

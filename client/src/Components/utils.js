@@ -2,15 +2,24 @@ const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export const formatArrayToOption = (array) =>
-  Array.isArray(array)
+export const formatArrayToOption = (array, propName) =>{
+console.log('utils',array)
+  return Array.isArray(array) && array.length >0
     ? array.map((element) => {
-        return {
-          label: capitalize(element.name),
-          value: element.name,
-        };
+        if (typeof element === 'object') {
+          return {
+            label: capitalize(element[propName]),
+            value: element[propName],
+          };
+        } else {
+          return {
+            label: capitalize(element),
+            value: element,
+          };
+        }
       })
-    : null;
+    : null;}
+
 
 // export const makeInitialValues = (labels, edit, reset) => {
 //   //* Recibe un array de `labels` y devuelve un objeto.

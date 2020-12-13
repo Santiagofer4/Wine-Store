@@ -25,8 +25,11 @@ const LoadProduct = (props) => {
     stock: '',
     description: '',
     image: '',
+    taste1: '',
+    taste2: '',
+    taste3: ''
   }; //valores "vacios" del form
-  const { wineDetail } = props;
+  const { wineDetail, cats } = props;
 
   const edit = props.location.state ? props.location.state.edit : false; //true cuando entro por edit, false cualquier otra forma
   const [loading, setLoading] = useState(true); //estado para cargar el spinner de cargango
@@ -50,6 +53,9 @@ const LoadProduct = (props) => {
         price: wineDetail.price,
         stock: wineDetail.stock,
         image: wineDetail.image,
+        taste: cats.taste,
+        taste2: cats.taste,
+        taste3: cats.taste,
       });
     }
   }, []);
@@ -80,9 +86,9 @@ const LoadProduct = (props) => {
       //si edit es un update (put), si !edit entonces es un create (post)
       const res = edit
         ? await axios.put(
-            `http://localhost:3000/products/${wineDetail.id}`,
-            payload
-          )
+          `http://localhost:3000/products/${wineDetail.id}`,
+          payload
+        )
         : await axios.post(`http://localhost:3000/products`, payload);
       if (res.status === 200) {
         //me devuelve status 200 entonces seteo success=ture y limpio el form (deberia hacerlo de forma automatica pero no me estuvo funcionando...hay que ver que pasa)
@@ -149,109 +155,130 @@ const LoadProduct = (props) => {
       {loading ? (
         <CircularProgress />
       ) : (
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchemaLoadProducts}
-          onSubmit={handleSubmit}
-        >
-          {(formik) => (
-            <Container>
-              <Form>
-                <FormField
-                  fieldType="input"
-                  label="Marca"
-                  name="name"
-                  required
-                />
-                <FormField
-                  fieldType="select"
-                  label="Cepa"
-                  name="strain"
-                  options={strainOption}
-                />
-                <FormField
-                  fieldType="input"
-                  type="number"
-                  label="Año de cosecha"
-                  name="yearHarvest"
-                  required
-                />
-                <FormField
-                  fieldType="input"
-                  type="number"
-                  label="Stock Inicial"
-                  name="stock"
-                />
-                <FormField
-                  fieldType="input"
-                  type="number"
-                  label="Precio"
-                  name="price"
-                  required
-                />
-                <FormField
-                  fieldType="input"
-                  label="URL de imagen"
-                  name="image"
-                  required
-                />
-                <FormField
-                  fieldType="textarea"
-                  label="Descripcion del producto"
-                  name="description"
-                  rows={8}
-                  required
-                />
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchemaLoadProducts}
+            onSubmit={handleSubmit}
+          >
+            {(formik) => (
+              <Container>
+                <Form>
+                  <FormField
+                    fieldType="input"
+                    label="Marca"
+                    name="name"
+                    required
+                  />
+                  <FormField
+                    fieldType="select"
+                    label="Cepa"
+                    name="strain"
+                    options={strainOption}
+                  />
+                  <FormField
+                    fieldType="input"
+                    type="number"
+                    label="Año de cosecha"
+                    name="yearHarvest"
+                    required
+                  />
+                  <FormField
+                    fieldType="input"
+                    type="number"
+                    label="Stock Inicial"
+                    name="stock"
+                  />
+                  <FormField
+                    fieldType="input"
+                    type="number"
+                    label="Precio"
+                    name="price"
+                    required
+                  />
+                  <FormField
+                    fieldType="input"
+                    label="URL de imagen"
+                    name="image"
+                    required
+                  />
 
-                <br></br>
-                <Container>
-                  {edit ? (
-                    <>
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        disabled={!formik.isValid}
-                        type="submit"
-                      >
-                        {' '}
-                        {success ? `PRODUCTO EDITADO!` : 'Update'}
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        disabled={!formik.isValid}
-                        onClick={() => handleDelete(formik)}
-                      >
-                        DELETE
-                      </Button>
-                    </>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      disabled={!formik.isValid}
-                      type="submit"
-                    >
-                      {' '}
-                      {success ? `PRODUCTO AGREGADO!` : 'Submit'}
-                    </Button>
-                  )}
+                  <FormField
+                    fieldType="select"
+                    label="Sabor 1"
+                    name="taste1"
+                    // options={listandoSabores}
+                  />
+                  <FormField
+                    fieldType="select"
+                    label="Sabor 2"
+                    name="taste2"
+                    // options={listandoSabores}
+                  />
+                  <FormField
+                    fieldType="select"
+                    label="Sabor 3"
+                    name="taste3"
+                    // options={listandoSabores}
+                  />
+
+
+                  <FormField
+                    fieldType="textarea"
+                    label="Descripcion del producto"
+                    name="description"
+                    rows={8}
+                    required
+                  />
+
                   <br></br>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    disabled={!formik.isValid}
-                    onClick={() => handleReset(formik)}
-                    type="reset"
-                  >
-                    RESET
+                  <Container>
+                    {edit ? (
+                      <>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          disabled={!formik.isValid}
+                          type="submit"
+                        >
+                          {' '}
+                          {success ? `PRODUCTO EDITADO!` : 'Update'}
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          disabled={!formik.isValid}
+                          onClick={() => handleDelete(formik)}
+                        >
+                          DELETE
+                      </Button>
+                      </>
+                    ) : (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          disabled={!formik.isValid}
+                          type="submit"
+                        >
+                          {' '}
+                          {success ? `PRODUCTO AGREGADO!` : 'Submit'}
+                        </Button>
+                      )}
+                    <br></br>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      disabled={!formik.isValid}
+                      onClick={() => handleReset(formik)}
+                      type="reset"
+                    >
+                      RESET
                   </Button>
-                </Container>
-              </Form>
-            </Container>
-          )}
-        </Formik>
-      )}
+                  </Container>
+                </Form>
+              </Container>
+            )}
+          </Formik>
+        )}
     </Container>
   );
 };
@@ -259,6 +286,7 @@ const LoadProduct = (props) => {
 const mapStateToProps = (state) => ({
   strainList: state.formReducers.strainList,
   wineDetail: state.productReducers.wineDetail,
+  cats: state.productReducers.categories
 });
 
 export default connect(mapStateToProps, {

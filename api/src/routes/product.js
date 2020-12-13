@@ -87,6 +87,21 @@ server.get('/ProductosPorCategoria/:categoria', (req, res) => {
   }
 });
 
+server.get('/CategoriaProducto/:id', (req, res, next) => {
+  let { id } = req.params;
+  Category.findAll({
+    include: {model: Product,
+    where: {id}}
+   })
+   .then((cats) => {
+    res.json (cats.map(t => {
+      return {id: t.id, taste: t.taste}
+     }))
+      
+   })
+   .catch(next);
+});
+
 server.put('/:id', (req, res) => {
   let { id } = req.params;
   let { name, price, description, yearHarvest, image, stock } = req.body;

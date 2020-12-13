@@ -8,10 +8,10 @@ import LoadCategory from './LoadCategory/LoadCategory';
 import { getCategoryList } from '../../actions';
 import { connect } from 'react-redux';
 
-export const AdminPanel = (props) => {
-
- //props.getCategoryList();
- console.log("viendo el estado",props)
+  const AdminPanel =(props)=> {
+   
+    props.getCategoryList()
+//  console.log("viendo el estado",props.categories)
   
   return (
     <Container className="AdminPanel">
@@ -23,7 +23,7 @@ export const AdminPanel = (props) => {
             <Link to="/admin/loadproduct">Cargar Producto</Link>
           </li>
           <li>
-            <Link to="/admin/loadcategory">Cargar/Borrar Categoria</Link>
+            <Link to="/admin/loadcategory" onClick={()=>{ props.getCategoryList()}}>Cargar/Borrar Categoria</Link>
           </li>
         </ul>
       </Paper>
@@ -46,7 +46,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { getCategoryList })(
-  AdminPanel
-  );
-//export default AdminPanel;
+export default connect(mapStateToProps, { getCategoryList })(AdminPanel);//export default AdminPanel;

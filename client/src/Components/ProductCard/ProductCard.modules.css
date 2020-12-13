@@ -6,14 +6,14 @@
 }
 .ProCards_Card {
   margin: 2rem 1rem 2rem 1rem;
-  width: 30% !important;
+  width: 16rem !important;
   /* opacity: 80%; */
   background:#ffffffb8 !important;
   padding-top: 1rem;
 }
 .ProCards_Card:hover{
   margin: 2rem 1rem 2rem 1rem;
-  width: 30% !important;
+  width: 16rem !important;
   background-color: white !important;
   transition: all 550ms ease-in-out; 
 }
