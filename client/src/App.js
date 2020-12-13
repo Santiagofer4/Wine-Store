@@ -25,10 +25,7 @@ function App() {
           path="/product"
           render={() => <Products data={productsList} />}
         />
-        <Route
-          path="/product/:id"
-          render={() => <ProductDetail data={productsList} />}
-        />
+        <Route path="/product/:id" render={() => <ProductDetail />} />
         <Route path="/admin/form-product" component={ProductForm} />
         <Route path="/form/test" component={TestForm} />
         <Route path="/admin" component={AdminPanel} />

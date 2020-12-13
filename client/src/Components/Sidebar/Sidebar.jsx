@@ -21,14 +21,14 @@ function Sidebar(props) {
           {props.categories[0].data.map((product, index) => {
             return (
               // <Button>
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    categoria(e);
-                  }}
-                >
-                  {product.taste}
-                </a>
+              <a
+                href="#"
+                onClick={(e) => {
+                  categoria(e);
+                }}
+              >
+                {product.taste}
+              </a>
               // </Button>
             );
           })}

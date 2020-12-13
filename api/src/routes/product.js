@@ -2,6 +2,13 @@ const server = require('express').Router();
 const { Product, Category, User, Strain } = require('../db.js');
 // const { Sequelize } = require('sequelize');
 
+//! [FLAVIO] SIEMPRE RETORNAR UN STATUS DE CUALQUIER METODO QUE SE LE HACE A LA API:
+//! PUEDE SER DE 3 maneras (desconozco si habra otra manera de hacerlo):
+//! 1. return res.status(XXX).send(`CON O SIN CONTENIDO)
+//! 2. return res.send(xxx,`CON O SON CONTENIDO`)
+//! 3. return res.sendStatus(XXX)
+//! Cualquiera de las formas es correcta, pero, res.status(XXX) NO DEVUELVE NADA -- OJO --
+
 server.get('/', (req, res, next) => {
   console.log('GET a productos');
   Product.findAll()
@@ -15,6 +22,7 @@ server.get('/category', (req, res, next) => {
   console.log('GET a categorys');
   Category.findAll()
     .then((cat) => {
+      console.log(cat);
       res.send(cat);
     })
     .catch(next);
@@ -122,7 +130,8 @@ server.delete('/:id', (req, res) => {
         id,
       },
     }).then(() => {
-      return res.status(200);
+      console.log('destroy OK');
+      return res.status(200).send(`Producto borrado ${id}`);
     });
   } else {
     return res.status(400).send('No se encontró el producto a eliminar');
@@ -140,7 +149,7 @@ server.delete('/category/:id', (req, res) => {
         id,
       },
     }).then(() => {
-      return res.status(200);
+      return res.send(200, `categoria borrad ${id}`);
     });
   } else {
     return res.status(400).send('No existe la categoría');
@@ -180,7 +189,7 @@ server.post('/', (req, res, next) => {
     stock,
     categories,
   } = req.body;
-  console.log('entré a post products');
+  console.log('entré a post ');
   //const categories = categories;
   Product.create({
     name,
@@ -215,6 +224,7 @@ server.post('/category', (req, res) => {
         taste,
       },
     }).then((category) => {
+      console.log('ENVIANDO CATEGORY', category);
       return res.status(200).send('La categoría ha sido creada');
     });
   } else {

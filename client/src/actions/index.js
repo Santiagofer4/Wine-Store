@@ -7,6 +7,10 @@ import {
   GET_CATEGORY_LIST,
   SET_PRODUCT_DETAIL,
   GET_STRAIN_LIST,
+<<<<<<< HEAD
+=======
+  SET_HISTORY,
+>>>>>>> master
 } from './actions';
 
 export function getProductSearch(payload) {
@@ -63,9 +67,13 @@ export const setProductDetail = (wineDetail) => (dispatch) => {
 export const getStrainList = () => async (dispatch) => {
   try {
     const strainList = await axios.get('http://localhost:3000/products/strain');
-    console.log('ACTIONS->strainList', strainList.data);
+    // console.log('ACTIONS->strainList', strainList.data);
     return dispatch({ type: GET_STRAIN_LIST, payload: strainList.data });
   } catch (error) {
     console.error(error);
   }
+};
+
+export const setHistory = (userHistory) => (dispatch) => {
+  return dispatch({ type: SET_HISTORY, payload: userHistory });
 };

@@ -43,7 +43,8 @@ export const AdminPanel = (props) => {
             </div>
           </div>
       </Paper>
-      {/*       <br></br>
+
+  {/*       <br></br>
       <h1>Renderizar formularios de carga</h1>
       <br></br> */}
       <Container className="AdminPanel__Form">
@@ -51,6 +52,7 @@ export const AdminPanel = (props) => {
         <Route path="/admin/loadcategory" component={LoadCategory} />
         <Route path="/admin/loadstrain" component={LoadStrain} />
         <Route path="/admin/loadbrand" component={LoadBrand} />
+
       </Container>
     </Container>
   );
