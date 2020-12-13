@@ -10,7 +10,7 @@ function SearchBar(props) {
   const [inputSearch, setinputSearch] = useState('');
 
   const history = useHistory();
-  
+
   const onSubmit = (e) => {
     e.preventDefault();
     props.getProductSearch(inputSearch);
@@ -41,11 +41,11 @@ function SearchBar(props) {
     </div>
   );
 }
-function mapStateToProps(state){
-  console.log('estado general',state)
+function mapStateToProps(state) {
+  // console.log('estado general',state)
   return {
-    wineList : state.wineList
-  }
+    wineList: state.wineList,
+  };
 }
 
 export default connect(mapStateToProps, { getProductSearch })(SearchBar);

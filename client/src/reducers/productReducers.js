@@ -17,10 +17,9 @@ const initialState = {
 const productReducers = (state = initialState, action) => {
   switch (action.type) {
     case GET_PRODUCT_SEARCH:
-
       return {
         ...state,
-        allProducts:[action.payload.data]
+        allProducts: [action.payload.data],
       };
     case GET_PRODUCTS_LIST:
       // console.log('datos payload', action.payload);

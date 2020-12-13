@@ -2,13 +2,13 @@ import * as yup from 'yup';
 
 //* Objecto de validacion para formulario de carga de producto (Reducer: postNewProduct;POST: '/products')
 export const validationSchemaLoadProducts = yup.object({
-  product: yup
+  name: yup
     .string()
     .required('El nombre del producto es requerido')
     .min(2, 'El nombre del producto es demasiado corto')
     .max(50, 'El nombre del producto es demasiado largo'),
-  strain: yup.string().required('Es necesario indicar la cepa'),
-  harvestYear: yup
+  // strain: yup.string().required('Es necesario indicar la cepa'),
+  yearHarvest: yup
     .number()
     .integer()
     .positive('El año de cosecha no puede ser negativo')
