@@ -12,6 +12,7 @@ function Sidebar(props) {
   function categoria(e) {
     let categoryName = e.target.innerText;
     props.getProductsCategory(categoryName);
+    console.log(categoryName)
   }
 
   if (props.products) {

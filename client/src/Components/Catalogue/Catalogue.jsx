@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ProductCard from '../ProductCard/ProductCard.jsx';
 import './Catalogue.modules.css';
 import Sidebar from '../Sidebar/Sidebar.jsx';
 import { connect } from 'react-redux';
 import { getProductsList, getCategoryList } from '../../actions';
-//! [Flavio] Me parece que el problema del error al renderizar esta relacionado con algun fetch async...o con algo que devuelve la db
-//! si apenas carga la pagina quiero entrar al catalogue es muy probable que se rompa con el error de que no encuentra
-//! `TypeError: props.categories[0] is undefined`. el div `cargando...` aparece pero dsps tira el error igual.
-//! Si intento `refrescar/recargar` la pagina, tb sale el mismo error
-//! encambio si esperamos un rato para el error no sale
+// [Flavio] Me parece que el problema del error al renderizar esta relacionado con algun fetch async...o con algo que devuelve la db
+// si apenas carga la pagina quiero entrar al catalogue es muy probable que se rompa con el error de que no encuentra
+// `TypeError: props.categories[0] is undefined`. el div `cargando...` aparece pero dsps tira el error igual.
+// Si intento `refrescar/recargar` la pagina, tb sale el mismo error
+// encambio si esperamos un rato para el error no sale
+// Borré el color rojo porque era muy llamativo y el lunes tenemos la demo
 
 function Catalogue(props) {
+  
   props.getCategoryList(); // se dispacha una accion al reducer con la lista de categorias para el sidebar
 
   if (props.allProducts.length === 0) {
@@ -30,6 +32,7 @@ function Catalogue(props) {
           {
             // informo en pantalla que no hay productos cargados
           }
+          <Sidebar></Sidebar>
           <div className="Catalogue__Div">
             <h3>No hay productos</h3>
           </div>

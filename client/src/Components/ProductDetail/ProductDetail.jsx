@@ -52,7 +52,7 @@ function ProductDetail({ wineDetail, ...props }) {
     <Container className="ProductDetail__Container">
       <Paper className="ProductDetail__Paper">
         <Container>
-          <img src={image} alt={`imagen del vino ${name}`} />
+          <img id="prodImg" src={image} alt={`imagen del vino ${name}`} />
         </Container>
         <Card className={classes.root} variant="outlined">
           <CardContent>

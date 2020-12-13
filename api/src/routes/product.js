@@ -2,12 +2,12 @@ const server = require('express').Router();
 const { Product, Category, User, Strain } = require('../db.js');
 // const { Sequelize } = require('sequelize');
 
-//! [FLAVIO] SIEMPRE RETORNAR UN STATUS DE CUALQUIER METODO QUE SE LE HACE A LA API:
-//! PUEDE SER DE 3 maneras (desconozco si habra otra manera de hacerlo):
-//! 1. return res.status(XXX).send(`CON O SIN CONTENIDO)
-//! 2. return res.send(xxx,`CON O SON CONTENIDO`)
-//! 3. return res.sendStatus(XXX)
-//! Cualquiera de las formas es correcta, pero, res.status(XXX) NO DEVUELVE NADA -- OJO --
+// [FLAVIO] SIEMPRE RETORNAR UN STATUS DE CUALQUIER METODO QUE SE LE HACE A LA API:
+// PUEDE SER DE 3 maneras (desconozco si habra otra manera de hacerlo):
+// 1. return res.status(XXX).send(`CON O SIN CONTENIDO)
+// 2. return res.send(xxx,`CON O SON CONTENIDO`)
+// 3. return res.sendStatus(XXX)
+// Cualquiera de las formas es correcta, pero, res.status(XXX) NO DEVUELVE NADA -- OJO -- cambié el color del comentario por la demo
 
 server.get('/', (req, res, next) => {
   console.log('GET a productos');
