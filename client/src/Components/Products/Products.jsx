@@ -6,7 +6,7 @@ function Products(props) {
     const { image, name, price, description, stock, category } = props.data;
     return (
         <div>
-            <img src={image} />
+            <img src={image} alt='No hay imagen'/>
             <h1>{name}</h1>
             <h4>{price}</h4>
             <h4>{stock}</h4>
@@ -20,8 +20,6 @@ function Products(props) {
             </CardActions>                  
         </div>
 )}
-
-
 
 
 export default Products

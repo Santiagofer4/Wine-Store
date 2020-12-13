@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Container,
-  Paper,
-  CardContent,
-  CardActions,
-  Card,
-  Typography,
-  Button,
-} from '@material-ui/core';
+import { Container, Paper, CardContent, CardActions, Card, Typography, Button, } from '@material-ui/core';
 import './ProductDetail.modules.css';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';

@@ -1,6 +1,6 @@
 const server = require('express').Router();
 const { Product, Category, User, Strain } = require('../db.js');
-const { Sequelize } = require('sequelize');
+// const { Sequelize } = require('sequelize');
 
 //! [FLAVIO] SIEMPRE RETORNAR UN STATUS DE CUALQUIER METODO QUE SE LE HACE A LA API:
 //! PUEDE SER DE 3 maneras (desconozco si habra otra manera de hacerlo):

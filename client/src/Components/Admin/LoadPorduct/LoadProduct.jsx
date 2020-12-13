@@ -47,7 +47,6 @@ import { setProductDetail, getProductsList } from '../../../actions/';
 const LoadProduct = (props) => {
   const emptyValues = {
     name: '',
->>>>>>> master
     strain: '',
     yearHarvest: '',
     price: '',
@@ -89,7 +88,7 @@ const LoadProduct = (props) => {
     await setStrainOption(formatArrayToOption(props.strainList)); //? Tiene que haber una mejor manera para solucionar esto...
     setLoading(false);
   };
-  //! <<<<<<<<<<<<<<<<<<----------------------
+ 
 
   const handleSubmit = async (values, onSubmitProps) => {
     // console.log(values);
@@ -173,6 +172,7 @@ const LoadProduct = (props) => {
   };
 
   return (
+
     <Container className="">
       {edit ? <h1>Editar {wineDetail.name}</h1> : <h1>Carga de Productos</h1>}
       {loading ? (
@@ -281,6 +281,7 @@ const LoadProduct = (props) => {
           )}
         </Formik>
       )}
+
     </Container>
   );
 };

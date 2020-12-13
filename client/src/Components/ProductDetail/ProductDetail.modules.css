@@ -3,4 +3,16 @@
 }
 .ProductDetail__Paper {
   padding: 2rem;
+  background-color: #525b56 !important;
+  border-radius: 50px !important;
 }
+
+#prodImg{
+  height: 500px;
+  border-radius: 20px !important;
+}
+
+#prodInfo{
+  border-radius: 20px !important;
+}
+

@@ -34,6 +34,3 @@ function NavBar() {
 }
 
 export default NavBar;
-
-// style={{ textDecoration: 'none', color: 'white' }}
-// style={{ textDecoration: 'none', color: 'white' }}

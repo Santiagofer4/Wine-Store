@@ -2,7 +2,7 @@ import React from 'react';
 import './App.modules.css';
 import Catalogue from './Components/Catalogue/Catalogue.jsx';
 import ProductForm from './Components/Forms/ProductForm.jsx';
-import SearchBar from './Components/SearchBar/SearchBar.jsx';
+// import SearchBar from './Components/SearchBar/SearchBar.jsx';
 import { productsList } from './Components/Products/ProductoPrueba.js';
 import Products from './Components/Products/Products.jsx';
 import { Route, Switch } from 'react-router-dom';
