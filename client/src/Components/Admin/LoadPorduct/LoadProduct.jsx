@@ -219,19 +219,39 @@ const LoadProduct = (props) => {
                     name="taste1"
                      options={tasteList}
                   />
+
+                      <Button
+                          variant="outlined"
+                          color="primary"
+                          label="Eliminar"
+                          name="delete1"
+                         />
+                 
                   <FormField
                     fieldType="select"
                     label="Sabor 2"
                     name="taste2"
                     options={tasteList}
                   />
+
+<Button
+                          variant="outlined"
+                          color="primary"
+                          label="Eliminar"
+                          name="delete2"
+                         />
                   <FormField
                     fieldType="select"
                     label="Sabor 3"
                     name="taste3"
                     options={tasteList}
                   />
-
+     <Button
+                          variant="outlined"
+                          color="primary"
+                          label="Eliminar"
+                          name="delete3"
+                         />
 
                   <FormField
                     fieldType="textarea"
