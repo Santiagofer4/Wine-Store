@@ -22,11 +22,12 @@ export const AdminPanel = (props) => {
         </ul>
       </Paper>
       <br></br>
-      <h1>Renderizar formularios de carga</h1>
+      <h1>Formularios del Administrador</h1>
       <br></br>
       <Container className="AdminPanel__Form">
         <Route path="/admin/loadproduct" component={LoadProduct} />
         <Route path="/admin/loadcategory" component={LoadCategory} />
+        <Route path="/admin/edit/:id" component={LoadProduct} />
       </Container>
     </Container>
   );

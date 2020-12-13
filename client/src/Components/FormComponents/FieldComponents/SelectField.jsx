@@ -37,7 +37,7 @@ function SelectField({
           return (
             <FormControl
               className={classes.formControl}
-              error={meta.touched && form.errors[name]}
+              error={meta.touched && !!form.errors[name]}
             >
               {label && (
                 <InputLabel shrink={placeholder && true} {...InputLabelProps}>
@@ -52,16 +52,18 @@ function SelectField({
                 {...field}
                 {...props}
               >
-                {placeholder && (
-                  <MenuItem value="" disabled>
-                    <em>{placeholder}</em>
-                  </MenuItem>
-                )}
-                {options.map((option, idx) => (
-                  <MenuItem key={idx} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
+                {placeholder ||
+                  (!options && (
+                    <MenuItem value="" disabled>
+                      <em>{placeholder || `No hay ${name}s cargadas`}</em>
+                    </MenuItem>
+                  ))}
+                {options &&
+                  options.map((option, idx) => (
+                    <MenuItem key={idx} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
               </Select>
               <FormHelperText>{form.errors[name]}</FormHelperText>
             </FormControl>

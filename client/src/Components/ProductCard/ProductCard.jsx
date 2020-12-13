@@ -18,6 +18,7 @@ function ProductCard(props) {
   const history = useHistory();
 
   const detailClickHandler = () => {
+    // console.log('CLICK CARD', props.data);
     props.setProductDetail(props.data);
     history.push(`/product/${id}`);
   };

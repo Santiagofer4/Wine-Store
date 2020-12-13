@@ -20,16 +20,16 @@ function Sidebar(props) {
         <div className="Sidebar__lista">
           {props.categories[0].data.map((product, index) => {
             return (
-              <Button>
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    categoria(e);
-                  }}
-                >
-                  {product.taste}
-                </a>
-              </Button>
+              // <Button>
+              <a
+                href="#"
+                onClick={(e) => {
+                  categoria(e);
+                }}
+              >
+                {product.taste}
+              </a>
+              // </Button>
             );
           })}
         </div>
