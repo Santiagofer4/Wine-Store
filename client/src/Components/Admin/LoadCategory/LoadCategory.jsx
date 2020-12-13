@@ -1,18 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
 import { validationSchemaLoadCategories } from '../adminValidations.js';
 import { Container, Paper, Button } from '@material-ui/core';
 import '../LoadPorduct/LoadProduct.modules.css';
 import axios from 'axios';
+import { getCategoryList } from '../../../actions';
+import { connect } from 'react-redux';
+import { formatArrayToOption } from '../../utils';
 
-export const LoadProduct = (props) => {
+export const LoadCategory = (props) => {
   const initialValues = {
-    name: '',
-    description: '',
-    pairing: '',
-    origin: '',
+    taste: ''
   };
+
+  const [borrar, setBorrar] = useState(false)
+  const [tasteList, setTasteList] = useState([]); //mantiene actualziada la lista de sabores(nuestras categorías)...no me convence...creo que es al pedo definir un estado local si tenemos un store
 
   const postNewCategory = async (category) => {
     try {
@@ -25,6 +28,13 @@ export const LoadProduct = (props) => {
       console.error(error);
     }
   };
+
+  // const callTastes = async () => {
+  //   await props.getCategoryList();
+  //   await setTasteList(formatArrayToOption(tasteList)); //? Tiene que haber una mejor manera para solucionar esto...
+  //  console.log(tasteList)
+  // };
+
   const handleSubmit = (values, onSubmitProps) => {
     // console.log('VALUES', values);
     postNewCategory(values);
@@ -34,6 +44,17 @@ export const LoadProduct = (props) => {
   return (
     <Container className="">
       <h1>Carga de categorías</h1>
+      <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {setBorrar(!borrar)
+                    // callTastes()
+                  }
+                 }           
+                >
+                { borrar ? "CARGAR" : "BORRAR" }
+                </Button>
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchemaLoadCategories}
@@ -41,32 +62,58 @@ export const LoadProduct = (props) => {
       >
         {(formik) => (
           <Container>
+
             <Form>
-              <FormField
-                fieldType="input"
-                label="Nombre de categoría"
-                name="name"
-                required
-              />
-              <FormField
-                fieldType="textarea"
-                label="Descripción de la categoría"
-                name="description"
-                rows={8}
-                required
-              />
-              <br></br>
-              <Container>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={!formik.isValid}
-                  type="submit"
-                >
-                  {' '}
-                  Cargar
-                </Button>
-              </Container>
+            { borrar ? 
+            
+   (   
+    <> 
+    <FormField
+            fieldType="select"
+            label="Listado de categorías"
+            name="taste"
+           options={tasteList}
+            required
+          />
+
+<br></br>
+                  <Container>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      disabled={!formik.isValid}
+                      type="submit"
+                    >
+                      
+                      Borrar
+                    </Button>
+                  </Container>
+</>)
+            : 
+                 (   
+                 <>
+                 <FormField
+                    fieldType="input"
+                    label="Nombre de categoría"
+                    name="taste"
+                    required
+                  />
+              
+                  <br></br>
+                  <Container>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      disabled={!formik.isValid}
+                      type="submit"
+                    >
+                      {' '}
+                      Cargar
+                    </Button>
+                  </Container>
+                  </>)
+            }
+      
             </Form>
           </Container>
         )}
@@ -75,4 +122,12 @@ export const LoadProduct = (props) => {
   );
 };
 
-export default LoadProduct;
+function mapStateToProps(state) {
+  return {
+    categoryList: state.productReducers.categories
+  };
+}
+
+export default connect(mapStateToProps, { getCategoryList })(
+  LoadCategory
+  );

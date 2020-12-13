@@ -11,7 +11,7 @@ import axios from 'axios';
 import { Switch, useHistory } from 'react-router-dom';
 import { setProductDetail, getProductsList } from '../../../actions/';
 
-//! ---- FUNCIONA PERO TIENE MUCHAS VUELTAS :S ----
+// ---- FUNCIONA PERO TIENE MUCHAS VUELTAS :S ----
 //? el select de las options no renderizan de primera, hay que ver la forma de se rerenderize cuando el fetch termina...el fetch lo hace pero no lo renderiza correctamente
 //? las cepas (strains) no son obligagtorias ahora, ya que en el create no son necesarias...
 //? Create,Udpate y Delete funcionan
@@ -37,7 +37,7 @@ const LoadProduct = (props) => {
   // console.log('PROPS LOAD', props.strainList);
   // console.log('LOADING', loading);
 
-  //! ESTE BLOQUE HAY QUE ANALZIARLO Y DEBUGEARLO BIEN --------->>>>>>>>>>>
+  // ESTE BLOQUE HAY QUE ANALZIARLO Y DEBUGEARLO BIEN --------->>>>>>>>>>>
   useEffect(() => {
     callStrainList();
     //si edit, entonces vengo de un product detail, entonces precargo los valores iniciales
@@ -60,7 +60,7 @@ const LoadProduct = (props) => {
     await setStrainOption(formatArrayToOption(props.strainList)); //? Tiene que haber una mejor manera para solucionar esto...
     setLoading(false);
   };
- 
+  // <<<<<<<<<<<<<<<<<<----------------------
 
   const handleSubmit = async (values, onSubmitProps) => {
     // console.log(values);
@@ -69,7 +69,7 @@ const LoadProduct = (props) => {
     //armo el objeto para pasarle a la API
     const payload = {
       name: values.name,
-     // strain: values.strain,
+      strain: values.strain,
       description: values.description,
       yearHarvest: values.yearHarvest,
       price: values.price,
@@ -112,7 +112,7 @@ const LoadProduct = (props) => {
       }
     } catch (error) {
       console.error(error);
-     //alert('No se ha podido cargar el producto'); TIRA SIEMPRE ERROR, AÚN CUANDO GUARDA EL PRODUCTO
+      alert('No se ha podido cargar el producto');
     }
   };
 
@@ -144,7 +144,6 @@ const LoadProduct = (props) => {
   };
 
   return (
-
     <Container className="">
       {edit ? <h1>Editar {wineDetail.name}</h1> : <h1>Carga de Productos</h1>}
       {loading ? (
@@ -164,15 +163,12 @@ const LoadProduct = (props) => {
                   name="name"
                   required
                 />
-
-                
-                {/* NO ANDA SI NO CARGAMOS CEPAS, ASÍ QUE LA COMENTO PORQUE ES UN EXTRA
-                 <FormField
+                <FormField
                   fieldType="select"
                   label="Cepa"
                   name="strain"
                   options={strainOption}
-                /> */}
+                />
                 <FormField
                   fieldType="input"
                   type="number"
@@ -256,7 +252,6 @@ const LoadProduct = (props) => {
           )}
         </Formik>
       )}
-
     </Container>
   );
 };

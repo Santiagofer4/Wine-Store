@@ -12,34 +12,46 @@ function Sidebar(props) {
   function categoria(e) {
     let categoryName = e.target.innerText;
     props.getProductsCategory(categoryName);
-    console.log(categoryName)
+
   }
 
-  if (props.products) {
+  // console.log('paso 1',props.categories)
+  if (props.categories[0] !== undefined) {
+    // console.log('paso 2',props.categories)
+    if(props.categories[0].length === 0){
+      return(
+        <div className="Sidebar__container">
+          <div className="Sidebar__lista">
+          <h6> No hay categorias</h6>
+          </div>
+        </div>
+      )
+    }else{
     return (
       <div className="Sidebar__container">
         <div className="Sidebar__lista">
           {props.categories[0].data.map((product, index) => {
             return (
               // <Button>
-              <a
-                href="#"
-                onClick={(e) => {
-                  categoria(e);
-                }}
-              >
-                {product.taste}
-              </a>
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    categoria(e);
+                  }}
+                >
+                  {product.taste}
+                </a>
               // </Button>
             );
           })}
         </div>
       </div>
-    );
+    );};
+  } else{
+    return (<h3>No hay productos</h3>);
+
   }
-  if (!props.products) {
-    return <h3>No hay productos</h3>;
-  }
+
 }
 
 const mapStateToProps = (state) => {

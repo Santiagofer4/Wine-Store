@@ -1,5 +1,13 @@
 import React from 'react';
-import { Container, Paper, CardContent, CardActions, Card, Typography, Button, } from '@material-ui/core';
+import {
+  Container,
+  Paper,
+  CardContent,
+  CardActions,
+  Card,
+  Typography,
+  Button,
+} from '@material-ui/core';
 import './ProductDetail.modules.css';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -52,7 +60,7 @@ function ProductDetail({ wineDetail, ...props }) {
     <Container className="ProductDetail__Container">
       <Paper className="ProductDetail__Paper">
         <Container>
-          <img id="prodImg" src={image} alt={`imagen del vino ${name}`} />
+          <img src={image} alt={`imagen del vino ${name}`} />
         </Container>
         <Card className={classes.root} variant="outlined">
           <CardContent>
