@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect} from 'react';
 import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
 import { validationSchemaLoadCategories } from '../adminValidations.js';
@@ -10,10 +10,13 @@ import { connect } from 'react-redux';
 import { formatArrayToOption } from '../../utils';
 
 export const LoadCategory = (props) => {
+  // console.log('es un arreglo?',props.categoryList[0].data)
   const initialValues = {
     taste: ''
   };
-
+  // console.log('load categori' ,props)
+  // props.getCategoryList()
+  // console.log('con datos', props.categoryList)
   const [borrar, setBorrar] = useState(false)
   const [tasteList, setTasteList] = useState([]); //mantiene actualziada la lista de sabores(nuestras categorías)...no me convence...creo que es al pedo definir un estado local si tenemos un store
 
@@ -28,18 +31,23 @@ export const LoadCategory = (props) => {
       console.error(error);
     }
   };
+useEffect(()=>{
+callTastes()
+},[props.categoryList])
 
-  // const callTastes = async () => {
-  //   await props.getCategoryList();
-  //   await setTasteList(formatArrayToOption(tasteList)); //? Tiene que haber una mejor manera para solucionar esto...
-  //  console.log(tasteList)
-  // };
+  const callTastes = async () => {
+    // await props.getCategoryList();
+    await Array.isArray(props.categoryList) && props.categoryList.length >0 && setTasteList(formatArrayToOption(props.categoryList,'taste')); //? Tiene que haber una mejor manera para solucionar esto...
+   console.log('dentro de calltests',tasteList)
+  };
 
   const handleSubmit = (values, onSubmitProps) => {
     // console.log('VALUES', values);
     postNewCategory(values);
     // onSubmitProps.resetForm();
   };
+
+
 
   return (
     <Container className="">
@@ -49,6 +57,7 @@ export const LoadCategory = (props) => {
                   color="secondary"
                   onClick={() => {setBorrar(!borrar)
                     // callTastes()
+
                   }
                  }           
                 >

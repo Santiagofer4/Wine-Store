@@ -195,6 +195,7 @@ server.delete('/category/:id', (req, res) => {
 // });
 
 server.post('/', (req, res, next) => {
+  let prod
   let {
     name,
     price,
@@ -205,8 +206,7 @@ server.post('/', (req, res, next) => {
     categories,
   } = req.body;
   console.log('entré a post ');
-  //const categories = categories;
-  Product.create({
+    Product.create({
     name,
     price,
     description,
@@ -214,14 +214,15 @@ server.post('/', (req, res, next) => {
     image,
     stock,
   })
-    .then((product) =>
+    .then((product) =>{
+       prod = product
       categories.forEach((categoryId) => {
         Category.findByPk(categoryId).then((category) =>
           product.addCategory(category)
         );
       })
-    )
-    .then(() => res.sendStatus(201))
+    })
+    .then(() => res.status(201).send(prod))
     .catch(next);
 });
 
@@ -271,19 +272,35 @@ server.post('/strain', (req, res) => {
   }
 });
 
-server.post('/:idProduct/category/:idCategory', (req, res) => {
-  let { idProduct, idCategory } = req.params;
+// server.post('/:idProduct/category/:idCategory', (req, res) => {
+//   let { idProduct, idCategory } = req.params;
 
-  console.log('actualizo categoría de producto');
+//   console.log('actualizo categoría de producto');
 
-  if (idProduct && idCategory) {
-    Product.findByPk(idProduct).then((product) => {
-      product.idCategory = idCategory;
-      return res.send('Se actualizó la categoría');
-    });
-  } else {
-    return res.status(400);
-  }
-});
+//   if (idProduct && idCategory) {
+//     Product.findByPk(idProduct).then((product) => {
+//       product.idCategory = idCategory;
+//       return res.send('Se actualizó la categoría');
+//     });
+//   } else {
+//     return res.status(400);
+//   }
+// });
+
+server.post('/:idProduct/category', (req, res) => {
+    let { idProduct } = req.params;
+    let { Category } = req.body; 
+  
+    console.log('actualizo categoría de producto');
+  
+    if (idProduct && Category) {
+      Product.findByPk(idProduct).then((product) => {
+        product.addCategory(Category)
+        return res.send('Se actualizó la categoría');
+      });
+    } else {
+      return res.status(400);
+    }
+  });
 
 module.exports = server;

@@ -29,20 +29,29 @@ const LoadProduct = (props) => {
     taste2: '',
     taste3: ''
   }; //valores "vacios" del form
-  const { wineDetail, cats } = props;
+  const { wineDetail, categoryList } = props;
 
   const edit = props.location.state ? props.location.state.edit : false; //true cuando entro por edit, false cualquier otra forma
   const [loading, setLoading] = useState(true); //estado para cargar el spinner de cargango
   const [strainOption, setStrainOption] = useState([]); //mantiene actualziada la lista de opciones de cepa...no me convence...creo que es al pedo definir un estado local si tenemos un store
   const [success, setSucces] = useState(false); //para cambiar el mensaje de los botones
   const [initialValues, setInitialValues] = useState(emptyValues); //estado para manejar los valores iniciales, o precargar los valores del producto, del formulario de carga/edicion de un producto
+  const [tasteList, setTasteList] = useState([]); //mantiene actualziada la lista de sabores(nuestras categorías)...no me convence...creo que es al pedo definir un estado local si tenemos un store
   const history = useHistory(); //para redirect despues del create-update-delete
   // console.log('PROPS LOAD', props.strainList);
   // console.log('LOADING', loading);
 
+     
+      const callTastes = async () => {
+        // await props.getCategoryList();
+        await Array.isArray(props.categoryList) && props.categoryList.length >0 && setTasteList(formatArrayToOption(props.categoryList,'taste')); //? Tiene que haber una mejor manera para solucionar esto...
+       console.log('dentro de calltests',tasteList)
+      };
+
   // ESTE BLOQUE HAY QUE ANALZIARLO Y DEBUGEARLO BIEN --------->>>>>>>>>>>
   useEffect(() => {
     callStrainList();
+    callTastes()
     //si edit, entonces vengo de un product detail, entonces precargo los valores iniciales
     if (edit) {
       setInitialValues({
@@ -53,12 +62,12 @@ const LoadProduct = (props) => {
         price: wineDetail.price,
         stock: wineDetail.stock,
         image: wineDetail.image,
-        taste: cats.taste,
-        taste2: cats.taste,
-        taste3: cats.taste,
+        // taste1: tasteList[0].taste,
+        // taste2: tasteList[1].taste,
+        // taste3: tasteList[2].taste,
       });
     }
-  }, []);
+  }, [props.tasteList]);
 
   const callStrainList = async () => {
     //! el getStrainList() es necesario para cargar el estado, aunque podria ejecutarse cada vez que cargo una nueva cepa.... el resto funciona....pero me parece ultra berreta
@@ -66,6 +75,8 @@ const LoadProduct = (props) => {
     await setStrainOption(formatArrayToOption(props.strainList)); //? Tiene que haber una mejor manera para solucionar esto...
     setLoading(false);
   };
+
+  
   // <<<<<<<<<<<<<<<<<<----------------------
 
   const handleSubmit = async (values, onSubmitProps) => {
@@ -206,19 +217,19 @@ const LoadProduct = (props) => {
                     fieldType="select"
                     label="Sabor 1"
                     name="taste1"
-                    // options={listandoSabores}
+                     options={tasteList}
                   />
                   <FormField
                     fieldType="select"
                     label="Sabor 2"
                     name="taste2"
-                    // options={listandoSabores}
+                    options={tasteList}
                   />
                   <FormField
                     fieldType="select"
                     label="Sabor 3"
                     name="taste3"
-                    // options={listandoSabores}
+                    options={tasteList}
                   />
 
 
@@ -286,7 +297,7 @@ const LoadProduct = (props) => {
 const mapStateToProps = (state) => ({
   strainList: state.formReducers.strainList,
   wineDetail: state.productReducers.wineDetail,
-  cats: state.productReducers.categories
+  categoryList: state.productReducers.categories
 });
 
 export default connect(mapStateToProps, {
