@@ -41,7 +41,7 @@ const LoadProduct = (props) => {
   // const [deleteTaste, setDeleteTaste] = useState(''); // Probando a hacer que active la actualización de los sabores
   // console.log('PROPS LOAD', props.strainList);
   // console.log('LOADING', loading);
- 
+
   const callTastes = async () => {
     // await props.getCategoryList();
     (await Array.isArray(props.categoryList)) &&
@@ -99,7 +99,7 @@ const LoadProduct = (props) => {
     };
     try {
       //si edit es un update (put), si !edit entonces es un create (post)
-      console.log('ID enviado',wineDetail.id)
+      console.log('ID enviado', wineDetail.id);
       const res = edit
         ? await axios.put(
             `http://localhost:3000/products/${wineDetail.id}`,
@@ -172,25 +172,34 @@ const LoadProduct = (props) => {
   //! la otra seria trabajarlo con algun estado de redux....
   const deleteTasteHandler = async (e) => {
     let select = e.target.name;
-   // let label ='';
-    let remove_cat_id = tasteList.find(
-      (taste) =>
-      document.querySelector(`#${e.target.name}`).textContent === taste.label
+    // let label ='';
+    console.log(select);
+    try {
+      var remove_cat_id = tasteList.find(
+        (taste) =>
+          document.querySelector(`#${e.target.name}`).textContent ===
+          taste.label
       ).value;
-      try {
-        const res = await axios.delete(
-          `http://localhost:3000/products/${wineDetail.id}/category/${remove_cat_id}`
-          );
-          if (res.status === 200) {
+    } catch (error) {
+      console.error(error);
+      alert('No se puede borrar una categoria vacia');
+      return;
+    }
+    try {
+      const res = await axios.delete(
+        `http://localhost:3000/products/${wineDetail.id}/category/${remove_cat_id}`
+      );
+      if (res.status === 200) {
         props.getProductsList();
         document.querySelector(`#${select}`).textContent = 'Eliminada';
         // console.log('Queryselector', document.querySelector(`#${select}`))
-       // history.push(`/admin/edit/${wineDetail.id}`); //intento fallido de forzar el renderizado del componente
+        // history.push(`/admin/edit/${wineDetail.id}`); //intento fallido de forzar el renderizado del componente
         console.log('DELETE');
       }
     } catch (error) {
       console.log(error);
       alert('No se ha podido eliminar la categoria');
+      return;
     }
   };
 
@@ -199,7 +208,7 @@ const LoadProduct = (props) => {
     initialValues[taste] = e.target.value;
     console.log(e.target.value);
     console.log(initialValues);
-  }
+  };
 
   return (
     <Container className="">
