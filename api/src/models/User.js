@@ -34,7 +34,7 @@ module.exports = (sequelize) => {
           isNumeric: true,
         },
       },
-      rol: {
+      role: {
         type: DataTypes.ENUM(['user', 'admin']),
         allowNull: false,
       },
@@ -42,7 +42,7 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true, // Funcionalidad completa será agregada más adelante
       },
-    },
+    }, { timestamps: false },
     {
       hooks: {
         beforeCreate: function (user) {
