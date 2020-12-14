@@ -104,20 +104,43 @@ server.get('/CategoriaProducto/:id', (req, res, next) => {
 
 server.put('/:id', (req, res) => {
   let { id } = req.params;
-  let { name, price, description, yearHarvest, image, stock } = req.body;
+  let { name, price, description, yearHarvest, image, stock, categories } = req.body;
+  let oldCategories;
 
   console.log('modifico producto');
+  if (!id) return res.status(400).send('El producto no existe');
 
-  if (id) {
-    Product.update(
-      { name, price, description, yearHarvest, image, stock },
-      { where: { id } }
-    ).then(() => {
-      return res.status(200).send('El producto ha sido actualizado');
+  Product.update(
+    { name, price, description, yearHarvest, image, stock },
+    { where: { id } }
+  )
+  Category.findAll({
+  include: {
+    model: Product, where: { id }
+  },
+  }).then(categories => {
+    oldCategories = categories;
+    console.log(oldCategories);
+    return Product.findByPk(id)
+  })
+    .then(product => {
+      oldCategories.forEach(category => {
+        product.removeCategory(category)
+      })
+      console.log(oldCategories);
+      return product;
+    })
+  .then((product) => {
+    categories.forEach((categoryId) => {
+      Category.findByPk(categoryId).then((category) =>
+        product.addCategory(category)
+      );
     });
-  } else {
-    return res.status(400).send('El producto no existe');
-  }
+  })    
+  .then(() => {
+    return res.status(200).send('El producto ha sido actualizado');
+  });
+
 });
 
 server.put('/category/:id', (req, res) => {

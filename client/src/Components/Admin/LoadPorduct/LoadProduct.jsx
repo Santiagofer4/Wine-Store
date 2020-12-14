@@ -99,6 +99,7 @@ const LoadProduct = (props) => {
     };
     try {
       //si edit es un update (put), si !edit entonces es un create (post)
+      console.log('ID enviado',wineDetail.id)
       const res = edit
         ? await axios.put(
             `http://localhost:3000/products/${wineDetail.id}`,
@@ -171,7 +172,6 @@ const LoadProduct = (props) => {
   //! la otra seria trabajarlo con algun estado de redux....
   const deleteTasteHandler = async (e) => {
     let select = e.target.name;
-
    // let label ='';
     let remove_cat_id = tasteList.find(
       (taste) =>
@@ -183,7 +183,7 @@ const LoadProduct = (props) => {
           );
           if (res.status === 200) {
         props.getProductsList();
-        document.querySelector(`#${select}`).innerText = 'Eliminada';
+        document.querySelector(`#${select}`).textContent = 'Eliminada';
         // console.log('Queryselector', document.querySelector(`#${select}`))
        // history.push(`/admin/edit/${wineDetail.id}`); //intento fallido de forzar el renderizado del componente
         console.log('DELETE');
@@ -193,6 +193,13 @@ const LoadProduct = (props) => {
       alert('No se ha podido eliminar la categoria');
     }
   };
+
+  const handleOnClickSelect = (e) => {
+    let taste = e.target.name;
+    initialValues[taste] = e.target.value;
+    console.log(e.target.value);
+    console.log(initialValues);
+  }
 
   return (
     <Container className="">
@@ -254,6 +261,7 @@ const LoadProduct = (props) => {
                     options={tasteList}
                     id="delete1"
                     value={initialValues.taste1}
+                    onChange={(e) => handleOnClickSelect(e)}
                   />
                 ) : (
                   <FormField
@@ -283,6 +291,7 @@ const LoadProduct = (props) => {
                     options={tasteList}
                     id="delete2"
                     value={initialValues.taste2}
+                    onChange={(e) => handleOnClickSelect(e)}
                   />
                 ) : (
                   <FormField
