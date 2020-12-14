@@ -38,9 +38,10 @@ const LoadProduct = (props) => {
   const [initialValues, setInitialValues] = useState(emptyValues); //estado para manejar los valores iniciales, o precargar los valores del producto, del formulario de carga/edicion de un producto
   const [tasteList, setTasteList] = useState([]); //mantiene actualziada la lista de sabores(nuestras categorías)...no me convence...creo que es al pedo definir un estado local si tenemos un store
   const history = useHistory(); //para redirect despues del create-update-delete
+  const [deleteTaste, setDeleteTaste] = useState(''); // Probando a hacer que active la actualización de los sabores
   // console.log('PROPS LOAD', props.strainList);
   // console.log('LOADING', loading);
-
+ 
   const callTastes = async () => {
     // await props.getCategoryList();
     (await Array.isArray(props.categoryList)) &&
@@ -171,15 +172,18 @@ const LoadProduct = (props) => {
   const deleteTasteHandler = async (e) => {
     let remove_cat_id = tasteList.find(
       (taste) =>
-        document.querySelector(`#${e.target.name}`).textContent === taste.label
-    ).value;
-    try {
-      const res = await axios.delete(
-        `http://localhost:3000/products/${wineDetail.id}/category/${remove_cat_id}`
-      );
-      if (res.status === 200) {
+      document.querySelector(`#${e.target.name}`).textContent === taste.label
+      ).value;
+      try {
+        const res = await axios.delete(
+          `http://localhost:3000/products/${wineDetail.id}/category/${remove_cat_id}`
+          );
+          if (res.status === 200) {
+            console.log('EVENTO',e.target.name)
+            console.log('REMOVE CAT ID', remove_cat_id)
         props.getProductsList();
-        history.push(`/product/${wineDetail.id}`); //intento fallido de forzar el renderizado del componente
+       // document.querySelector(`#${e.target.name}`).innerText = '';
+       // history.push(`/admin/edit/${wineDetail.id}`); //intento fallido de forzar el renderizado del componente
         console.log('DELETE');
       }
     } catch (error) {
