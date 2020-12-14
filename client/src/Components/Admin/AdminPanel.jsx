@@ -14,7 +14,7 @@ const AdminPanel = (props) => {
 
   return (
     <Container className="AdminPanel">
-      <Paper className="AdminPanel__Panel">
+      <Paper id='backgroundPaper' className="AdminPanel__Panel">
         <h1 className="AdminPanel__Title">ADMIN PANEL</h1>
         <img
           className="imgAdmin"
