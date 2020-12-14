@@ -331,6 +331,7 @@ const LoadProduct = (props) => {
                     options={tasteList}
                     id="delete3"
                     value={initialValues.taste3}
+                    onChange={(e) => handleOnClickSelect(e)}
                   />
                 ) : (
                   <FormField
