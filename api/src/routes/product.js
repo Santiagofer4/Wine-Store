@@ -178,27 +178,11 @@ server.delete('/:idProducto/category/:idCategoria', (req, res) => {
     where: { id: idProducto },
   })
     .then((prod) => {
-      prod.removeCategory([idProducto]);
+      prod.removeCategory([idCategoria]);
       res.sendStatus(200);
     })
     .catch((e) => console.log(e));
-  //   let { idProducto, idCategoria } = req.params;
-  //   if (idCategoria && idProducto) {
-  // //    Category.destroy({
-  // //      where: { id: idCategoria },
-  // //      include: { model: Product },
-  // //    })
-  //       Product.findAll({where: {
-  //         id: idProducto
-  //       } })
-  //       .then((producto) => {
-  //       producto.removeCategory(idCategoria)
-  //       })
-  //       .then(() => {
-  //         return res.send(200, `categoria borrada ${id}`);
-  //       })
-  //       .catch('No existe la categoría');
-  //   }
+
 });
 
 server.post('/', (req, res, next) => {
