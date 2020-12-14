@@ -34,7 +34,7 @@ function SearchBar(props) {
             setinputSearch(e.target.value);
           }}
         />
-        <Button type="submit" className="SearchBar___btn" id='btnSB'>
+        <Button type="submit" className="SearchBar___btn" id="btnSB">
           Buscar
         </Button>
       </form>

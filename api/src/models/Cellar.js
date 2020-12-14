@@ -1,8 +1,10 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    // defino el modelo
-    sequelize.define('cellar', {
+  // defino el modelo
+  sequelize.define(
+    'cellar',
+    {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -14,6 +16,8 @@ module.exports = (sequelize) => {
       location: {
         type: DataTypes.STRING,
         allowNull: false,
-      }
-    }, {timestamps: false});
-  };
+      },
+    },
+    { timestamps: false }
+  );
+};

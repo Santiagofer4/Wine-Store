@@ -12,7 +12,6 @@ import { getProductsList, getCategoryList } from '../../actions';
 // Borré el color rojo porque era muy llamativo y el lunes tenemos la demo
 
 function Catalogue(props) {
-  
   props.getCategoryList(); // se dispacha una accion al reducer con la lista de categorias para el sidebar
 
   if (props.allProducts.length === 0) {

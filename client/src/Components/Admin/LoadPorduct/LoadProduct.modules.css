@@ -1,3 +1,7 @@
-.MuiButton-containedPrimary  {
-    background-color: #be9063 !important;
+.MuiButton-containedPrimary {
+  background-color: #be9063 !important;
+}
+
+button > * {
+  pointer-events: none;
 }

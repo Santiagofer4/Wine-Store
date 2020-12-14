@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect} from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
 import { validationSchemaLoadCategories } from '../adminValidations.js';
@@ -12,12 +12,12 @@ import { formatArrayToOption } from '../../utils';
 export const LoadCategory = (props) => {
   // console.log('es un arreglo?',props.categoryList[0].data)
   const initialValues = {
-    taste: ''
+    taste: '',
   };
   // console.log('load categori' ,props)
   // props.getCategoryList()
   // console.log('con datos', props.categoryList)
-  const [borrar, setBorrar] = useState(false)
+  const [borrar, setBorrar] = useState(false);
   const [tasteList, setTasteList] = useState([]); //mantiene actualziada la lista de sabores(nuestras categorías)...no me convence...creo que es al pedo definir un estado local si tenemos un store
 
   const postNewCategory = async (category) => {
@@ -31,14 +31,16 @@ export const LoadCategory = (props) => {
       console.error(error);
     }
   };
-useEffect(()=>{
-callTastes()
-},[props.categoryList])
+  useEffect(() => {
+    callTastes();
+  }, [props.categoryList]);
 
   const callTastes = async () => {
     // await props.getCategoryList();
-    await Array.isArray(props.categoryList) && props.categoryList.length >0 && setTasteList(formatArrayToOption(props.categoryList,'taste')); //? Tiene que haber una mejor manera para solucionar esto...
-   console.log('dentro de calltests',tasteList)
+    (await Array.isArray(props.categoryList)) &&
+      props.categoryList.length > 0 &&
+      setTasteList(formatArrayToOption(props.categoryList, 'taste')); //? Tiene que haber una mejor manera para solucionar esto...
+    console.log('dentro de calltests', tasteList);
   };
 
   const handleSubmit = (values, onSubmitProps) => {
@@ -47,22 +49,19 @@ callTastes()
     // onSubmitProps.resetForm();
   };
 
-
-
   return (
     <Container className="">
-      <h1>Carga de categorías</h1>
+      {borrar ? <h1>Borrar una categorías</h1> : <h1>Cargar una categorías</h1>}
       <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => {setBorrar(!borrar)
-                    // callTastes()
-
-                  }
-                 }           
-                >
-                { borrar ? "CARGAR" : "BORRAR" }
-                </Button>
+        variant="contained"
+        color="secondary"
+        onClick={() => {
+          setBorrar(!borrar);
+          // callTastes()
+        }}
+      >
+        {borrar ? 'CARGAR' : 'BORRAR'}
+      </Button>
 
       <Formik
         initialValues={initialValues}
@@ -71,21 +70,18 @@ callTastes()
       >
         {(formik) => (
           <Container>
-
             <Form>
-            { borrar ? 
-            
-   (   
-    <> 
-    <FormField
-            fieldType="select"
-            label="Listado de categorías"
-            name="taste"
-           options={tasteList}
-            required
-          />
+              {borrar ? (
+                <>
+                  <FormField
+                    fieldType="select"
+                    label="Listado de categorías"
+                    name="taste"
+                    options={tasteList}
+                    required
+                  />
 
-<br></br>
+                  <br></br>
                   <Container>
                     <Button
                       variant="contained"
@@ -93,21 +89,19 @@ callTastes()
                       disabled={!formik.isValid}
                       type="submit"
                     >
-                      
                       Borrar
                     </Button>
                   </Container>
-</>)
-            : 
-                 (   
-                 <>
-                 <FormField
+                </>
+              ) : (
+                <>
+                  <FormField
                     fieldType="input"
                     label="Nombre de categoría"
                     name="taste"
                     required
                   />
-              
+
                   <br></br>
                   <Container>
                     <Button
@@ -120,9 +114,8 @@ callTastes()
                       Cargar
                     </Button>
                   </Container>
-                  </>)
-            }
-      
+                </>
+              )}
             </Form>
           </Container>
         )}
@@ -133,10 +126,8 @@ callTastes()
 
 function mapStateToProps(state) {
   return {
-    categoryList: state.productReducers.categories
+    categoryList: state.productReducers.categories,
   };
 }
 
-export default connect(mapStateToProps, { getCategoryList })(
-  LoadCategory
-  );
+export default connect(mapStateToProps, { getCategoryList })(LoadCategory);

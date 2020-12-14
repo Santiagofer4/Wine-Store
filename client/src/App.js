@@ -9,7 +9,7 @@ import { Route, Switch } from 'react-router-dom';
 import NavBar from './Components/SearchBar/NavBar.jsx';
 import Inicio from './Components/Inicio/Inicio.jsx';
 import TestForm from './Components/FormComponents/TestForm.jsx';
-import  AdminPanel  from './Components/Admin/AdminPanel';
+import AdminPanel from './Components/Admin/AdminPanel';
 import { LoadProduct } from './Components/Admin/LoadPorduct/LoadProduct';
 import ProductDetail from './Components/ProductDetail/ProductDetail';
 

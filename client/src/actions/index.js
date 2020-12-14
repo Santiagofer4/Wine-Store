@@ -7,7 +7,8 @@ import {
   GET_CATEGORY_LIST,
   SET_PRODUCT_DETAIL,
   GET_STRAIN_LIST,
-  SET_HISTORY
+  SET_HISTORY,
+  GET_CATEGORIES_OF_PRODUCT,
 } from './actions';
 
 export function getProductSearch(payload) {
@@ -68,9 +69,26 @@ export const getStrainList = () => async (dispatch) => {
     return dispatch({ type: GET_STRAIN_LIST, payload: strainList.data });
   } catch (error) {
     console.error(error);
+    return;
   }
 };
 
 export const setHistory = (userHistory) => (dispatch) => {
   return dispatch({ type: SET_HISTORY, payload: userHistory });
+};
+
+export const getCatsOfProduct = (productId) => async (dispatch) => {
+  try {
+    const prodCategoryList = await axios.get(
+      `http://localhost:3000/products/CategoriaProducto/${productId}`
+    );
+    // console.log('ACTION', prodCategoryList.data);
+    return dispatch({
+      type: GET_CATEGORIES_OF_PRODUCT,
+      payload: prodCategoryList.data,
+    });
+  } catch (error) {
+    console.error(error);
+    return;
+  }
 };

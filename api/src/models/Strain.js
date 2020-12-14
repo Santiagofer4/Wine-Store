@@ -1,8 +1,10 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    // defino el modelo
-    sequelize.define('strain', {
+  // defino el modelo
+  sequelize.define(
+    'strain',
+    {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -11,13 +13,16 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      pairing: { //maridaje
+      pairing: {
+        //maridaje
         type: DataTypes.TEXT,
         allowNull: false,
       },
-     origin: {
+      origin: {
         type: DataTypes.TEXT,
         allowNull: false,
-      }
-    }, {timestamps: false});
-  };
+      },
+    },
+    { timestamps: false }
+  );
+};

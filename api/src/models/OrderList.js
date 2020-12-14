@@ -1,8 +1,8 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define("orderList", {
+  sequelize.define('orderList', {
     quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,

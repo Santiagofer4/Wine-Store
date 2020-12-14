@@ -1,7 +1,6 @@
-.Nav__li{
-    list-style: none;
-    padding: 0rem 2rem;
-   
+.Nav__li {
+  list-style: none;
+  padding: 0rem 2rem;
 }
 
 .Nav__Link {
@@ -37,10 +36,10 @@
 }
 
 @media screen and (max-width: 750px) {
-  #invisible{
-    display: none;}
-    .Nav__ul{
-      width: 50% ;
-    }
- 
+  #invisible {
+    display: none;
   }
+  .Nav__ul {
+    width: 50%;
+  }
+}

@@ -27,9 +27,9 @@ const LoadProduct = (props) => {
     image: '',
     taste1: '',
     taste2: '',
-    taste3: ''
+    taste3: '',
   }; //valores "vacios" del form
-  const { wineDetail, categoryList } = props;
+  const { wineDetail, categoryList, prodCats } = props;
 
   const edit = props.location.state ? props.location.state.edit : false; //true cuando entro por edit, false cualquier otra forma
   const [loading, setLoading] = useState(true); //estado para cargar el spinner de cargango
@@ -41,17 +41,19 @@ const LoadProduct = (props) => {
   // console.log('PROPS LOAD', props.strainList);
   // console.log('LOADING', loading);
 
-     
-      const callTastes = async () => {
-        // await props.getCategoryList();
-        await Array.isArray(props.categoryList) && props.categoryList.length >0 && setTasteList(formatArrayToOption(props.categoryList,'taste')); //? Tiene que haber una mejor manera para solucionar esto...
-       console.log('dentro de calltests',tasteList)
-      };
+  const callTastes = async () => {
+    // await props.getCategoryList();
+    (await Array.isArray(props.categoryList)) &&
+      props.categoryList.length > 0 &&
+      setTasteList(formatArrayToOption(categoryList, 'taste')); //? Tiene que haber una mejor manera para solucionar esto...
+    // console.log('CATS LIST', categoryList);
+    // console.log('dentro de calltests', tasteList);
+  };
 
   // ESTE BLOQUE HAY QUE ANALZIARLO Y DEBUGEARLO BIEN --------->>>>>>>>>>>
   useEffect(() => {
     callStrainList();
-    callTastes()
+    callTastes();
     //si edit, entonces vengo de un product detail, entonces precargo los valores iniciales
     if (edit) {
       setInitialValues({
@@ -62,12 +64,13 @@ const LoadProduct = (props) => {
         price: wineDetail.price,
         stock: wineDetail.stock,
         image: wineDetail.image,
-        // taste1: tasteList[0].taste,
-        // taste2: tasteList[1].taste,
-        // taste3: tasteList[2].taste,
+        taste1: !!prodCats[0] ? prodCats[0].id : '',
+        taste2: !!prodCats[1] ? prodCats[1].id : '',
+        taste3: !!prodCats[2] ? prodCats[2].id : '',
       });
+      // console.log('prodCats useEffect', prodCats);
     }
-  }, [props.tasteList]);
+  }, [wineDetail, categoryList, prodCats]);
 
   const callStrainList = async () => {
     //! el getStrainList() es necesario para cargar el estado, aunque podria ejecutarse cada vez que cargo una nueva cepa.... el resto funciona....pero me parece ultra berreta
@@ -76,7 +79,6 @@ const LoadProduct = (props) => {
     setLoading(false);
   };
 
-  
   // <<<<<<<<<<<<<<<<<<----------------------
 
   const handleSubmit = async (values, onSubmitProps) => {
@@ -92,14 +94,15 @@ const LoadProduct = (props) => {
       price: values.price,
       stock: values.stock,
       image: values.image,
+      categories: [values.taste1, values.taste2, values.taste3],
     };
     try {
       //si edit es un update (put), si !edit entonces es un create (post)
       const res = edit
         ? await axios.put(
-          `http://localhost:3000/products/${wineDetail.id}`,
-          payload
-        )
+            `http://localhost:3000/products/${wineDetail.id}`,
+            payload
+          )
         : await axios.post(`http://localhost:3000/products`, payload);
       if (res.status === 200) {
         //me devuelve status 200 entonces seteo success=ture y limpio el form (deberia hacerlo de forma automatica pero no me estuvo funcionando...hay que ver que pasa)
@@ -160,156 +163,229 @@ const LoadProduct = (props) => {
     });
   };
 
+  //! el delete lo manda a la API correctamente, y esta responde 200 si todo salio bien, o error
+  //! No hay ninguna redireccion despues del delete, pero habria que vaciar el campo "select" que se elimino
+  //! Tampoco estamos manejando el doble delete
+  //! Habria que ver de levantar la data del producto nuevamente de la DB y re-renderizar el componente (o la parte que cambio)
+  //! la otra seria trabajarlo con algun estado de redux....
+  const deleteTasteHandler = async (e) => {
+    let remove_cat_id = tasteList.find(
+      (taste) =>
+        document.querySelector(`#${e.target.name}`).textContent === taste.label
+    ).value;
+    try {
+      const res = await axios.delete(
+        `http://localhost:3000/products/${wineDetail.id}/category/${remove_cat_id}`
+      );
+      if (res.status === 200) {
+        props.getProductsList();
+        history.push(`/product/${wineDetail.id}`); //intento fallido de forzar el renderizado del componente
+        console.log('DELETE');
+      }
+    } catch (error) {
+      console.log(error);
+      alert('No se ha podido eliminar la categoria');
+    }
+  };
+
   return (
     <Container className="">
       {edit ? <h1>Editar {wineDetail.name}</h1> : <h1>Carga de Productos</h1>}
       {loading ? (
         <CircularProgress />
       ) : (
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchemaLoadProducts}
-            onSubmit={handleSubmit}
-          >
-            {(formik) => (
-              <Container>
-                <Form>
-                  <FormField
-                    fieldType="input"
-                    label="Marca"
-                    name="name"
-                    required
-                  />
-                  <FormField
-                    fieldType="select"
-                    label="Cepa"
-                    name="strain"
-                    options={strainOption}
-                  />
-                  <FormField
-                    fieldType="input"
-                    type="number"
-                    label="Año de cosecha"
-                    name="yearHarvest"
-                    required
-                  />
-                  <FormField
-                    fieldType="input"
-                    type="number"
-                    label="Stock Inicial"
-                    name="stock"
-                  />
-                  <FormField
-                    fieldType="input"
-                    type="number"
-                    label="Precio"
-                    name="price"
-                    required
-                  />
-                  <FormField
-                    fieldType="input"
-                    label="URL de imagen"
-                    name="image"
-                    required
-                  />
-
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchemaLoadProducts}
+          onSubmit={handleSubmit}
+        >
+          {(formik) => (
+            <Container>
+              <Form>
+                <FormField
+                  fieldType="input"
+                  label="Marca"
+                  name="name"
+                  required
+                />
+                <FormField
+                  fieldType="select"
+                  label="Cepa"
+                  name="strain"
+                  options={strainOption}
+                />
+                <FormField
+                  fieldType="input"
+                  type="number"
+                  label="Año de cosecha"
+                  name="yearHarvest"
+                  required
+                />
+                <FormField
+                  fieldType="input"
+                  type="number"
+                  label="Stock Inicial"
+                  name="stock"
+                />
+                <FormField
+                  fieldType="input"
+                  type="number"
+                  label="Precio"
+                  name="price"
+                  required
+                />
+                <FormField
+                  fieldType="input"
+                  label="URL de imagen"
+                  name="image"
+                  required
+                />
+                {edit ? (
                   <FormField
                     fieldType="select"
                     label="Sabor 1"
                     name="taste1"
-                     options={tasteList}
+                    options={tasteList}
+                    id="delete1"
+                    value={initialValues.taste1}
                   />
-
-                      <Button
-                          variant="outlined"
-                          color="primary"
-                          label="Eliminar"
-                          name="delete1"
-                         />
-                 
+                ) : (
+                  <FormField
+                    fieldType="select"
+                    label="Sabor 1"
+                    name="taste1"
+                    options={tasteList}
+                    id="delete1"
+                  />
+                )}
+                {edit && (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    label="Eliminar"
+                    name="delete1"
+                    onClick={(e) => deleteTasteHandler(e)}
+                  >
+                    X
+                  </Button>
+                )}
+                {edit ? (
                   <FormField
                     fieldType="select"
                     label="Sabor 2"
                     name="taste2"
                     options={tasteList}
+                    id="delete2"
+                    value={initialValues.taste2}
                   />
+                ) : (
+                  <FormField
+                    fieldType="select"
+                    label="Sabor 2"
+                    name="taste2"
+                    options={tasteList}
+                    id="delete2"
+                  />
+                )}
 
-<Button
-                          variant="outlined"
-                          color="primary"
-                          label="Eliminar"
-                          name="delete2"
-                         />
+                {edit && (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    label="Eliminar"
+                    name="delete2"
+                    onClick={(e) => deleteTasteHandler(e, formik)}
+                  >
+                    X
+                  </Button>
+                )}
+                {edit ? (
                   <FormField
                     fieldType="select"
                     label="Sabor 3"
                     name="taste3"
                     options={tasteList}
+                    id="delete3"
+                    value={initialValues.taste3}
                   />
-     <Button
-                          variant="outlined"
-                          color="primary"
-                          label="Eliminar"
-                          name="delete3"
-                         />
-
+                ) : (
                   <FormField
-                    fieldType="textarea"
-                    label="Descripcion del producto"
-                    name="description"
-                    rows={8}
-                    required
+                    fieldType="select"
+                    label="Sabor 3"
+                    name="taste3"
+                    options={tasteList}
+                    id="delete3"
                   />
-
-                  <br></br>
-                  <Container>
-                    {edit ? (
-                      <>
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          disabled={!formik.isValid}
-                          type="submit"
-                        >
-                          {' '}
-                          {success ? `PRODUCTO EDITADO!` : 'Update'}
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          disabled={!formik.isValid}
-                          onClick={() => handleDelete(formik)}
-                        >
-                          DELETE
-                      </Button>
-                      </>
-                    ) : (
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          disabled={!formik.isValid}
-                          type="submit"
-                        >
-                          {' '}
-                          {success ? `PRODUCTO AGREGADO!` : 'Submit'}
-                        </Button>
-                      )}
-                    <br></br>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      disabled={!formik.isValid}
-                      onClick={() => handleReset(formik)}
-                      type="reset"
-                    >
-                      RESET
+                )}
+                {edit && (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    label="Eliminar"
+                    name="delete3"
+                    onClick={(e) => deleteTasteHandler(e, formik)}
+                  >
+                    X
                   </Button>
-                  </Container>
-                </Form>
-              </Container>
-            )}
-          </Formik>
-        )}
+                )}
+
+                <FormField
+                  fieldType="textarea"
+                  label="Descripcion del producto"
+                  name="description"
+                  rows={8}
+                  required
+                />
+
+                <br></br>
+                <Container>
+                  {edit ? (
+                    <>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        disabled={!formik.isValid}
+                        type="submit"
+                      >
+                        {' '}
+                        {success ? `PRODUCTO EDITADO!` : 'Update'}
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        disabled={!formik.isValid}
+                        onClick={() => handleDelete(formik)}
+                      >
+                        DELETE
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      disabled={!formik.isValid}
+                      type="submit"
+                    >
+                      {' '}
+                      {success ? `PRODUCTO AGREGADO!` : 'Submit'}
+                    </Button>
+                  )}
+                  <br></br>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    disabled={!formik.isValid}
+                    onClick={() => handleReset(formik)}
+                    type="reset"
+                  >
+                    RESET
+                  </Button>
+                </Container>
+              </Form>
+            </Container>
+          )}
+        </Formik>
+      )}
     </Container>
   );
 };
@@ -317,7 +393,8 @@ const LoadProduct = (props) => {
 const mapStateToProps = (state) => ({
   strainList: state.formReducers.strainList,
   wineDetail: state.productReducers.wineDetail,
-  categoryList: state.productReducers.categories
+  categoryList: state.productReducers.categories,
+  prodCats: state.formReducers.prodCategoryList,
 });
 
 export default connect(mapStateToProps, {

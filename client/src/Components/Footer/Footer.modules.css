@@ -1,41 +1,39 @@
 .footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-right: 15%;
-    width: 100%;
-    background-color: #be9063 !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 15%;
+  width: 100%;
+  background-color: #be9063 !important;
 }
 
-.rrssImg{
-    height: 40px;
-    width: 40px;
+.rrssImg {
+  height: 40px;
+  width: 40px;
 }
 
-.rrssImg:hover{
-    height: 50px;
-    width: 50px;
+.rrssImg:hover {
+  height: 50px;
+  width: 50px;
 }
 
 .rrssImgContainer {
-    display: flex;
-   align-items: center;
-    height: 50px;
-    width: 70px;
-
+  display: flex;
+  align-items: center;
+  height: 50px;
+  width: 70px;
 }
 
-.logoContainer{
-    display: flex;
-    flex-direction: row;
+.logoContainer {
+  display: flex;
+  flex-direction: row;
 }
 
-.rrssContainer{
-    display: flex;
-    flex-direction: row;
+.rrssContainer {
+  display: flex;
+  flex-direction: row;
 }
 .logoFooter {
-    height: 50px;
-    width: 136px;
-    
+  height: 50px;
+  width: 136px;
 }

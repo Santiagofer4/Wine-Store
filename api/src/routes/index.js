@@ -1,8 +1,8 @@
-const { Router } = require("express");
+const { Router } = require('express');
 const { Sequelize, Op } = require('sequelize');
-const { Product } = require("../db.js");
+const { Product } = require('../db.js');
 // import all routers;
-const productRouter = require("./product.js");
+const productRouter = require('./product.js');
 
 const router = Router();
 
@@ -10,21 +10,26 @@ const router = Router();
 // i.e: router.use('/auth', authRouter);
 // router.use('/auth', authRouter);
 
-router.use("/products", productRouter);
+router.use('/products', productRouter);
 
-router.get("/search", (req, res) => {
-  console.log("Ruta de search by query.");
+router.get('/search', (req, res) => {
+  console.log('Ruta de search by query.');
   let { word } = req.query;
- 
+
   Product.findAll({
-      where: {
-        [Op.or]: [{name: {[Op.like]:`%${word}%`}},{description: {[Op.like]:`%${word}%`}} ] //falta hacerlo case sensitive
-             },
-  }).then((products) => {
-    return res.status(200).send(products);
-  }).catch(err => {
-      return console.log(err)
+    where: {
+      [Op.or]: [
+        { name: { [Op.like]: `%${word}%` } },
+        { description: { [Op.like]: `%${word}%` } },
+      ], //falta hacerlo case sensitive
+    },
   })
+    .then((products) => {
+      return res.status(200).send(products);
+    })
+    .catch((err) => {
+      return console.log(err);
+    });
 });
 
 module.exports = router;

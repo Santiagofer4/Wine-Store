@@ -12,28 +12,28 @@ function Sidebar(props) {
   function categoria(e) {
     let categoryName = e.target.innerText;
     props.getProductsCategory(categoryName);
-
   }
 
   // console.log('paso 1',props.categories)
   if (props.categories !== undefined) {
     // console.log('paso 2',props.categories)
-    if(props.categories.length === 0){
-      return(
+    if (props.categories.length === 0) {
+      return (
         <div className="Sidebar__container">
           <div className="Sidebar__lista">
-          <h6> No hay categorias</h6>
+            <h6> No hay categorias</h6>
           </div>
         </div>
-      )
-    }else{
-    return (
-      <div className="Sidebar__container">
-        <div className="Sidebar__lista">
-          {props.categories.map((product, index) => {
-            return (
-              // <Button>
+      );
+    } else {
+      return (
+        <div className="Sidebar__container">
+          <div className="Sidebar__lista">
+            {props.categories.map((product, index) => {
+              return (
+                // <Button>
                 <a
+                  className="Sidebar__Text"
                   href="#"
                   onClick={(e) => {
                     categoria(e);
@@ -41,17 +41,21 @@ function Sidebar(props) {
                 >
                   {product.taste}
                 </a>
-              // </Button>
-            );
-          })}
+                // </Button>
+              );
+            })}
+          </div>
         </div>
-      </div>
-    );};
-  } else{
-    return (<h3>No hay productos</h3>);
-
+      );
+    }
+  } else {
+    return (
+      <h3>
+        <p />
+        <p /> No hay productos
+      </h3>
+    );
   }
-
 }
 
 const mapStateToProps = (state) => {
@@ -65,4 +69,3 @@ export default connect(mapStateToProps, {
   getCategoryList,
   getProductsCategory,
 })(Sidebar);
-

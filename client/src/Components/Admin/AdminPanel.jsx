@@ -8,27 +8,41 @@ import LoadCategory from './LoadCategory/LoadCategory';
 import { getCategoryList } from '../../actions';
 import { connect } from 'react-redux';
 
-  const AdminPanel =(props)=> {
-   
-    props.getCategoryList()
-//  console.log("viendo el estado",props.categories)
-  
+const AdminPanel = (props) => {
+  //  props.getCategoryList()
+  //  console.log("viendo el estado",props.categories)
+
   return (
     <Container className="AdminPanel">
       <Paper className="AdminPanel__Panel">
         <h1 className="AdminPanel__Title">ADMIN PANEL</h1>
+        <img
+          className="imgAdmin"
+          src="https://i.ibb.co/JKQk16V/racimo-de-uvas.png"
+          alt="No se puede cargar la imagen"
+        />
         <br></br>
-        <ul>
+        <ul className="AdminPanel__Ul">
           <li>
-            <Link to="/admin/loadproduct">Cargar Producto</Link>
+            <Link className="links" to="/admin/loadproduct">
+              Cargar Producto
+            </Link>
           </li>
           <li>
-            <Link to="/admin/loadcategory" onClick={()=>{ props.getCategoryList()}}>Cargar/Borrar Categoria</Link>
+            <Link
+              className="links"
+              to="/admin/loadcategory"
+              onClick={() => {
+                props.getCategoryList();
+              }}
+            >
+              Cargar/Borrar Categoria
+            </Link>
           </li>
         </ul>
       </Paper>
       <br></br>
-      <h1>Formularios del Administrador</h1>
+      <h1 className="Admin__H1">Formularios del Administrador</h1>
       <br></br>
       <Container className="AdminPanel__Form">
         <Route path="/admin/loadproduct" component={LoadProduct} />
@@ -40,10 +54,10 @@ import { connect } from 'react-redux';
 };
 
 const mapStateToProps = (state) => {
-  console.log("estado", state)
+  // console.log('estado', state);
   return {
-     categories: state.productReducers.categories
+    categories: state.productReducers.categories,
   };
 };
 
-export default connect(mapStateToProps, { getCategoryList })(AdminPanel);//export default AdminPanel;
+export default connect(mapStateToProps, { getCategoryList })(AdminPanel); //export default AdminPanel;

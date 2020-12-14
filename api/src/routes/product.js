@@ -90,16 +90,16 @@ server.get('/ProductosPorCategoria/:categoria', (req, res) => {
 server.get('/CategoriaProducto/:id', (req, res, next) => {
   let { id } = req.params;
   Category.findAll({
-    include: {model: Product,
-    where: {id}}
-   })
-   .then((cats) => {
-    res.json (cats.map(t => {
-      return {id: t.id, taste: t.taste}
-     }))
-      
-   })
-   .catch(next);
+    include: { model: Product, where: { id } },
+  })
+    .then((cats) => {
+      res.json(
+        cats.map((t) => {
+          return { id: t.id, taste: t.taste };
+        })
+      );
+    })
+    .catch(next);
 });
 
 server.put('/:id', (req, res) => {
@@ -171,31 +171,38 @@ server.delete('/category/:id', (req, res) => {
   }
 });
 
-// server.post("/", (req, res) => {
-//   let { name, price, description, yearHarvest, image, stock } = req.body;
-
-//   console.log("entré a post products");
-
-//   Product.findOrCreate({
-//     where: {
-//       name,
-//     },
-//     defaults: {
-//       name, price,   description,       yearHarvest,       image,       stock: 0,
-//     },
-//   })
-//     .then((product) => {
-//       // Asignar o sumar stock
-//       product.stock = +stock;
-//       return res.send(201);
-//     })
-//     .catch((err) => {
-//       return console.log(err);
-//     });
-// });
+// para borrar una categoría de un productooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+server.delete('/:idProducto/category/:idCategoria', (req, res) => {
+  const { idProducto, idCategoria } = req.params;
+  Product.findOne({
+    where: { id: idProducto },
+  })
+    .then((prod) => {
+      prod.removeCategory([idProducto]);
+      res.sendStatus(200);
+    })
+    .catch((e) => console.log(e));
+  //   let { idProducto, idCategoria } = req.params;
+  //   if (idCategoria && idProducto) {
+  // //    Category.destroy({
+  // //      where: { id: idCategoria },
+  // //      include: { model: Product },
+  // //    })
+  //       Product.findAll({where: {
+  //         id: idProducto
+  //       } })
+  //       .then((producto) => {
+  //       producto.removeCategory(idCategoria)
+  //       })
+  //       .then(() => {
+  //         return res.send(200, `categoria borrada ${id}`);
+  //       })
+  //       .catch('No existe la categoría');
+  //   }
+});
 
 server.post('/', (req, res, next) => {
-  let prod
+  let prod;
   let {
     name,
     price,
@@ -206,7 +213,7 @@ server.post('/', (req, res, next) => {
     categories,
   } = req.body;
   console.log('entré a post ');
-    Product.create({
+  Product.create({
     name,
     price,
     description,
@@ -214,15 +221,15 @@ server.post('/', (req, res, next) => {
     image,
     stock,
   })
-    .then((product) =>{
+    .then((product) => {
       categories.forEach((categoryId) => {
         Category.findByPk(categoryId).then((category) =>
-        product.addCategory(category)
+          product.addCategory(category)
         );
-      })
-      prod = product
+      });
+      prod = product;
     })
-    .then(() => res.status(201).send(prod))
+    .then(() => res.status(200).send(prod))
     .catch(next);
 });
 
@@ -288,19 +295,19 @@ server.post('/strain', (req, res) => {
 // });
 
 server.post('/:idProduct/category', (req, res) => {
-    let { idProduct } = req.params;
-    let { Category } = req.body; 
-  
-    console.log('actualizo categoría de producto');
-  
-    if (idProduct && Category) {
-      Product.findByPk(idProduct).then((product) => {
-        product.addCategory(Category)
-        return res.send('Se actualizó la categoría');
-      });
-    } else {
-      return res.status(400);
-    }
-  });
+  let { idProduct } = req.params;
+  let { Category } = req.body;
+
+  console.log('actualizo categoría de producto');
+
+  if (idProduct && Category) {
+    Product.findByPk(idProduct).then((product) => {
+      product.addCategory(Category);
+      return res.send('Se actualizó la categoría');
+    });
+  } else {
+    return res.status(400);
+  }
+});
 
 module.exports = server;

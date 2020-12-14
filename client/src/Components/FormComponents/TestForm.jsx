@@ -126,6 +126,7 @@ function Test() {
                 label="Strain"
                 name="strain"
                 options={strains}
+                value={strains[0].value}
               />
               <FormField
                 fieldType="switch"
