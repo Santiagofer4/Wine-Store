@@ -76,3 +76,8 @@
 .Admin__H1 {
   color: #c5c5c5;
 }
+
+#backgroundPaper {
+  opacity: 80%;
+  border-radius: 57%;
+}
