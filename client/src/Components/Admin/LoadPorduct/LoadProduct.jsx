@@ -170,6 +170,9 @@ const LoadProduct = (props) => {
   //! Habria que ver de levantar la data del producto nuevamente de la DB y re-renderizar el componente (o la parte que cambio)
   //! la otra seria trabajarlo con algun estado de redux....
   const deleteTasteHandler = async (e) => {
+    let select = e.target.name;
+
+   // let label ='';
     let remove_cat_id = tasteList.find(
       (taste) =>
       document.querySelector(`#${e.target.name}`).textContent === taste.label
@@ -179,10 +182,9 @@ const LoadProduct = (props) => {
           `http://localhost:3000/products/${wineDetail.id}/category/${remove_cat_id}`
           );
           if (res.status === 200) {
-            console.log('EVENTO',e.target.name)
-            console.log('REMOVE CAT ID', remove_cat_id)
         props.getProductsList();
-       // document.querySelector(`#${e.target.name}`).innerText = '';
+        document.querySelector(`#${select}`).innerText = 'Eliminada';
+        // console.log('Queryselector', document.querySelector(`#${select}`))
        // history.push(`/admin/edit/${wineDetail.id}`); //intento fallido de forzar el renderizado del componente
         console.log('DELETE');
       }
