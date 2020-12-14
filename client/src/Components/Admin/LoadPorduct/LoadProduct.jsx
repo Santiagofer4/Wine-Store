@@ -38,7 +38,7 @@ const LoadProduct = (props) => {
   const [initialValues, setInitialValues] = useState(emptyValues); //estado para manejar los valores iniciales, o precargar los valores del producto, del formulario de carga/edicion de un producto
   const [tasteList, setTasteList] = useState([]); //mantiene actualziada la lista de sabores(nuestras categorías)...no me convence...creo que es al pedo definir un estado local si tenemos un store
   const history = useHistory(); //para redirect despues del create-update-delete
-  const [deleteTaste, setDeleteTaste] = useState(''); // Probando a hacer que active la actualización de los sabores
+  // const [deleteTaste, setDeleteTaste] = useState(''); // Probando a hacer que active la actualización de los sabores
   // console.log('PROPS LOAD', props.strainList);
   // console.log('LOADING', loading);
  
