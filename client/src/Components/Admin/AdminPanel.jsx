@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Paper, Container } from '@material-ui/core';
 import './AdminPanel.modules.css';
 import { Link } from 'react-router-dom';
-import LoadProduct from './LoadPorduct/LoadProduct';
-import { Route, Switch } from 'react-router-dom';
+import LoadProduct from './LoadProduct/LoadProduct';
+import { Route } from 'react-router-dom';
 import LoadCategory from './LoadCategory/LoadCategory';
-import { getCategoryList } from '../../actions';
+import LoadStrain from './LoadCategory/LoadStrain';
+import { getCategoryList, getStrainList } from '../../actions';
 import { connect } from 'react-redux';
 
 const AdminPanel = (props) => {
@@ -14,7 +15,7 @@ const AdminPanel = (props) => {
 
   return (
     <Container className="AdminPanel">
-      <Paper id='backgroundPaper' className="AdminPanel__Panel">
+      <Paper id="backgroundPaper" className="AdminPanel__Panel">
         <h1 className="AdminPanel__Title">ADMIN PANEL</h1>
         <img
           className="imgAdmin"
@@ -39,6 +40,17 @@ const AdminPanel = (props) => {
               Cargar/Borrar Categoria
             </Link>
           </li>
+          <li>
+            <Link
+              className="links"
+              to="/admin/loadstrain"
+              onClick={() => {
+                props.getStrainList();
+              }}
+            >
+              Cargar/Borrar Cepa
+            </Link>
+          </li>
         </ul>
       </Paper>
       <br></br>
@@ -47,6 +59,7 @@ const AdminPanel = (props) => {
       <Container className="AdminPanel__Form">
         <Route path="/admin/loadproduct" component={LoadProduct} />
         <Route path="/admin/loadcategory" component={LoadCategory} />
+        <Route path="/admin/loadstrain" component={LoadStrain} />
         <Route path="/admin/edit/:id" component={LoadProduct} />
       </Container>
     </Container>

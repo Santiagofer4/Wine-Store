@@ -45,22 +45,7 @@ module.exports = (sequelize) => {
         },
         allowNull: false,
       },
-      // categories: {
-      //   type: DataTypes.ARRAY,
-      //   allowNull: true,
-      // }
-      // ,
-      // typeW: {
-      //   type: DataTypes.ENUM(["tinto", "blanco", "rosado"]),
-      //   allowNull: false,
-      // }
     },
     { timestamps: false }
   );
 };
-
-// set: function (val) {
-//   // Remember to set the data value, otherwise it won't be validated
-//   this.setDataValue('password', val);
-//   this.setDataValue('password_hash', this.salt + val);
-// },

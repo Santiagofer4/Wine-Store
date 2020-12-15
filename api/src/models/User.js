@@ -34,7 +34,7 @@ module.exports = (sequelize) => {
           isNumeric: true,
         },
       },
-      rol: {
+      role: {
         type: DataTypes.ENUM(['user', 'admin']),
         allowNull: false,
       },

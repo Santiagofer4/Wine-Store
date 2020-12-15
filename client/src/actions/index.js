@@ -45,7 +45,7 @@ export const postNewProduct = (product) => (dispatch) => {
 
 export const getProductsCategory = (categoryName) => (dispatch) => {
   return axios
-    .get(`http://localhost:3000/products/ProductosPorCategoria/${categoryName}`)
+    .get(`http://localhost:3000/products/productsByCategory/${categoryName}`)
     .then((catList) =>
       dispatch({ type: GET_PRODUCTS_CATEGORY, payload: catList })
     );
@@ -64,11 +64,11 @@ export const setProductDetail = (wineDetail) => (dispatch) => {
 
 export const getStrainList = () => async (dispatch) => {
   try {
-    const strainList = await axios.get('http://localhost:3000/products/strain');
+    const strainList = await axios.get('http://localhost:3000/strain');
     // console.log('ACTIONS->strainList', strainList.data);
     return dispatch({ type: GET_STRAIN_LIST, payload: strainList.data });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return;
   }
 };
@@ -80,7 +80,7 @@ export const setHistory = (userHistory) => (dispatch) => {
 export const getCatsOfProduct = (productId) => async (dispatch) => {
   try {
     const prodCategoryList = await axios.get(
-      `http://localhost:3000/products/CategoriaProducto/${productId}`
+      `http://localhost:3000/products/categoryProduct/${productId}`
     );
     // console.log('ACTION', prodCategoryList.data);
     return dispatch({
@@ -88,7 +88,7 @@ export const getCatsOfProduct = (productId) => async (dispatch) => {
       payload: prodCategoryList.data,
     });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return;
   }
 };

@@ -3,9 +3,8 @@ import {
   GET_STRAIN_LIST,
   GET_CATEGORIES_OF_PRODUCT,
 } from '../actions/actions';
-import { postNewProduct } from '../actions/index';
-import StrainForm from '../Components/Forms/StrainForm';
-import { productsList } from '../Components/Products/ProductoPrueba';
+// import { postNewProduct } from '../actions/index';
+// import StrainForm from '../Components/Forms/StrainForm';
 
 const initialState = {
   strainList: {},

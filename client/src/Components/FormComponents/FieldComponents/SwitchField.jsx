@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormControlLabel, Switch } from '@material-ui/core';
-// import MuiSwitch from '@material-ui/core/Switch';
 import { Field } from 'formik';
 
 function SwitchField({ name, label, labelPlacement, disabled, ...props }) {

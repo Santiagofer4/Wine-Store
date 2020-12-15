@@ -3,6 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import './ProductForm.modules.css';
 
+//Probar si anda este. Si anda, borrar LoadStrain
 function StrainForm() {
   const [state, setstate] = useState({
     name: '',

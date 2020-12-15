@@ -1,15 +1,17 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
 import { validationSchemaLoadCategories } from '../adminValidations.js';
-import { Container, Paper, Button } from '@material-ui/core';
-import '../LoadPorduct/LoadProduct.modules.css';
+import { Container, Button } from '@material-ui/core';
+import '../LoadProduct/LoadProduct.modules.css';
 import axios from 'axios';
 import { getCategoryList } from '../../../actions';
 import { connect } from 'react-redux';
 import { formatArrayToOption } from '../../utils';
+import { useHistory } from 'react-router-dom';
 
 export const LoadCategory = (props) => {
+  const history = useHistory();
   // console.log('es un arreglo?',props.categoryList[0].data)
   const initialValues = {
     taste: '',
@@ -26,9 +28,9 @@ export const LoadCategory = (props) => {
         'http://localhost:3000/products/category',
         category
       );
-      console.log('POST', resp);
+      // console.log('POST', resp);
     } catch (error) {
-      console.error(error);
+      //  console.error(error);
     }
   };
   useEffect(() => {
@@ -40,12 +42,13 @@ export const LoadCategory = (props) => {
     (await Array.isArray(props.categoryList)) &&
       props.categoryList.length > 0 &&
       setTasteList(formatArrayToOption(props.categoryList, 'taste')); //? Tiene que haber una mejor manera para solucionar esto...
-    console.log('dentro de calltests', tasteList);
+    // console.log('dentro de calltests', tasteList);
   };
 
   const handleSubmit = (values, onSubmitProps) => {
     // console.log('VALUES', values);
     postNewCategory(values);
+    history.push('/catalogue');
     // onSubmitProps.resetForm();
   };
 

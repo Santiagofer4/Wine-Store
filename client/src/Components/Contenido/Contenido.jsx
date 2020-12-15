@@ -9,16 +9,18 @@ function Contenido() {
       <img
         className="imgLogo"
         src="https://i.ibb.co/x7Z2cfF/winestorelogo.png"
+        alt="Logo"
       ></img>
       <div id="contenedor1">
         {/* Los article es necesario para poder armar el efecto de la carta que gira */}
         <article key="1" className="card">
           <img
-            class="card__front"
+            className="card__front"
             id="visionImg"
             src="https://i.ibb.co/qMdksps/Vision.png"
+            alt="Visión"
           ></img>
-          <div class="card__back">
+          <div className="card__back">
             <h3>Nuestra Vision</h3>
             <p>Vision 1</p>
             <p>Vision 2</p>
@@ -27,11 +29,12 @@ function Contenido() {
         </article>
         <article key="2" className="card">
           <img
-            class="card__front"
+            className="card__front"
             id="visionImg"
             src="https://i.ibb.co/mBGfr4L/mision.png"
+            alt="Misión"
           ></img>
-          <div class="card__back">
+          <div className="card__back">
             <h3>Nuestra Mision</h3>
             <p>Mision 1</p>
             <p>Mision 2</p>
@@ -40,11 +43,12 @@ function Contenido() {
         </article>
         <article key="3" className="card">
           <img
-            class="card__front"
+            className="card__front"
             id="visionImg"
             src="https://i.ibb.co/882fSvc/valores.png"
+            alt="Valores"
           ></img>
-          <div class="card__back">
+          <div className="card__back">
             <h3>Nuestros Valores</h3>
             <p>Valor 1</p>
             <p>Valor 2</p>

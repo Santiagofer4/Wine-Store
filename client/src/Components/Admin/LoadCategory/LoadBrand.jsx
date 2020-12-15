@@ -3,7 +3,7 @@ import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
 import { validationSchemaLoadBrands } from '../adminValidations.js';
 import { Container, Paper, Button } from '@material-ui/core';
-import '../LoadPorduct/LoadProduct.modules.css';
+import '../LoadProduct/LoadProduct.modules.css';
 import axios from 'axios';
 
 export const LoadProduct = (props) => {
@@ -20,7 +20,7 @@ export const LoadProduct = (props) => {
         'http://localhost:3000/products/brand',
         brand
       );
-      console.log('POST', resp);
+      // console.log('POST', resp);
     } catch (error) {
       console.error(error);
     }

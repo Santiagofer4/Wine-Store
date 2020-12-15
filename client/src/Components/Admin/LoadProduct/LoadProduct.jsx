@@ -3,13 +3,17 @@ import { connect } from 'react-redux';
 import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
 import { validationSchemaLoadProducts } from '../adminValidations.js';
-import { Container, Paper, Button, CircularProgress } from '@material-ui/core';
+import {
+  Container,
+  /* Paper, */ Button,
+  CircularProgress,
+} from '@material-ui/core';
 import './LoadProduct.modules.css';
-import { getStrainList } from '../../../actions/';
+import { getStrainList } from '../../../actions';
 import { formatArrayToOption } from '../../utils.js';
 import axios from 'axios';
-import { Switch, useHistory } from 'react-router-dom';
-import { setProductDetail, getProductsList } from '../../../actions/';
+import { /* Switch, */ useHistory } from 'react-router-dom';
+import { setProductDetail, getProductsList } from '../../../actions';
 
 // ---- FUNCIONA PERO TIENE MUCHAS VUELTAS :S ----
 //? el select de las options no renderizan de primera, hay que ver la forma de se rerenderize cuando el fetch termina...el fetch lo hace pero no lo renderiza correctamente
@@ -99,7 +103,7 @@ const LoadProduct = (props) => {
     };
     try {
       //si edit es un update (put), si !edit entonces es un create (post)
-      console.log('ID enviado', wineDetail.id);
+      // console.log('ID enviado', wineDetail.id);
       const res = edit
         ? await axios.put(
             `http://localhost:3000/products/${wineDetail.id}`,
@@ -133,7 +137,7 @@ const LoadProduct = (props) => {
         }
       }
     } catch (error) {
-      console.error(error);
+      //  console.error(error);
       alert('No se ha podido cargar el producto');
     }
   };
@@ -144,14 +148,14 @@ const LoadProduct = (props) => {
       const res = await axios.delete(
         `http://localhost:3000/products/${wineDetail.id}`
       );
-      if (res.status == 200) {
+      if (res.status === 200) {
         //si status = 200, success = ture, actualizo productlisty y redirect a catalogo
         setSucces(true);
         props.getProductsList();
         history.push('/catalogue');
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       alert('No se ha podido borrar el producto');
     }
   };
@@ -173,7 +177,7 @@ const LoadProduct = (props) => {
   const deleteTasteHandler = async (e) => {
     let select = e.target.name;
     // let label ='';
-    console.log(select);
+    // console.log(select);
     try {
       var remove_cat_id = tasteList.find(
         (taste) =>
@@ -181,7 +185,7 @@ const LoadProduct = (props) => {
           taste.label
       ).value;
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       alert('No se puede borrar una categoria vacia');
       return;
     }
@@ -194,10 +198,10 @@ const LoadProduct = (props) => {
         document.querySelector(`#${select}`).textContent = 'Eliminada';
         // console.log('Queryselector', document.querySelector(`#${select}`))
         // history.push(`/admin/edit/${wineDetail.id}`); //intento fallido de forzar el renderizado del componente
-        console.log('DELETE');
+        // console.log('DELETE');
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       alert('No se ha podido eliminar la categoria');
       return;
     }
@@ -206,8 +210,8 @@ const LoadProduct = (props) => {
   const handleOnClickSelect = (e) => {
     let taste = e.target.name;
     initialValues[taste] = e.target.value;
-    console.log(e.target.value);
-    console.log(initialValues);
+    //  console.log(e.target.value);
+    //  console.log(initialValues);
   };
 
   return (

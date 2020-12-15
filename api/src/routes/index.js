@@ -3,6 +3,7 @@ const { Sequelize, Op } = require('sequelize');
 const { Product } = require('../db.js');
 // import all routers;
 const productRouter = require('./product.js');
+const strainRouter = require('./strain.js');
 
 const router = Router();
 
@@ -11,6 +12,7 @@ const router = Router();
 // router.use('/auth', authRouter);
 
 router.use('/products', productRouter);
+router.use('/strain', strainRouter);
 
 router.get('/search', (req, res) => {
   console.log('Ruta de search by query.');

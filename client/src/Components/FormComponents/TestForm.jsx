@@ -1,5 +1,4 @@
 import { Button, Paper } from '@material-ui/core';
-import MuiSwitch from '@material-ui/core/Switch';
 import { Formik, Form } from 'formik';
 import React from 'react';
 import FormField from './FormField.jsx';
@@ -79,7 +78,7 @@ function Test() {
 
   //* Parametros <<obligatorios>> a pasar a <FormField/>:
   //? fieldType: Un string que tiene el tipo de campo que queremos renderizar, puede ser:
-  //? ['input','validateinput',textarea','switch','select','checkbox','radio','datepicker','uploader']
+  //? ['input','`validateinput`',textarea','switch','select','checkbox','radio','`datepicker`','`uploader`','`groupCheckBox`',`'groupSwitch'`]
   //? label: Un string que sera el label del campo
   //? name: Un string que sera el nombre de referencia para el Field. `name` es la propiedad que permite
   //? enlazar los objetos `errors`, `touched`,`validations` (de yup). Entonces:

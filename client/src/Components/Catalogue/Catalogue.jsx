@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ProductCard from '../ProductCard/ProductCard.jsx';
 import './Catalogue.modules.css';
 import Sidebar from '../Sidebar/Sidebar.jsx';

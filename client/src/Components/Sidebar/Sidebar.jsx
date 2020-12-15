@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Sidebar.modules.css';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import { getCategoryList, getProductsCategory } from '../../actions';
-import { Button } from '@material-ui/core';
+// import { Button } from '@material-ui/core';
 
 function Sidebar(props) {
   // cuando este lista las relaciones  de la DB, esta funcion debe pisar el estado 'List'

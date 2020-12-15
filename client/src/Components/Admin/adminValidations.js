@@ -26,6 +26,10 @@ export const validationSchemaLoadProducts = yup.object({
     .url('Debe ser una URL valida')
     .required('Debe pasar URL de img')
     .max(200, 'La URL no puede exceder los 200 caracteres'),
+  description: yup
+    .string()
+    .max(500, 'Descripcion demasiado larga')
+    .required('Es necesario dejar una descripcion'),
 });
 
 //* Objeto para validacion de cepas
