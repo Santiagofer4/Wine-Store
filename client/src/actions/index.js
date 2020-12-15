@@ -9,6 +9,7 @@ import {
   GET_STRAIN_LIST,
   SET_HISTORY,
   GET_CATEGORIES_OF_PRODUCT,
+  DELETE_STRAIN,
 } from './actions';
 
 export function getProductSearch(payload) {
@@ -62,15 +63,11 @@ export const setProductDetail = (wineDetail) => (dispatch) => {
   return dispatch({ type: SET_PRODUCT_DETAIL, payload: wineDetail });
 };
 
-export const getStrainList = () => async (dispatch) => {
-  try {
-    const strainList = await axios.get('http://localhost:3000/strain');
+export const getStrainList = () => (dispatch) => {
+  return axios.get('http://localhost:3000/strain')
     // console.log('ACTIONS->strainList', strainList.data);
-    return dispatch({ type: GET_STRAIN_LIST, payload: strainList.data });
-  } catch (error) {
-    // console.error(error);
-    return;
-  }
+    .then((strainList) => dispatch ({ type: GET_STRAIN_LIST, payload: strainList })
+    );
 };
 
 export const setHistory = (userHistory) => (dispatch) => {
@@ -91,4 +88,11 @@ export const getCatsOfProduct = (productId) => async (dispatch) => {
     // console.error(error);
     return;
   }
+};
+
+export const deleteStrain = (strainId) => (dispatch) => {
+  return axios
+  .delete(`http://localhost:3000/strain/${strainId}`)
+  .then((id) => dispatch({ type: DELETE_STRAIN, payload: id }))
+  .catch(err => console.log('Error en la acción delete', err))
 };

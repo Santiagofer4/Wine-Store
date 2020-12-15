@@ -1,50 +1,102 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
 import { validationSchemaLoadStrains } from '../adminValidations.js';
-import { Container, Paper, Button } from '@material-ui/core';
+import { Container, Button } from '@material-ui/core';
 import '../LoadProduct/LoadProduct.modules.css';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { getStrainList, deleteStrain } from '../../../actions';
+import { formatArrayToOption } from '../../utils';
 
-//Probar si anda este. Si anda, borrar StrainForm
 export const LoadStrain = (props) => {
   const initialValues = {
     name: '',
     description: '',
     pairing: '',
-    origin: '',
+    origin: ''
   };
 
-  const postNewStrain = async (strain) => {
+  // console.log('PROPS strain', props);
+
+  const [borrar, setBorrar] = useState(false);
+  const [strainOption, setStrainOption] = useState([]); 
+
+  const postNewStrain = async (strain, x) => {
     try {
-      const resp = await axios.post('http://localhost:3000/strain', strain);
-      // console.log('POST', resp);
+      await axios.post('http://localhost:3000/strain', strain);
+        x.resetForm();
+        x.setSubmitting(false);
     } catch (error) {
-      // console.error(error);
+      console.error(error);
     }
   };
+
+  useEffect(() => {
+    callStrainList();
+  }, [props.strainList]);
+
+  const callStrainList = () => {
+    setStrainOption(formatArrayToOption(props.strainList, 'name'));
+  };
+
   const handleSubmit = (values, onSubmitProps) => {
-    // console.log('VALUES', values);
-    postNewStrain(values);
-    // onSubmitProps.resetForm();
+    if(borrar) {
+      props.deleteStrain(values.name)
+    } else {
+      postNewStrain(values, onSubmitProps);
+    }
   };
 
   return (
     <Container className="">
-      <h1>Carga de cepas</h1>
+      {borrar ? <h1>Borrar cepas</h1> : <h1>Carga de cepas</h1>}
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => {
+          setBorrar(!borrar);
+        }}
+      >
+        {borrar ? 'CARGAR' : 'BORRAR'}
+      </Button>
+
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchemaLoadStrains}
+        validationSchema={!borrar && validationSchemaLoadStrains}
         onSubmit={handleSubmit}
       >
         {(formik) => (
           <Container>
             <Form>
+              {borrar ? (
+                <>
+                  <FormField
+                    fieldType="select"
+                    label="Listado de cepas"
+                    name="name"
+                    options={strainOption}
+                    required
+                  />
+
+                  <br></br>
+                  <Container>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                    >
+                      Borrar
+                    </Button>
+                  </Container>
+                </>
+              ) : (
+                <>
               <FormField
                 fieldType="input"
                 label="Nombre de cepa"
                 name="name"
-                required
+                // required
               />
               <FormField
                 fieldType="textarea"
@@ -66,6 +118,7 @@ export const LoadStrain = (props) => {
                 name="origin"
                 required
               />
+
               <br></br>
               <Container>
                 <Button
@@ -78,6 +131,8 @@ export const LoadStrain = (props) => {
                   Cargar
                 </Button>
               </Container>
+              </>
+              )}
             </Form>
           </Container>
         )}
@@ -86,4 +141,10 @@ export const LoadStrain = (props) => {
   );
 };
 
-export default LoadStrain;
+function mapStateToProps(state) {
+  return {
+    strainList: state.productReducers.strains,
+  };
+}
+
+export default connect(mapStateToProps, { getStrainList, deleteStrain })(LoadStrain);

@@ -16,7 +16,8 @@ export const LoadCategory = (props) => {
   const initialValues = {
     taste: '',
   };
-  // console.log('load categori' ,props)
+  
+  console.log('PROPS category' ,props)
   // props.getCategoryList()
   // console.log('con datos', props.categoryList)
   const [borrar, setBorrar] = useState(false);

@@ -5,14 +5,13 @@ server.get('/', (req, res, next) => {
   // console.log('Trae todas las cepas - GET a /strain');
   Strain.findAll()
     .then((strain) => {
-      res.json(strain);
+      return res.json(strain);
     })
     .catch(next);
 });
 
 server.post('/', (req, res) => {
   let { name, description, pairing, origin } = req.body;
-
   // console.log('Creo o modifico cepa - POST a /strain');
   if (!name)
     return res.status(400).send('No se puede crear o modificar la cepa');
@@ -27,9 +26,23 @@ server.post('/', (req, res) => {
       pairing,
       origin,
     },
-  }).then((strain) => {
-    return res.status(200).send('La cepa ha sido creada');
+  }).then(() => {
+    return res.status(201).send('La cepa ha sido creada');
   });
+});
+
+server.delete('/:id', (req, res) => {
+  let { id } = req.params;
+
+  if (!id) return res.status(400).send('No se puede eliminar la cepa');
+  
+  Strain.destroy({
+    where: {
+      id,
+    },
+  }).then(() => {
+    return res.send(200, 'Se ha borrado la cepa seleccionada');
+  })
 });
 
 module.exports = server;

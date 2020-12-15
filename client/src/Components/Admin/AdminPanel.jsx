@@ -13,6 +13,8 @@ const AdminPanel = (props) => {
   //  props.getCategoryList()
   //  console.log("viendo el estado",props.categories)
 
+  // console.log('estas son las porps', props)
+
   return (
     <Container className="AdminPanel">
       <Paper id="backgroundPaper" className="AdminPanel__Panel">
@@ -69,8 +71,9 @@ const AdminPanel = (props) => {
 const mapStateToProps = (state) => {
   // console.log('estado', state);
   return {
+    strains: state.productReducers.strains,
     categories: state.productReducers.categories,
   };
 };
 
-export default connect(mapStateToProps, { getCategoryList })(AdminPanel); //export default AdminPanel;
+export default connect(mapStateToProps, { getCategoryList, getStrainList })(AdminPanel); //export default AdminPanel;

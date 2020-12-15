@@ -4,6 +4,8 @@ import {
   GET_PRODUCTS_CATEGORY,
   GET_CATEGORY_LIST,
   SET_PRODUCT_DETAIL,
+  GET_STRAIN_LIST,
+  DELETE_STRAIN,
 } from '../actions/actions';
 
 const initialState = {
@@ -12,6 +14,7 @@ const initialState = {
   wineDetail: {},
   search: '',
   categories: [],
+  strains: [],
 };
 
 const productReducers = (state = initialState, action) => {
@@ -45,7 +48,18 @@ const productReducers = (state = initialState, action) => {
         ...state,
         categories: action.payload.data,
       };
-
+      case GET_STRAIN_LIST:
+        return {
+          ...state,
+          strains: action.payload.data,
+        }
+      case DELETE_STRAIN:
+        return {
+          ...state,
+          strains: state.strains.filter((strain) => 
+           strain.id !== action.payload.data
+          )
+        }
     default:
       return state;
   }
