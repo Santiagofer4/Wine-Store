@@ -5,7 +5,7 @@ import { validationSchemaLoadCategories } from '../adminValidations.js';
 import { Container, Button } from '@material-ui/core';
 import '../LoadProduct/LoadProduct.modules.css';
 import axios from 'axios';
-import { getCategoryList } from '../../../actions';
+import { getCategoryList, deleteCategory } from '../../../actions';
 import { connect } from 'react-redux';
 import { formatArrayToOption } from '../../utils';
 import { useHistory } from 'react-router-dom';
@@ -47,10 +47,15 @@ export const LoadCategory = (props) => {
   };
 
   const handleSubmit = (values, onSubmitProps) => {
-    // console.log('VALUES', values);
-    postNewCategory(values);
-    history.push('/catalogue');
-    // onSubmitProps.resetForm();
+    //console.log('VALUES', values);
+    if(borrar){
+      props.deleteCategory(values.taste)
+      history.push('/catalogue');
+    } else{
+      postNewCategory(values);
+      history.push('/catalogue');
+      // onSubmitProps.resetForm();
+    }
   };
 
   return (
@@ -134,4 +139,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getCategoryList })(LoadCategory);
+export default connect(mapStateToProps, { getCategoryList, deleteCategory })(LoadCategory);

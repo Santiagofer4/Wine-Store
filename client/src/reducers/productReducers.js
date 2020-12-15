@@ -6,6 +6,7 @@ import {
   SET_PRODUCT_DETAIL,
   GET_STRAIN_LIST,
   DELETE_STRAIN,
+  DELETE_CATEGORY,
 } from '../actions/actions';
 
 const initialState = {
@@ -60,6 +61,11 @@ const productReducers = (state = initialState, action) => {
            strain.id !== action.payload.data
           )
         }
+    case DELETE_CATEGORY:
+      return {
+        ...state,
+        categories: state.categories.filter((category) => {return category !== action.payload.data} )
+      }
     default:
       return state;
   }
