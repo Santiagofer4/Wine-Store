@@ -9,6 +9,7 @@ import {
   GET_STRAIN_LIST,
   SET_HISTORY,
   GET_CATEGORIES_OF_PRODUCT,
+  DELETE_CATEGORY,
 } from './actions';
 
 export function getProductSearch(payload) {
@@ -91,4 +92,13 @@ export const getCatsOfProduct = (productId) => async (dispatch) => {
     // console.error(error);
     return;
   }
+};
+
+export const deleteCategory = (id) => (dispatch) => {
+  return axios
+    .delete(`http://localhost:3000/products/category/${id}`)
+    .then((id) => dispatch({ type: DELETE_CATEGORY, payload: id }))
+    .catch((err) => {
+      console.log('Error en DELETE_CATEGORY', err);
+    });
 };

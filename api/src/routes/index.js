@@ -5,7 +5,7 @@ const { Product } = require('../db.js');
 const productRouter = require('./product.js');
 const usersRouter = require('./users.js');
 const ordersRouter = require('./orders.js');
-//const strainRouter = require('./strain.js')
+const strainRouter = require('./strain.js')
 
 const router = Router();
 

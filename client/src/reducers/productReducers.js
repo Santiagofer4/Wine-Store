@@ -4,6 +4,7 @@ import {
   GET_PRODUCTS_CATEGORY,
   GET_CATEGORY_LIST,
   SET_PRODUCT_DETAIL,
+  DELETE_CATEGORY,
 } from '../actions/actions';
 
 const initialState = {
@@ -45,7 +46,11 @@ const productReducers = (state = initialState, action) => {
         ...state,
         categories: action.payload.data,
       };
-
+    case DELETE_CATEGORY:
+      return {
+        ...state,
+        categories: state.categories.filter((category) => {return category !== action.payload.data} )
+      }
     default:
       return state;
   }
