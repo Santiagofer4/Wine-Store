@@ -14,7 +14,16 @@ server.get('/', (req, res, next) => {
   });
 
   //Agregar un USER
-
+// funciona cuando quiere 
+// {
+//   "firstName":"santi",
+//   "lastName":"fernandez",
+//   "email":"santiago@gmail.com",
+//   "birthdate":"1996-12-15",
+//   "cellphone":3517051753, 
+//   "role":"user",
+//   "password":"asd"
+//   }
   server.post('/', (req, res, next) => {
     let { firstName, lastName, email, birthdate, cellphone, role, password  } = req.body;
 
@@ -36,9 +45,11 @@ server.get('/', (req, res, next) => {
             password
         },
       }).then((user) => {
-         
         return res.status(200).send(`El usuario ha sido creado`);
-      });
+      })
+      .catch((err)=>{
+       return  console.log(err)
+      })
     
   });
 

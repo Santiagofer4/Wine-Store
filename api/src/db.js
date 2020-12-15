@@ -66,8 +66,8 @@ Category.belongsToMany(Product, { through: 'Prod_Cat' });
 // Order.hasMany(OrderList);
 // OrderList.belongsTo(Order);
 
-// User.hasMany(Order);
-// Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsTo(User);
 
 // Product.belongsToMany(Order, { through: OrderList })
 
