@@ -38,6 +38,7 @@ function ProductDetail({ wineDetail, ...props }) {
     yearHarvest,
     description,
     image,
+    stock,
     categories,
   } = wineDetail;
   const classes = useStyles();
@@ -90,6 +91,7 @@ function ProductDetail({ wineDetail, ...props }) {
           </CardContent>
           <CardActions>
             <Button size="small">BACK</Button>
+            {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy">Comprar</Button>}
             <Button size="small" onClick={editHandler}>
               EDIT
             </Button>

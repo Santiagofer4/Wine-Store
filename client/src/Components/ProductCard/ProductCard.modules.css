@@ -29,3 +29,12 @@
 .ProCard__opacidad {
   opacity: 80%;
 }
+
+#Button__Buy{
+  background-color: #be9063 !important;
+}
+
+#buttonsContainer{
+  display: flex;
+  justify-content: space-between;
+}

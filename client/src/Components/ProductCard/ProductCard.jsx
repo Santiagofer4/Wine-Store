@@ -12,7 +12,7 @@ import { useHistory } from 'react-router-dom';
 // Recibe props con Products.info
 
 function ProductCard(props) {
-  const { image, name, price, id } = props.data;
+  const { image, name, price, id, stock } = props.data;
   const history = useHistory();
 
   const detailClickHandler = () => {
@@ -41,10 +41,12 @@ function ProductCard(props) {
           </Typography>
         </CardContent>
         <CardActions id="Button__Card">
-          <Button id="Button__Base">Comprar</Button>
-          <Button id="Button__Base" onClick={detailClickHandler}>
+       <div id="buttonsContainer"> {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy">Comprar</Button>}
+      
+          <Button id="Button__Info" onClick={detailClickHandler}>
             +
           </Button>
+          </div>
         </CardActions>
       </div>
     </Card>
