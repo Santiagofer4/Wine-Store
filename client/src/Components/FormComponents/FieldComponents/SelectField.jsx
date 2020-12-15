@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   MenuItem,
-  TextField,
+  /*   TextField, */
   InputLabel,
   Select,
   FormControl,
@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { Field } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
-//!displayEmpty no esta funcionando, no puedo hacer que muestre el placeholder cuando renderiza
+//displayEmpty no esta funcionando, no puedo hacer que muestre el placeholder cuando renderiza
 function SelectField({
   name,
   label,
@@ -75,31 +75,3 @@ function SelectField({
 }
 
 export default SelectField;
-
-//  <TextField
-//             select
-//             label={label}
-//             id={name}
-//             helperText={meta.touched && form.errors[name]}
-//             disabled={disabled ?? form.isSubmitting}
-//             InputLabelProps={{
-//               ...InputLabelProps,
-//             }}
-//             SelectProps={{
-//               ...SelectProps,
-//             }}
-//             {...field}
-//             {...props}
-//           >
-//             {!required && (
-//               <MenuItem value="">
-//                 <em>None</em>
-//               </MenuItem>
-//             )}
-
-//             {options.map((option, idx) => (
-//               <MenuItem key={idx} value={option.value}>
-//                 {option.label}
-//               </MenuItem>
-//             ))}
-//           </TextField>

@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Sidebar.modules.css';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import { getCategoryList, getProductsCategory } from '../../actions';
-import { Button } from '@material-ui/core';
+// import { Button } from '@material-ui/core';
 
 function Sidebar(props) {
   // cuando este lista las relaciones  de la DB, esta funcion debe pisar el estado 'List'
@@ -14,30 +13,47 @@ function Sidebar(props) {
     props.getProductsCategory(categoryName);
   }
 
-  if (props.products) {
-    return (
-      <div className="Sidebar__container">
-        <div className="Sidebar__lista">
-          {props.categories[0].data.map((product, index) => {
-            return (
-              // <Button>
-              <a
-                href="#"
-                onClick={(e) => {
-                  categoria(e);
-                }}
-              >
-                {product.taste}
-              </a>
-              // </Button>
-            );
-          })}
+  // console.log('paso 1',props.categories)
+  if (props.categories !== undefined) {
+    // console.log('paso 2',props.categories)
+    if (props.categories.length === 0) {
+      return (
+        <div className="Sidebar__container">
+          <div className="Sidebar__lista">
+            <h6> No hay categorias</h6>
+          </div>
         </div>
-      </div>
+      );
+    } else {
+      return (
+        <div className="Sidebar__container">
+          <div className="Sidebar__lista">
+            {props.categories.map((product, index) => {
+              return (
+                // <Button>
+                <a
+                  className="Sidebar__Text"
+                  href="#"
+                  onClick={(e) => {
+                    categoria(e);
+                  }}
+                >
+                  {product.taste}
+                </a>
+                // </Button>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+  } else {
+    return (
+      <h3>
+        <p />
+        <p /> No hay productos
+      </h3>
     );
-  }
-  if (!props.products) {
-    return <h3>No hay productos</h3>;
   }
 }
 

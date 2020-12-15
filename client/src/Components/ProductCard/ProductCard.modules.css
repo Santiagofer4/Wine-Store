@@ -1,21 +1,20 @@
 .ProCard__img {
-  width: 60%; 
-  height: 400px;
+  width: 70%;
+  height: 350px;
   background-color: rgb(17, 16, 16);
-  border-radius: 100%;
+  border-radius: 47%;
 }
 .ProCards_Card {
   margin: 2rem 1rem 2rem 1rem;
-  width: 30% !important;
-  /* opacity: 80%; */
-  background:#ffffffb8 !important;
+  width: 18rem !important;
+  background: #f7f8ffa8 !important;
   padding-top: 1rem;
 }
-.ProCards_Card:hover{
+.ProCards_Card:hover {
   margin: 2rem 1rem 2rem 1rem;
-  width: 30% !important;
+  width: 18rem !important;
   background-color: white !important;
-  transition: all 550ms ease-in-out; 
+  transition: all 550ms ease-in-out;
 }
 .ProCard__Container {
   height: 4rem;
@@ -27,11 +26,6 @@
   margin: auto;
 }
 
-.ProCard__opacidad{
+.ProCard__opacidad {
   opacity: 80%;
 }
-
-/* #Product__img{
-  width: 200px;
-  height: 350px;
-} */

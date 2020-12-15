@@ -3,10 +3,11 @@ import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
 import { validationSchemaLoadStrains } from '../adminValidations.js';
 import { Container, Paper, Button } from '@material-ui/core';
-import '../LoadPorduct/LoadProduct.modules.css';
+import '../LoadProduct/LoadProduct.modules.css';
 import axios from 'axios';
 
-export const LoadProduct = (props) => {
+//Probar si anda este. Si anda, borrar StrainForm
+export const LoadStrain = (props) => {
   const initialValues = {
     name: '',
     description: '',
@@ -16,13 +17,10 @@ export const LoadProduct = (props) => {
 
   const postNewStrain = async (strain) => {
     try {
-      const resp = await axios.post(
-        'http://localhost:3000/products/strain',
-        strain
-      );
-      console.log('POST', resp);
+      const resp = await axios.post('http://localhost:3000/strain', strain);
+      // console.log('POST', resp);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
   const handleSubmit = (values, onSubmitProps) => {
@@ -88,4 +86,4 @@ export const LoadProduct = (props) => {
   );
 };
 
-export default LoadProduct;
+export default LoadStrain;

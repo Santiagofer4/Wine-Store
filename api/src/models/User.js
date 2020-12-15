@@ -1,9 +1,9 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define(
-    "user",
+    'user',
     {
       firstName: {
         type: DataTypes.STRING,
@@ -34,15 +34,15 @@ module.exports = (sequelize) => {
           isNumeric: true,
         },
       },
-      rol: {
-        type: DataTypes.ENUM(["user", "admin"]),
+      role: {
+        type: DataTypes.ENUM(['user', 'admin']),
         allowNull: false,
       },
       password: {
-          type: DataTypes.STRING,
-          allowNull: true,  // Funcionalidad completa será agregada más adelante
-      }
-    },
+        type: DataTypes.STRING,
+        allowNull: true, // Funcionalidad completa será agregada más adelante
+      },
+    }, { timestamps: false },
     {
       hooks: {
         beforeCreate: function (user) {
@@ -50,7 +50,7 @@ module.exports = (sequelize) => {
           ageCheck.setFullYear(ageCheck.getFullYear() - 18);
           let bd = new Date(user.birthdate);
           if (ageCheck < bd) {
-            throw new Error("Solo apto para mayores de edad");
+            throw new Error('Solo apto para mayores de edad');
           }
         },
       },

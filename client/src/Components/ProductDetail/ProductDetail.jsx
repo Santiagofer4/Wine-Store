@@ -1,11 +1,18 @@
 import React from 'react';
-import { Container, Paper, CardContent, CardActions, Card, Typography, Button, } from '@material-ui/core';
+import {
+  Container,
+  Paper,
+  CardContent,
+  CardActions,
+  Card,
+  Typography,
+  Button,
+} from '@material-ui/core';
 import './ProductDetail.modules.css';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
-import { setProductDetail, setHistory } from '../../actions';
-
+import { setProductDetail, setHistory, getCatsOfProduct } from '../../actions';
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -40,6 +47,8 @@ function ProductDetail({ wineDetail, ...props }) {
   const editHandler = () => {
     props.setProductDetail(wineDetail); //necesario en caso que ingrese al product detail sin pasar por catalogue.
     //Actualmente no es posible, pero podria ser una opcion en el futuro
+    props.getCatsOfProduct(id);
+
     history.push({
       pathname: `/admin/edit/${id}`,
       state: {
@@ -52,10 +61,10 @@ function ProductDetail({ wineDetail, ...props }) {
     <Container className="ProductDetail__Container">
       <Paper className="ProductDetail__Paper">
         <Container>
-          <img src={image} alt={`imagen del vino ${name}`} />
+          <img id='prodImg' src={image} alt={`imagen del vino ${name}`} />
         </Container>
         <Card className={classes.root} variant="outlined">
-          <CardContent>
+          <CardContent className="ProdDetail__CardText">
             <Typography
               className={classes.title}
               color="textSecondary"
@@ -65,6 +74,9 @@ function ProductDetail({ wineDetail, ...props }) {
             </Typography>
             <Typography variant="h5" component="h2">
               {name}
+            </Typography>
+            <Typography variant="h5" component="h2">
+              Codigo #{id}
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
               {categories}
@@ -92,6 +104,8 @@ const mapStateToProps = (state) => ({
   wineDetail: state.productReducers.wineDetail,
 });
 
-export default connect(mapStateToProps, { setProductDetail, setHistory })(
-  ProductDetail
-);
+export default connect(mapStateToProps, {
+  setProductDetail,
+  setHistory,
+  getCatsOfProduct,
+})(ProductDetail);

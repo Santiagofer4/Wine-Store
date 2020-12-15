@@ -40,9 +40,10 @@ const productReducers = (state = initialState, action) => {
         allProducts: [action.payload.data[0].products],
       };
     case GET_CATEGORY_LIST:
+      // console.log('Get_category_list', action.payload.data)
       return {
         ...state,
-        categories: [action.payload],
+        categories: action.payload.data,
       };
 
     default:

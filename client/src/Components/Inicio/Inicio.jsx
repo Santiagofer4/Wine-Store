@@ -1,13 +1,12 @@
-import React from "react";
-import "./Inicio.modules.css";
-import Carrousel from '../Carrousel/Carrousel.jsx'
-import Contenido from "../Contenido/Contenido.jsx";
-import Footer from "../Footer/Footer.jsx";
+import React from 'react';
+import './Inicio.modules.css';
+import Carrousel from '../Carrousel/Carrousel.jsx';
+import Contenido from '../Contenido/Contenido.jsx';
+import Footer from '../Footer/Footer.jsx';
 
 // Recibe props con Products.info
 
 function Inicio() {
-
   return (
     <div>
       <Carrousel></Carrousel>

@@ -3,47 +3,19 @@ import { connect } from 'react-redux';
 import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
 import { validationSchemaLoadProducts } from '../adminValidations.js';
-import { Container, Paper, Button, CircularProgress } from '@material-ui/core';
+import {
+  Container,
+  /* Paper, */ Button,
+  CircularProgress,
+} from '@material-ui/core';
 import './LoadProduct.modules.css';
-import { getStrainList } from '../../../actions/';
+import { getStrainList } from '../../../actions';
 import { formatArrayToOption } from '../../utils.js';
 import axios from 'axios';
-import { Switch, useHistory } from 'react-router-dom';
-import { setProductDetail, getProductsList } from '../../../actions/';
+import { /* Switch, */ useHistory } from 'react-router-dom';
+import { setProductDetail, getProductsList } from '../../../actions';
 
-//! ---- NO FUNCIONA :( ----
-//El componente `carga` un par de veces antes de que se dispare el useEffect que busca la lista de cepas, aun asi las cepas son asincronas entonces "tarda" en recibir esas props,existe la forma de que la func `getStrainList` se dispare antes de que renderice por primera vez?
-// intente con una promesa y un condicional pero no funciono...pero creo que va por ahi....ya que no deberiamos intentar mapear las cepas hasta que la promesa no se resuelva y tampoco antes de que se dispare el useffect
-
-// const LoadProduct = (props) => {
-//   // const [strainOptions, setStrainOptions] = useState({});
-//   console.log('PROPS LOAD', props.strainList);
-//   useEffect(() => {
-//     strainList();
-//     // setStrainOptions(props.getStrainList());
-//     // console.log('STRAIN', strainOptions);
-//     // const option = props.strainList.map((strain) => {
-//     //   return { label: strain.name, value: strain.name };
-//     // });
-//     // console.log('OPTIONS', option);
-//   }, []);
-
-//   const strainList = async () => {
-//     return await props.getStrainList();
-//   };
-//   const x =
-//     Array.isArray(props.strainList) && props.strainList.map((x) => x.name);
-//   console.log(x);
-
-//   const initialValues = {
-//     product: '',
-
-// import { formatArrayToOption } from '../../utils.js';
-// import axios from 'axios';
-// import { Switch, useHistory } from 'react-router-dom';
-// import { setProductDetail, getProductsList } from '../../../actions/';
-
-//! ---- FUNCIONA PERO TIENE MUCHAS VUELTAS :S ----
+// ---- FUNCIONA PERO TIENE MUCHAS VUELTAS :S ----
 //? el select de las options no renderizan de primera, hay que ver la forma de se rerenderize cuando el fetch termina...el fetch lo hace pero no lo renderiza correctamente
 //? las cepas (strains) no son obligagtorias ahora, ya que en el create no son necesarias...
 //? Create,Udpate y Delete funcionan
@@ -57,21 +29,36 @@ const LoadProduct = (props) => {
     stock: '',
     description: '',
     image: '',
+    taste1: '',
+    taste2: '',
+    taste3: '',
   }; //valores "vacios" del form
-  const { wineDetail } = props;
+  const { wineDetail, categoryList, prodCats } = props;
 
   const edit = props.location.state ? props.location.state.edit : false; //true cuando entro por edit, false cualquier otra forma
   const [loading, setLoading] = useState(true); //estado para cargar el spinner de cargango
   const [strainOption, setStrainOption] = useState([]); //mantiene actualziada la lista de opciones de cepa...no me convence...creo que es al pedo definir un estado local si tenemos un store
   const [success, setSucces] = useState(false); //para cambiar el mensaje de los botones
   const [initialValues, setInitialValues] = useState(emptyValues); //estado para manejar los valores iniciales, o precargar los valores del producto, del formulario de carga/edicion de un producto
+  const [tasteList, setTasteList] = useState([]); //mantiene actualziada la lista de sabores(nuestras categorías)...no me convence...creo que es al pedo definir un estado local si tenemos un store
   const history = useHistory(); //para redirect despues del create-update-delete
+  // const [deleteTaste, setDeleteTaste] = useState(''); // Probando a hacer que active la actualización de los sabores
   // console.log('PROPS LOAD', props.strainList);
   // console.log('LOADING', loading);
 
-  //! ESTE BLOQUE HAY QUE ANALZIARLO Y DEBUGEARLO BIEN --------->>>>>>>>>>>
+  const callTastes = async () => {
+    // await props.getCategoryList();
+    (await Array.isArray(props.categoryList)) &&
+      props.categoryList.length > 0 &&
+      setTasteList(formatArrayToOption(categoryList, 'taste')); //? Tiene que haber una mejor manera para solucionar esto...
+    // console.log('CATS LIST', categoryList);
+    // console.log('dentro de calltests', tasteList);
+  };
+
+  // ESTE BLOQUE HAY QUE ANALZIARLO Y DEBUGEARLO BIEN --------->>>>>>>>>>>
   useEffect(() => {
     callStrainList();
+    callTastes();
     //si edit, entonces vengo de un product detail, entonces precargo los valores iniciales
     if (edit) {
       setInitialValues({
@@ -82,9 +69,13 @@ const LoadProduct = (props) => {
         price: wineDetail.price,
         stock: wineDetail.stock,
         image: wineDetail.image,
+        taste1: !!prodCats[0] ? prodCats[0].id : '',
+        taste2: !!prodCats[1] ? prodCats[1].id : '',
+        taste3: !!prodCats[2] ? prodCats[2].id : '',
       });
+      // console.log('prodCats useEffect', prodCats);
     }
-  }, []);
+  }, [wineDetail, categoryList, prodCats]);
 
   const callStrainList = async () => {
     //! el getStrainList() es necesario para cargar el estado, aunque podria ejecutarse cada vez que cargo una nueva cepa.... el resto funciona....pero me parece ultra berreta
@@ -92,7 +83,8 @@ const LoadProduct = (props) => {
     await setStrainOption(formatArrayToOption(props.strainList)); //? Tiene que haber una mejor manera para solucionar esto...
     setLoading(false);
   };
- 
+
+  // <<<<<<<<<<<<<<<<<<----------------------
 
   const handleSubmit = async (values, onSubmitProps) => {
     // console.log(values);
@@ -107,9 +99,11 @@ const LoadProduct = (props) => {
       price: values.price,
       stock: values.stock,
       image: values.image,
+      categories: [values.taste1, values.taste2, values.taste3],
     };
     try {
       //si edit es un update (put), si !edit entonces es un create (post)
+      // console.log('ID enviado', wineDetail.id);
       const res = edit
         ? await axios.put(
             `http://localhost:3000/products/${wineDetail.id}`,
@@ -143,7 +137,7 @@ const LoadProduct = (props) => {
         }
       }
     } catch (error) {
-      console.error(error);
+      //  console.error(error);
       alert('No se ha podido cargar el producto');
     }
   };
@@ -154,14 +148,14 @@ const LoadProduct = (props) => {
       const res = await axios.delete(
         `http://localhost:3000/products/${wineDetail.id}`
       );
-      if (res.status == 200) {
+      if (res.status === 200) {
         //si status = 200, success = ture, actualizo productlisty y redirect a catalogo
         setSucces(true);
         props.getProductsList();
         history.push('/catalogue');
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       alert('No se ha podido borrar el producto');
     }
   };
@@ -175,8 +169,52 @@ const LoadProduct = (props) => {
     });
   };
 
-  return (
+  //! el delete lo manda a la API correctamente, y esta responde 200 si todo salio bien, o error
+  //! No hay ninguna redireccion despues del delete, pero habria que vaciar el campo "select" que se elimino
+  //! Tampoco estamos manejando el doble delete
+  //! Habria que ver de levantar la data del producto nuevamente de la DB y re-renderizar el componente (o la parte que cambio)
+  //! la otra seria trabajarlo con algun estado de redux....
+  const deleteTasteHandler = async (e) => {
+    let select = e.target.name;
+    // let label ='';
+    // console.log(select);
+    try {
+      var remove_cat_id = tasteList.find(
+        (taste) =>
+          document.querySelector(`#${e.target.name}`).textContent ===
+          taste.label
+      ).value;
+    } catch (error) {
+      // console.error(error);
+      alert('No se puede borrar una categoria vacia');
+      return;
+    }
+    try {
+      const res = await axios.delete(
+        `http://localhost:3000/products/${wineDetail.id}/category/${remove_cat_id}`
+      );
+      if (res.status === 200) {
+        props.getProductsList();
+        document.querySelector(`#${select}`).textContent = 'Eliminada';
+        // console.log('Queryselector', document.querySelector(`#${select}`))
+        // history.push(`/admin/edit/${wineDetail.id}`); //intento fallido de forzar el renderizado del componente
+        // console.log('DELETE');
+      }
+    } catch (error) {
+      // console.log(error);
+      alert('No se ha podido eliminar la categoria');
+      return;
+    }
+  };
 
+  const handleOnClickSelect = (e) => {
+    let taste = e.target.name;
+    initialValues[taste] = e.target.value;
+    //  console.log(e.target.value);
+    //  console.log(initialValues);
+  };
+
+  return (
     <Container className="">
       {edit ? <h1>Editar {wineDetail.name}</h1> : <h1>Carga de Productos</h1>}
       {loading ? (
@@ -228,6 +266,98 @@ const LoadProduct = (props) => {
                   name="image"
                   required
                 />
+                {edit ? (
+                  <FormField
+                    fieldType="select"
+                    label="Sabor 1"
+                    name="taste1"
+                    options={tasteList}
+                    id="delete1"
+                    value={initialValues.taste1}
+                    onChange={(e) => handleOnClickSelect(e)}
+                  />
+                ) : (
+                  <FormField
+                    fieldType="select"
+                    label="Sabor 1"
+                    name="taste1"
+                    options={tasteList}
+                    id="delete1"
+                  />
+                )}
+                {edit && (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    label="Eliminar"
+                    name="delete1"
+                    onClick={(e) => deleteTasteHandler(e)}
+                  >
+                    X
+                  </Button>
+                )}
+                {edit ? (
+                  <FormField
+                    fieldType="select"
+                    label="Sabor 2"
+                    name="taste2"
+                    options={tasteList}
+                    id="delete2"
+                    value={initialValues.taste2}
+                    onChange={(e) => handleOnClickSelect(e)}
+                  />
+                ) : (
+                  <FormField
+                    fieldType="select"
+                    label="Sabor 2"
+                    name="taste2"
+                    options={tasteList}
+                    id="delete2"
+                  />
+                )}
+
+                {edit && (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    label="Eliminar"
+                    name="delete2"
+                    onClick={(e) => deleteTasteHandler(e, formik)}
+                  >
+                    X
+                  </Button>
+                )}
+                {edit ? (
+                  <FormField
+                    fieldType="select"
+                    label="Sabor 3"
+                    name="taste3"
+                    options={tasteList}
+                    id="delete3"
+                    value={initialValues.taste3}
+                    onChange={(e) => handleOnClickSelect(e)}
+                  />
+                ) : (
+                  <FormField
+                    fieldType="select"
+                    label="Sabor 3"
+                    name="taste3"
+                    options={tasteList}
+                    id="delete3"
+                  />
+                )}
+                {edit && (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    label="Eliminar"
+                    name="delete3"
+                    onClick={(e) => deleteTasteHandler(e, formik)}
+                  >
+                    X
+                  </Button>
+                )}
+
                 <FormField
                   fieldType="textarea"
                   label="Descripcion del producto"
@@ -285,7 +415,6 @@ const LoadProduct = (props) => {
           )}
         </Formik>
       )}
-
     </Container>
   );
 };
@@ -293,6 +422,8 @@ const LoadProduct = (props) => {
 const mapStateToProps = (state) => ({
   strainList: state.formReducers.strainList,
   wineDetail: state.productReducers.wineDetail,
+  categoryList: state.productReducers.categories,
+  prodCats: state.formReducers.prodCategoryList,
 });
 
 export default connect(mapStateToProps, {

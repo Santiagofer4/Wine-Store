@@ -123,9 +123,9 @@ function ProductForm() {
 }
 
 export default ProductForm;
-{
+/* {
   //<TextField id="standard-basic" label="Bodega" onChange={(e) => {setinputSearch(e.target.value);}}/>
 }
 {
-  /* <TextField id={state.name ? 'accepted' : 'error'}        name='name'        label="Nombre"      type='string'  onChange={(e) => {handleOnChange(e)}}/> */
-}
+  <TextField id={state.name ? 'accepted' : 'error'}        name='name'        label="Nombre"      type='string'  onChange={(e) => {handleOnChange(e)}}/> 
+} */

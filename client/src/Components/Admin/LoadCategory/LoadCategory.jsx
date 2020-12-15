@@ -1,18 +1,26 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
 import { validationSchemaLoadCategories } from '../adminValidations.js';
-import { Container, Paper, Button } from '@material-ui/core';
-import '../LoadPorduct/LoadProduct.modules.css';
+import { Container, Button } from '@material-ui/core';
+import '../LoadProduct/LoadProduct.modules.css';
 import axios from 'axios';
+import { getCategoryList } from '../../../actions';
+import { connect } from 'react-redux';
+import { formatArrayToOption } from '../../utils';
+import { useHistory } from 'react-router-dom';
 
-export const LoadProduct = (props) => {
+export const LoadCategory = (props) => {
+  const history = useHistory();
+  // console.log('es un arreglo?',props.categoryList[0].data)
   const initialValues = {
-    name: '',
-    description: '',
-    pairing: '',
-    origin: '',
+    taste: '',
   };
+  // console.log('load categori' ,props)
+  // props.getCategoryList()
+  // console.log('con datos', props.categoryList)
+  const [borrar, setBorrar] = useState(false);
+  const [tasteList, setTasteList] = useState([]); //mantiene actualziada la lista de sabores(nuestras categorías)...no me convence...creo que es al pedo definir un estado local si tenemos un store
 
   const postNewCategory = async (category) => {
     try {
@@ -20,20 +28,44 @@ export const LoadProduct = (props) => {
         'http://localhost:3000/products/category',
         category
       );
-      console.log('POST', resp);
+      // console.log('POST', resp);
     } catch (error) {
-      console.error(error);
+      //  console.error(error);
     }
   };
+  useEffect(() => {
+    callTastes();
+  }, [props.categoryList]);
+
+  const callTastes = async () => {
+    // await props.getCategoryList();
+    (await Array.isArray(props.categoryList)) &&
+      props.categoryList.length > 0 &&
+      setTasteList(formatArrayToOption(props.categoryList, 'taste')); //? Tiene que haber una mejor manera para solucionar esto...
+    // console.log('dentro de calltests', tasteList);
+  };
+
   const handleSubmit = (values, onSubmitProps) => {
     // console.log('VALUES', values);
     postNewCategory(values);
+    history.push('/catalogue');
     // onSubmitProps.resetForm();
   };
 
   return (
     <Container className="">
-      <h1>Carga de categorías</h1>
+      {borrar ? <h1>Borrar una categorías</h1> : <h1>Cargar una categorías</h1>}
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => {
+          setBorrar(!borrar);
+          // callTastes()
+        }}
+      >
+        {borrar ? 'CARGAR' : 'BORRAR'}
+      </Button>
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchemaLoadCategories}
@@ -42,31 +74,51 @@ export const LoadProduct = (props) => {
         {(formik) => (
           <Container>
             <Form>
-              <FormField
-                fieldType="input"
-                label="Nombre de categoría"
-                name="name"
-                required
-              />
-              <FormField
-                fieldType="textarea"
-                label="Descripción de la categoría"
-                name="description"
-                rows={8}
-                required
-              />
-              <br></br>
-              <Container>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={!formik.isValid}
-                  type="submit"
-                >
-                  {' '}
-                  Cargar
-                </Button>
-              </Container>
+              {borrar ? (
+                <>
+                  <FormField
+                    fieldType="select"
+                    label="Listado de categorías"
+                    name="taste"
+                    options={tasteList}
+                    required
+                  />
+
+                  <br></br>
+                  <Container>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      disabled={!formik.isValid}
+                      type="submit"
+                    >
+                      Borrar
+                    </Button>
+                  </Container>
+                </>
+              ) : (
+                <>
+                  <FormField
+                    fieldType="input"
+                    label="Nombre de categoría"
+                    name="taste"
+                    required
+                  />
+
+                  <br></br>
+                  <Container>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      disabled={!formik.isValid}
+                      type="submit"
+                    >
+                      {' '}
+                      Cargar
+                    </Button>
+                  </Container>
+                </>
+              )}
             </Form>
           </Container>
         )}
@@ -75,4 +127,10 @@ export const LoadProduct = (props) => {
   );
 };
 
-export default LoadProduct;
+function mapStateToProps(state) {
+  return {
+    categoryList: state.productReducers.categories,
+  };
+}
+
+export default connect(mapStateToProps, { getCategoryList })(LoadCategory);

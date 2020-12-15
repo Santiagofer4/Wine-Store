@@ -1,8 +1,15 @@
-import React from "react";
-import { makeStyles, useTheme, MobileStepper, Paper, Typography, Button } from "@material-ui/core";
-import SwipeableViews from "react-swipeable-views";
-import { autoPlay } from "react-swipeable-views-utils";
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@material-ui/icons";
+import React from 'react';
+import {
+  makeStyles,
+  useTheme,
+  MobileStepper,
+  Paper,
+  Typography,
+  Button,
+} from '@material-ui/core';
+import SwipeableViews from 'react-swipeable-views';
+import { autoPlay } from 'react-swipeable-views-utils';
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import './Carrousel.modules.css';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
@@ -10,38 +17,36 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const tutorialSteps = [
   {
     imgPath:
-      "https://ibiza.vilavins.com/images/blog/el-mundo-del-vino/la-ciencia-en-tu-copa/guardar-o-abrir/reliquias-del-almacen.jpg"
+      'https://ibiza.vilavins.com/images/blog/el-mundo-del-vino/la-ciencia-en-tu-copa/guardar-o-abrir/reliquias-del-almacen.jpg',
   },
   {
-
     imgPath:
-      "https://ibiza.vilavins.com/images/blog/el-mundo-del-vino/la-ciencia-en-tu-copa/guardar-o-abrir/conservacion-del-vino.jpg"
+      'https://ibiza.vilavins.com/images/blog/el-mundo-del-vino/la-ciencia-en-tu-copa/guardar-o-abrir/conservacion-del-vino.jpg',
   },
   {
-
     imgPath:
-      "https://ibiza.vilavins.com/images/blog/el-mundo-del-vino/la-ciencia-en-tu-copa/guardar-o-abrir/el-envejecimiento.jpg"
-  }
+      'https://ibiza.vilavins.com/images/blog/el-mundo-del-vino/la-ciencia-en-tu-copa/guardar-o-abrir/el-envejecimiento.jpg',
+  },
 ];
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
-    textAlign: "center",
+    width: '100%',
+    textAlign: 'center',
   },
   header: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     height: 50,
     paddingLeft: theme.spacing(4),
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.background.default,
   },
   img: {
-    height: "25vw",
-    display: "block",
-    overflow: "hidden",
-    width: "100%"
-  }
+    height: '25vw',
+    display: 'block',
+    overflow: 'hidden',
+    width: '100%',
+  },
 }));
 
 function Carrousel() {
@@ -50,19 +55,21 @@ function Carrousel() {
   const [activeStep, setActiveStep] = React.useState(0);
   const maxSteps = tutorialSteps.length;
 
-  const handleNext = () => { //Manejador de la próxima imágen del carrusel
+  const handleNext = () => {
+    //Manejador de la próxima imágen del carrusel
     if (activeStep === 2) {
-      setActiveStep((prevActiveStep) => prevActiveStep = 0)
+      setActiveStep((prevActiveStep) => (prevActiveStep = 0));
     } else {
-      setActiveStep(prevActiveStep => prevActiveStep + 1);
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
   };
 
-  const handleBack = () => { //Manejador de la imágen previa del carrusel
+  const handleBack = () => {
+    //Manejador de la imágen previa del carrusel
     if (activeStep === 0) {
-      setActiveStep((prevActiveStep) => prevActiveStep = 2)
+      setActiveStep((prevActiveStep) => (prevActiveStep = 2));
     } else {
-      setActiveStep(prevActiveStep => prevActiveStep - 1);
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
     }
   };
 
@@ -70,13 +77,14 @@ function Carrousel() {
     setActiveStep(step);
   };
 
-  return (  //Renderizado del carrusel de imágenes
+  return (
+    //Renderizado del carrusel de imágenes
     <div className={classes.root}>
       <Paper square elevation={0} className={classes.header}>
         <Typography>{tutorialSteps[activeStep].label}</Typography>
       </Paper>
       <AutoPlaySwipeableViews
-        axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={activeStep}
         onChangeIndex={handleStepChange}
         enableMouseEvents
@@ -99,30 +107,21 @@ function Carrousel() {
         variant="dots"
         activeStep={activeStep}
         nextButton={
-          <Button
-            size="small"
-            className="color__cremita"
-            onClick={handleNext}
-          >
-            {theme.direction === "rtl" ? (
+          <Button size="small" className="color__cremita" onClick={handleNext}>
+            {theme.direction === 'rtl' ? (
               <KeyboardArrowLeft />
             ) : (
-                <KeyboardArrowRight />
-              )}
+              <KeyboardArrowRight />
+            )}
           </Button>
         }
         backButton={
-          <Button
-            size="small"
-            className="color__cremita"
-            onClick={handleBack}
-          >
-            {theme.direction === "rtl" ? (
+          <Button size="small" className="color__cremita" onClick={handleBack}>
+            {theme.direction === 'rtl' ? (
               <KeyboardArrowRight />
             ) : (
-                <KeyboardArrowLeft />
-              )}
-
+              <KeyboardArrowLeft />
+            )}
           </Button>
         }
       />
