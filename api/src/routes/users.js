@@ -99,16 +99,16 @@ server.get('/:id/orders', (req, res) => {
 
 server.get('/:id/cart', (req, res) => {
   let { id } = req.params
-//  console.log('GET a CART');
-   Order.findAll({
-     include:[OrderLine],
-    where: { status: 'cart',
-    userId: id}
+  // console.log('GET a CART');
+  Order.findAll({
+    where: {status: 'cart',
+    userId: id},
+    include:{model: OrderLine, include: [{model: Product}]},
   })
-  .then(ord => {
+  .then((ord) => {
     return res.status(200).send(ord)
-   })
-});
+  })
+})
 
 server.post('/:id/cart', (req, res) => {
   let { id } = req.params;
