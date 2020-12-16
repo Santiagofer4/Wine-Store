@@ -18,15 +18,6 @@ server.get('/', (req, res, next) => {
 
   //Agregar un USER
 
-// {
-//   "firstName":"santi",
-//   "lastName":"fernandez",
-//   "email":"santiago@gmail.com",
-//   "birthdate":"1996-12-15",
-//   "cellphone":3517051753, 
-//   "role":"user",
-//   "password":"asd"
-//   }
   server.post('/', (req, res, next) => {
     let { firstName, lastName, email, birthdate, cellphone, role, password  } = req.body;
 
