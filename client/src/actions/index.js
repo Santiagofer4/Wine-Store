@@ -11,6 +11,7 @@ import {
   GET_CATEGORIES_OF_PRODUCT,
   DELETE_STRAIN,
   DELETE_CATEGORY,
+  GET_PRODUCTS_CART,
 } from './actions';
 
 export function getProductSearch(payload) {
@@ -105,3 +106,10 @@ export const deleteCategory = (id) => (dispatch) => {
       console.log('Error en DELETE_CATEGORY', err);
     });
 };
+
+export const getProductsCart = (id) => async (dispatch) => {
+  return await axios
+  .get(`http://localhost:3000/users/${id}/cart`)
+  .then((productsCart) => dispatch({ type: GET_PRODUCTS_CART, payload: productsCart}))
+  .catch((err) => {console.log('Error en GET_PRODUCTS_CART', err)})
+}
