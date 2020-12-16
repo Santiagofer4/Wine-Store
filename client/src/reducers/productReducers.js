@@ -69,7 +69,7 @@ const productReducers = (state = initialState, action) => {
         categories: state.categories.filter((category) => {return category !== action.payload.data} )
       }
     case GET_PRODUCTS_CART:
-      return {
+        return {
         ...state,
         productsCart: action.payload.data
       }
