@@ -109,7 +109,7 @@ export const deleteCategory = (id) => (dispatch) => {
 
 export const getProductsCart = (id) => async (dispatch) => {
   return await axios
-  .get(`http://localhost:3000/users/${id}/cart`)
+  .get(`http://localhost:3000/users/1/cart`)   //! Usuario harcodeado
   .then((productsCart) => dispatch({ type: GET_PRODUCTS_CART, payload: productsCart}))
   .catch((err) => {console.log('Error en GET_PRODUCTS_CART', err)})
 }

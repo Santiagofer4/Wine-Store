@@ -37,6 +37,35 @@
   z-index: +1;
   color: white;
 }
+#searchbar{
+  margin-top: 0.4rem;
+}
+#search-cart{
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+
+}
+#cart {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  margin-top: 1.4rem;
+  margin-right: 1rem;
+}
+#cartDiv{
+  height: 50px;
+  width: 50px;
+  align-items: center;
+}
+#imgCart{
+  height: 40px;
+  width: 40px;
+ }
+#imgCart:hover{
+  height: 45px;
+  width: 45px;
+  }
 
 @media screen and (max-width: 750px) {
   #invisible {

@@ -11,7 +11,8 @@ server.get('/', (req, res) => {
      Order.findAll({
          where: {status: 'cart'}
      }).then(order => {
-        return res.status(200).send(order)
+       // return res.status(200).send(order)
+       console.log('ORDER ID',order.id)
         //! Falta hacer que devuelva TODOS los productos de la orden
      })
  

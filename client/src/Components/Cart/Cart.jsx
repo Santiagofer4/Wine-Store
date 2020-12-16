@@ -4,9 +4,16 @@ import { getProductsCart } from '../../actions/index';
 import { connect } from 'react-redux';
 
 function Cart(props) {
+ 
+
   return (
     <div>
-        <div className="ShoppingCart"><ul></ul> 
+        <div className="ShoppingCart"><ul>
+     
+           {console.log( 'productos del carrito', props.productsCart)}
+
+        
+          </ul> 
         </div>
         <div className="Summary"></div>
         <div className="Buttons"></div>
@@ -15,7 +22,7 @@ function Cart(props) {
 }
 
 function mapStateToProps (state) {
-    return {productsCart}
+    return {productsCart: state.productReducers.productsCart}
 } 
 
 export default connect (mapStateToProps, { getProductsCart } ) (Cart);

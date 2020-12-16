@@ -9,6 +9,7 @@ import TestForm from './Components/FormComponents/TestForm.jsx';
 import AdminPanel from './Components/Admin/AdminPanel';
 // import { LoadProduct } from './Components/Admin/LoadProduct/LoadProduct';
 import ProductDetail from './Components/ProductDetail/ProductDetail';
+import Cart from './Components/Cart/Cart.jsx';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/admin/form-product" component={ProductForm} />
         <Route path="/form/test" component={TestForm} />
         <Route path="/admin" component={AdminPanel} />
+        <Route path="/cart" component={Cart}/>
       </Switch>
     </div>
   );
