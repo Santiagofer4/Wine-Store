@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     status:{
-      type: DataTypes.ENUM(['pending', 'completed']),
+      type: DataTypes.ENUM(['created', 'canceled', 'pending', 'completed', 'cart']),
       defaultValue: 'pending',
     }
   });
