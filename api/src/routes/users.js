@@ -99,17 +99,17 @@ server.get('/:id/orders', (req, res) => {
 
 server.get('/:id/cart', (req, res) => {
   let { id } = req.params
-  console.log('GET a CART');
-  // res.status(200).send("Entré al carrito");
+  // console.log('GET a CART');
   Order.findAll({
-    where: { status: 'cart',
+    include:[OrderLine],
+    where: {status: 'cart',
     userId: id}
-  }).then(order => {
-    return res.status(200).send(order)
-    //! Falta hacer que devuelva TODOS los productos de la orden
   })
-
-});
+  .then((ord) => {
+    console.log(ord)
+    return res.status(200).send(ord)
+  })
+})  
 
 server.post('/:id/cart', (req, res) => {
   let { id } = req.params;
