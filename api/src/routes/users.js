@@ -1,5 +1,5 @@
 const server = require('express').Router();
-const { User, Order, Product } = require('../db.js');
+const { User, Order, Product, OrderLine } = require('../db.js');
 //const cartRouter = require('./cart.js');
 
 //server.use('/:id/cart', cartRouter);
@@ -109,84 +109,38 @@ server.get('/', (req, res, next) => {
      
       });
 
-      server.post('/:id/cart', (req, res, next) => { //cambiar post por put
-        let fullOrder;
-        let { total, status, product } = req.body;
+      server.post('/:id/cart', (req, res) => {
         let { id } = req.params;
-//PromiseAll es una opción
+        let { productId, quantity, price } = req.body
 
-         console.log('POST a /:id/cart');
-         Order.findOrCreate({
-          where: {
-            userId: id,
-            status: "cart",
-          } , defaults: {
-            total: 0,
-            status: "cart",
-          }
-        })
-         OrderLine.create({ //findOrCreate en vez de create
-          total,
-          status,
-          quantity: 1,
-          price: 100
+           if (!productId || !id)
+           return res.status(400).send('No se puede agregar el producto al carrito');
 
+    Order.findOrCreate({
+      where: {
+        userId: id,
+        status: "cart",
+      } , defaults: {
+        total: 0,
+        status: "cart",
+         }})
+         .then(order =>{
+   const [instance, wasCreated] = order; // si crea el dato wasCreated = true sino false
+          OrderLine.create({
+          productId,
+          quantity,
+          price,
         })
-          .then((order) => {
-          //  console.group(order.id)
-            product.forEach((productId) => {
-              Product.findByPk(productId).then((product) =>
-                order.addProduct(product)
-              );
-            });
-            fullOrder = order;
+        .then(orderLine =>{
+          orderLine.setProduct(productId);
+          orderLine.setOrder(instance.id)
+          console.log('exito', productId)
+        })
           })
-          .then(() => res.status(200).send(fullOrder))
-          .catch(next);
-      });
+      res.status(200).send("Entré a agregar item al carrito");
 
-//       server.post('/:id/cart', (req, res) => {
-//         let { id } = req.params;
-//         let { productId, quantity, price } = req.body
-//         let fullOrder;
-//        // console.log('ID', id, productId)
-  
-//            if (!productId || !id)
-//            return res.status(400).send('No se puede agregar el producto al carrito');
+    })
 
-//            /*               ORDER LIST                                ORDER
-// PK     orderId    productId   quantity  price         PK     userId    total    status
-// 1         1           3           2       22           1        4        65       cart 
-// 2         1           4           1       21           2        1        21       cart
-// 3         2           3           2       20                                          */
-  
-//         Order.findAll({
-//            where: { userId: id, status: "cart" } 
-//         }).then(order => {
-//           fullOrder = order;
-//              OrderList.findOrCreate({
-//               where: {
-//                  productId: productId,
-//                  orderId : fullOrder.id              
-//               }, defaults : {
-//                   productId,
-//                   quantity,
-//                   price                  
-//               }
-//           }).then(() => {
-//              fullOrder.addOrder(order.id)
-//              console.log('instance', instance);
-//              console.log('wasCreated', wasCreated);
-//               // console.log('RESULT', result)
-//               // const [instance, wasCreated] = result;
-//           })
-  
-  
-         
-//         })
-//         //con esta orden ir a buscar el orderId
-//       res.status(200).send("Entré a agregar item al carrito");
-      
-//     })
+
 
 module.exports = server
