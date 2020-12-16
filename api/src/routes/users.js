@@ -85,6 +85,31 @@ server.put("/:id", (req, res) => {
     });
 });
 
+//Editar cantidades de producto
+
+server.put("/:idUser/cart", (req, res) => {
+  let {idUser} = req.params;
+  let { productId, quantity } = req.body;
+  if (!idUser) return res.status(400).send("El usuario no existe");
+  Order.findOne({
+    where: {
+      status: "cart",
+      userId: idUser,
+    },
+  }).then((orders) => {
+    let id = orders.id;
+    OrderLine.update(
+      {quantity},
+      {where: 
+        { productId: productId, orderId: id}}
+    )}).then(() => {
+      return res.send(200, "El carrito del usuario se ha actualizado");
+  });
+})
+
+
+//Vaciar carrito
+
 server.delete("/:idUser/cart", (req, res) => {
   let { idUser } = req.params;
 
