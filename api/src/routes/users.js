@@ -1,5 +1,5 @@
 const server = require('express').Router();
-const { User } = require('../db.js');
+const { User,Order } = require('../db.js');
 
 // Listar todos los USERS
 
@@ -90,5 +90,17 @@ server.get('/', (req, res, next) => {
        
       });
 
+      server.get('/:id/orders', (req,res)=>{
+        const {id}=req.params;
+          Order.findAll({
+            where:{ userId : id}
+          })
+          .then((list)=>{
+            res.json(list)
+          })
+          .catch(err =>{
+            console.log(err)
+          })
+      })
 
 module.exports = server

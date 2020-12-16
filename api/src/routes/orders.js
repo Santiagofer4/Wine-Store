@@ -38,6 +38,23 @@ server.get('/', (req, res, next) => {
     })
   })
 
+  server.get('/:id',(req,res)=>{
+      Order.findAll({
+        where:{
+            id : req.params.id
+        }
+      })
+      .then((order)=>{
+        res.send(order)
+      })
+
+  })
+
+  // server.put('/:id',(req,res)=>{
+  //   const {id}= req.params;
+  //   Order.update({ status: }, {where:{id}})
+  // })
+
 
 
 module.exports = server
