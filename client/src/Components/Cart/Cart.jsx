@@ -15,7 +15,9 @@ function Cart(props) {
 }
 
 function mapStateToProps (state) {
-    return {productsCart}
+    return {
+      productsCart: state.productReducer.productsCart
+    }
 } 
 
 export default connect (mapStateToProps, { getProductsCart } ) (Cart);
