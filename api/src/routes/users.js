@@ -1,5 +1,8 @@
 const server = require('express').Router();
 const { User,Order } = require('../db.js');
+const cartRouter = require('./cart.js');
+
+server.use('/:id/cart', cartRouter);
 
 // Listar todos los USERS
 
@@ -14,7 +17,7 @@ server.get('/', (req, res, next) => {
   });
 
   //Agregar un USER
-// funciona cuando quiere 
+
 // {
 //   "firstName":"santi",
 //   "lastName":"fernandez",
