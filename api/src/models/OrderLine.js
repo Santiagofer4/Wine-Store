@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define('orderList', {
+  sequelize.define('orderLine', {
     quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,

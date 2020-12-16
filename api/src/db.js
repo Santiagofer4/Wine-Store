@@ -45,7 +45,7 @@ const {
   Brand,
   Cellar,
   Order,
-  OrderList,
+  OrderLine,
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -63,14 +63,14 @@ Category.belongsToMany(Product, { through: 'Prod_Cat' });
 // Brand.belongsTo(Cellar);
 // Cellar.hasMany(Brand);
 
-Order.hasMany(OrderList);
-OrderList.belongsTo(Order);
+Order.hasMany(OrderLine);
+OrderLine.belongsTo(Order);
 
 User.hasMany(Order);
 Order.belongsTo(User);
 
-Product.belongsToMany(Order, { through: 'OrderList' })
-Order.belongsToMany(Product, { through: 'OrderList' })
+Product.hasMany(OrderLine)
+OrderLine.belongsTo(Product)
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
