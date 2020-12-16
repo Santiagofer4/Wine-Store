@@ -1,8 +1,8 @@
 const server = require('express').Router();
-const { User,Order } = require('../db.js');
-const cartRouter = require('./cart.js');
+const { User, Order, OrderList } = require('../db.js');
+//const cartRouter = require('./cart.js');
 
-server.use('/:id/cart', cartRouter);
+//server.use('/:id/cart', cartRouter);
 
 // Listar todos los USERS
 
@@ -96,5 +96,62 @@ server.get('/', (req, res, next) => {
             console.log(err)
           })
       })
+
+      server.get('/:id/cart', (req, res) => {
+        console.log('GET a CART');
+       // res.status(200).send("Entré al carrito");
+         Order.findAll({
+             where: {status: 'cart'}
+         }).then(order => {
+            return res.status(200).send(order)
+            //! Falta hacer que devuelva TODOS los productos de la orden
+         })
+     
+      });
+
+
+      server.post('/:id/cart', (req, res) => {
+        let { id } = req.params;
+        let { productId, quantity, price } = req.body
+        let fullOrder;
+       // console.log('ID', id, productId)
+  
+           if (!productId || !id)
+           return res.status(400).send('No se puede agregar el producto al carrito');
+
+           /*               ORDER LIST                                ORDER
+PK     orderId    productId   quantity  price         PK     userId    total    status
+1         1           3           2       22           1        4        65       cart 
+2         1           4           1       21           2        1        21       cart
+3         2           3           2       20                                          */
+  
+        Order.findAll({
+           where: { userId: id, status: "cart" } 
+        }).then(order => {
+          fullOrder = order;
+             OrderList.findOrCreate({
+              where: {
+                 productId: productId,
+                 orderId : fullOrder.id              
+              }, defaults : {
+                  productId,
+                  quantity,
+                  price                  
+              }
+          }).then(() => {
+             fullOrder.addOrder(order.id)
+             console.log('instance', instance);
+             console.log('wasCreated', wasCreated);
+              // console.log('RESULT', result)
+              // const [instance, wasCreated] = result;
+          })
+  
+  
+         
+        })
+        //con esta orden ir a buscar el orderId
+      res.status(200).send("Entré a agregar item al carrito");
+      
+    })
 
 module.exports = server

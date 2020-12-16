@@ -156,13 +156,13 @@ server.post('/', (req, res, next) => {
 server.post('/:idProduct/category', (req, res) => {
   let { idProduct } = req.params;
   let { Category } = req.body;
-  // console.log('Actualizo categoría de producto - POST a /products/:idProduct/category');
+  
   if (!idProduct || Category)
-    return res.status(400).send('No se puede actualizar la categoría');
+    return res.status(400).send('No se puede agregar la categoría');
 
   Product.findByPk(idProduct).then((product) => {
     product.addCategory(Category);
-    return res.send('Se actualizó la categoría');
+    return res.send('Se agregó la categoría');
   });
 });
 
