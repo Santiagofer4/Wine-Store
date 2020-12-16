@@ -5,35 +5,6 @@ const { User, Order, OrderList } = require('../db.js');
 
 //Obtener la orden CARRITO (CART)
 
-server.delete('/:idUser/cart', (req, res) => {
-  let { idUser } = req.params;
-
-  if (idUser) return res.send(400, 'No hay carrito asociado al usuario');
-
-  Order.destroy({
-    where: {
-      status: "cart",
-      userId: idUser,
-    }
-  })
-  .then(() => {
-    return res.send(200, 'El carrito del usuario se ha borrado')
-  })
-});
-
-server.get('/', (req, res) => {
-    console.log('GET a CART');
-   // res.status(200).send("Entré al carrito GET a /cart");
-     Order.findAll({
-         where: {status: 'cart'}
-     }).then(order => {
-       // return res.status(200).send(order)
-       console.log('ORDER ID',order.id)
-        //! Falta hacer que devuelva TODOS los productos de la orden
-     })
- 
-  });
-
   server.post('/', (req, res) => {
       let { id } = req.params;
       console.log('ID', id)
