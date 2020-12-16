@@ -50,10 +50,18 @@ server.get('/', (req, res, next) => {
 
   })
 
-  // server.put('/:id',(req,res)=>{
-  //   const {id}= req.params;
-  //   Order.update({ status: }, {where:{id}})
-  // })
+  server.put('/:id',(req,res)=>{
+    const {id}= req.params;
+    const {total, status} = req.body;
+    Order.update({ status,total }, {where:{id}})
+    .then((respuesta)=>{
+      res.status(201).send('orden actualizada')
+    })
+    .catch(err=>{
+      console.log(err)
+      res.status(400)
+    })
+  })
 
 
 
