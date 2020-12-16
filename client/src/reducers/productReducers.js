@@ -7,6 +7,7 @@ import {
   GET_STRAIN_LIST,
   DELETE_STRAIN,
   DELETE_CATEGORY,
+  GET_PRODUCTS_CART,
 } from '../actions/actions';
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
   search: '',
   categories: [],
   strains: [],
+  productsCart: [],
 };
 
 const productReducers = (state = initialState, action) => {
@@ -65,6 +67,11 @@ const productReducers = (state = initialState, action) => {
       return {
         ...state,
         categories: state.categories.filter((category) => {return category !== action.payload.data} )
+      }
+    case GET_PRODUCTS_CART:
+      return {
+        ...state,
+        productsCart: action.payload.data
       }
     default:
       return state;
