@@ -1,0 +1,15 @@
+.OrderTable__Container{
+    padding-top: 10rem;
+}
+.OrderTable__Text{
+margin: 0px;
+color: white;
+list-style: none;
+width: 20%;
+}
+.OrderTable__Ul{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+}

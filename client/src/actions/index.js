@@ -12,6 +12,7 @@ import {
   DELETE_STRAIN,
   DELETE_CATEGORY,
   GET_PRODUCTS_CART,
+  GET_ORDER_LIST
 } from './actions';
 
 export function getProductSearch(payload) {
@@ -112,4 +113,10 @@ export const getProductsCart = (id) => async (dispatch) => {
   .get(`http://localhost:3000/users/1/cart`)   //! Usuario harcodeado
   .then((productsCart) => dispatch({ type: GET_PRODUCTS_CART, payload: productsCart}))
   .catch((err) => {console.log('Error en GET_PRODUCTS_CART', err)})
+}
+
+export const getOrderList = ()=> async (dispatch)=>{
+  return await axios
+    .get('http://localhost:3000/orders')
+    .then((orderList)=>{ dispatch({type: GET_ORDER_LIST, payload: orderList})})
 }

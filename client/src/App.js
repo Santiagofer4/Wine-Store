@@ -10,6 +10,7 @@ import AdminPanel from './Components/Admin/AdminPanel';
 // import { LoadProduct } from './Components/Admin/LoadProduct/LoadProduct';
 import ProductDetail from './Components/ProductDetail/ProductDetail';
 import Cart from './Components/Cart/Cart.jsx';
+import OrderTable from './Components/OrderTable/OrderTable.jsx'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/form/test" component={TestForm} />
         <Route path="/admin" component={AdminPanel} />
         <Route path="/cart" component={Cart}/>
+        <Route path="/order-table" component={OrderTable}/>
       </Switch>
     </div>
   );
