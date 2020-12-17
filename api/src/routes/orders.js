@@ -1,18 +1,26 @@
 const server = require('express').Router();
-const {Order,User} = require('../db.js');
+const {Order,User, OrderLine, Product} = require('../db.js');
+
+
 server.get('/', (req, res, next) => {
   // debe devolver todas las ordenes si no recibe status
 
   const {status} = req.query;
     console.log('GET a ORDERS');
     if(!status){
-      Order.findAll()
+      Order.findAll({
+        include: { model: OrderLine, include: [{ model: Product }] },
+      })
       .then((order) => {
        return res.status(200).send(order);
       })
       .catch(next);
     }else{
-      Order.findAll({where:{ status}})
+      Order.findAll({
+        where:{ status},
+        include: { model: OrderLine, include: [{ model: Product }] },
+
+      })
       .then((list)=>{
         console.log('respuesta')
         res.json(list)

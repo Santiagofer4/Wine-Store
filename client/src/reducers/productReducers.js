@@ -76,7 +76,6 @@ const productReducers = (state = initialState, action) => {
         productsCart: action.payload.data
       }
     case GET_ORDER_LIST:
-      console.log('Entro al reducer' ,action.payload.data)
         return {
         ...state,
         orderList: action.payload.data
