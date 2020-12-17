@@ -46,7 +46,7 @@ function NavBar(props) {
           props.getProductsCart();
         }}
         >
-            <img id="imgCart" src="https://i.ibb.co/FsngVZ5/carrito1.png"/>
+            <img id="imgCart" src="https://i.ibb.co/FsngVZ5/carrito1.png" alt="Carrito"/>
              
             </Link>
        </div>
@@ -60,7 +60,9 @@ function NavBar(props) {
 }
 
 function mapStateToProps (state) {
-  return {productsCart: state.productReducers.productsCart}
+  return {
+    productsCart: state.productReducers.productsCart
+  }
 }
 
 export default connect(mapStateToProps, { getProductsCart })

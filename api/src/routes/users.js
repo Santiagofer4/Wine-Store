@@ -200,7 +200,7 @@ server.post("/:id/cart", (req, res) => {
     }).then((orderLine) => {
       orderLine.setProduct(productId);
       orderLine.setOrder(instance.id);
-      console.log("exito", productId);
+      // console.log("exito", productId);
     });
   });
   res.status(200).send("Entré a agregar item al carrito");
