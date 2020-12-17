@@ -8,6 +8,7 @@ import {
   DELETE_STRAIN,
   DELETE_CATEGORY,
   GET_PRODUCTS_CART,
+  GET_ORDER_LIST,
 } from '../actions/actions';
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   categories: [],
   strains: [],
   productsCart: [],
+  ordersList: []
 };
 
 const productReducers = (state = initialState, action) => {
@@ -72,6 +74,12 @@ const productReducers = (state = initialState, action) => {
         return {
         ...state,
         productsCart: action.payload.data
+      }
+    case GET_ORDER_LIST:
+      console.log('Entro al reducer' ,action.payload.data)
+        return {
+        ...state,
+        orderList: action.payload.data
       }
     default:
       return state;
