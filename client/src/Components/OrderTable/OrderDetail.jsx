@@ -5,6 +5,7 @@ function OrderDetail(props) {
     return (
 
         <div className='OrderDetail__Container' id={props.id}>
+            <hr/>
                 <ul className='OrderTable__Ul'>
                     <li className='OrderTable__Text' >Quantity</li>
                     <li className='OrderTable__Text' >Price</li>
@@ -25,7 +26,7 @@ function OrderDetail(props) {
         }) }
                
 
-
+        <hr/>
         </div>
     )
 }
