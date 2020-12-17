@@ -25,17 +25,19 @@ server.get('/', (req, res, next) => {
 
   server.post('/',(req,res)=>{
     const{status,total,userId,}=req.body;
-    Order.create({
-      status,
-      total,
+    Order.findOrCreate({
+      where: {status: "cart", userId: userId},
+      defaults: { status, total},
     })
-    .then((order)=>{     
-      return order.setUser(userId)
+    .then((order)=>{ 
+      const [instance, wasCreated] = order;
+      if(!wasCreated){
+        return res.send("el usuario ya tiene un carrito");
+      }
+      instance.setUser(userId);
+      return res.send('se agrego una nueva orden');
     })
-    .then(() =>{
-      res.send('se agrego una nueva orden')
-
-    })
+    .catch((err)=>{console.log(err)})
   })
 
   server.get('/:id',(req,res)=>{
