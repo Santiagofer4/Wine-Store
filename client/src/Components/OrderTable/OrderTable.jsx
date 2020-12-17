@@ -21,6 +21,8 @@ function OrderTable(props) {
                     <li className='OrderTable__Text' >Status</li>
                     <li className='OrderTable__Text' >User Id</li>
                     <li className='OrderTable__Text' >Order Id</li>
+                    <li className='OrderTable__Text' >Detalle</li>
+
                 </ul>
 
             {props.orderList && props.orderList.map(element =>{
@@ -30,6 +32,7 @@ function OrderTable(props) {
                     <li className='OrderTable__Text' >{element.status}</li>
                     <li className='OrderTable__Text' >{element.userId}</li>
                     <li className='OrderTable__Text' >{element.id}</li>
+                    <li className='OrderTable__Text'> <button>D</button></li>
                     </ul>
   
                 )
