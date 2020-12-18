@@ -83,7 +83,7 @@ function ProductDetail({ wineDetail, ...props }) {
           </CardContent>
           <CardActions>
             <Button size="small" onClick={() => history.goBack()} >BACK</Button>
-            {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy" onClick={() => props.addProductCart(2, wineDetail)}>Comprar</Button>}
+            {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy" onClick={() => props.addProductCart(1, id, price)}>Comprar</Button>}
             <Button size="small" onClick={editHandler}>
               EDIT
             </Button>

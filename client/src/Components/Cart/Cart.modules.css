@@ -107,3 +107,8 @@
 .buttonCart {
     margin: 1rem;
 }
+
+.btnEliminar {
+    height: 30px;
+    width: 30px;
+}

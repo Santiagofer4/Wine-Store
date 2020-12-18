@@ -112,7 +112,7 @@ export const deleteCategory = (id) => (dispatch) => {
 
 export const getProductsCart = (id) => async (dispatch) => {
   return await axios
-    .get(`http://localhost:3000/users/1/cart`)   //! Usuario harcodeado
+    .get(`http://localhost:3000/users/${id}/cart`)  
     .then((productsCart) => dispatch({ type: GET_PRODUCTS_CART, payload: productsCart}))
     .catch((err) => {console.log('Error en GET_PRODUCTS_CART', err)})
 }
@@ -125,18 +125,20 @@ export const getOrderList = () => async (dispatch) => {
 
 export const deleteProductsCart = (id) => async (dispatch) => {
   return await axios
-    .delete(`http://localhost:3000/users/2/cart`)   //! Usuario harcodeado
+    .delete(`http://localhost:3000/users/${id}/cart`)  //harcodearlo en el front al user
     .then((id) => dispatch({ type: DELETE_PRODUCTS_CART, payload: id}))
     .catch(err => {
       console.log('Error en DELETE_PRODUCTS_CART', err);
     })
 }
 
-export const addProductCart = (idUser, product) => (dispatch) =>  {
-  console.log('actions',idUser, product)
+export const addProductCart = (idUser, productId, price) => (dispatch) =>  {
+ // console.log('actions',idUser, product)
   return axios
-  .post(`http://localhost:3000/users/${idUser}/cart`) //harcodearlo en el front al user
-  .then(addProductoToCart => dispatch ({ type: ADD_PRODUCT_CART }))
+  .post(`http://localhost:3000/users/${idUser}/cart`, {productId, price}) //harcodearlo en el front al user
+  
+  .then(() => getProductsCart(idUser))
+  // dispatch ({ type: ADD_PRODUCT_CART, payload }))
   .catch(err => {console.log('Error en ADD_PRODUCT_CART', err)}) 
 }
 
@@ -145,4 +147,11 @@ export const putProductCart = (idUser, productId, quantity) => (dispatch) => {
     .put(`http://localhost:3000/users/${idUser}/cart`, { productId, quantity })
     .then(() => getProductsCart(idUser))
     .catch(err => {console.log('Error en PUT_PRODUCT_CART', err)})
+}
+
+export const deleteProductCart = (idUser, productId) => async (dispatch) => {
+  return await axios
+  .delete(`http://localhost:3000/users/${idUser}/cart/${productId}`)
+  .then(()=> getProductsCart(idUser), console.log())
+  .catch(err => {console.log('Error en DELETE_PRODUCT_CART', err)})
 }

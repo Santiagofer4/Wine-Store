@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Cart.modules.css";
-import { getProductsCart, deleteProductsCart, putProductCart } from "../../actions/index";
+import { getProductsCart, deleteProductsCart, putProductCart, deleteProductCart } from "../../actions/index";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { Button } from "@material-ui/core";
@@ -10,8 +10,8 @@ function Cart(props) {
   console.log("PROPS.PRODUCTSCART", props.productsCart);
 
   const handleDelete = async () => {
-    await props.deleteProductsCart();
-    props.getProductsCart();
+    await props.deleteProductsCart(1);
+    props.getProductsCart(1);
   };
 
   const handleConfirm = () => {};
@@ -34,8 +34,16 @@ function Cart(props) {
     props.putProductCart(1, id, document.getElementById(`${id}`).value);
   };
 
+  const handlerDeleteElement = (id) => {
+    
+    console.log("anda el botón", id)
+    props.deleteProductCart(1, id);
+    
+    //hacer la acción delete y pasarle el id
+  }
+
   useEffect(() => {
-    props.getProductsCart();
+    props.getProductsCart(1);
     console.log('Productos', props.productsCart)
   }, []);
 
@@ -66,6 +74,10 @@ function Cart(props) {
                       <p>$ {p.product.price}</p>
                     </div>
                     <div className="quantity">
+                      <img src="https://img2.freepng.es/20180329/cke/kisspng-computer-icons-clip-art-delete-button-5abced454dbd36.6503919615223309493184.jpg" 
+                       name={p.product.id}
+                       className="btnEliminar"
+                      onClick={() => handlerDeleteElement(p.product.id)}></img>
                     <Button 
                     name={p.product.id}
                     className="button" 
@@ -141,5 +153,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   getProductsCart,
   deleteProductsCart,
-  putProductCart
+  putProductCart,
+  deleteProductCart
 })(Cart);

@@ -81,11 +81,11 @@ const productReducers = (state = initialState, action) => {
         ...state,
         orderList: action.payload.data
       }
-      case ADD_PRODUCT_CART:
-        return {
-          ...state,
-         productsCart: state.productsCart.concat(action.payload.data) //Revisar como llega el payload. Y revisar también si está bien hecho esto xD
-        }
+      // case ADD_PRODUCT_CART:
+      //   return {
+      //     ...state,
+      //    productsCart: state.productsCart.concat(action.payload.data) //Revisar como llega el payload. Y revisar también si está bien hecho esto xD
+      //   }
     default:
       return state;
   }

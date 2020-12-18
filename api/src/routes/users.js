@@ -219,9 +219,12 @@ server.get("/:id/cart", (req, res) => {
 //    res.status(200).send("Entré a agregar item al carrito");
 // });
 
+
+// Agregar elemento al carrito
+
 server.post("/:id/cart", (req, res) => {
   let { id } = req.params;
-  let { productId, quantity, price } = req.body;
+  let { productId, price } = req.body;
 
   if (!productId || !id)
     return res.status(400).send("No se puede agregar el producto al carrito");
@@ -239,7 +242,7 @@ server.post("/:id/cart", (req, res) => {
     const [instance, wasCreated] = order; // si crea el dato wasCreated = true sino false
     OrderLine.create({
       productId,
-      quantity,
+      quantity: 1,
       price,
     }).then((orderLine) => {
       orderLine.setProduct(productId);
@@ -248,6 +251,33 @@ server.post("/:id/cart", (req, res) => {
     });
   });
   res.status(200).send("Entré a agregar item al carrito");
+});
+
+
+// Borrar producto del carrito
+
+server.delete("/:idUser/cart/:productId", (req, res) => {
+  console.log("Entré")
+  let { idUser, productId } = req.params;
+ 
+
+  if (!idUser) return res.send(400, "No hay carrito asociado al usuario");
+
+  Order.findOne({
+    where: {
+      status: "cart",
+      userId: idUser,
+    },
+  }).then((orders) => {
+    let id = orders.id;
+    OrderLine.destroy({
+      where: {
+        productId,
+      },
+    }).then(() => {
+      return res.send(200, "El producto ha sido eliminado del carrito");
+    });
+  });
 });
 
 module.exports = server;
