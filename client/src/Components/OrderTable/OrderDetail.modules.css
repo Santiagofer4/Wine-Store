@@ -1,7 +1,7 @@
-.OrderTable__Container{
+.OrderDetail__Container{
     padding-top: 10rem;
     background-size: contain;
-    /* height: 78vh; */
+    display: none;
 }
 .OrderTable__Text{
 margin: 0px;

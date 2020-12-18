@@ -1,5 +1,5 @@
 const server = require('express').Router();
-const { User, Order, OrderList } = require('../db.js');
+const { User, Order, OrderLine } = require('../db.js');
 
 //El Carrito va a ser una orden con un status CART ??
 
@@ -16,7 +16,7 @@ const { User, Order, OrderList } = require('../db.js');
       Order.findAll({
          where: { userId: id, status: "cart" } 
       }).then(order => {
-        OrderList.findOrCreate({
+        OrderLine.findOrCreate({
             where: {
                productId: id                
             }, defaults : {

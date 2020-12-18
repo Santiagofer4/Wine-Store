@@ -78,3 +78,10 @@ export const formatArrayToOption = (array, propName) => {
 //   typeof reset === 'undefined' ? (reset = false) : true;
 //   labels.map(label);
 // };
+
+export function sliceTime(str){
+
+
+
+    return str.slice( 8, 10) + '/' + str.slice( 5, 7 ) + '/' + str.slice(0, 4 )
+}
