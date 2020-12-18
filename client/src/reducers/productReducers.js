@@ -84,7 +84,7 @@ const productReducers = (state = initialState, action) => {
       case ADD_PRODUCT_CART:
         return {
           ...state,
-         productsCart: action.payload.data //Revisar como llega el payload.
+         productsCart: state.productsCart.concat(action.payload.data) //Revisar como llega el payload. Y revisar también si está bien hecho esto xD
         }
     default:
       return state;

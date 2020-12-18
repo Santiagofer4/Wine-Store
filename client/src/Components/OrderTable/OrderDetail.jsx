@@ -5,28 +5,24 @@ function OrderDetail(props) {
     return (
 
         <div className='OrderDetail__Container' id={props.id}>
-            <hr/>
-                <ul className='OrderTable__Ul'>
-                    <li className='OrderTable__Text' >Quantity</li>
-                    <li className='OrderTable__Text' >Price</li>
-                    <li className='OrderTable__Text' >Product name</li>
-                    <li className='OrderTable__Text' >Product price</li>
+                <ul className='OrderDetail__Ul'>
+                    <li className='OrderDetail__Text' >Quantity</li>
+                    <li className='OrderDetail__Text' >Price</li>
+                    <li className='OrderDetail__Text' >Product name</li>
+                    <li className='OrderDetail__Text' >Product price</li>
                 </ul>
             { props.data.map(element =>{
-                console.log( 'tu vieja',element)
             return(
-                <ul className='OrderTable__Ul'>
-                <li className='OrderTable__Text' >{element.quantity}</li>
-                <li className='OrderTable__Text' >{element.price}</li>
-                <li className='OrderTable__Text' >{element.product.name}</li>
-                <li className='OrderTable__Text' >{element.product.price}</li>
+                <ul className='OrderDetail__Ul'>
+                <li className='OrderDetail__Text' >{element.quantity}</li>
+                <li className='OrderDetail__Text' >{element.price}</li>
+                <li className='OrderDetail__Text' >{element.product.name}</li>
+                <li className='OrderDetail__Text' >{element.product.price}</li>
 
             </ul>
                 )
         }) }
-               
 
-        <hr/>
         </div>
     )
 }

@@ -15,3 +15,13 @@ width: 20%;
     justify-content: space-around;
     padding: 0px;
 }
+.OrderTable__index{
+    margin: 0px;
+    color: white;
+    list-style: none;
+    width: 20%;
+    font-weight: bold;
+    padding: 1rem 0rem;
+    border-bottom: 0.1rem solid white;
+    border-top: 0.1rem solid white;
+    }

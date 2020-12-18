@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import {connect} from 'react-redux';
 import { getOrderList } from '../../actions';
 import {sliceTime} from '../utils.js'
 import OrderDetail from './OrderDetail';
+import './OrderTable.modules.css';
 
-import './OrderTable.modules.css'
 // Tabla que muestra una lista de ordenes.s
 // Esta tabla es para el admin.
 // Tiene que mostrar todas las ordenes de todos los usuarios.
@@ -16,14 +16,15 @@ function OrderTable(props) {
         props.getOrderList();
 
     },[])
+    // console.log(props.orderList)
     return (
         <div className='OrderTable__Container'>
                 <ul className='OrderTable__Ul'>
-                    <li className='OrderTable__Text' >Total</li>
-                    <li className='OrderTable__Text' >Status</li>
-                    <li className='OrderTable__Text' >User Id</li>
-                    <li className='OrderTable__Text' >Fecha</li>
-                    <li className='OrderTable__Text' >Detalle</li>
+                    <li className='OrderTable__index' >Total</li>
+                    <li className='OrderTable__index' >Status</li>
+                    <li className='OrderTable__index' >User Id</li>
+                    <li className='OrderTable__index' >Fecha</li>
+                    <li className='OrderTable__index' >Detalle</li>
 
                 </ul>
 
