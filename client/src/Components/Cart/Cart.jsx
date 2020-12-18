@@ -77,7 +77,7 @@ function Cart(props) {
                       <img src="https://img2.freepng.es/20180329/cke/kisspng-computer-icons-clip-art-delete-button-5abced454dbd36.6503919615223309493184.jpg" 
                        name={p.product.id}
                        className="btnEliminar"
-                      onClick={() => handlerDeleteElement(p.product.id)}></img>
+                      onClick={(e) => handlerDeleteElement(p.product.id)}></img>
                     <Button 
                     name={p.product.id}
                     className="button" 

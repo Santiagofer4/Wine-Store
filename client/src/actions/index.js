@@ -90,7 +90,7 @@ export const getCatsOfProduct = (productId) => async (dispatch) => {
       payload: prodCategoryList.data,
     });
   } catch (error) {
-    // console.error(error);
+     console.error(error);
     return;
   }
 };
@@ -121,6 +121,7 @@ export const getOrderList = () => async (dispatch) => {
   return await axios
     .get('http://localhost:3000/orders')
     .then((orderList)=>{ dispatch({type: GET_ORDER_LIST, payload: orderList})})
+    .catch(err => { console.log('Error en GET_ORDER_LIST', err)})
 }
 
 export const deleteProductsCart = (id) => async (dispatch) => {
@@ -132,11 +133,10 @@ export const deleteProductsCart = (id) => async (dispatch) => {
     })
 }
 
-export const addProductCart = (idUser, productId, price) => (dispatch) =>  {
+export const addProductCart = (idUser, productId, price) => async (dispatch) =>  {
  // console.log('actions',idUser, product)
-  return axios
+   return await axios
   .post(`http://localhost:3000/users/${idUser}/cart`, {productId, price}) //harcodearlo en el front al user
-  
   .then(() => getProductsCart(idUser))
   // dispatch ({ type: ADD_PRODUCT_CART, payload }))
   .catch(err => {console.log('Error en ADD_PRODUCT_CART', err)}) 
@@ -152,6 +152,6 @@ export const putProductCart = (idUser, productId, quantity) => (dispatch) => {
 export const deleteProductCart = (idUser, productId) => async (dispatch) => {
   return await axios
   .delete(`http://localhost:3000/users/${idUser}/cart/${productId}`)
-  .then(()=> getProductsCart(idUser), console.log())
+  .then(()=> getProductsCart(idUser))
   .catch(err => {console.log('Error en DELETE_PRODUCT_CART', err)})
 }
