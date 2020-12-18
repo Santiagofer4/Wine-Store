@@ -1,7 +1,7 @@
 import React from 'react';
 import './Sidebar.modules.css';
 import { connect } from 'react-redux';
-import { getCategoryList, getProductsCategory } from '../../actions';
+import { getCategoryList, getProductsCategory, getProductsList } from '../../actions';
 // import { Button } from '@material-ui/core';
 
 function Sidebar(props) {
@@ -9,7 +9,7 @@ function Sidebar(props) {
   //con el array de objetos devueltos. para que el map haga el render
 
   function categoria(e) {
-    let categoryName = e.target.innerText;
+    let categoryName = e.target.innerText.toLowerCase();
     props.getProductsCategory(categoryName);
   }
 
@@ -28,6 +28,11 @@ function Sidebar(props) {
       return (
         <div className="Sidebar__container">
           <div className="Sidebar__lista">
+          <a  className="Sidebar__Text"
+                  href="#"
+                  onClick={(e) => {
+                    props.getProductsList();
+                  }}> Ver Todos</a>
             {props.categories.map((product, index) => {
               return (
                 // <Button>
@@ -43,6 +48,7 @@ function Sidebar(props) {
                 // </Button>
               );
             })}
+        
           </div>
         </div>
       );
@@ -67,4 +73,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   getCategoryList,
   getProductsCategory,
+  getProductsList,
 })(Sidebar);

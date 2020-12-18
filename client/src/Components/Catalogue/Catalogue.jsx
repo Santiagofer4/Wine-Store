@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import ProductCard from '../ProductCard/ProductCard.jsx';
 import './Catalogue.modules.css';
 import Sidebar from '../Sidebar/Sidebar.jsx';
@@ -12,13 +12,21 @@ import { getProductsList, getCategoryList } from '../../actions';
 // Borré el color rojo porque era muy llamativo y el lunes tenemos la demo
 
 function Catalogue(props) {
-  props.getCategoryList(); // se dispacha una accion al reducer con la lista de categorias para el sidebar
 
-  if (props.allProducts.length === 0) {
-    // si el estado allProducts esta vacio.
-    props.getProductsList(); // despacho una accion al reducer para traer todos los productos para el catalogo y los guardo en allProducts
-    // console.log('a ver como aparezco??')
-  }
+  useEffect(() => { //Carga solo cuando entrás, y no recarga cuando apretás catalogue otra vez. Arreglar eso
+      async function anyNameFunction() {  // Hay que crear una async function en el hook
+      await props.getCategoryList(); // se dispacha una accion al reducer con la lista de categorias para el sidebar
+      await props.getProductsList();
+    }  
+    anyNameFunction();   // Y ejecutar la función creada
+  }, []);
+
+// Probar si así cargan bien los datos. Si cargan bien, se puede borrar lo de abajo.
+  // if (props.allProducts.length === 0) {
+  //   // si el estado allProducts esta vacio.
+  //   props.getProductsList(); // despacho una accion al reducer para traer todos los productos para el catalogo y los guardo en allProducts
+  //   // console.log('a ver como aparezco??')
+  // }
   // el estado allProducts es un arreglo vacio. va a contener un arreglo de objetos (productos)
   if (props.allProducts[0] !== undefined) {
     // si el estado allProducts tiene un arreglo dentro y este no es undefined

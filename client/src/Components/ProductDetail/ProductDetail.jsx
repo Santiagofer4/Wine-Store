@@ -90,7 +90,7 @@ function ProductDetail({ wineDetail, ...props }) {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small">BACK</Button>
+            <Button size="small" onClick={() => history.goBack()} >BACK</Button>
             {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy">Comprar</Button>}
             <Button size="small" onClick={editHandler}>
               EDIT

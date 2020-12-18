@@ -2,7 +2,7 @@ import React from 'react';
 import SearchBar from './SearchBar.jsx';
 import './NavBar.modules.css';
 import { Link } from 'react-router-dom';
-import { getProductsCart } from '../../actions'
+import { getProductsCart, getProductsList, getCategoryList } from '../../actions'
 import { connect } from 'react-redux';
 
 
@@ -19,8 +19,11 @@ function NavBar(props) {
           </li>
           <li className="Nav__li">
             {' '}
-            <Link to="/catalogue" className="Nav__Link">
-              Catalogue
+            <Link to="/catalogue" className="Nav__Link"   onClick={() => {
+                props.getProductsList()
+                props.getCategoryList();
+              }}>
+              Catalogo
             </Link>
           </li>
           <li className="Nav__li">
@@ -65,5 +68,5 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps, { getProductsCart })
+export default connect(mapStateToProps, { getProductsCart, getProductsList, getCategoryList })
 (NavBar);
