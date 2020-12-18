@@ -1,5 +1,5 @@
 const server = require('express').Router();
-const {Order,User} = require('../db.js');
+const {Order, User} = require('../db.js');
 server.get('/', (req, res, next) => {
   // debe devolver todas las ordenes si no recibe status
 
@@ -24,7 +24,7 @@ server.get('/', (req, res, next) => {
   });
 
   server.post('/',(req,res)=>{
-    const{status,total,userId,}=req.body;
+    const{status, total, userId}=req.body;
     Order.findOrCreate({
       where: {status: "cart", userId: userId},
       defaults: { status, total},

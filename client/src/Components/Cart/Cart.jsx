@@ -1,57 +1,112 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Cart.modules.css";
-import { getProductsCart } from "../../actions/index";
+import { getProductsCart, deleteProductsCart } from "../../actions/index";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { Button } from "@material-ui/core";
 
 function Cart(props) {
-  console.log("PROPS", props);
+
   console.log("PROPS.PRODUCTSCART", props.productsCart);
 
-  if (props.productsCart.length !== 0) {
+  const handleDelete = async () => {
+    await props.deleteProductsCart();
+    props.getProductsCart();
+  };
+
+  const handleConfirm = () => {};
+
+  const handleChange = (e) => {
+    
+    // e.target.value;
+
+  };
+
+  useEffect(() => {
+    props.getProductsCart();
+  }, []);
+
+  if (props.productsCart.length > 0) {
     let products = props.productsCart[0];
-    return (
-      <div className="ShoppingCart">
-        <div className="products">
-          <h2 className="titleCart">Carrito de compras</h2>
-          <hr className="line" />
-          <ul>
-            {products.orderLines.map((p) => (
-              <li className="productCart" key={p.product.id}>
-                <div>
-                  <img
-                    className="imageProductCart"
-                    src={p.product.image}
-                    alt="Producto sin imagen"
-                  />
-                </div>
-                <div className="infoProduct">
-                  <p>{p.product.name}</p>
-                  <p className="ProductDescription">{p.product.description}</p>
-                  <p>$ {p.product.price}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="detail">
-          <h2 className="titleCart">Detalle de compra</h2>
-          <hr className="line" />
-          <div className="Summary">
-            <p>SUBTOTAL $ {products.total}</p>
-            <p>ENVÍO $</p>
+    if (products.orderLines.length > 0) {
+      return (
+        <div className="ShoppingCart">
+          <div className="products">
+            <h2 className="titleCart">Carrito de compras</h2>
             <hr className="line" />
-            <p>TOTAL $</p>
+            <ul>
+              {products.orderLines.map((p) => (
+                <li className="productCart" key={p.product.id}>
+                  <div>
+                    <img
+                      className="imageProductCart"
+                      src={p.product.image}
+                      alt="Producto sin imagen"
+                    />
+                  </div>
+                  <div className="infoProduct">
+                    <div>
+                      <p>{p.product.name}</p>
+                      <p className="ProductDescription">
+                        {p.product.description}
+                      </p>
+                      <p>$ {p.product.price}</p>
+                      <p className="subtotal">
+                        Subtotal $ {p.quantity * p.product.price}
+                      </p>
+                    </div>
+                    <input
+                      className="quantity"
+                      type="number"
+                      name="quantity"
+                      value={p.quantity}
+                      min="1"
+                      max={p.product.stock}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
-          <div>
-            <Button>Confirmar</Button>
-            <Button>Cancelar</Button>
+          <div className="detail">
+            <h2 className="titleCart">Detalle de compra</h2>
+            <hr className="line" />
+            <div className="Summary">
+              <p>SUBTOTAL $ {products.total}</p>
+              <p>ENVÍO $</p>
+              <hr className="line" />
+              <p>TOTAL $</p>
+            </div>
+            <div>
+              <Button onClick={handleConfirm}>Confirmar</Button>
+              <Button onClick={handleDelete}>Cancelar</Button>
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="ShoppingCartEmpty">
+          <h1 className="titleCart">Carrito de compras</h1>
+          <hr className="lineEmpty" />
+          <h2 className="titleCart">Su carrito de compras está vacío</h2>
+          <img
+            className="imgCartEmpty"
+            src="https://i.ibb.co/NWgzJPf/botella.png"
+            alt="Carrito vacío"
+          />
+          <p>
+          <Link to="/catalogue" className="link">
+            Volver al catálogo
+          </Link>
+          </p>
+        </div>
+      );
+    }
+  } else {
+    return <h3>Cargando...</h3>;
   }
-  return <h1>Cargando...</h1>;
 }
 
 function mapStateToProps(state) {
@@ -60,4 +115,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getProductsCart })(Cart);
+export default connect(mapStateToProps, {
+  getProductsCart,
+  deleteProductsCart,
+})(Cart);

@@ -12,7 +12,9 @@ import {
   DELETE_STRAIN,
   DELETE_CATEGORY,
   GET_PRODUCTS_CART,
-  GET_ORDER_LIST
+  GET_ORDER_LIST,
+  DELETE_PRODUCTS_CART,
+  ADD_PRODUCT_CART,
 } from './actions';
 
 export function getProductSearch(payload) {
@@ -110,13 +112,29 @@ export const deleteCategory = (id) => (dispatch) => {
 
 export const getProductsCart = (id) => async (dispatch) => {
   return await axios
-  .get(`http://localhost:3000/users/1/cart`)   //! Usuario harcodeado
-  .then((productsCart) => dispatch({ type: GET_PRODUCTS_CART, payload: productsCart}))
-  .catch((err) => {console.log('Error en GET_PRODUCTS_CART', err)})
+    .get(`http://localhost:3000/users/1/cart`)   //! Usuario harcodeado
+    .then((productsCart) => dispatch({ type: GET_PRODUCTS_CART, payload: productsCart}))
+    .catch((err) => {console.log('Error en GET_PRODUCTS_CART', err)})
 }
 
-export const getOrderList = ()=> async (dispatch)=>{
+export const getOrderList = () => async (dispatch) => {
   return await axios
     .get('http://localhost:3000/orders')
     .then((orderList)=>{ dispatch({type: GET_ORDER_LIST, payload: orderList})})
+}
+
+export const deleteProductsCart = (id) => async (dispatch) => {
+  return await axios
+    .delete(`http://localhost:3000/users/1/cart`)   //! Usuario harcodeado
+    .then((id) => dispatch({ type: DELETE_PRODUCTS_CART, payload: id}))
+    .catch(err => {
+      console.log('Error en DELETE_PRODUCTS_CART', err);
+    })
+}
+
+export const addProductCart = (idUser, productId) => (dispatch) =>  {
+  return axios
+  .post(`http://localhost:3000/users/${idUser}/cart`) //harcodearlo en el front
+  .then(addProductoToCart => dispatch ({ type: ADD_PRODUCT_CART, payload: addProductoToCart }))
+  .catch(err => {console.log('Error en ADD_PRODUCT_CART', err)}) 
 }

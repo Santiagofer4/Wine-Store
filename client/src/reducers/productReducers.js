@@ -9,6 +9,7 @@ import {
   DELETE_CATEGORY,
   GET_PRODUCTS_CART,
   GET_ORDER_LIST,
+  ADD_PRODUCT_CART,
 } from '../actions/actions';
 
 const initialState = {
@@ -81,6 +82,11 @@ const productReducers = (state = initialState, action) => {
         ...state,
         orderList: action.payload.data
       }
+      case ADD_PRODUCT_CART:
+        return {
+          ...state,
+         productsCart: action.payload.data //Revisar como llega el payload.
+        }
     default:
       return state;
   }
