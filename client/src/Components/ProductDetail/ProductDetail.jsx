@@ -1,18 +1,10 @@
 import React from 'react';
-import {
-  Container,
-  Paper,
-  CardContent,
-  CardActions,
-  Card,
-  Typography,
-  Button,
-} from '@material-ui/core';
+import { Container, Paper, CardContent, CardActions, Card, Typography, Button,} from '@material-ui/core';
 import './ProductDetail.modules.css';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
-import { setProductDetail, setHistory, getCatsOfProduct } from '../../actions';
+import { setProductDetail, setHistory, getCatsOfProduct, addProductCart } from '../../actions';
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -91,7 +83,7 @@ function ProductDetail({ wineDetail, ...props }) {
           </CardContent>
           <CardActions>
             <Button size="small" onClick={() => history.goBack()} >BACK</Button>
-            {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy">Comprar</Button>}
+            {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy" onClick={() => props.addProductCart(2, wineDetail)}>Comprar</Button>}
             <Button size="small" onClick={editHandler}>
               EDIT
             </Button>
@@ -110,4 +102,5 @@ export default connect(mapStateToProps, {
   setProductDetail,
   setHistory,
   getCatsOfProduct,
+  addProductCart,
 })(ProductDetail);

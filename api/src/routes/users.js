@@ -182,9 +182,46 @@ server.get("/:id/cart", (req, res) => {
 
 // Ruta para agregar item al carrito - POST a /users/:id/cart
 
+// server.post("/:id/cart", (req, res) => {
+//   let { id } = req.params;
+//   let { productId, price } = req.body;
+
+//   if (!productId || !id)
+//     return res.status(400).send("No se puede agregar el producto al carrito");
+
+//   Order.findOrCreate({
+//     where: {
+//       userId: id,
+//       status: "cart",
+//     },
+//     defaults: {
+//       total: 0,
+//       status: "cart",
+//     },
+//   }).then((order) => {
+//     const [instance, wasCreated] = order; // si crea el dato wasCreated = true sino false
+//     OrderLine.findOrCreate({
+//       productId,
+//       quantity: 1,
+//       price,
+//     }).then((orderLine) => {
+   
+      
+//       const [instanceLine, wasCreatedLine] = orderLine;
+//       if (!wasCreatedLine) {
+//           instanceLine.quantity = instanceLine.quantity + 1
+//       } else {
+//         instanceLine.setProduct(productId);
+//         instanceLine.setOrder(instance.id);
+//       }
+//     })
+//   });
+//    res.status(200).send("Entré a agregar item al carrito");
+// });
+
 server.post("/:id/cart", (req, res) => {
   let { id } = req.params;
-  let { productId, price } = req.body;
+  let { productId, quantity, price } = req.body;
 
   if (!productId || !id)
     return res.status(400).send("No se puede agregar el producto al carrito");
@@ -202,7 +239,7 @@ server.post("/:id/cart", (req, res) => {
     const [instance, wasCreated] = order; // si crea el dato wasCreated = true sino false
     OrderLine.create({
       productId,
-      quantity: 1,
+      quantity,
       price,
     }).then((orderLine) => {
       orderLine.setProduct(productId);

@@ -125,16 +125,17 @@ export const getOrderList = () => async (dispatch) => {
 
 export const deleteProductsCart = (id) => async (dispatch) => {
   return await axios
-    .delete(`http://localhost:3000/users/1/cart`)   //! Usuario harcodeado
+    .delete(`http://localhost:3000/users/2/cart`)   //! Usuario harcodeado
     .then((id) => dispatch({ type: DELETE_PRODUCTS_CART, payload: id}))
     .catch(err => {
       console.log('Error en DELETE_PRODUCTS_CART', err);
     })
 }
 
-export const addProductCart = (idUser, productId) => (dispatch) =>  {
+export const addProductCart = (idUser, product) => (dispatch) =>  {
+  console.log('actions',idUser, product)
   return axios
-  .post(`http://localhost:3000/users/${idUser}/cart`) //harcodearlo en el front
-  .then(addProductoToCart => dispatch ({ type: ADD_PRODUCT_CART, payload: addProductoToCart }))
+  .post(`http://localhost:3000/users/${idUser}/cart`) //harcodearlo en el front al user
+  .then(addProductoToCart => dispatch ({ type: ADD_PRODUCT_CART }))
   .catch(err => {console.log('Error en ADD_PRODUCT_CART', err)}) 
 }

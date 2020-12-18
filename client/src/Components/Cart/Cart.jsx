@@ -22,6 +22,7 @@ function Cart(props) {
 
   useEffect(() => {
     props.getProductsCart();
+    console.log('Productos', props.productsCart)
   }, []);
 
   if (props.productsCart.length > 0) {
