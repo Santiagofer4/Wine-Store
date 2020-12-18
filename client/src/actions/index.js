@@ -138,3 +138,10 @@ export const addProductCart = (idUser, productId) => (dispatch) =>  {
   .then(addProductoToCart => dispatch ({ type: ADD_PRODUCT_CART, payload: addProductoToCart }))
   .catch(err => {console.log('Error en ADD_PRODUCT_CART', err)}) 
 }
+
+export const putProductCart = (idUser, productId, quantity) => (dispatch) => {
+  return axios
+    .put(`http://localhost:3000/users/${idUser}/cart`, { productId, quantity })
+    .then(() => getProductsCart(idUser))
+    .catch(err => {console.log('Error en PUT_PRODUCT_CART', err)})
+}

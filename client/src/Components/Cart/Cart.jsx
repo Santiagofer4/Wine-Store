@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Cart.modules.css";
-import { getProductsCart, deleteProductsCart } from "../../actions/index";
+import { getProductsCart, deleteProductsCart, putProductCart } from "../../actions/index";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { Button } from "@material-ui/core";
@@ -16,9 +16,23 @@ function Cart(props) {
 
   const handleConfirm = () => {};
 
-  const handleClick = () => {};
+  const handleDecrement = (e) => {
+    let id = e.target.name;
 
-  const handleDecrement = () => {};
+    if(document.getElementById(`${id}`).value > 1) {
+      document.getElementById(`${id}`).value--
+    }
+    props.putProductCart(1, id, document.getElementById(`${id}`).value);
+  };
+
+  const handleIncrement = (e, stock) => {
+    let id = e.target.name;
+
+    if(document.getElementById(`${id}`).value < stock) {
+      document.getElementById(`${id}`).value++
+    }
+    props.putProductCart(1, id, document.getElementById(`${id}`).value);
+  };
 
   useEffect(() => {
     props.getProductsCart();
@@ -49,14 +63,28 @@ function Cart(props) {
                         {p.product.description}
                       </p>
                       <p>$ {p.product.price}</p>
-                      <p className="subtotal">
-                        Subtotal $ {p.quantity * p.product.price}
-                      </p>
                     </div>
                     <div className="quantity">
-                    <Button className="button" onClick={handleDecrement}>-</Button>
-                    {p.quantity}
-                    <Button className="button" onClick={handleClick}>+</Button>
+                    <Button 
+                    name={p.product.id}
+                    className="button" 
+                    onClick={(e) => handleDecrement(e)}
+                    >
+                    -
+                    </Button>
+                    <input 
+                    className="input"
+                    id={p.product.id}
+                    value={p.quantity}
+                    >
+                    </input>
+                    <Button 
+                    name={p.product.id}
+                    className="button"
+                    onClick={(e) => handleIncrement(e, p.product.stock)}
+                    >
+                    +
+                    </Button>
                     </div>
                   </div>
                 </li>
@@ -112,4 +140,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   getProductsCart,
   deleteProductsCart,
+  putProductCart
 })(Cart);

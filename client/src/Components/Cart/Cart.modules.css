@@ -6,6 +6,7 @@
 .productCart {
     display: flex;
     flex-direction: row;
+    padding-bottom: 2rem;
 }
 
 .imageProductCart {
@@ -68,6 +69,12 @@
 
 .quantity {
     text-align: right;
+}
+
+.input {
+    width: 2rem;
+    text-align: center;
+    border: none;
 }
 
 .ProductDescription {
