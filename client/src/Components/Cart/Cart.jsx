@@ -16,11 +16,9 @@ function Cart(props) {
 
   const handleConfirm = () => {};
 
-  const handleChange = (e) => {
-    
-    // e.target.value;
+  const handleClick = () => {};
 
-  };
+  const handleDecrement = () => {};
 
   useEffect(() => {
     props.getProductsCart();
@@ -55,15 +53,11 @@ function Cart(props) {
                         Subtotal $ {p.quantity * p.product.price}
                       </p>
                     </div>
-                    <input
-                      className="quantity"
-                      type="number"
-                      name="quantity"
-                      value={p.quantity}
-                      min="1"
-                      max={p.product.stock}
-                      onChange={handleChange}
-                    />
+                    <div className="quantity">
+                    <Button className="button" onClick={handleDecrement}>-</Button>
+                    {p.quantity}
+                    <Button className="button" onClick={handleClick}>+</Button>
+                    </div>
                   </div>
                 </li>
               ))}
@@ -79,8 +73,8 @@ function Cart(props) {
               <p>TOTAL $</p>
             </div>
             <div>
-              <Button onClick={handleConfirm}>Confirmar</Button>
-              <Button onClick={handleDelete}>Cancelar</Button>
+              <Button className="buttonCart" onClick={handleConfirm}>Confirmar</Button>
+              <Button className="buttonCart" onClick={handleDelete}>Cancelar</Button>
             </div>
           </div>
         </div>

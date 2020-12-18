@@ -151,6 +151,8 @@ server.delete("/:id", (req, res) => {
   });
 });
 
+// Ruta que retorna todas las ordenes de un usuario
+
 server.get("/:id/orders", (req, res) => {
   const { id } = req.params;
   Order.findAll({
@@ -164,9 +166,11 @@ server.get("/:id/orders", (req, res) => {
     });
 });
 
+// Ruta que retorna todos los items del carrito - GET a /users/:id/cart
+
 server.get("/:id/cart", (req, res) => {
   let { id } = req.params;
-  // console.log('GET a CART');
+
   Order.findAll({
     where: { status: "cart", userId: id },
     include: { model: OrderLine, include: [{ model: Product }] },
@@ -174,6 +178,9 @@ server.get("/:id/cart", (req, res) => {
     return res.status(200).send(ord);
   });
 });
+
+
+// Ruta para agregar item al carrito - POST a /users/:id/cart
 
 server.post("/:id/cart", (req, res) => {
   let { id } = req.params;

@@ -6,7 +6,7 @@ import { Container, Button } from '@material-ui/core';
 import '../LoadProduct/LoadProduct.modules.css';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { getStrainList, deleteStrain } from '../../../actions';
+import { deleteStrain } from '../../../actions';
 import { formatArrayToOption } from '../../utils';
 
 export const LoadStrain = (props) => {
@@ -147,4 +147,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getStrainList, deleteStrain })(LoadStrain);
+export default connect(mapStateToProps, { deleteStrain })(LoadStrain);
