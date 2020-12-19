@@ -45,7 +45,10 @@ function Cart(props) {
   useEffect(() => {
     props.getProductsCart(1);
     console.log('Productos', props.productsCart)
-  }, []);
+    return ()=>{
+      console.log('limpiando')
+    }
+  },[]);
 
   if (props.productsCart.length > 0) {
     let products = props.productsCart[0];
