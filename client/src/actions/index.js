@@ -111,7 +111,6 @@ export const deleteCategory = (id) => (dispatch) => {
 };
 
 export const getProductsCart = (id) => (dispatch) => {
-  console.log('esto llega a index',id)
   return  axios
     .get(`http://localhost:3000/users/${id}/cart`)  
     .then((productsCart) => dispatch({ type: GET_PRODUCTS_CART, payload: productsCart}))

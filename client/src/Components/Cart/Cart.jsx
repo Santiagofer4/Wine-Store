@@ -8,7 +8,6 @@ import { Button } from "@material-ui/core";
 function Cart(props) {
   const[state, setState] = useState(0)
 
-  console.log("PROPS.PRODUCTSCART", props.productsCart);
 
   const handleDelete = async () => {
     await props.deleteProductsCart(1);
@@ -53,9 +52,7 @@ function Cart(props) {
   }
 
   useEffect(() => {
-    console.log('Productos', props.productsCart)
     return ()=>{
-      console.log('limpiando')
       props.getProductsCart(1);
 
     }
@@ -73,7 +70,6 @@ function Cart(props) {
               {products.orderLines.map((p) => (
                 
                 <li className="productCart" key={p.product.id}>
-                  {console.log(p.quantity, 'cantidad en redux')}
                   <div>
                     <img
                       className="imageProductCart"

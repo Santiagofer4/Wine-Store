@@ -66,11 +66,17 @@ function ProductCard(props) {
           </Typography>
         </CardContent>
         <CardActions id="Button__Card">
-       <div id="buttonsContainer"> {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy" onClick={()=>{handlerProductToCart(1,id,price)}} >Comprar</Button>}
-      
-          <Button id="Button__Info" onClick={detailClickHandler}>
-            +
+          <div id="buttonsContainer">
+            {stock === 0
+              ?
+              <h3>No hay STOCK</h3>
+              :
+              <Button id="Button__Buy" onClick={()=>{handlerProductToCart(1,id,price)}}>Comprar</Button>}
+          
+              <Button id="Button__Info" onClick={detailClickHandler}>
+                +
           </Button>
+           
           </div>
         </CardActions>
       </div>
@@ -81,6 +87,5 @@ const mapStateToProps = (state) => ({
   productsCart: state.productReducers.productsCart
 });
 export default connect(mapStateToProps, { setProductDetail,addProductCart, putProductCart })(ProductCard);
-
 // Este componente es una tarjeta donde tiene la información básica del Producto.
 // Nos va a servir para ser usado en el componente Catálogo.

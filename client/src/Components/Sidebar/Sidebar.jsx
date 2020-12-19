@@ -26,13 +26,14 @@ function Sidebar(props) {
       );
     } else {
       return (
-        <div className="Sidebar__container">
-          <div className="Sidebar__lista">
-          <a  className="Sidebar__Text"
-                  href="#"
-                  onClick={(e) => {
-                    props.getProductsList();
-                  }}> Ver Todos</a>
+         <div className="Sidebar__container">
+           <div className="Sidebar__lista">
+            <a className="Sidebar__Text"
+              id="verTodos"
+              href="#"
+              onClick={(e) => {
+                props.getProductsList();
+              }}> Ver Todos</a>
             {props.categories.map((product, index) => {
               return (
                 // <Button>
@@ -48,7 +49,7 @@ function Sidebar(props) {
                 // </Button>
               );
             })}
-        
+
           </div>
         </div>
       );
