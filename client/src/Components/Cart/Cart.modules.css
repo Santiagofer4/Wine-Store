@@ -112,3 +112,9 @@
     height: 30px;
     width: 30px;
 }
+.Cart__Cargando{
+    margin: 0px;
+    padding-top: 300px;
+    color: blue;
+    font-size: 50px;
+}

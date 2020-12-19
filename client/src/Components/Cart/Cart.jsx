@@ -5,16 +5,15 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { Button } from "@material-ui/core";
 
-function Cart(props) {
-  const[state, setState] = useState(0)
 
+
+// arreglar el problema de cargando
+function Cart(props) {
 
   const handleDelete = async () => {
     await props.deleteProductsCart(1);
     props.getProductsCart(1);
   };
-
-  const handleConfirm = () => {};
 
   const handleDecrement = (e) => {
     let id = e.target.name;
@@ -26,16 +25,7 @@ function Cart(props) {
   };
   const handleIncrement = (e, stock,quantity) => {
     let id = e.target.name;
-    //  quantityToDb =document.getElementById(`${id}`).value;
-    // if(document.getElementById(`${id}`).value < stock) {
-    //    quantityToDb++
-    // }
-    // props.putProductCart(1, id, quantityToDb)
-    // .then(()=>{
-    //   // console.log(quantity)
-    // document.getElementById(`${id}`).value = quantity;
 
-    // })
     if(document.getElementById(`${id}`).value < stock) {
       document.getElementById(`${id}`).value++
     }
@@ -44,12 +34,9 @@ function Cart(props) {
  
 
   const handlerDeleteElement = (id) => {
-    
-    console.log("anda el botón", id)
-    props.deleteProductCart(1, id);
-    
-    //hacer la acción delete y pasarle el id
-  }
+        props.deleteProductCart(1, id);
+      }
+  const handleConfirm = ()=>{}
 
   useEffect(() => {
     return ()=>{
@@ -152,7 +139,7 @@ function Cart(props) {
       );
     }
   } else {
-    return <h3>Cargando...</h3>;
+    return (<h3 className='Cart__Cargando'>Cargando... </h3>);
   }
 }
 
