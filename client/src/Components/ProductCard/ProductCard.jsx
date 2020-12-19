@@ -41,7 +41,7 @@ function ProductCard(props) {
           </Typography>
         </CardContent>
         <CardActions id="Button__Card">
-       <div id="buttonsContainer"> {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy">Comprar</Button>}
+       <div id="buttonsContainer"> {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy" >Comprar</Button>}
       
           <Button id="Button__Info" onClick={detailClickHandler}>
             +

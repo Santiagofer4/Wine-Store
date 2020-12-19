@@ -24,14 +24,19 @@ function Cart(props) {
     }
     props.putProductCart(1, id, document.getElementById(`${id}`).value);
   };
-
-  const handleIncrement = (e, stock) => {
+  let quantityToDb;
+  const handleIncrement = (e, stock,quantity) => {
     let id = e.target.name;
-
+     quantityToDb =document.getElementById(`${id}`).value;
     if(document.getElementById(`${id}`).value < stock) {
-      document.getElementById(`${id}`).value++
+       quantityToDb++
     }
-    props.putProductCart(1, id, document.getElementById(`${id}`).value);
+    props.putProductCart(1, id, quantityToDb)
+    .then(()=>{
+      // console.log(quantity)
+    document.getElementById(`${id}`).value = quantity;
+
+    })
   };
 
   const handlerDeleteElement = (id) => {
@@ -97,7 +102,7 @@ function Cart(props) {
                     <Button 
                     name={p.product.id}
                     className="button"
-                    onClick={(e) => handleIncrement(e, p.product.stock)}
+                    onClick={(e) => handleIncrement(e, p.product.stock, p.quantity)}
                     >
                     +
                     </Button>
