@@ -10,26 +10,38 @@ import { Button } from "@material-ui/core";
 // arreglar el problema de cargando
 function Cart(props) {
 
+  const[subTotal,setSubTotal] = useState(0)
+
   const handleDelete = async () => {
     await props.deleteProductsCart(1);
     props.getProductsCart(1);
   };
 
-  const handleDecrement = (e) => {
+  const handleDecrement = (e,quantity,price) => {
     let id = e.target.name;
-
     if(document.getElementById(`${id}`).value > 1) {
       document.getElementById(`${id}`).value--
     }
     props.putProductCart(1, id, document.getElementById(`${id}`).value);
+    // setSubTotal( subTotal - price)
   };
-  const handleIncrement = (e, stock,quantity) => {
+
+  // 4 productos a  300  = 1200 -900   
+
+  // 3 '' a 300 = 900
+
+function total (quantity,price){
+  setSubTotal(subTotal + (quantity * price*1))
+}
+
+  const handleIncrement = (e, stock,quantity,price) => {
     let id = e.target.name;
 
     if(document.getElementById(`${id}`).value < stock) {
       document.getElementById(`${id}`).value++
     }
     props.putProductCart(1, id, document.getElementById(`${id}`).value);
+    // setSubTotal(subTotal + price *1)
   };
  
 
@@ -39,11 +51,14 @@ function Cart(props) {
   const handleConfirm = ()=>{}
 
   useEffect(() => {
-    return ()=>{
-      props.getProductsCart(1);
+    console.log(props.productsCart.length)
 
-    }
-  },[]);
+    // if (props.productsCart.length === 0){
+    //   return props.getProductsCart(1);
+    // }else{
+    //   console.log('no esta vacio')
+    // }
+  },[subTotal]);
 
   if (props.productsCart.length > 0) {
     let products = props.productsCart[0];
@@ -73,14 +88,16 @@ function Cart(props) {
                       <p>$ {p.product.price}</p>
                     </div>
                     <div className="quantity">
-                      <img src="https://img2.freepng.es/20180329/cke/kisspng-computer-icons-clip-art-delete-button-5abced454dbd36.6503919615223309493184.jpg" 
+                      <a href="#" className='Cart__DeleteProduct'><i class="fas fa-trash-alt" onClick={(e) => handlerDeleteElement(p.product.id)}></i>
+</a>
+                      {/* <img src="https://img2.freepng.es/20180329/cke/kisspng-computer-icons-clip-art-delete-button-5abced454dbd36.6503919615223309493184.jpg" 
                        name={p.product.id}
                        className="btnEliminar"
-                      onClick={(e) => handlerDeleteElement(p.product.id)}></img>
+                      onClick={(e) => handlerDeleteElement(p.product.id)}></img> */}
                     <Button 
                     name={p.product.id}
                     className="button" 
-                    onClick={(e) => handleDecrement(e)}
+                    onClick={(e) => handleDecrement(e, p.quantity, p.product.price)}
                     >
                     -
                     </Button>
@@ -93,7 +110,7 @@ function Cart(props) {
                     <Button 
                     name={p.product.id}
                     className="button"
-                    onClick={(e) => handleIncrement(e, p.product.stock, p.quantity)}
+                    onClick={(e) => handleIncrement(e, p.product.stock, p.quantity, p.product.price)}
                     >
                     +
                     </Button>
@@ -107,7 +124,7 @@ function Cart(props) {
             <h2 className="titleCart">Detalle de compra</h2>
             <hr className="line" />
             <div className="Summary">
-              <p>SUBTOTAL $ {products.total}</p>
+              <p>SUBTOTAL $ {subTotal}</p>
               <p>ENVÍO $</p>
               <hr className="line" />
               <p>TOTAL $</p>
