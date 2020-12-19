@@ -32,9 +32,18 @@
 
 #Button__Buy{
   background-color: #be9063 !important;
+  height: 40px;
+  width: 100px;
+  
 }
-
 #buttonsContainer{
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+
+}
+
+#Button__Info{
+  background-color: rgb(165, 163, 163) !important;
+  height: 40px;
+  width: 100px;
 }

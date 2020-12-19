@@ -2,6 +2,8 @@
   padding-top: 10rem;
 }
 .ProductDetail__Paper {
+  display: flex;
+  flex-direction: row;
   padding: 2rem;
   background-color: #525b56 !important;
   border-radius: 50px !important;
@@ -9,9 +11,54 @@
 
 #prodImg {
   height: 500px;
+  width:200px;
   border-radius: 20px !important;
 }
 
 #prodInfo {
   border-radius: 20px !important;
+  height: 80%;
+}
+
+#imgContainer {
+ height: 70%;
+ width: 30%;
+}
+
+#detailsContainer{
+  height: 30rem !important;
+  width: 50rem !important;
+}
+#paper {
+  width: 90%;
+  height: 90%;
+}
+
+#pageContainer {
+  height: 80%;
+  width: 90%;
+}
+
+#buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+#backButton {
+  height: 40px;
+  width: 100px;
+  
+}
+
+#backButtonImage {
+  height: 40px;
+  width: 40px;
+  padding-right: 3px;
+  
+}
+
+#editImage{
+  height: 40px;
+  width: 40px;
+  padding-right: 3px;
 }

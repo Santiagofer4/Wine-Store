@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
 import './ProductCard.modules.css';
 import { connect } from 'react-redux';
-import { setProductDetail } from '../../actions';
+import { setProductDetail, addProductCart } from '../../actions';
 import { useHistory } from 'react-router-dom';
 
 // Recibe props con Products.info
@@ -41,11 +41,17 @@ function ProductCard(props) {
           </Typography>
         </CardContent>
         <CardActions id="Button__Card">
-       <div id="buttonsContainer"> {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy">Comprar</Button>}
-      
-          <Button id="Button__Info" onClick={detailClickHandler}>
-            +
+          <div id="buttonsContainer">
+            {stock === 0
+              ?
+              <h3>No hay STOCK</h3>
+              :
+              <Button id="Button__Buy" onClick={() => props.addProductCart(1, id, price)}>Comprar</Button>}
+          
+              <Button id="Button__Info" onClick={detailClickHandler}>
+                +
           </Button>
+           
           </div>
         </CardActions>
       </div>
@@ -53,7 +59,7 @@ function ProductCard(props) {
   );
 }
 
-export default connect(null, { setProductDetail })(ProductCard);
+export default connect(null, { setProductDetail, addProductCart })(ProductCard);
 
 // Este componente es una tarjeta donde tiene la información básica del Producto.
 // Nos va a servir para ser usado en el componente Catálogo.

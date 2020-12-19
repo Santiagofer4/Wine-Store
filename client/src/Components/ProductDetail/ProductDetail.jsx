@@ -51,12 +51,12 @@ function ProductDetail({ wineDetail, ...props }) {
   };
 
   return (
-    <Container className="ProductDetail__Container">
-      <Paper className="ProductDetail__Paper">
-        <Container>
+    <Container id="pageContainer" className="ProductDetail__Container">
+      <Paper id="paper" className="ProductDetail__Paper">
+        <Container id="imgContainer">
           <img id='prodImg' src={image} alt={`imagen del vino ${name}`} />
         </Container>
-        <Card className={classes.root} variant="outlined">
+        <Card id="detailsContainer" className={classes.root} variant="outlined">
           <CardContent className="ProdDetail__CardText">
             <Typography
               className={classes.title}
@@ -81,12 +81,12 @@ function ProductDetail({ wineDetail, ...props }) {
               {description}
             </Typography>
           </CardContent>
-          <CardActions>
-            <Button size="small" onClick={() => history.goBack()} >BACK</Button>
-            {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy" onClick={() => props.addProductCart(1, id, price)}>Comprar</Button>}
-            <Button size="small" onClick={editHandler}>
-              EDIT
+          <CardActions id="buttons">
+            <Button  id="backButton" size="small" onClick={() => history.goBack()} > <img id="backButtonImage" src="https://static.thenounproject.com/png/251451-200.png"></img>VOLVER</Button>
+            <Button size="small" onClick={editHandler}> <img id="editImage" src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"></img>
+              EDITAR
             </Button>
+            {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy" onClick={() => props.addProductCart(1, id, price)}>Comprar</Button>}
           </CardActions>
         </Card>
       </Paper>
