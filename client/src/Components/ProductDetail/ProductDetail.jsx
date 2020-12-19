@@ -60,23 +60,34 @@ function ProductDetail({ wineDetail, ...props }) {
   //   props.putProductCart(1, id, document.getElementById(`${id}`).value);
   // };
 
+// esta funcion debe ser refactorizada 
   function handlerProductToCart(userId, id, price,) {
-    if(props.productsCart[0] !== undefined){
-        let products = props.productsCart[0].orderLines;
-        for (let i = 0; i < products.length; i++) {
-          if (products[i].productId === id) {
-            if(products[i].quantity <= products[i].product.stock){
-              props.putProductCart(1, id, products[i].quantity + 1);
-              return i = products.length
+    if(props.productsCart[0] !== undefined){//entro a la funcion
+     if(props.productsCart[0].orderLines !== undefined){//cuando el estado tiene algo
+       if(props.productsCart[0].orderLines.length > 0){//cuando el estado tiene un orderLine y tiene datos
+          let products = props.productsCart[0].orderLines;
+          for (let i = 0; i < products.length; i++) {
+            if (products[i].productId === id) {
+              if(products[i].quantity <= products[i].product.stock){
+                props.putProductCart(1, id, products[i].quantity + 1);
+                return i = products.length
+              }
+            } else if (i === products.length - 1) {
+              props.addProductCart(userId, id, price) 
             }
-          } else if (i === products.length - 1) {
-            props.addProductCart(userId, id, price) 
           }
-        }   
+        }else{
+          props.addProductCart(userId, id, price) //cuando la orderLine no tiene datos
+        }
+
+     }   
     } else {
-      props.addProductCart(userId, id, price)
+      props.addProductCart(userId, id, price) //cuando el estado es undefined/ esta vacio
     }
   }
+
+
+
   return (
     <Container className="ProductDetail__Container">
       <Paper className="ProductDetail__Paper">

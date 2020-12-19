@@ -89,6 +89,7 @@ server.put("/:id", (req, res) => {
 
 server.put("/:idUser/cart", (req, res) => {
   let {idUser} = req.params;
+  idUser = idUser * 1;
   let { productId, quantity } = req.body;
   if (!idUser) return res.status(400).send("El usuario no existe");
   Order.findOne({
@@ -155,6 +156,7 @@ server.delete("/:id", (req, res) => {
 
 server.get("/:id/orders", (req, res) => {
   const { id } = req.params;
+  id = id *1
   Order.findAll({
     where: { userId: id },
   })
@@ -170,7 +172,6 @@ server.get("/:id/orders", (req, res) => {
 
 server.get("/:id/cart", (req, res) => {
   let { id } = req.params;
-
   Order.findAll({
     where: { status: "cart", userId: id },
     include: { model: OrderLine, include: [{ model: Product }] },

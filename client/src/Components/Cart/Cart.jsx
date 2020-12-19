@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { Button } from "@material-ui/core";
 
 function Cart(props) {
+  const[state, setState] = useState(0)
 
   console.log("PROPS.PRODUCTSCART", props.productsCart);
 
@@ -24,20 +25,24 @@ function Cart(props) {
     }
     props.putProductCart(1, id, document.getElementById(`${id}`).value);
   };
-  let quantityToDb;
   const handleIncrement = (e, stock,quantity) => {
     let id = e.target.name;
-     quantityToDb =document.getElementById(`${id}`).value;
-    if(document.getElementById(`${id}`).value < stock) {
-       quantityToDb++
-    }
-    props.putProductCart(1, id, quantityToDb)
-    .then(()=>{
-      // console.log(quantity)
-    document.getElementById(`${id}`).value = quantity;
+    //  quantityToDb =document.getElementById(`${id}`).value;
+    // if(document.getElementById(`${id}`).value < stock) {
+    //    quantityToDb++
+    // }
+    // props.putProductCart(1, id, quantityToDb)
+    // .then(()=>{
+    //   // console.log(quantity)
+    // document.getElementById(`${id}`).value = quantity;
 
-    })
+    // })
+    if(document.getElementById(`${id}`).value < stock) {
+      document.getElementById(`${id}`).value++
+    }
+    props.putProductCart(1, id, document.getElementById(`${id}`).value);
   };
+ 
 
   const handlerDeleteElement = (id) => {
     
@@ -48,10 +53,11 @@ function Cart(props) {
   }
 
   useEffect(() => {
-    props.getProductsCart(1);
     console.log('Productos', props.productsCart)
     return ()=>{
       console.log('limpiando')
+      props.getProductsCart(1);
+
     }
   },[]);
 
@@ -65,7 +71,9 @@ function Cart(props) {
             <hr className="line" />
             <ul>
               {products.orderLines.map((p) => (
+                
                 <li className="productCart" key={p.product.id}>
+                  {console.log(p.quantity, 'cantidad en redux')}
                   <div>
                     <img
                       className="imageProductCart"

@@ -110,8 +110,9 @@ export const deleteCategory = (id) => (dispatch) => {
     });
 };
 
-export const getProductsCart = (id) => async (dispatch) => {
-  return await axios
+export const getProductsCart = (id) => (dispatch) => {
+  console.log('esto llega a index',id)
+  return  axios
     .get(`http://localhost:3000/users/${id}/cart`)  
     .then((productsCart) => dispatch({ type: GET_PRODUCTS_CART, payload: productsCart}))
     .catch((err) => {console.log('Error en GET_PRODUCTS_CART', err)})
@@ -142,8 +143,8 @@ export const addProductCart = (idUser, productId, price) => async (dispatch) => 
   .catch(err => {console.log('Error en ADD_PRODUCT_CART', err)}) 
 }
 
-export const putProductCart = (idUser, productId, quantity) => (dispatch) => {
-  return axios
+export const putProductCart = (idUser, productId, quantity) => async (dispatch) => {
+  return await axios
     .put(`http://localhost:3000/users/${idUser}/cart`, { productId, quantity })
     .then(() => getProductsCart(idUser))
     .catch(err => {console.log('Error en PUT_PRODUCT_CART', err)})

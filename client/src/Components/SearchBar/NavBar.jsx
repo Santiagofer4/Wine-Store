@@ -46,7 +46,7 @@ function NavBar(props) {
         to="/cart" 
         className="Nav__Link" 
         onClick={() => {
-          props.getProductsCart();
+          props.getProductsCart(1);
         }}
         >
             <img id="imgCart" src="https://i.ibb.co/FsngVZ5/carrito1.png" alt="Carrito"/>
