@@ -2,9 +2,8 @@ import React from 'react';
 import SearchBar from './SearchBar.jsx';
 import './NavBar.modules.css';
 import { Link } from 'react-router-dom';
-import { getProductsCart, getProductsList, getCategoryList } from '../../actions'
+import { getProductsCart, getCategoryList } from '../../actions';
 import { connect } from 'react-redux';
-
 
 function NavBar(props) {
   return (
@@ -19,10 +18,14 @@ function NavBar(props) {
           </li>
           <li className="Nav__li">
             {' '}
-            <Link to="/catalogue" className="Nav__Link"   onClick={() => {
-                props.getProductsList()
+            <Link
+              to="/catalogue"
+              className="Nav__Link"
+              onClick={() => {
+                // props.getProductsList()
                 props.getCategoryList();
-              }}>
+              }}
+            >
               Catalogo
             </Link>
           </li>
@@ -32,41 +35,39 @@ function NavBar(props) {
               Admin
             </Link>
           </li>
-        
-            </ul>
-      <div id="search-cart">
-       <div>
-
-        <SearchBar id='searchbar'></SearchBar>
-       </div>
-       <div id="cartDiv">
-
-        <Link 
-        id='cart' 
-        to="/cart" 
-        className="Nav__Link" 
-        onClick={() => {
-          props.getProductsCart(1);
-        }}
-        >
-            <img id="imgCart" src="https://i.ibb.co/FsngVZ5/carrito1.png" alt="Carrito"/>
-             
+        </ul>
+        <div id="search-cart">
+          <div>
+            <SearchBar id="searchbar"></SearchBar>
+          </div>
+          <div id="cartDiv">
+            <Link
+              id="cart"
+              to="/cart"
+              className="Nav__Link"
+              onClick={() => {
+                props.getProductsCart(1);
+              }}
+            >
+              <img
+                id="imgCart"
+                src="https://i.ibb.co/FsngVZ5/carrito1.png"
+                alt="Carrito"
+              />
             </Link>
-       </div>
-
-
-      </div>
-        
+          </div>
+        </div>
       </nav>
     </div>
   );
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
-    productsCart: state.productReducers.productsCart
-  }
+    productsCart: state.productReducers.productsCart,
+  };
 }
 
-export default connect(mapStateToProps, { getProductsCart, getProductsList, getCategoryList })
-(NavBar);
+export default connect(mapStateToProps, { getProductsCart, getCategoryList })(
+  NavBar
+);
