@@ -6,8 +6,11 @@ export const allProductsStatusSelector = (state) =>
 export const allProductsErrorSelector = (state) =>
   state.products.allProducts.error;
 
-// export const allCategoriesSelector = (state) =>
-//   state.categories.allCategories.categories;
+export const allCategoriesSelector = (state) =>
+  state.categories.allCategories.list;
 
-// export const allCategoriesStatusSelector = (state) =>
-//   state.categories.allCategories.status;
+export const allCategoriesStatusSelector = (state) =>
+  state.categories.allCategories.status;
+
+export const allCategoriesErrorSelector = (state) =>
+  state.categories.allCategories.error;

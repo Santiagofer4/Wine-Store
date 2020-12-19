@@ -22,12 +22,12 @@ function Catalogue(props) {
   useEffect(() => {
     //Carga solo cuando entrás, y no recarga cuando apretás catalogue otra vez. Arreglar eso
     if (allProdState === 'idle') dispatch(getAllProducts());
-    async function anyNameFunction() {
-      // Hay que crear una async function en el hook
-      await props.getCategoryList(); // se dispacha una accion al reducer con la lista de categorias para el sidebar
-      // await props.getProductsList();
-    }
-    anyNameFunction(); // Y ejecutar la función creada
+    // async function anyNameFunction() {
+    //   // Hay que crear una async function en el hook
+    //   await props.getCategoryList(); // se dispacha una accion al reducer con la lista de categorias para el sidebar
+    //   // await props.getProductsList();
+    // }
+    // anyNameFunction(); // Y ejecutar la función creada
   }, [allProdState, dispatch]);
 
   let content;
@@ -51,17 +51,20 @@ function Catalogue(props) {
     return (
       <>
         <h3>Error al cargar productos</h3>
-        <p>{allProdError}</p>
+        {console.error(allProdError)}
+        <p>{allProdError.name}</p>
+        <p>{allProdError.message}</p>
         <Button>Try Again</Button>
       </>
     );
   }
   return (
     <div className="Catalogue__container">
-      <Sidebar />
+      <Sidebar></Sidebar>
       <div className="Catalogue__Div">{content}</div>
     </div>
   );
 }
 
-export default connect(null, { getCategoryList })(Catalogue);
+export default Catalogue;
+// export default connect(null, { getCategoryList })(Catalogue);

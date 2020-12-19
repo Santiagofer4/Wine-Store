@@ -23,7 +23,7 @@ function NavBar(props) {
               className="Nav__Link"
               onClick={() => {
                 // props.getProductsList()
-                props.getCategoryList();
+                // props.getCategoryList();
               }}
             >
               Catalogo
