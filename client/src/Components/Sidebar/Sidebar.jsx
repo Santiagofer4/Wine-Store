@@ -1,12 +1,20 @@
 import React from 'react';
 import './Sidebar.modules.css';
-import { connect } from 'react-redux';
-import { getCategoryList, getProductsCategory, getProductsList } from '../../actions';
+import { connect, useSelector, useDispatch } from 'react-redux';
+import { getCategoryList, getProductsCategory } from '../../actions';
 // import { Button } from '@material-ui/core';
+import { getAllProducts } from '../../slices/productSlice';
+import {
+  allProductsSelector,
+  allProductsStatusSelector,
+  allProductsErrorSelector,
+} from '../../selectors';
 
 function Sidebar(props) {
   // cuando este lista las relaciones  de la DB, esta funcion debe pisar el estado 'List'
   //con el array de objetos devueltos. para que el map haga el render
+  const dispatch = useDispatch();
+  const allProducts = useSelector(allProductsSelector);
 
   function categoria(e) {
     let categoryName = e.target.innerText.toLowerCase();
@@ -26,14 +34,19 @@ function Sidebar(props) {
       );
     } else {
       return (
-         <div className="Sidebar__container">
-           <div className="Sidebar__lista">
-            <a className="Sidebar__Text"
+        <div className="Sidebar__container">
+          <div className="Sidebar__lista">
+            <a
+              className="Sidebar__Text"
               id="verTodos"
               href="#"
-              onClick={(e) => {
-                props.getProductsList();
-              }}> Ver Todos</a>
+              onClick={() => {
+                dispatch(getAllProducts());
+              }}
+            >
+              {' '}
+              Ver Todos
+            </a>
             {props.categories.map((product, index) => {
               return (
                 // <Button>
@@ -49,7 +62,6 @@ function Sidebar(props) {
                 // </Button>
               );
             })}
-
           </div>
         </div>
       );
@@ -74,5 +86,4 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   getCategoryList,
   getProductsCategory,
-  getProductsList,
 })(Sidebar);
