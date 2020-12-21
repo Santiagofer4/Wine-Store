@@ -26,3 +26,6 @@ export const allProdsByCategoryErrorSelector = (state) =>
 
 export const filteredTasteSelector = (state) =>
   state.categories.allProdsByCategory.taste;
+ 
+export const productDetailSelector = (state) =>
+  state.wineDetail.wine;

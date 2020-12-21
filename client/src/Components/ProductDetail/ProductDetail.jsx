@@ -1,10 +1,13 @@
 import React from 'react';
 import { Container, Paper, CardContent, CardActions, Card, Typography, Button, } from '@material-ui/core';
 import './ProductDetail.modules.css';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector  } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { setProductDetail, setHistory, getCatsOfProduct, addProductCart,putProductCart } from '../../actions';
+import { wineDetails } from '../../slices/productDetailSlice';
+import {productDetailSelector} from '../../selectors';
+
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -23,7 +26,12 @@ const useStyles = makeStyles({
 });
 
 function ProductDetail({ wineDetail, ...props }) {
-  const {
+  // const dispatch = useDispatch();
+  const productDetail = useSelector(productDetailSelector)
+  const history = useHistory();
+  const classes = useStyles();
+      // if( !productDetail){  return (history.push( '/'))}
+    const {
     id,
     name,
     price,
@@ -32,22 +40,24 @@ function ProductDetail({ wineDetail, ...props }) {
     image,
     stock,
     categories,
-  } = wineDetail;
-  const classes = useStyles();
-
+  } = productDetail;
+  // dispatch(wineDetails(wineDetail))
   //* EDITHANDLER, redirect a form para editar producto
-  const history = useHistory();
   const editHandler = () => {
     props.setProductDetail(wineDetail); //necesario en caso que ingrese al product detail sin pasar por catalogue.
     //Actualmente no es posible, pero podria ser una opcion en el futuro
     props.getCatsOfProduct(id);
 
-    history.push({
+    history.push( id ? { 
       pathname: `/admin/edit/${id}`,
       state: {
         edit: true,
       },
-    });
+    } : {pathname: '/catalogue',
+          state:{
+            edit: false,
+          }
+        });
   };
 
   
@@ -134,7 +144,7 @@ function ProductDetail({ wineDetail, ...props }) {
 }
 
 const mapStateToProps = (state) => ({
-  wineDetail: state.productReducers.wineDetail,
+  // wineDetail: state.productReducers.wineDetail,
   productsCart: state.productReducers.productsCart
 });
 

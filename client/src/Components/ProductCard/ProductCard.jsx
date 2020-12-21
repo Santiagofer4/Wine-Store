@@ -5,7 +5,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
 import './ProductCard.modules.css';
-import { connect } from 'react-redux';
+import { connect , useDispatch} from 'react-redux';
+import { wineDetails } from '../../slices/productDetailSlice';
 import {
   setProductDetail,
   addProductCart,
@@ -16,12 +17,14 @@ import { useHistory } from 'react-router-dom';
 // Recibe props con Products.info
 
 function ProductCard(props) {
+  const dispatch = useDispatch();
   const { image, name, price, id, stock } = props.data;
   const history = useHistory();
 
   const detailClickHandler = () => {
     // console.log('CLICK CARD', props.data);
-    props.setProductDetail(props.data);
+    dispatch(wineDetails(props.data))
+    // props.setProductDetail(props.data);
     history.push(`/product/${id}`);
   };
   // refactorizar esta funcion
