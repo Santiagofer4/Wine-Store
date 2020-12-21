@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { Button, CircularProgress } from '@material-ui/core';
-import './Catalogue.modules.css';
+import './CatalogueByTaste.modules.css';
 
 import ProductCard from '../ProductCard/ProductCard.jsx';
 import Sidebar from '../Sidebar/Sidebar.jsx';
@@ -23,13 +23,21 @@ function CatalogueByTaste(props) {
   const allProdsByCat = useSelector(allProdsByCategorySelector);
   const allProdsByCatError = useSelector(allProdsByCategoryErrorSelector);
   const filteredTaste = useSelector(filteredTasteSelector);
+  const allProducts = useSelector(allProductsSelector);
 
+  useEffect(()=>{
+    dispatch(getAllProducts())
+  },[])
   let content;
   if (allProdsByCatStatus === 'loading') {
     content = (
       <>
-        <h3>Cargando...</h3>
+            <Sidebar></Sidebar>
+      <div className='CatalogueByTaste__containerCargando'>
+
+        <h3 className='CatalogueByTaste__text'>Cargando...</h3>
         <CircularProgress />
+      </div>
       </>
     );
     return content;
@@ -53,10 +61,10 @@ function CatalogueByTaste(props) {
     );
   }
   return (
-    <div className="Catalogue__container">
+    <div className="CatalogueByTaste__container">
       <Sidebar></Sidebar>
       <h2>Viendo vinos de sabor: {filteredTaste}</h2>
-      <div className="Catalogue__Div">{content}</div>
+      <div className="CatalogueByTaste__Div">{content}</div>
     </div>
   );
 }
