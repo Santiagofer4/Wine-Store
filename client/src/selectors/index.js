@@ -32,3 +32,5 @@ export const allStrainsSelector = (state) => state.strains.allStrains.list;
 export const strainsStatusSelector = (state) => state.strains.status;
 
 export const strainsErrorSelector = (state) => state.strains.error;
+
+export const productDetailSelector = (state) => state.wineDetail.wine;
