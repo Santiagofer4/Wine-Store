@@ -1,3 +1,4 @@
+import { NextWeek } from '@material-ui/icons';
 import axios from 'axios';
 import {
   GET_PRODUCTS_CATEGORY,
@@ -69,10 +70,14 @@ export const setProductDetail = (wineDetail) => (dispatch) => {
 };
 
 export const getStrainList = () => (dispatch) => {
-  return axios.get('http://localhost:3000/strain')
-    // console.log('ACTIONS->strainList', strainList.data);
-    .then((strainList) => dispatch ({ type: GET_STRAIN_LIST, payload: strainList })
-    );
+  return (
+    axios
+      .get('http://localhost:3000/strain')
+      // console.log('ACTIONS->strainList', strainList.data);
+      .then((strainList) =>
+        dispatch({ type: GET_STRAIN_LIST, payload: strainList })
+      )
+  );
 };
 
 export const setHistory = (userHistory) => (dispatch) => {
@@ -90,16 +95,16 @@ export const getCatsOfProduct = (productId) => async (dispatch) => {
       payload: prodCategoryList.data,
     });
   } catch (error) {
-     console.error(error);
+    console.error(error);
     return;
   }
 };
 
 export const deleteStrain = (strainId) => (dispatch) => {
   return axios
-  .delete(`http://localhost:3000/strain/${strainId}`)
-  .then((id) => dispatch({ type: DELETE_STRAIN, payload: id }))
-  .catch(err => console.log('Error en la acción delete', err))
+    .delete(`http://localhost:3000/strain/${strainId}`)
+    .then((id) => dispatch({ type: DELETE_STRAIN, payload: id }))
+    .catch((err) => console.log('Error en la acción delete', err));
 };
 export const deleteCategory = (id) => (dispatch) => {
   return axios
@@ -111,47 +116,65 @@ export const deleteCategory = (id) => (dispatch) => {
 };
 
 export const getProductsCart = (id) => (dispatch) => {
-  return  axios
-    .get(`http://localhost:3000/users/${id}/cart`)  
-    .then((productsCart) => dispatch({ type: GET_PRODUCTS_CART, payload: productsCart}))
-    .catch((err) => {console.log('Error en GET_PRODUCTS_CART', err)})
-}
+  return axios
+    .get(`http://localhost:3000/users/${id}/cart`)
+    .then((productsCart) =>
+      dispatch({ type: GET_PRODUCTS_CART, payload: productsCart })
+    )
+    .catch((err) => {
+      console.log('Error en GET_PRODUCTS_CART', err);
+    });
+};
 
 export const getOrderList = () => async (dispatch) => {
   return await axios
     .get('http://localhost:3000/orders')
-    .then((orderList)=>{ dispatch({type: GET_ORDER_LIST, payload: orderList})})
-    .catch(err => { console.log('Error en GET_ORDER_LIST', err)})
-}
+    .then((orderList) => {
+      dispatch({ type: GET_ORDER_LIST, payload: orderList });
+    })
+    .catch((err) => {
+      console.log('Error en GET_ORDER_LIST', err);
+    });
+};
 
 export const deleteProductsCart = (id) => async (dispatch) => {
   return await axios
-    .delete(`http://localhost:3000/users/${id}/cart`)  //harcodearlo en el front al user
-    .then((id) => dispatch({ type: DELETE_PRODUCTS_CART, payload: id}))
-    .catch(err => {
+    .delete(`http://localhost:3000/users/${id}/cart`) //harcodearlo en el front al user
+    .then((id) => dispatch({ type: DELETE_PRODUCTS_CART, payload: id }))
+    .catch((err) => {
       console.log('Error en DELETE_PRODUCTS_CART', err);
-    })
-}
+    });
+};
 
-export const addProductCart = (idUser, productId, price) => async (dispatch) =>  {
- // console.log('actions',idUser, product)
-   return await axios
-  .post(`http://localhost:3000/users/${idUser}/cart`, {productId, price}) //harcodearlo en el front al user
-  .then(() => getProductsCart(idUser))
-  // dispatch ({ type: ADD_PRODUCT_CART, payload }))
-  .catch(err => {console.log('Error en ADD_PRODUCT_CART', err)}) 
-}
+export const addProductCart = (idUser, productId, price) => async (
+  dispatch
+) => {
+  // console.log('actions',idUser, product)
+  return await axios
+    .post(`http://localhost:3000/users/${idUser}/cart`, { productId, price }) //harcodearlo en el front al user
+    .then(() => getProductsCart(idUser))
+    // dispatch ({ type: ADD_PRODUCT_CART, payload }))
+    .catch((err) => {
+      console.log('Error en ADD_PRODUCT_CART', err);
+    });
+};
 
-export const putProductCart = (idUser, productId, quantity) => async (dispatch) => {
+export const putProductCart = (idUser, productId, quantity) => async (
+  dispatch
+) => {
   return await axios
     .put(`http://localhost:3000/users/${idUser}/cart`, { productId, quantity })
     .then(() => getProductsCart(idUser))
-    .catch(err => {console.log('Error en PUT_PRODUCT_CART', err)})
-}
+    .catch((err) => {
+      console.log('Error en PUT_PRODUCT_CART', err);
+    });
+};
 
 export const deleteProductCart = (idUser, productId) => async (dispatch) => {
   return await axios
-  .delete(`http://localhost:3000/users/${idUser}/cart/${productId}`)
-  .then(()=> getProductsCart(idUser))
-  .catch(err => {console.log('Error en DELETE_PRODUCT_CART', err)})
-}
+    .delete(`http://localhost:3000/users/${idUser}/cart/${productId}`)
+    .then(() => getProductsCart(idUser))
+    .catch((err) => {
+      console.log('Error en DELETE_PRODUCT_CART', err);
+    });
+};

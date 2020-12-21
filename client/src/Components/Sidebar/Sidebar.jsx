@@ -32,10 +32,10 @@ function Sidebar(props) {
   }, [allCatsStatus, dispatch]);
 
   const categoryClickHandler = (e) => {
-    let categoryName = e.target.name.toLowerCase();
+    let taste = e.target.name.toLowerCase();
     console.log('LINK');
-    history.push(`/catalogue/${categoryName}`);
-    dispatch(getAllProdsByCategory(categoryName));
+    history.push(`/catalogue/${taste}`);
+    dispatch(getAllProdsByCategory(taste));
     // props.getProductsCategory(categoryName);
   };
 

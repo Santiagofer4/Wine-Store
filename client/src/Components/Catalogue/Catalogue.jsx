@@ -6,7 +6,7 @@ import './Catalogue.modules.css';
 import ProductCard from '../ProductCard/ProductCard.jsx';
 import Sidebar from '../Sidebar/Sidebar.jsx';
 import { getCategoryList } from '../../actions';
-import { getAllProducts } from '../../slices/productSlice';
+import { getAllProducts, findWine } from '../../slices/productSlice';
 import {
   allProductsSelector,
   allProductsStatusSelector,
@@ -16,7 +16,7 @@ import {
   allProdsByCategorySelector,
 } from '../../selectors';
 
-function Catalogue(props) {
+function Catalogue() {
   const dispatch = useDispatch();
   const allProducts = useSelector(allProductsSelector);
   const allProdStatus = useSelector(allProductsStatusSelector);
@@ -38,11 +38,17 @@ function Catalogue(props) {
     return content;
   } else if (allProdStatus === 'succeded') {
     if (allProducts.length < 1) {
-      content = <h3>No hay productos</h3>;
+      content = (
+        <>
+          <h3>No hay productos</h3>
+          <Button onClick={() => dispatch(getAllProducts())}>Reintentar</Button>
+        </>
+      );
+    } else {
+      content = allProducts.map((product, idx) => (
+        <ProductCard data={product} key={idx} />
+      ));
     }
-    content = allProducts.map((product, idx) => (
-      <ProductCard data={product} key={idx} />
-    ));
   } else if (allProdStatus === 'failed') {
     return (
       <>
@@ -50,7 +56,7 @@ function Catalogue(props) {
         {console.error(allProdError)}
         <p>{allProdError.name}</p>
         <p>{allProdError.message}</p>
-        <Button>Try Again</Button>
+        <Button onCLick={() => dispatch(getAllProducts())}>Reintentar</Button>
       </>
     );
   }
@@ -64,4 +70,3 @@ function Catalogue(props) {
 }
 
 export default Catalogue;
-// export default connect(null, { getCategoryList })(Catalogue);

@@ -17,7 +17,7 @@ import {
   filteredTasteSelector,
 } from '../../selectors';
 
-function Catalogue(props) {
+function CatalogueByTaste(props) {
   const dispatch = useDispatch();
   const allProdsByCatStatus = useSelector(allProdsByCategoryStatusSelector);
   const allProdsByCat = useSelector(allProdsByCategorySelector);
@@ -25,7 +25,6 @@ function Catalogue(props) {
   const filteredTaste = useSelector(filteredTasteSelector);
 
   let content;
-
   if (allProdsByCatStatus === 'loading') {
     content = (
       <>
@@ -35,12 +34,13 @@ function Catalogue(props) {
     );
     return content;
   } else if (allProdsByCatStatus === 'succeded') {
-    if (allProducts.length < 1) {
+    if (allProdsByCat.length < 1) {
       content = <h3>No hay productos</h3>;
+    } else {
+      content = allProdsByCat.map((product, idx) => (
+        <ProductCard data={product} key={idx} />
+      ));
     }
-    content = allProdsByCat.map((product, idx) => (
-      <ProductCard data={product} key={idx} />
-    ));
   } else if (allProdsByCatStatus === 'failed') {
     return (
       <>
@@ -56,10 +56,9 @@ function Catalogue(props) {
     <div className="Catalogue__container">
       <Sidebar></Sidebar>
       <h2>Viendo vinos de sabor: {filteredTaste}</h2>
-      {/* <div className="Catalogue__Div">{content}</div> */}
+      <div className="Catalogue__Div">{content}</div>
     </div>
   );
 }
 
-export default Catalogue;
-// export default connect(null, { getCategoryList })(Catalogue);
+export default CatalogueByTaste;

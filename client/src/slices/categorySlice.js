@@ -31,8 +31,8 @@ export const getAllCategories = createAsyncThunk(
 
 export const getAllProdsByCategory = createAsyncThunk(
   'category/getAllProdsByCategory',
-  async (categoryName) => {
-    const resp = await axios.get(getAllProdsByCategoryEnpoint + categoryName);
+  async (taste) => {
+    const resp = await axios.get(getAllProdsByCategoryEnpoint + taste);
     return resp;
   }
 );
@@ -40,12 +40,7 @@ export const getAllProdsByCategory = createAsyncThunk(
 const categorySlice = createSlice({
   name: 'category',
   initialState: initialState_product,
-  reducers: {
-    addCategory: (state, action) => {
-      const { wine } = action.payload;
-      state.allCategories.list.concat(wine);
-    },
-  },
+  reducers: {},
   extraReducers: {
     [getAllCategories.pending]: (state, action) => {
       state.allCategories.status = status.loading;
