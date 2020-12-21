@@ -1,6 +1,10 @@
-export const getAllCatsEndpoint = 'http://localhost:3000/products/category';
+const baseEndpoint = 'http://localhost:3000/';
 
-export const getAllProdsEndpoint = `http://localhost:3000/products`;
+export const getAllProdsEndpoint = baseEndpoint + `products/`;
+
+export const getAllCatsEndpoint = getAllProdsEndpoint + 'category';
 
 export const getAllProdsByCategoryEnpoint =
-  'http://localhost:3000/products/productsByCategory/';
+  getAllProdsEndpoint + 'productsByCategory/';
+
+export const strainsEndpoint = baseEndpoint + 'strain/';

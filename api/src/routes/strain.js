@@ -5,7 +5,7 @@ server.get('/', (req, res, next) => {
   // console.log('Trae todas las cepas - GET a /strain');
   Strain.findAll()
     .then((strain) => {
-      return res.json(strain);
+      return res.status(200).json(strain);
     })
     .catch(next);
 });
@@ -26,8 +26,9 @@ server.post('/', (req, res) => {
       pairing,
       origin,
     },
-  }).then(() => {
-    return res.status(201).send('La cepa ha sido creada');
+  }).then((strain) => {
+    // console.log('200 OK', strain);
+    return res.status(201).send(strain);
   });
 });
 
@@ -35,14 +36,15 @@ server.delete('/:id', (req, res) => {
   let { id } = req.params;
 
   if (!id) return res.status(400).send('No se puede eliminar la cepa');
-  
+
   Strain.destroy({
     where: {
       id,
     },
-  }).then(() => {
-    return res.send(200, 'Se ha borrado la cepa seleccionada');
-  })
+  }).then((strain) => {
+    console.log('200 OK - DELETED');
+    return res.sendStatus(200).send(strain);
+  });
 });
 
 module.exports = server;
