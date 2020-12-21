@@ -14,21 +14,19 @@ import {
   allProdsByCategoryStatusSelector,
   allProdsByCategoryErrorSelector,
   allProdsByCategorySelector,
+  filteredTasteSelector,
 } from '../../selectors';
 
 function Catalogue(props) {
   const dispatch = useDispatch();
-  const allProducts = useSelector(allProductsSelector);
-  const allProdStatus = useSelector(allProductsStatusSelector);
-  const allProdError = useSelector(allProductsErrorSelector);
-
-  useEffect(() => {
-    if (allProdStatus === 'idle') dispatch(getAllProducts());
-  }, [allProdStatus, dispatch]);
+  const allProdsByCatStatus = useSelector(allProdsByCategoryStatusSelector);
+  const allProdsByCat = useSelector(allProdsByCategorySelector);
+  const allProdsByCatError = useSelector(allProdsByCategoryErrorSelector);
+  const filteredTaste = useSelector(filteredTasteSelector);
 
   let content;
 
-  if (allProdStatus === 'loading') {
+  if (allProdsByCatStatus === 'loading') {
     content = (
       <>
         <h3>Cargando...</h3>
@@ -36,20 +34,20 @@ function Catalogue(props) {
       </>
     );
     return content;
-  } else if (allProdStatus === 'succeded') {
+  } else if (allProdsByCatStatus === 'succeded') {
     if (allProducts.length < 1) {
       content = <h3>No hay productos</h3>;
     }
-    content = allProducts.map((product, idx) => (
+    content = allProdsByCat.map((product, idx) => (
       <ProductCard data={product} key={idx} />
     ));
-  } else if (allProdStatus === 'failed') {
+  } else if (allProdsByCatStatus === 'failed') {
     return (
       <>
         <h3>Error al cargar productos</h3>
-        {console.error(allProdError)}
-        <p>{allProdError.name}</p>
-        <p>{allProdError.message}</p>
+        {console.error(allProdsByCatError)}
+        <p>{allProdsByCatError.name}</p>
+        <p>{allProdsByCatError.message}</p>
         <Button>Try Again</Button>
       </>
     );
@@ -57,8 +55,8 @@ function Catalogue(props) {
   return (
     <div className="Catalogue__container">
       <Sidebar></Sidebar>
-      <h3>Viendo todos los vinos</h3>
-      <div className="Catalogue__Div">{content}</div>
+      <h2>Viendo vinos de sabor: {filteredTaste}</h2>
+      {/* <div className="Catalogue__Div">{content}</div> */}
     </div>
   );
 }

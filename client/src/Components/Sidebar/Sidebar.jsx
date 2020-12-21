@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import './Sidebar.modules.css';
-import { connect, useSelector, useDispatch } from 'react-redux';
-import { getCategoryList, getProductsCategory } from '../../actions';
-// import { Button } from '@material-ui/core';
+import { Link, Redirect, useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { getAllProducts } from '../../slices/productSlice';
-import { getAllCategories } from '../../slices/categorySlice';
+import {
+  getAllCategories,
+  getAllProdsByCategory,
+} from '../../slices/categorySlice';
 import {
   allProductsSelector,
   allProductsStatusSelector,
@@ -12,24 +14,30 @@ import {
   allCategoriesStatusSelector,
   allCategoriesErrorSelector,
   allCategoriesSelector,
+  allProdsByCategorySelector,
 } from '../../selectors';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Button } from '@material-ui/core';
 
 function Sidebar(props) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const allProducts = useSelector(allProductsSelector);
   const allCategories = useSelector(allCategoriesSelector);
   const allCatsStatus = useSelector(allCategoriesStatusSelector);
   const allCatsError = useSelector(allCategoriesErrorSelector);
+  const allProdsByCat = useSelector(allProdsByCategorySelector);
 
   useEffect(() => {
     if (allCatsStatus === 'idle') dispatch(getAllCategories());
   }, [allCatsStatus, dispatch]);
 
-  function categoria(e) {
-    let categoryName = e.target.innerText.toLowerCase();
-    props.getProductsCategory(categoryName);
-  }
+  const categoryClickHandler = (e) => {
+    let categoryName = e.target.name.toLowerCase();
+    console.log('LINK');
+    history.push(`/catalogue/${categoryName}`);
+    dispatch(getAllProdsByCategory(categoryName));
+    // props.getProductsCategory(categoryName);
+  };
 
   let content;
   if (allCatsStatus === 'loading') {
@@ -47,16 +55,17 @@ function Sidebar(props) {
     }
     content = allCategories.map((category, idx) => {
       return (
-        <a
+        <Button
+          variant="text"
           className="Sidebar__Text"
-          href="#"
+          color="inherit"
+          fullWidth
           key={idx}
-          onClick={(e) => {
-            categoria(e);
-          }}
+          name={category.taste}
+          onClick={(e) => categoryClickHandler(e)}
         >
           {category.taste}
-        </a>
+        </Button>
       );
     });
   }
@@ -64,17 +73,20 @@ function Sidebar(props) {
     <div className="Sidebar__container">
       <div className="Sidebar__lista">
         {allProducts.length > 0 ? (
-          <a
+          <Button
+            color="primary"
+            variant="text"
             className="Sidebar__Text"
             id="verTodos"
-            href="#"
+            fullWidth
             onClick={() => {
+              history.push(`/catalogue`);
               dispatch(getAllProducts());
             }}
           >
             {' '}
             Ver Todos
-          </a>
+          </Button>
         ) : (
           <p>No hay productos</p>
         )}{' '}
