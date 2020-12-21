@@ -31,8 +31,11 @@ function Catalogue() {
   if (allProdStatus === 'loading') {
     content = (
       <>
+      <div className='Catalogue__containerCargando'>
+
         <h3>Cargando...</h3>
         <CircularProgress />
+      </div>
       </>
     );
     return content;
