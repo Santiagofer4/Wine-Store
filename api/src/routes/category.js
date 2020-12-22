@@ -37,7 +37,7 @@ server.get('/', (req, res, next) => {
 //   });
 // });
 
-server.get('Product/:id', (req, res, next) => {
+server.get('/product/:id', (req, res, next) => {
   // Devuelve todas las categorias que tiene un producto
   // console.log(Categorías de un producto - GET a products/categoryProduct/:id)
   let { id } = req.params;

@@ -5,7 +5,8 @@ const { Product } = require('../db.js');
 const productRouter = require('./product.js');
 const usersRouter = require('./users.js');
 const ordersRouter = require('./orders.js');
-const strainRouter = require('./strain.js')
+const strainRouter = require('./strain.js');
+const authRouter = require('./auth.js');
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router.use('/products', productRouter);
 router.use('/strain', strainRouter);
 router.use('/users', usersRouter);
 router.use('/orders', ordersRouter);
+router.use('/auth', authRouter);
 
 router.get('/search', (req, res) => {
   console.log('Ruta de search by query.');

@@ -41,5 +41,22 @@ server.get("/me", async (req, res, next) => {
     }
   });
 
+  server.post("/login", async function (req, res, next) {
+    const {password, email} = req.body
+    if (!password || !email) { res.sendStatus(400).send('Tienes que ingresar Email y Password') }
+    try {
+      User.findOne({
+        where: {email}
+      }).then (correctUser => {
+        const prueba = correctUser.compare(password)
+        console.log(prueba)
+      }) 
+    }
+    catch (error) {
+      res.send(error);
+    }
+  });
+
+
 
 module.exports = server;

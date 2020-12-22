@@ -1,8 +1,9 @@
 const { DataTypes } = require('sequelize');
+const bcrypt = require("bcrypt");
 
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define(
+  const User = sequelize.define(
     'user',
     {
       firstName: {
@@ -41,6 +42,13 @@ module.exports = (sequelize) => {
       password: {
         type: DataTypes.STRING,
         allowNull: true, // Funcionalidad completa será agregada más adelante
+        set(value) {
+          if (value) {
+            const salt = bcrypt.genSaltSync(10);
+            const hash = bcrypt.hashSync(value, salt);
+            this.setDataValue("password", hash);
+          }
+        },      
       },
     }, { timestamps: false },
     {
@@ -56,4 +64,9 @@ module.exports = (sequelize) => {
       },
     }
   );
+  User.prototype.compare = function (pass) {
+    return bcrypt.compareSync(pass, this.password);
+
+  }
+  return User;
 };
