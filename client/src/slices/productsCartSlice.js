@@ -2,7 +2,7 @@ import { SnackbarContent } from '@material-ui/core';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { getAllProdsEndpoint ,getAllProductsCartEnpoint, postProductsCardEnpoint } from '../constants/endpoints';
+import { getAllProdsEndpoint ,getAllProductsCartEnpoint, postProductsCardEnpoint, deleteProductCarEnpoint } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 import { getAllCategories } from './categorySlice';
 import { Component } from 'react';
@@ -33,7 +33,14 @@ export const postProductsCar = createAsyncThunk(
     return resp;
   }
 );
-
+export const deleteProductCar = createAsyncThunk(
+  'product/deleteProductsCard',
+  async ( producto) => {
+    let {id , userId } = producto
+    const resp = await axios.delete(deleteProductCarEnpoint + userId + '/cart/' + id);
+    return resp;
+  }
+);
   const productsCartSlice = createSlice({
   name: 'productsCart',
   initialState: initialState_product,

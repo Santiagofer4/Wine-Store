@@ -5,11 +5,10 @@ import { Link } from "react-router-dom";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { Button } from "@material-ui/core";
 import {allProductsCartSelector, allProductsCartSyncSelector, allProductsCartStatusSelector} from '../../selectors'
-import {getAllProductsCart, sync, addToCart, subtractToCart,deleteFromCart, deleteCart ,postProductsCar} from '../../slices/productsCartSlice'
+import {getAllProductsCart, sync, addToCart, subtractToCart,deleteFromCart, deleteCart ,postProductsCar, deleteProductCar} from '../../slices/productsCartSlice'
 
 
 
-// arreglar el problema de cargando
 function Cart(props) {
   const dispatch= useDispatch()
   const AllProductsCart = useSelector(allProductsCartSelector)
@@ -18,8 +17,6 @@ function Cart(props) {
   const[subTotal,setSubTotal] = useState(0)
 
   const handleDelete = ()=>{
-    // await props.deleteProductsCart(1);
-    // props.getProductsCart(1);
     dispatch(deleteCart())
   };
   window.onbeforeunload = function(e) {
@@ -31,17 +28,11 @@ function Cart(props) {
   };
   const handleDecrement = (e,quantity,price) => {
     let id = e.target.name *1
-    dispatch(subtractToCart(id))
-    //   if(document.getElementById(`${id}`).value > 1) {
-  //     document.getElementById(`${id}`).value--
-  //   }
-  //   props.putProductCart(1, id, document.getElementById(`${id}`).value);
-  //   // setSubTotal( subTotal - price)
-  // };
-  }
-  // 4 productos a  300  = 1200 -900   
+    if(quantity >1){
 
-  // 3 '' a 300 = 900
+      dispatch(subtractToCart(id))
+    }
+  }
 
 function total (quantity,price){
   setSubTotal(subTotal + (quantity * price*1))
@@ -55,18 +46,14 @@ function total (quantity,price){
       }
      dispatch(addToCart({productDetail}))
     }
-    // if(document.getElementById(`${id}`).value < stock) {
-    //   document.getElementById(`${id}`).value++
-    // }
-    // props.putProductCart(1, id, document.getElementById(`${id}`).value);
-    // // setSubTotal(subTotal + price *1)
 
   };
  
 
   const handlerDeleteElement = (id) => {
-        // props.deleteProductCart(1, id);
-        dispatch(deleteFromCart(id))
+        dispatch(deleteFromCart(id.id))
+        dispatch(deleteProductCar(id))
+
       }
   const handleConfirm = ()=>{}
 
@@ -77,12 +64,6 @@ console.log('actualizando')
       dispatch(getAllProductsCart(1))
       dispatch(sync(true))
     }
-    console.log(props.productsCart.length)
-    // if (props.productsCart.length === 0){
-    //   return props.getProductsCart(1);
-    // }else{
-    //   console.log('no esta vacio')
-    // }
   },[]);
 
    if ( status === 'succeded') {
@@ -112,12 +93,8 @@ console.log('actualizando')
                       <p>$ {p.price}</p>
                     </div>
                     <div className="quantity">
-                      <a href="#" className='Cart__DeleteProduct'><i class="fas fa-trash-alt" onClick={(e) => handlerDeleteElement(p.id)}></i>
+                      <a href="#" className='Cart__DeleteProduct'><i class="fas fa-trash-alt" onClick={(e) => handlerDeleteElement({id:p.id, userId:1,})}></i>
 </a>
-                      {/* <img src="https://img2.freepng.es/20180329/cke/kisspng-computer-icons-clip-art-delete-button-5abced454dbd36.6503919615223309493184.jpg" 
-                       name={p.product.id}
-                       className="btnEliminar"
-                      onClick={(e) => handlerDeleteElement(p.product.id)}></img> */}
                     <Button 
                     name={p.id}
                     className="button" 
@@ -184,15 +161,4 @@ console.log('actualizando')
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    productsCart: state.productReducers.productsCart,
-  };
-}
-
-export default connect(mapStateToProps, {
-  getProductsCart,
-  deleteProductsCart,
-  putProductCart,
-  deleteProductCart
-})(Cart);
+export default Cart;

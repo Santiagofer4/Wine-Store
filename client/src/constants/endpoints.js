@@ -10,3 +10,4 @@ export const getCatsOfProductEnpoint = 'http://localhost:3000/products/category/
 
 export const postProductsCardEnpoint = 'http://localhost:3000/users/'   //1/cart'
 
+export const deleteProductCarEnpoint =  'http://localhost:3000/users/' //${idUser}/cart/${productId}'
