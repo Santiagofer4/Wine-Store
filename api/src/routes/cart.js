@@ -40,27 +40,3 @@ const { User, Order, OrderLine } = require('../db.js');
 
   module.exports = server;
 
-//   models.sequelize.transaction(function(t) {
-//     return models.users.findOrCreate({
-//       where: {
-//         userId:    profile.userId,
-//         name:      profile.name
-//       },
-//       transaction: t
-//     })
-//     .spread(function(userResult, created){
-//       // userResult is the user instance
-  
-//       if (created) {
-//         // created will be true if a new user was created
-//       }
-//     });
-//   });
-
-//   if (!idProduct || Category)
-//   return res.status(400).send('No se puede agregar la categoría');
-
-// Product.findByPk(idProduct).then((product) => {
-//   product.addCategory(Category);
-//   return res.send('Se agregó la categoría');
-// });

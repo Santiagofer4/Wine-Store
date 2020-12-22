@@ -1,34 +1,30 @@
 const server = require('express').Router();
 const { Product, Category } = require('../db.js');
-// const { Sequelize } = require('sequelize');
 const categoryRouter = require('./category.js');
-
-// [FLAVIO] SIEMPRE RETORNAR UN STATUS DE CUALQUIER METODO QUE SE LE HACE A LA API:
-// PUEDE SER DE 3 maneras (desconozco si habra otra manera de hacerlo):
-// 1. return res.status(XXX).send(`CON O SIN CONTENIDO)
-// 2. return res.send(xxx,`CON O SON CONTENIDO`)
-// 3. return res.sendStatus(XXX)
-// Cualquiera de las formas es correcta, pero, res.status(XXX) NO DEVUELVE NADA -- OJO -- cambié el color del comentario por la demo
 
 server.use('/category', categoryRouter);
 
+//Listado de todos los Productos
+
 server.get('/', (req, res, next) => {
-  //  console.log('Traigo todos los productos - GET a /products');
-  Product.findAll()
+   Product.findAll()
     .then((products) => {
       res.send(products);
     })
     .catch(next);
 });
 
+//Devuelve un producto según el ID
+
 server.get('/:id', (req, res) => {
   let { id } = req.params;
-  // console.log('Filtro productos por id - GET a /products/:id');
-  if (!id) return res.status(404).send('No existe el producto');
+   if (!id) return res.status(404).send('No existe el producto');
   Product.findByPk(id).then((product) => {
     return res.send(product);
   });
 });
+
+//Filtrar productos por categoría
 
 server.get('/productsByCategory/:category', (req, res) => {
   let { category } = req.params;
@@ -42,6 +38,8 @@ server.get('/productsByCategory/:category', (req, res) => {
     res.json(s);
   });
 });
+
+//Modificar Producto
 
 server.put('/:id', (req, res) => {
   let { id } = req.params;
@@ -91,6 +89,8 @@ server.put('/:id', (req, res) => {
     });
 });
 
+//Eliminar un Producto
+
 server.delete('/:id', (req, res) => {
   let { id } = req.params;
   // console.log('Elimino un producto - DELETE a /products/:id');
@@ -104,6 +104,8 @@ server.delete('/:id', (req, res) => {
     return res.status(200).send(`Producto borrado ${id}`);
   });
 });
+
+//Borrar categoría de un producto
 
 server.delete('/:idProduct/category/:idCategory', (req, res) => {
   const { idProduct, idCategory } = req.params;
@@ -120,6 +122,8 @@ server.delete('/:idProduct/category/:idCategory', (req, res) => {
     })
     .catch((e) => console.log(e));
 });
+
+//Crear un nuevo Producto
 
 server.post('/', (req, res, next) => {
   let prod;
@@ -152,6 +156,8 @@ server.post('/', (req, res, next) => {
     .then(() => res.status(200).send(prod))
     .catch(next);
 });
+
+//Agregar categoría a un Producto
 
 server.post('/:idProduct/category', (req, res) => {
   let { idProduct } = req.params;

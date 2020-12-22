@@ -1,11 +1,10 @@
 const server = require('express').Router();
 const {Order,User, OrderLine, Product} = require('../db.js');
 
+//Devolver todas las Órdenes
 
 server.get('/', (req, res, next) => {
-  // debe devolver todas las ordenes si no recibe status
-
-  const {status} = req.query;
+   const {status} = req.query;
     console.log('GET a ORDERS');
     if(!status){
       Order.findAll({
@@ -31,6 +30,8 @@ server.get('/', (req, res, next) => {
     }
   });
 
+//Crear un carrito o agregar una orden si el carrito ya existe
+
   server.post('/',(req,res)=>{
     const{status, total, userId}=req.body;
     Order.findOrCreate({
@@ -48,6 +49,8 @@ server.get('/', (req, res, next) => {
     .catch((err)=>{console.log(err)})
   })
 
+  //Ver una Órden
+
   server.get('/:id',(req,res)=>{
       Order.findAll({
         where:{
@@ -59,6 +62,8 @@ server.get('/', (req, res, next) => {
       })
 
   })
+
+  //Editar una Órden
 
   server.put('/:id',(req,res)=>{
     const {id}= req.params;
