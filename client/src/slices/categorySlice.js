@@ -4,6 +4,7 @@ import axios from 'axios';
 import {
   getAllCatsEndpoint,
   getAllProdsByCategoryEnpoint,
+  getCatsOfProductEnpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 
@@ -19,6 +20,11 @@ const initialState_product = {
     status: 'idle',
     error: null,
   },
+  allCatsOfProduct:{
+    list: [],
+    status: 'idle',
+    error: null,
+  }
 };
 
 export const getAllCategories = createAsyncThunk(
@@ -33,6 +39,13 @@ export const getAllProdsByCategory = createAsyncThunk(
   'category/getAllProdsByCategory',
   async (taste) => {
     const resp = await axios.get(getAllProdsByCategoryEnpoint + taste);
+    return resp;
+  }
+);
+export const getAllCatsOfProduct = createAsyncThunk(
+  'category/getAllCatsOfProduct',
+  async (productId) => {
+    const resp = await axios.get(getCatsOfProductEnpoint + productId);
     return resp;
   }
 );
@@ -64,6 +77,17 @@ const categorySlice = createSlice({
     [getAllProdsByCategory.rejected]: (state, action) => {
       state.allProdsByCategory.status = status.failed;
       state.allProdsByCategory.error = action.error;
+    },
+    [getAllCatsOfProduct.pending]: (state, action) => {
+      state.allCatsOfProduct.status = status.loading;
+    },
+    [getAllCatsOfProduct.fulfilled]: (state, { payload }) => {
+      state.allCatsOfProduct.status = status.succeded;
+      state.allCatsOfProduct.list = payload.data;
+    },
+    [getAllCatsOfProduct.rejected]: (state, action) => {
+      state.allCatsOfProduct.status = status.failed;
+      state.allCatsOfProduct.error = action.error;
     },
   },
 });

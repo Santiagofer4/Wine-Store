@@ -38,4 +38,6 @@ export const allProductsCartStatusSelector = (state) =>
 
 export const allProductsCartErrorSelector = (state) =>
   state.allProductsCart.error
-
+export const allCatsOfProductSelector = (state) => state.categories.allCatsOfProduct.list
+export const allCatsOfProductStatusSelector = (state) => state.categories.allCatsOfProduct.status
+export const allCatsOfProductErrorSelector = (state) => state.categories.allCatsOfProduct.error

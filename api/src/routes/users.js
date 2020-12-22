@@ -225,7 +225,7 @@ server.get("/:id/cart", (req, res) => {
 
 server.post("/:id/cart", (req, res) => {
   let { id } = req.params;
-  let { productId, price } = req.body;
+  let { productId, price , quantity} = req.body;
 
   if (!productId || !id)
     return res.status(400).send("No se puede agregar el producto al carrito");
@@ -238,12 +238,13 @@ server.post("/:id/cart", (req, res) => {
     defaults: {
       total: 0,
       status: "cart",
+
     },
   }).then((order) => {
     const [instance, wasCreated] = order; // si crea el dato wasCreated = true sino false
     OrderLine.create({
       productId,
-      quantity: 1,
+      quantity,
       price,
     }).then((orderLine) => {
       orderLine.setProduct(productId);

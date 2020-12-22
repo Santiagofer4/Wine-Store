@@ -87,7 +87,7 @@ export const setHistory = (userHistory) => (dispatch) => {
 export const getCatsOfProduct = (productId) => async (dispatch) => {
   try {
     const prodCategoryList = await axios.get(
-      `http://localhost:3000/products/categoryProduct/${productId}`
+      `http://localhost:3000/products/category/product/${productId}`
     );
     // console.log('ACTION', prodCategoryList.data);
     return dispatch({

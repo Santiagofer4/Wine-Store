@@ -4,10 +4,10 @@ import './ProductDetail.modules.css';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
-import { setProductDetail, setHistory, getCatsOfProduct, addProductCart,putProductCart } from '../../actions';
 import { wineDetails } from '../../slices/productDetailSlice';
-import {getAllProductsCart , addToCart} from '../../slices/productsCartSlice'
-import {productDetailSelector, allProductsCartSelector } from '../../selectors/index';
+import { addToCart} from '../../slices/productsCartSlice'
+import {getAllCatsOfProduct} from '../../slices/categorySlice'
+import {productDetailSelector} from '../../selectors/index';
 
 const useStyles = makeStyles({
   root: {
@@ -27,23 +27,17 @@ const useStyles = makeStyles({
 });
 
 
-function ProductDetail({ wineDetail, ...props }) {
+function ProductDetail() {
 
-  // useEffect(()=>{
 
-  //   dispatch(getAllProductsCart(1))
-  // },[])
-  // const dispatch = useDispatch();
   const productDetail = useSelector(productDetailSelector)
   const dispatch = useDispatch()
-  function init(){
 
-   }
-  const allProCart = useSelector(allProductsCartSelector)
+
   const history = useHistory();
   const classes = useStyles();
-      // if( !productDetail){  return (history.push( '/'))}
-      const {
+
+  const {
     id,
     name,
     price,
@@ -53,12 +47,13 @@ function ProductDetail({ wineDetail, ...props }) {
     stock,
     categories,
   } = productDetail;
-  // dispatch(wineDetails(wineDetail))
   //* EDITHANDLER, redirect a form para editar producto
   const editHandler = () => {
-    props.setProductDetail(wineDetail); //necesario en caso que ingrese al product detail sin pasar por catalogue.
+     dispatch(wineDetails(productDetail))
+    // props.setProductDetail(wineDetail); //necesario en caso que ingrese al product detail sin pasar por catalogue.
     //Actualmente no es posible, pero podria ser una opcion en el futuro
-    props.getCatsOfProduct(id);
+    dispatch(getAllCatsOfProduct(id))
+    // props.getCatsOfProduct(id);
 
     history.push( id ? { 
       pathname: `/admin/edit/${id}`,
@@ -73,46 +68,11 @@ function ProductDetail({ wineDetail, ...props }) {
   };
 
   
-  // const handleIncrement = (e, stock) => {
-  //   let id = e.target.name;
-
-  //   if(document.getElementById(`${id}`).value < stock) {
-  //     document.getElementById(`${id}`).value++
-  //   }
-  //   props.putProductCart(1, id, document.getElementById(`${id}`).value);
-  // };
+ 
 
 // esta funcion debe ser refactorizada 
-  function handlerProductToCart(userId, id, price,) {
-    // if(allProCart.length === 0) 
-    console.log('tu viejasa', allProCart)
-    if(props.productsCart[0] !== undefined){//entro a la funcion
-     if(props.productsCart[0].orderLines !== undefined){//cuando el estado tiene algo
-       if(props.productsCart[0].orderLines.length > 0){//cuando el estado tiene un orderLine y tiene datos
-          let products = props.productsCart[0].orderLines;
-          for (let i = 0; i < products.length; i++) {
-            if (products[i].productId === id) {
-              if(products[i].quantity <= products[i].product.stock){
-                props.putProductCart(1, id, products[i].quantity + 1);
-                return i = products.length
-              }
-            } else if (i === products.length - 1) {
-              // props.addProductCart(userId, id, price) 
-              dispatch(addToCart({userId,productDetail}))
-
-            }
-          }
-        }else{
-          // props.addProductCart(userId, id, price) //cuando la orderLine no tiene datos
-          dispatch(addToCart({userId,productDetail}))
-        }
-
-     }   
-    } else {
-      // props.addProductCart(userId, id, price) //cuando el estado es undefined/ esta vacio
-      dispatch(addToCart({userId,productDetail}))
-
-    }
+  function handlerProductToCart(userId) {
+       dispatch(addToCart({userId,productDetail}))
   }
 
 
@@ -154,7 +114,7 @@ function ProductDetail({ wineDetail, ...props }) {
             <Button size="small" onClick={editHandler}> <img id="editImage" src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"></img>
               EDITAR
             </Button>
-            {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy" onClick={() => {handlerProductToCart(1, id, price); }}>Comprar</Button>}
+            {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy" onClick={() => {handlerProductToCart(1); }}>Comprar</Button>}
           </CardActions>
         </Card>
       </Paper>
@@ -162,15 +122,4 @@ function ProductDetail({ wineDetail, ...props }) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  // wineDetail: state.productReducers.wineDetail,
-  productsCart: state.productReducers.productsCart
-});
-
-export default connect(mapStateToProps, {
-  setProductDetail,
-  setHistory,
-  getCatsOfProduct,
-  addProductCart,
-  putProductCart
-})(ProductDetail);
+ export default ProductDetail
