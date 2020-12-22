@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Container, Paper, CardContent, CardActions, Card, Typography, Button, } from '@material-ui/core';
 import './ProductDetail.modules.css';
-import { connect, useDispatch, useSelector  } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { setProductDetail, setHistory, getCatsOfProduct, addProductCart,putProductCart } from '../../actions';
 import { wineDetails } from '../../slices/productDetailSlice';
-import {productDetailSelector} from '../../selectors';
+import {getAllProductsCart , addToCart} from '../../slices/productsCartSlice'
+import {productDetailSelector, allProductsCartSelector } from '../../selectors/index';
 
 const useStyles = makeStyles({
   root: {
@@ -25,13 +26,24 @@ const useStyles = makeStyles({
   },
 });
 
+
 function ProductDetail({ wineDetail, ...props }) {
+
+  // useEffect(()=>{
+
+  //   dispatch(getAllProductsCart(1))
+  // },[])
   // const dispatch = useDispatch();
   const productDetail = useSelector(productDetailSelector)
+  const dispatch = useDispatch()
+  function init(){
+
+   }
+  const allProCart = useSelector(allProductsCartSelector)
   const history = useHistory();
   const classes = useStyles();
       // if( !productDetail){  return (history.push( '/'))}
-    const {
+      const {
     id,
     name,
     price,
@@ -72,6 +84,8 @@ function ProductDetail({ wineDetail, ...props }) {
 
 // esta funcion debe ser refactorizada 
   function handlerProductToCart(userId, id, price,) {
+    // if(allProCart.length === 0) 
+    console.log('tu viejasa', allProCart)
     if(props.productsCart[0] !== undefined){//entro a la funcion
      if(props.productsCart[0].orderLines !== undefined){//cuando el estado tiene algo
        if(props.productsCart[0].orderLines.length > 0){//cuando el estado tiene un orderLine y tiene datos
@@ -83,16 +97,21 @@ function ProductDetail({ wineDetail, ...props }) {
                 return i = products.length
               }
             } else if (i === products.length - 1) {
-              props.addProductCart(userId, id, price) 
+              // props.addProductCart(userId, id, price) 
+              dispatch(addToCart({userId,productDetail}))
+
             }
           }
         }else{
-          props.addProductCart(userId, id, price) //cuando la orderLine no tiene datos
+          // props.addProductCart(userId, id, price) //cuando la orderLine no tiene datos
+          dispatch(addToCart({userId,productDetail}))
         }
 
      }   
     } else {
-      props.addProductCart(userId, id, price) //cuando el estado es undefined/ esta vacio
+      // props.addProductCart(userId, id, price) //cuando el estado es undefined/ esta vacio
+      dispatch(addToCart({userId,productDetail}))
+
     }
   }
 
@@ -135,7 +154,7 @@ function ProductDetail({ wineDetail, ...props }) {
             <Button size="small" onClick={editHandler}> <img id="editImage" src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"></img>
               EDITAR
             </Button>
-            {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy" onClick={() => handlerProductToCart(1, id, price)}>Comprar</Button>}
+            {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy" onClick={() => {handlerProductToCart(1, id, price); }}>Comprar</Button>}
           </CardActions>
         </Card>
       </Paper>

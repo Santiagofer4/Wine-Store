@@ -29,3 +29,13 @@ export const filteredTasteSelector = (state) =>
  
 export const productDetailSelector = (state) =>
   state.wineDetail.wine;
+
+export const allProductsCartSelector = (state) =>
+  state.productsCart.allProductsCart.list;
+
+export const allProductsCartStatusSelector = (state) =>
+  state.allProductsCart.status;
+
+export const allProductsCartErrorSelector = (state) =>
+  state.allProductsCart.error
+
