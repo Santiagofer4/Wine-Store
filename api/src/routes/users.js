@@ -223,16 +223,16 @@ server.get("/:id/cart", (req, res) => {
 
 // Agregar elemento al carrito
 
-server.post("/:id/cart", (req, res) => {
-  let { id } = req.params;
-  let { productId, price , quantity} = req.body;
+server.post("/:userId/cart", (req, res) => {
+  let { userId } = req.params;
+  let { id, price , quantity} = req.body;
 
-  if (!productId || !id)
+  if (!id || !userId)
     return res.status(400).send("No se puede agregar el producto al carrito");
-
+  let instacia;
   Order.findOrCreate({
     where: {
-      userId: id,
+      userId,
       status: "cart",
     },
     defaults: {
@@ -242,13 +242,24 @@ server.post("/:id/cart", (req, res) => {
     },
   }).then((order) => {
     const [instance, wasCreated] = order; // si crea el dato wasCreated = true sino false
-    OrderLine.create({
-      productId,
-      quantity,
-      price,
+    instacia = instance;
+     orderLine = OrderLine.findOrCreate({
+       where:{ 
+         productId: id
+       },
+       defaults:{
+         productId: id,
+         quantity,
+         price,
+       }
     }).then((orderLine) => {
-      orderLine.setProduct(productId);
-      orderLine.setOrder(instance.id);
+      const [instance, wasCreated] = orderLine
+      if(!wasCreated){
+        OrderLine.update({quantity},{where:{productId: id}})
+      }
+      console.log(instance)
+      instance.setProduct(id);
+      instance.setOrder(instacia.id);
       // console.log("exito", productId);
     });
   });

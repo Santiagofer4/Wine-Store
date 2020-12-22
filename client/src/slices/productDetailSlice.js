@@ -22,7 +22,7 @@ const productDetailSlice = createSlice({
   initialState: initialState_product,
   reducers: {
     wineDetails(state,action){  
-        state.wine = action.payload
+        state.wineDetail.wine = action.payload
         }
   },
 });

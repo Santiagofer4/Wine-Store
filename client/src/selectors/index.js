@@ -28,16 +28,21 @@ export const filteredTasteSelector = (state) =>
   state.categories.allProdsByCategory.taste;
  
 export const productDetailSelector = (state) =>
-  state.wineDetail.wine;
+  state.wineDetail.wineDetail.wine;
 
 export const allProductsCartSelector = (state) =>
   state.productsCart.allProductsCart.list;
 
+  export const allProductsCartSyncSelector = (state) => 
+  state.productsCart.allProductsCart.sync
+
+
 export const allProductsCartStatusSelector = (state) =>
-  state.allProductsCart.status;
+  state.productsCart.allProductsCart.status;
 
 export const allProductsCartErrorSelector = (state) =>
-  state.allProductsCart.error
+  state.productsCart.allProductsCart.error
+
 export const allCatsOfProductSelector = (state) => state.categories.allCatsOfProduct.list
 export const allCatsOfProductStatusSelector = (state) => state.categories.allCatsOfProduct.status
 export const allCatsOfProductErrorSelector = (state) => state.categories.allCatsOfProduct.error

@@ -8,4 +8,5 @@ export const getAllProductsCartEnpoint = 'http://localhost:3000/users/' // ${id}
 
 export const getCatsOfProductEnpoint = 'http://localhost:3000/products/category/product/' // ${productId}'
 
+export const postProductsCardEnpoint = 'http://localhost:3000/users/'   //1/cart'
 

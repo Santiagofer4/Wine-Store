@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import { Container, Paper, CardContent, CardActions, Card, Typography, Button, } from '@material-ui/core';
 import './ProductDetail.modules.css';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { wineDetails } from '../../slices/productDetailSlice';
-import { addToCart} from '../../slices/productsCartSlice'
+import { addToCart,postProductsCar} from '../../slices/productsCartSlice'
 import {getAllCatsOfProduct} from '../../slices/categorySlice'
 import {productDetailSelector} from '../../selectors/index';
 
@@ -32,7 +32,7 @@ function ProductDetail() {
 
   const productDetail = useSelector(productDetailSelector)
   const dispatch = useDispatch()
-
+  console.log('jajaja', productDetail)
 
   const history = useHistory();
   const classes = useStyles();
@@ -54,7 +54,7 @@ function ProductDetail() {
     //Actualmente no es posible, pero podria ser una opcion en el futuro
     dispatch(getAllCatsOfProduct(id))
     // props.getCatsOfProduct(id);
-
+    console.log('detalle', id)
     history.push( id ? { 
       pathname: `/admin/edit/${id}`,
       state: {
@@ -73,6 +73,8 @@ function ProductDetail() {
 // esta funcion debe ser refactorizada 
   function handlerProductToCart(userId) {
        dispatch(addToCart({userId,productDetail}))
+       let e = {id,price,quantity:1}
+        dispatch(postProductsCar({e,userId:1}))
   }
 
 
