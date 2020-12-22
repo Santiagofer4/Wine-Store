@@ -15,13 +15,9 @@ import { getAllStrains } from '../../../slices/strainSlice';
 
 export const AdminStrain = (props) => {
   const dispatch = useDispatch();
-  const allStrains = useSelector(allStrainsSelector);
   const strainsStatus = useSelector(strainsStatusSelector);
-  const allStrainsError = useSelector(strainsErrorSelector);
 
   const [borrar, setBorrar] = useState(false);
-
-  let content;
 
   useEffect(() => {
     if (strainsStatus === 'idle') {
@@ -29,11 +25,6 @@ export const AdminStrain = (props) => {
     }
   }, [strainsStatus, dispatch]);
 
-  // if (borrar) {
-  //   content = <DeleteStrain />;
-  // } else {
-  //   content = <LoadStrain />;
-  // }
   return (
     <Container className="">
       {borrar ? <h1>Borrar cepas</h1> : <h1>Carga de cepas</h1>}

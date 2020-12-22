@@ -8,6 +8,7 @@ import LoadCategory from './LoadCategory/LoadCategory';
 import { getCategoryList, getStrainList } from '../../actions';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import AdminStrain from './LoadCategory/AdminStrain';
+import AdminCategory from './LoadCategory/AdminCategory';
 
 const AdminPanel = (props) => {
   const dispatch = useDispatch();
@@ -29,13 +30,7 @@ const AdminPanel = (props) => {
             </Link>
           </li>
           <li>
-            <Link
-              className="links"
-              to="/admin/loadcategory"
-              onClick={() => {
-                props.getCategoryList();
-              }}
-            >
+            <Link className="links" to="/admin/loadcategory">
               Cargar/Borrar Categoria
             </Link>
           </li>
@@ -51,7 +46,7 @@ const AdminPanel = (props) => {
       <br></br>
       <Container className="AdminPanel__Form">
         <Route path="/admin/loadproduct" component={LoadProduct} />
-        <Route path="/admin/loadcategory" component={LoadCategory} />
+        <Route path="/admin/loadcategory" component={AdminCategory} />
         <Route path="/admin/loadstrain" component={AdminStrain} />
         <Route path="/admin/edit/:id" component={LoadProduct} />
       </Container>

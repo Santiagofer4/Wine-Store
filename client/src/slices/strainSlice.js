@@ -9,6 +9,7 @@ const initialState_strain = {
   allStrains: {
     list: [],
     lastAdded: {},
+    lastDeleted: {},
   },
 };
 
@@ -83,6 +84,9 @@ export const strainSlice = createSlice({
       const { strainId } = action.meta.arg;
       const { formik } = action.payload;
       state.status = status.succeded;
+      state.allStrains.lastDeleted = state.allStrains.list.find(
+        (strain) => strain.id === strainId
+      );
       const filtered_strain_list = state.allStrains.list.filter(
         (strain) => strain.id !== strainId
       );

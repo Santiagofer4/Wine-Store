@@ -76,8 +76,9 @@ server.delete('/:id', (req, res) => {
     where: {
       id,
     },
-  }).then(() => {
-    return res.send(200, `Categoría borrada ${id}`);
+  }).then((category) => {
+    console.log('200 OK - DELETE');
+    return res.sendStatus(200).send(category);
   });
 });
 
@@ -95,7 +96,8 @@ server.post('/', (req, res) => {
       taste,
     },
   }).then((category) => {
-    return res.status(200).send('La categoría ha sido creada');
+    console.log('200 OK - POSTED');
+    return res.status(200).send(category);
   });
 });
 

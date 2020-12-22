@@ -33,7 +33,6 @@ function DeleteStrain() {
 
   const handleSubmit = (values, onSubmitProps) => {
     const strainId = values.strainToDelete;
-    console.log(strainId);
     dispatch(deleteStrain({ strainId, formik: onSubmitProps }));
   };
 
