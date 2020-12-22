@@ -1,5 +1,6 @@
 const server = require("express").Router();
 const { User } = require("../db.js");
+const jwt = require("jsonwebtoken");
 
 
 // Ruta ME
@@ -23,7 +24,7 @@ server.get("/me", async (req, res, next) => {
       const user = await User.create(req.body);
       const { id, firstName, lastName, email, birthdate, cellphone, role, password } = user;
       return res.send(
-        
+        jwt.sign(
           {
             id,
             firstName, 
@@ -33,13 +34,16 @@ server.get("/me", async (req, res, next) => {
             cellphone, 
             role, 
             password
-          }
-        
+          },
+          "secret word"
+        )
       );
     } catch (error) {
       res.sendStatus(500).send(error);
     }
   });
+
+//Ruta para Loguearse
 
   server.post("/login", async function (req, res, next) {
     const {password, email} = req.body
@@ -49,7 +53,12 @@ server.get("/me", async (req, res, next) => {
         where: {email}
       }).then (correctUser => {
         const prueba = correctUser.compare(password)
-        console.log(prueba)
+       // console.log(prueba)
+       if (correctUser.compare(password)) {
+         res.sendStatus(200) // en el front, si recibe 200, guardar el user en el Store.
+       } else {
+         res.sendStatus(401) // si recibe 401, rechazar la conexión???
+       }
       }) 
     }
     catch (error) {
