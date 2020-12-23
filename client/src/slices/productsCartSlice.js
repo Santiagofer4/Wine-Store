@@ -87,7 +87,7 @@ export const deleteProductCar = createAsyncThunk(
     },
     [getAllProductsCart.fulfilled]: (state, { payload }) => {
       state.allProductsCart.status = status.succeded;
-       payload.data[0].orderLines.map((e, i)=>{ 
+      payload.data[0] &&  payload.data[0].orderLines.map((e, i)=>{ 
         state.allProductsCart.list.push({ id: e.product.id, quantity: e.quantity, price: e.product.price, description: e.product.description, name: e.product.name, stock: e.product.stock, image:e.product.image }) 
       });
     },
