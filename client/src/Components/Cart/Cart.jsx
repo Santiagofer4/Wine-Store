@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Cart.modules.css";
-import { getProductsCart, deleteProductsCart, putProductCart, deleteProductCart } from "../../actions/index";
 import { Link } from "react-router-dom";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@material-ui/core";
 import {allProductsCartSelector, allProductsCartSyncSelector, allProductsCartStatusSelector} from '../../selectors'
 import {getAllProductsCart, sync, addToCart, subtractToCart,deleteFromCart, deleteCart ,postProductsCar, deleteProductCar} from '../../slices/productsCartSlice'
@@ -58,7 +57,6 @@ function total (quantity,price){
   const handleConfirm = ()=>{}
 
   useEffect(() => {
-console.log('actualizando')
     if(sincronizar === false){
 
       dispatch(getAllProductsCart(1))
