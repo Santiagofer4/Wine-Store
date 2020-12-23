@@ -2,7 +2,7 @@ import { SnackbarContent } from '@material-ui/core';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { getAllProdsEndpoint } from '../constants/endpoints';
+import { getAllProdsEndpoint, searchProductEndpoint } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 import { getAllCategories } from './categorySlice';
 import { Component } from 'react';
@@ -22,8 +22,18 @@ export const getAllProducts = createAsyncThunk(
   async () => {
     const resp = await axios.get(getAllProdsEndpoint);
     return resp;
-  }
-);
+  });
+
+export const getProductSearch = createAsyncThunk(
+  'product/getProductSearch',
+ async (inputSearch) => {
+   console.log('INPUT SEARCH',inputSearch)
+   console.log('ENDPOINT', searchProductEndpoint+`${inputSearch}`)
+  const resp = await axios.get(searchProductEndpoint+`${inputSearch}`);
+  return resp;
+});
+
+
 
 const productsSlice = createSlice({
   name: 'product',
@@ -52,6 +62,17 @@ const productsSlice = createSlice({
       state.allProducts.list = payload.data;
     },
     [getAllProducts.rejected]: (state, action) => {
+      state.allProducts.status = status.failed;
+      state.allProducts.error = action.error;
+    },
+    [getProductSearch.pending]: (state, action) => {
+      state.allProducts.status = status.loading;
+    },
+    [getProductSearch.fulfilled]: (state, { payload }) => {
+      state.allProducts.status = status.succeded;
+      state.allProducts.list = payload.data;
+    },
+    [getProductSearch.rejected]: (state, action) => {
       state.allProducts.status = status.failed;
       state.allProducts.error = action.error;
     },

@@ -21,3 +21,4 @@ export const strainsEndpoint = baseEndpoint + 'strain/';
 // export const getAllProdsByCategoryEnpoint =
 //   'http://localhost:3000/products/productsByCategory/';
 
+export const searchProductEndpoint = baseEndpoint + 'search?word=';

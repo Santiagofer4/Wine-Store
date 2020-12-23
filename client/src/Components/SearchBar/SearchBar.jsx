@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import './SearchBar.modules.css';
-import { connect } from 'react-redux';
-import { getProductSearch } from '../../actions';
-import { useHistory } from 'react-router-dom';
-
+import { useHistory} from 'react-router-dom';
+import { useDispatch} from 'react-redux';
+import { getProductSearch } from '../../slices/productSlice';
+ 
 function SearchBar(props) {
-  const [inputSearch, setinputSearch] = useState('');
+  const [inputSearch, setInputSearch] = useState('');
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const onSubmit = (e) => {
     e.preventDefault();
-    props.getProductSearch(inputSearch);
+    dispatch(getProductSearch(inputSearch));
     history.push(`/catalogue`);
-    // console.log( 'estado del search',props)
-  };
+    };
 
   return (
     <div className="searchBar">
@@ -31,7 +31,7 @@ function SearchBar(props) {
           color="primary"
           label="Search"
           onChange={(e) => {
-            setinputSearch(e.target.value);
+            setInputSearch(e.target.value);
           }}
         />
         <Button type="submit" className="SearchBar___btn" id="btnSB">
@@ -41,14 +41,9 @@ function SearchBar(props) {
     </div>
   );
 }
-function mapStateToProps(state) {
-  // console.log('estado general',state)
-  return {
-    wineList: state.wineList,
-  };
-}
 
-export default connect(mapStateToProps, { getProductSearch })(SearchBar);
+
+export default SearchBar;
 
 // El componente Search Bar es un formulario conectado de un sólo input, al submitear ejecuta una función recibida por props con el texto ingresado.
 

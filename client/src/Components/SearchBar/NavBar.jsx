@@ -2,10 +2,17 @@ import React from 'react';
 import SearchBar from './SearchBar.jsx';
 import './NavBar.modules.css';
 import { Link } from 'react-router-dom';
-import { getProductsCart, getCategoryList } from '../../actions';
-import { connect } from 'react-redux';
+import { getAllProducts } from '../../slices/productSlice';
+import { getAllCategories } from '../../slices/categorySlice';
+import { useSelector, useDispatch} from 'react-redux';
+import { allProductsSelector } from '../../selectors/index';
 
-function NavBar(props) {
+
+function NavBar() {
+
+  const allProducts = useSelector(allProductsSelector);
+  const dispatch = useDispatch();
+
   return (
     <div>
       <nav className="Nav">
@@ -22,9 +29,9 @@ function NavBar(props) {
               to="/catalogue"
               className="Nav__Link"
               onClick={() => {
-                // props.getProductsList()
-                // props.getCategoryList();
-              }}
+                dispatch(getAllProducts());      // ! Al que comenta esto le corto las manos xD
+                dispatch(getAllCategories());            
+                }}
             >
               Catalogo
             </Link>
@@ -45,9 +52,6 @@ function NavBar(props) {
               id="cart"
               to="/cart"
               className="Nav__Link"
-              onClick={() => {
-                props.getProductsCart(1);
-              }}
             >
               <img
                 id="imgCart"
@@ -62,12 +66,5 @@ function NavBar(props) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    productsCart: state.productReducers.productsCart,
-  };
-}
 
-export default connect(mapStateToProps, { getProductsCart, getCategoryList })(
-  NavBar
-);
+export default NavBar;
