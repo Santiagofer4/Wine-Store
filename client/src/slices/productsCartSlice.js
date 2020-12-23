@@ -41,6 +41,14 @@ export const deleteProductCar = createAsyncThunk(
     return resp;
   }
 );
+export const deleteProductsCart = createAsyncThunk(
+  'cart/delateCartofUser',
+  async ( userId ) => {
+    const resp = await axios.delete(deleteProductCarEnpoint + userId + '/cart/')
+    return resp;
+  }
+);
+
   const productsCartSlice = createSlice({
   name: 'productsCart',
   initialState: initialState_product,

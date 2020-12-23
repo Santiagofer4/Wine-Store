@@ -3,77 +3,79 @@ import "./Cart.modules.css";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@material-ui/core";
-import {allProductsCartSelector, allProductsCartSyncSelector, allProductsCartStatusSelector} from '../../selectors'
-import {getAllProductsCart, sync, addToCart, subtractToCart,deleteFromCart, deleteCart ,postProductsCar, deleteProductCar} from '../../slices/productsCartSlice'
+import { allProductsCartSelector, allProductsCartSyncSelector, allProductsCartStatusSelector } from '../../selectors'
+import { getAllProductsCart, sync, addToCart, subtractToCart, deleteFromCart, deleteCart, postProductsCar, deleteProductCar, deleteProductsCart } from '../../slices/productsCartSlice'
 
 
 
 function Cart(props) {
-  const dispatch= useDispatch()
+  const dispatch = useDispatch()
   const AllProductsCart = useSelector(allProductsCartSelector)
   const sincronizar = useSelector(allProductsCartSyncSelector)
-   const status = useSelector(allProductsCartStatusSelector)
-  const[subTotal,setSubTotal] = useState(0)
+  const status = useSelector(allProductsCartStatusSelector)
+  const [subTotal, setSubTotal] = useState(0)
 
-  const handleDelete = ()=>{
+  const handleDelete = () => {
     dispatch(deleteCart())
+    dispatch(deleteProductsCart(1))
   };
-  window.onbeforeunload = function(e) {
-    AllProductsCart.map(e =>{
-      dispatch(postProductsCar( {e, userId:1}))
+  window.onbeforeunload = function (e) {
+    AllProductsCart.map(e => {
+      dispatch(postProductsCar({ e, userId: 1 }))
     })
 
     return 'Texto de aviso';
   };
-  const handleDecrement = (e,quantity,price) => {
-    let id = e.target.name *1
-    if(quantity >1){
+  const handleDecrement = (e, quantity, price) => {
+    let id = e.target.name * 1
+    if (quantity > 1) {
 
       dispatch(subtractToCart(id))
     }
   }
 
-function total (quantity,price){
-  setSubTotal(subTotal + (quantity * price*1))
-}
+  function total(quantity, price) {
+    setSubTotal(subTotal + (quantity * price * 1))
+  }
 
-  const handleIncrement = (e, stock,quantity) => {
-    let id = e.target.name *1;
-    if( stock > quantity){
-      let productDetail = { 
+  const handleIncrement = (e, stock, quantity) => {
+    let id = e.target.name * 1;
+    if (stock > quantity) {
+      let productDetail = {
         id,
       }
-     dispatch(addToCart({productDetail}))
+      dispatch(addToCart({ productDetail }))
     }
 
   };
- 
+
 
   const handlerDeleteElement = (id) => {
-        dispatch(deleteFromCart(id.id))
-        dispatch(deleteProductCar(id))
+    dispatch(deleteFromCart(id.id))
+    dispatch(deleteProductCar(id))
 
-      }
-  const handleConfirm = ()=>{}
+  }
+  const handleConfirm = () => { }
 
   useEffect(() => {
-    if(sincronizar === false){
+    if (sincronizar === false) {
 
       dispatch(getAllProductsCart(1))
       dispatch(sync(true))
     }
-  },[]);
+  }, []);
 
-   if ( status === 'succeded') {
+  if (status === 'succeded') {
     if (AllProductsCart.length > 0) {
       return (
+        <div className="ShoppingCartBackImg">
         <div className="ShoppingCart">
           <div className="products">
             <h2 className="titleCart">Carrito de compras</h2>
             <hr className="line" />
             <ul>
               {AllProductsCart.map((p) => (
-                
+
                 <li className="productCart" key={p.id}>
                   <div>
                     <img
@@ -91,31 +93,32 @@ function total (quantity,price){
                       <p>$ {p.price}</p>
                     </div>
                     <div className="quantity">
-                      <a href="#" className='Cart__DeleteProduct'><i class="fas fa-trash-alt" onClick={(e) => handlerDeleteElement({id:p.id, userId:1,})}></i>
-</a>
-                    <Button 
-                    name={p.id}
-                    className="button" 
-                    onClick={(e) => handleDecrement(e, p.quantity, p.price)}
-                    >
-                    -
+                      <a href="#" className='Cart__DeleteProduct'><i class="fas fa-trash-alt" onClick={(e) => handlerDeleteElement({ id: p.id, userId: 1, })}></i>
+                      </a>
+                      <Button
+                        name={p.id}
+                        className="button"
+                        onClick={(e) => handleDecrement(e, p.quantity, p.price)}
+                      >
+                        -
                     </Button>
-                    <input 
-                    className="input"
-                    id={p.id}
-                    value={p.quantity}
-                    >
-                    </input>
-                    <Button 
-                    name={p.id}
-                    className="button"
-                    onClick={(e) => handleIncrement(e, p.stock, p.quantity )}
-                    >
-                    +
+                      <input
+                        className="input"
+                        id={p.id}
+                        value={p.quantity}
+                      >
+                      </input>
+                      <Button
+                        name={p.id}
+                        className="button"
+                        onClick={(e) => handleIncrement(e, p.stock, p.quantity)}
+                      >
+                        +
                     </Button>
                     </div>
                   </div>
                 </li>
+                
               ))}
             </ul>
           </div>
@@ -134,6 +137,7 @@ function total (quantity,price){
             </div>
           </div>
         </div>
+        </div>
       );
     } else {
       return (
@@ -147,8 +151,8 @@ function total (quantity,price){
             alt="Carrito vacío"
           />
           <p>
-          <Link to="/catalogue" className="link">
-            Volver al catálogo
+            <Link to="/catalogue" className="link">
+              Volver al catálogo
           </Link>
           </p>
         </div>
