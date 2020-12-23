@@ -46,3 +46,9 @@ export const allProductsCartErrorSelector = (state) =>
 export const allCatsOfProductSelector = (state) => state.categories.allCatsOfProduct.list
 export const allCatsOfProductStatusSelector = (state) => state.categories.allCatsOfProduct.status
 export const allCatsOfProductErrorSelector = (state) => state.categories.allCatsOfProduct.error
+
+export const allStrainsSelector = (state) => state.strains.allStrains.list;
+
+export const strainsStatusSelector = (state) => state.strains.status;
+
+export const strainsErrorSelector = (state) => state.strains.error;
