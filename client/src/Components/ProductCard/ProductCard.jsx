@@ -6,7 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
 import './ProductCard.modules.css';
 import { connect , useDispatch} from 'react-redux';
-import { wineDetails } from '../../slices/productDetailSlice';
+import { wineDetails} from '../../slices/productDetailSlice';
+import { addToCart, postProductsCar} from '../../slices/productsCartSlice'
 import {
   setProductDetail,
   addProductCart,
@@ -29,30 +30,34 @@ function ProductCard(props) {
   };
   // refactorizar esta funcion
   function handlerProductToCart(userId, id, price) {
-    if (props.productsCart[0] !== undefined) {
-      //entro a la funcion
-      if (props.productsCart[0].orderLines !== undefined) {
-        //cuando el estado tiene algo
-        if (props.productsCart[0].orderLines.length > 0) {
-          //cuando el estado tiene un orderLine y tiene datos
-          let products = props.productsCart[0].orderLines;
-          for (let i = 0; i < products.length; i++) {
-            if (products[i].productId === id) {
-              if (products[i].quantity <= products[i].product.stock) {
-                props.putProductCart(1, id, products[i].quantity + 1);
-                return (i = products.length);
-              }
-            } else if (i === products.length - 1) {
-              props.addProductCart(userId, id, price);
-            }
-          }
-        } else {
-          props.addProductCart(userId, id, price); //cuando la orderLine no tiene datos
-        }
-      }
-    } else {
-      props.addProductCart(userId, id, price); //cuando el estado es undefined/ esta vacio
-    }
+    let productDetail ={image, name, price, id, stock, quantity:1}
+      dispatch(addToCart({userId,productDetail}))
+      let e = productDetail;
+      dispatch(postProductsCar({e,userId}))
+    // if (props.productsCart[0] !== undefined) {
+    //   //entro a la funcion
+    //   if (props.productsCart[0].orderLines !== undefined) {
+    //     //cuando el estado tiene algo
+    //     if (props.productsCart[0].orderLines.length > 0) {
+    //       //cuando el estado tiene un orderLine y tiene datos
+    //       let products = props.productsCart[0].orderLines;
+    //       for (let i = 0; i < products.length; i++) {
+    //         if (products[i].productId === id) {
+    //           if (products[i].quantity <= products[i].product.stock) {
+    //             props.putProductCart(1, id, products[i].quantity + 1);
+    //             return (i = products.length);
+    //           }
+    //         } else if (i === products.length - 1) {
+    //           props.addProductCart(userId, id, price);
+    //         }
+    //       }
+    //     } else {
+    //       props.addProductCart(userId, id, price); //cuando la orderLine no tiene datos
+    //     }
+    //   }
+    // } else {
+    //   props.addProductCart(userId, id, price); //cuando el estado es undefined/ esta vacio
+    // }
   }
 
   return (
