@@ -1,6 +1,5 @@
 .ProCard__img {
-  width: 70%;
-  height: 350px;
+  width: 100%;
   background-color: rgb(17, 16, 16);
   border-radius: 47%;
 }
@@ -9,6 +8,7 @@
   width: 18rem !important;
   background: #f7f8ffa8 !important;
   padding-top: 1rem;
+
 }
 .ProCards_Card:hover {
   margin: 2rem 1rem 2rem 1rem;
@@ -17,7 +17,8 @@
   transition: all 550ms ease-in-out;
 }
 .ProCard__Container {
-  height: 4rem;
+  height: 3.5rem;
+  
 }
 #Button__Card {
   justify-content: center;
@@ -46,4 +47,8 @@
   background-color: rgb(165, 163, 163) !important;
   height: 40px;
   width: 100px;
+}
+
+h4 {
+  font-size: 1.2rem !important;
 }

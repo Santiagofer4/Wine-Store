@@ -32,7 +32,7 @@ function ProductDetail() {
 
   const productDetail = useSelector(productDetailSelector)
   const dispatch = useDispatch()
-  console.log('jajaja', productDetail)
+ 
 
   const history = useHistory();
   const classes = useStyles();
@@ -55,6 +55,7 @@ function ProductDetail() {
     dispatch(getAllCatsOfProduct(id))
     // props.getCatsOfProduct(id);
     console.log('detalle', id)
+    console.log('INFO', productDetail)
     history.push( id ? { 
       pathname: `/admin/edit/${id}`,
       state: {
@@ -114,7 +115,8 @@ function ProductDetail() {
           <CardActions id="buttons">
             <Button  id="backButton" size="small" onClick={() => history.goBack()} > <img id="backButtonImage" src="https://static.thenounproject.com/png/251451-200.png"></img>VOLVER</Button>
             <Button size="small" onClick={editHandler}> <img id="editImage" src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"></img>
-              EDITAR
+            {/* <i class="fa fa-pencil-square-o" aria-hidden="true"></i> */}
+            EDITAR
             </Button>
             {stock === 0 ? <h3>No hay STOCK</h3> :  <Button id="Button__Buy" onClick={() => {handlerProductToCart(1); }}>Comprar</Button>}
           </CardActions>

@@ -15,7 +15,7 @@ function OrderDetail(props) {
             return(
                 <ul className='OrderDetail__Ul'>
                 <li className='OrderDetail__Text' >{element.quantity}</li>
-                <li className='OrderDetail__Text' >{element.price}</li>
+                <li className='OrderDetail__Text' >{element.product.price * element.quantity}</li>
                 <li className='OrderDetail__Text' >{element.product.name}</li>
                 <li className='OrderDetail__Text' >{element.product.price}</li>
 

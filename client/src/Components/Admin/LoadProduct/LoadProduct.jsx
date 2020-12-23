@@ -14,6 +14,8 @@ import { formatArrayToOption } from '../../utils.js';
 import axios from 'axios';
 import { /* Switch, */ useHistory } from 'react-router-dom';
 import { setProductDetail, getProductsList } from '../../../actions';
+import {productDetailSelector, allCatsOfProductSelector } from '../../../selectors/index.js'
+import { useDispatch, useSelector } from 'react-redux';
 
 // ---- FUNCIONA PERO TIENE MUCHAS VUELTAS :S ----
 //? el select de las options no renderizan de primera, hay que ver la forma de se rerenderize cuando el fetch termina...el fetch lo hace pero no lo renderiza correctamente
@@ -33,7 +35,7 @@ const LoadProduct = (props) => {
     taste2: '',
     taste3: '',
   }; //valores "vacios" del form
-  const { wineDetail, categoryList, prodCats } = props;
+  const { categoryList } = props;
 
   const edit = props.location.state ? props.location.state.edit : false; //true cuando entro por edit, false cualquier otra forma
   const [loading, setLoading] = useState(true); //estado para cargar el spinner de cargango
@@ -54,6 +56,16 @@ const LoadProduct = (props) => {
     // console.log('CATS LIST', categoryList);
     // console.log('dentro de calltests', tasteList);
   };
+
+  const wineDetail = useSelector(productDetailSelector);
+
+
+  const prodCats = useSelector(allCatsOfProductSelector);
+  
+  
+  
+  console.log('CATEGORIAS DEL VINO', prodCats)
+  console.log('CAT 1', prodCats[0])
 
   // ESTE BLOQUE HAY QUE ANALZIARLO Y DEBUGEARLO BIEN --------->>>>>>>>>>>
   useEffect(() => {
