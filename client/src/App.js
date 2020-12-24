@@ -12,6 +12,7 @@ import AdminPanel from './Components/Admin/AdminPanel';
 import ProductDetail from './Components/ProductDetail/ProductDetail';
 import Cart from './Components/Cart/Cart.jsx';
 import OrderTable from './Components/OrderTable/OrderTable.jsx';
+import UserForm from './Components/Forms/User/UserForm.jsx'
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/admin" component={AdminPanel} />
         <Route path="/cart" component={Cart} />
         <Route path="/order-table" component={OrderTable} />
+        <Route path="/form/user" component={UserForm} />
       </Switch>
     </div>
   );

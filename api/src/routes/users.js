@@ -25,7 +25,6 @@ server.post("/", (req, res, next) => {
     email,
     birthdate,
     cellphone,
-    role,
     password,
   } = req.body;
 
@@ -43,7 +42,7 @@ server.post("/", (req, res, next) => {
       email,
       birthdate,
       cellphone,
-      role,
+      isAdmin: false,
       password,
     },
   })
@@ -65,7 +64,6 @@ server.put("/:id", (req, res) => {
     email,
     birthdate,
     cellphone,
-    role,
     password,
   } = req.body;
   let oldInfo;
@@ -76,7 +74,7 @@ server.put("/:id", (req, res) => {
   User.findByPk(id)
     .then(
       User.update(
-        { firstName, lastName, email, birthdate, cellphone, role, password },
+        { firstName, lastName, email, birthdate, cellphone, password },
         { where: { id } }
       )
     )

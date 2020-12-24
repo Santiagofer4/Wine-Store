@@ -1,0 +1,19 @@
+#error {
+  border-bottom: 0.2rem rgb(194, 0, 0) solid !important;
+}
+#accepted {
+  border-bottom: 0.2rem rgb(0, 85, 14) solid !important;
+}
+.formUser {
+  margin-bottom: 2rem;
+  padding-top: 10rem !important;
+  background-color: white;
+}
+
+#btnUser {
+    background-color: #be9063;
+    color: black !important;
+    margin: 5px;
+    width: 100px;
+    border-radius: 25px;
+  }
