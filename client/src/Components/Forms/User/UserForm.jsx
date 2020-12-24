@@ -27,7 +27,6 @@ function UserForm() {
     function handleOnSubmit(e){
       e.preventDefault();
       dispatch(createUser(state));
-
     };
 
     return (
