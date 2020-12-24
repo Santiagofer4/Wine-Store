@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
 import { validationSchemaLoadProducts } from '../adminValidations.js';
@@ -14,8 +14,13 @@ import { formatArrayToOption } from '../../utils.js';
 import axios from 'axios';
 import { /* Switch, */ useHistory } from 'react-router-dom';
 import { setProductDetail, getProductsList } from '../../../actions';
-import {productDetailSelector, allCatsOfProductSelector } from '../../../selectors/index.js'
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  productDetailSelector,
+  allCatsOfProductSelector,
+  allCategoriesSelector,
+  allCategoriesStatusSelector,
+} from '../../../selectors/index.js';
+import { getAllCategories } from '../../../slices/categorySlice';
 
 // ---- FUNCIONA PERO TIENE MUCHAS VUELTAS :S ----
 //? el select de las options no renderizan de primera, hay que ver la forma de se rerenderize cuando el fetch termina...el fetch lo hace pero no lo renderiza correctamente
@@ -36,6 +41,8 @@ const LoadProduct = (props) => {
     taste3: '',
   }; //valores "vacios" del form
   const { categoryList } = props;
+
+  const dispatch = useDispatch();
 
   const edit = props.location.state ? props.location.state.edit : false; //true cuando entro por edit, false cualquier otra forma
   const [loading, setLoading] = useState(true); //estado para cargar el spinner de cargango
@@ -59,16 +66,17 @@ const LoadProduct = (props) => {
 
   const wineDetail = useSelector(productDetailSelector);
 
-
   const prodCats = useSelector(allCatsOfProductSelector);
-  
-  
-  
-  console.log('CATEGORIAS DEL VINO', prodCats)
-  console.log('CAT 1', prodCats[0])
+
+  const allCatStatus = useSelector(allCategoriesStatusSelector);
+  const allCats = useSelector(allCategoriesSelector);
+
+  console.log('CATEGORIAS DEL VINO', prodCats);
+  console.log('CAT 1', prodCats[0]);
 
   // ESTE BLOQUE HAY QUE ANALZIARLO Y DEBUGEARLO BIEN --------->>>>>>>>>>>
   useEffect(() => {
+    if (allCatStatus === 'idle') dispatch(getAllCategories());
     callStrainList();
     callTastes();
     //si edit, entonces vengo de un product detail, entonces precargo los valores iniciales

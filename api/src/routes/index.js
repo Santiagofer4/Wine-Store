@@ -46,15 +46,20 @@ router.get('/search', (req, res) => {
   let search = extractDigitsFromString(word);
   // console.log('SEARCH', search);
   let conditions = [];
-  for (const word of search.words) {
-    conditions.push(
-      { name: { [Op.iLike]: '%' + word + '%' } },
-      { description: { [Op.iLike]: '%' + word + '%' } }
-    );
+  if (search.words && search.words.length > 0) {
+    for (const word of search.words) {
+      conditions.push(
+        { name: { [Op.iLike]: '%' + word + '%' } },
+        { description: { [Op.iLike]: '%' + word + '%' } }
+      );
+    }
   }
-  for (const number of search.digits) {
-    conditions.push({ yearHarvest: { [Op.eq]: number } });
+  if (search.digits && search.digits.length > 0) {
+    for (const number of search.digits) {
+      conditions.push({ yearHarvest: { [Op.eq]: number } });
+    }
   }
+
   // console.log('QUERY', conditions);
   Product.findAll({
     where: {
