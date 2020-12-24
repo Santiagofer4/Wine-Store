@@ -14,12 +14,12 @@ server.use('/category', categoryRouter);
 
 server.get('/', (req, res, next) => {
   //  console.log('Traigo todos los productos - GET a /products');
-  Product.findAll()
-    .then((products) => {
-      res.send(products);
-    })
-    .catch(next);
+  Product.findAll().then((products) => {
+    res.send(products);
+  });
 });
+
+server.get('/', (req, res) => {});
 
 server.get('/:id', (req, res) => {
   let { id } = req.params;
@@ -156,7 +156,7 @@ server.post('/', (req, res, next) => {
 server.post('/:idProduct/category', (req, res) => {
   let { idProduct } = req.params;
   let { Category } = req.body;
-  
+
   if (!idProduct || Category)
     return res.status(400).send('No se puede agregar la categoría');
 
