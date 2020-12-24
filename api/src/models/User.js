@@ -34,8 +34,8 @@ module.exports = (sequelize) => {
           isNumeric: true,
         },
       },
-      role: {
-        type: DataTypes.ENUM(['user', 'admin']),
+      isAdmin: {
+        type: DataTypes.BOOLEAN,
         allowNull: false,
       },
       password: {
