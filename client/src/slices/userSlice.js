@@ -14,8 +14,7 @@ const initialState_user = {
 export const createUser = createAsyncThunk(
     'user/register',
     async (user) => {
-        console.log(user);
-        const resp = await axios.post(addUserEndpoint);
+        const resp = await axios.post(addUserEndpoint, user);
         return resp;
     }
 );

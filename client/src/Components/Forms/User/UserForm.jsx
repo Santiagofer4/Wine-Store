@@ -3,6 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import './UserForm.modules.css';
 import { useDispatch } from 'react-redux';
+import { createUser } from '../../../slices/userSlice';
 
 function UserForm() {
     const [state, setState] = useState({
@@ -13,23 +14,26 @@ function UserForm() {
         cellphone: "",
         password: ""
     });
+
+    const dispatch = useDispatch();
+
     function handleOnChange(e){
-        console.log("jajajaja", e.target.value)
+      setState({
+        ...state,
+        [e.target.name]: e.target.value
+      })
     };
+
     function handleOnSubmit(e){
-        console.log("Submit", e.target)
-/*        const usuario = {
-            firstName: e.target.value.firstName,
-            lastName: e.target.value.lastName, 
-            email: e.target.value.email,
-            birthdate: e.target.value.birthdate,
-            cellphone: e.target.value.cellphone,
-            password: e.target.value.password
-        }*/
+      e.preventDefault();
+      dispatch(createUser(state));
     };
+
     return (
         <div className = "formUser">
-            <form 
+            <form
+            //action='/users'
+            method='POST'
         onSubmit={(e) => {
           handleOnSubmit(e);
         }}

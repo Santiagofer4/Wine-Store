@@ -28,9 +28,9 @@ server.post("/", (req, res, next) => {
     password,
   } = req.body;
 
-  console.log("Creo o modifico USER");
+  //console.log("Creo o modifico USER");
 
-  if (!email) return res.status(400);
+  if (!email) return res.status(400).send('Debe ingresar un email');
 
   User.findOrCreate({
     where: {
@@ -46,11 +46,28 @@ server.post("/", (req, res, next) => {
       password,
     },
   })
+
+/*User.create({
+  firstName,
+  lastName,
+  email,
+  birthdate,
+  cellphone,
+  isAdmin: false,
+  password,
+})
+*/
     .then((user) => {
-      return res.status(200).send(`El usuario ha sido creado`);
+      const [instance, wasCreated] = user;
+      console.log(instance);
+      if(wasCreated) {
+        return res.status(200).send(`El usuario ha sido creado`);
+      } else {
+        return res.status(200).send(`El usuario ya existe`);
+      }
     })
     .catch((err) => {
-      return console.log(err);
+      return res.status(400).send(err);
     });
 });
 
