@@ -300,10 +300,11 @@ server.delete("/:idUser/cart/:productId", (req, res) => {
     let id = orders.id;
     OrderLine.destroy({
       where: {
+        orderId: id,
         productId,
       },
     }).then(() => {
-      return res.send(200, "El producto ha sido eliminado del carrito");
+      return res.status(200).send("El producto ha sido eliminado del carrito");
     });
   });
 });

@@ -7,35 +7,40 @@ import { allProductsCartSelector, allProductsCartSyncSelector, allProductsCartSt
 import { getAllProductsCart, sync, addToCart, subtractToCart, deleteFromCart, deleteCart, postProductsCar, deleteProductCar, deleteProductsCart } from '../../slices/productsCartSlice'
 
 
-
-function Cart(props) {
+function Cart() {
   const dispatch = useDispatch()
   const AllProductsCart = useSelector(allProductsCartSelector)
   const sincronizar = useSelector(allProductsCartSyncSelector)
   const status = useSelector(allProductsCartStatusSelector)
   const [subTotal, setSubTotal] = useState(0)
 
+  //console.log('SUBTOTAL INICIO', subTotal)
+
   const handleDelete = () => {
     dispatch(deleteCart())
     dispatch(deleteProductsCart(1))
   };
-  window.onbeforeunload = function (e) {
+  window.onbeforeunload = function () {
     AllProductsCart.map(e => {
       dispatch(postProductsCar({ e, userId: 1 }))
     })
-
     return 'Texto de aviso';
   };
-  const handleDecrement = (e, quantity, price) => {
+
+  const handleDecrement = (e, quantity) => {
     let id = e.target.name * 1
     if (quantity > 1) {
-
       dispatch(subtractToCart(id))
     }
   }
 
-  function total(quantity, price) {
-    setSubTotal(subTotal + (quantity * price * 1))
+  const total = () => {
+    //console.log('SUBTOTAL total', subTotal)
+    let x = 0;
+    AllProductsCart.forEach(p => {
+      x = x + p.price * p.quantity
+    })
+    setSubTotal(x)
   }
 
   const handleIncrement = (e, stock, quantity) => {
@@ -46,24 +51,24 @@ function Cart(props) {
       }
       dispatch(addToCart({ productDetail }))
     }
-
   };
-
 
   const handlerDeleteElement = (id) => {
     dispatch(deleteFromCart(id.id))
     dispatch(deleteProductCar(id))
-
   }
+
   const handleConfirm = () => { }
 
   useEffect(() => {
     if (sincronizar === false) {
-
+      total()
       dispatch(getAllProductsCart(1))
       dispatch(sync(true))
+    } else {
+      total()
     }
-  }, []);
+  }, [AllProductsCart]);
 
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {
@@ -127,9 +132,9 @@ function Cart(props) {
             <hr className="line" />
             <div className="Summary">
               <p>SUBTOTAL $ {subTotal}</p>
-              <p>ENVÍO $</p>
+              <p>IVA $ {Math.ceil(subTotal * 21 / 100)}</p>
               <hr className="line" />
-              <p>TOTAL $</p>
+              <p>TOTAL $ {Math.ceil(subTotal * 121 / 100)}</p>
             </div>
             <div>
               <Button className="buttonCart" onClick={handleConfirm}>Confirmar</Button>

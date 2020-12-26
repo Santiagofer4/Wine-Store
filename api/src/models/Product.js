@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       price: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.INTEGER,
         validate: {
           //isNumeric: true,
           min: 0,
