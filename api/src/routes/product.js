@@ -1,5 +1,5 @@
 const server = require('express').Router();
-const { Product, Category } = require('../db.js');
+const { Product, Category, Strain } = require('../db.js');
 // const { Sequelize } = require('sequelize');
 const categoryRouter = require('./category.js');
 
@@ -26,7 +26,7 @@ server.get('/:id', (req, res) => {
   // console.log('Filtro productos por id - GET a /products/:id');
   if (!id) return res.status(404).send('No existe el producto');
   Product.findByPk(id).then((product) => {
-    return res.send(product);
+    return res.status(200).send(product);
   });
 });
 
@@ -121,8 +121,7 @@ server.delete('/:idProduct/category/:idCategory', (req, res) => {
     .catch((e) => console.log(e));
 });
 
-server.post('/', (req, res, next) => {
-  let prod;
+server.post('/', async (req, res, next) => {
   let {
     name,
     price,
@@ -131,26 +130,62 @@ server.post('/', (req, res, next) => {
     image,
     stock,
     categories,
+    strain,
   } = req.body;
+
+  try {
+    let product = await Product.create({
+      name,
+      price,
+      description,
+      yearHarvest,
+      image,
+      stock,
+      strainId: strain,
+    });
+    await categories.forEach((categoryId) => {
+      Category.findByPk(categoryId).then((category) =>
+        product.addCategory(category)
+      );
+    });
+    return res.status(200).send(product);
+  } catch (error) {
+    console.error(error);
+  }
+
   // console.log('Creo nuevo producto - POST a /products');
-  Product.create({
-    name,
-    price,
-    description,
-    yearHarvest,
-    image,
-    stock,
-  })
-    .then((product) => {
-      categories.forEach((categoryId) => {
-        Category.findByPk(categoryId).then((category) =>
-          product.addCategory(category)
-        );
-      });
-      prod = product;
-    })
-    .then(() => res.status(200).send(prod))
-    .catch(next);
+  // let strain_row = await Strain.findByPk(strain);
+  // console.log('ROW', strain_row);
+
+  // console.log('PROD', product);
+  // let strain_name = await Strain.findByPk(strain);
+  // console.log('STRAIN_NAME', strain_name.dataValues.name);
+  // let data = await Strain.findAll({
+  //   where: { id: strain },
+  //   include: { model: Product },
+  // });
+  // console.log('DATA', data[0]);
+  // console.log('DATA', data[0].dataValues);
+  // console.log('DATA', data[0].dataValues.products);
+  // console.log('DATA', data[0].dataValues.products.product);
+  // await categories.forEach(async (categoryId) => {
+  //       let category = await findByPk(categoryId)
+  //       product.addCategory(category)
+  // });
+
+  // .then((product) => {
+  //   console.log(product);
+  //   categories.forEach((categoryId) => {
+  //     Category.findByPk(categoryId).then((category) =>
+  //       product.addCategory(category)
+  //     );
+  //   });
+  //   console.log(product);
+  //   // Strain.findByPk(strain).then((strain) => product.addStrain(strain));
+  //   // console.log(product);
+  // })
+  // .then(() => res.status(200).send(prod))
+  // .catch(next);
 });
 
 server.post('/:idProduct/category', (req, res) => {

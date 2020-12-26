@@ -21,6 +21,7 @@ import {
   allCategoriesStatusSelector,
 } from '../../../selectors/index.js';
 import { getAllCategories } from '../../../slices/categorySlice';
+import { setWineDetailAsync } from '../../../slices/productDetailSlice';
 
 // ---- FUNCIONA PERO TIENE MUCHAS VUELTAS :S ----
 //? el select de las options no renderizan de primera, hay que ver la forma de se rerenderize cuando el fetch termina...el fetch lo hace pero no lo renderiza correctamente

@@ -26,26 +26,39 @@ export const allProdsByCategoryErrorSelector = (state) =>
 
 export const filteredTasteSelector = (state) =>
   state.categories.allProdsByCategory.taste;
- 
+
 export const productDetailSelector = (state) =>
   state.wineDetail.wineDetail.wine;
+
+export const productDetailCatSelector = (state) =>
+  state.wineDetail.wineDetail.categories;
+
+export const productDetailStatusSelector = (state) =>
+  state.wineDetail.wineDetail.status;
+
+export const productDetailErrorSelector = (state) =>
+  state.wineDetail.wineDetail.error;
 
 export const allProductsCartSelector = (state) =>
   state.productsCart.allProductsCart.list;
 
-  export const allProductsCartSyncSelector = (state) => 
-  state.productsCart.allProductsCart.sync
-
+export const allProductsCartSyncSelector = (state) =>
+  state.productsCart.allProductsCart.sync;
 
 export const allProductsCartStatusSelector = (state) =>
   state.productsCart.allProductsCart.status;
 
 export const allProductsCartErrorSelector = (state) =>
-  state.productsCart.allProductsCart.error
+  state.productsCart.allProductsCart.error;
 
-export const allCatsOfProductSelector = (state) => state.categories.allCatsOfProduct.list
-export const allCatsOfProductStatusSelector = (state) => state.categories.allCatsOfProduct.status
-export const allCatsOfProductErrorSelector = (state) => state.categories.allCatsOfProduct.error
+export const allCatsOfProductSelector = (state) =>
+  state.categories.allCatsOfProduct.list;
+
+export const allCatsOfProductStatusSelector = (state) =>
+  state.categories.allCatsOfProduct.status;
+
+export const allCatsOfProductErrorSelector = (state) =>
+  state.categories.allCatsOfProduct.error;
 
 export const allStrainsSelector = (state) => state.strains.allStrains.list;
 

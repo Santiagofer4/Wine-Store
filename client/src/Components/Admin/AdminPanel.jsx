@@ -9,6 +9,8 @@ import { getCategoryList, getStrainList } from '../../actions';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import AdminStrain from './LoadCategory/AdminStrain';
 import AdminCategory from './LoadCategory/AdminCategory';
+import AdminProduct from './LoadProduct/AdminProduct';
+import _LoadProduct from './LoadProduct/_LoadProduct';
 
 const AdminPanel = (props) => {
   const dispatch = useDispatch();
@@ -45,10 +47,10 @@ const AdminPanel = (props) => {
       <h1 className="Admin__H1">Formularios del Administrador</h1>
       <br></br>
       <Container className="AdminPanel__Form">
-        <Route path="/admin/loadproduct" component={LoadProduct} />
+        <Route path="/admin/loadproduct" component={AdminProduct} />
         <Route path="/admin/loadcategory" component={AdminCategory} />
         <Route path="/admin/loadstrain" component={AdminStrain} />
-        <Route path="/admin/edit/:id" component={LoadProduct} />
+        <Route path="/admin/edit/:id" component={_LoadProduct} />
       </Container>
     </Container>
   );

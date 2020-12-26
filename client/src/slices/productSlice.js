@@ -2,17 +2,20 @@ import { SnackbarContent } from '@material-ui/core';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { getAllProdsEndpoint, searchProductEndpoint } from '../constants/endpoints';
+import { productEndpoint, searchProductEndpoint } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 import { getAllCategories } from './categorySlice';
 import { Component } from 'react';
 import Sidebar from '../Components/Sidebar/Sidebar';
+import { thunk } from 'redux-thunk';
+import { setWineDetailAsync } from './productDetailSlice';
 
 const initialState_product = {
   allProducts: {
     list: [],
     status: 'idle',
     error: null,
+    lastAdded: {},
   },
   vinoEncontrado: '',
 };
@@ -20,20 +23,33 @@ const initialState_product = {
 export const getAllProducts = createAsyncThunk(
   'product/getAllProducts',
   async () => {
-    const resp = await axios.get(getAllProdsEndpoint);
+    const resp = await axios.get(productEndpoint);
     return resp;
-  });
+  }
+);
+
+export const postNewProduct = createAsyncThunk(
+  'product/postNewProduct',
+  async ({ product, formik }, thunkApi) => {
+    const newProd = await axios.post(productEndpoint, product);
+    // await thunkApi.dispatch(setWineDetailAsync(product));
+    const payload = {
+      newProd: newProd.data,
+      formik,
+    };
+    return payload;
+  }
+);
 
 export const getProductSearch = createAsyncThunk(
   'product/getProductSearch',
- async (inputSearch) => {
-   console.log('INPUT SEARCH',inputSearch)
-   console.log('ENDPOINT', searchProductEndpoint+`${inputSearch}`)
-  const resp = await axios.get(searchProductEndpoint+`${inputSearch}`);
-  return resp;
-});
-
-
+  async (inputSearch) => {
+    console.log('INPUT SEARCH', inputSearch);
+    console.log('ENDPOINT', searchProductEndpoint + `${inputSearch}`);
+    const resp = await axios.get(searchProductEndpoint + `${inputSearch}`);
+    return resp;
+  }
+);
 
 const productsSlice = createSlice({
   name: 'product',
@@ -76,9 +92,23 @@ const productsSlice = createSlice({
       state.allProducts.status = status.failed;
       state.allProducts.error = action.error;
     },
+    [postNewProduct.pending]: (state, action) => {
+      state.allProducts.status = status.loading;
+    },
+    [postNewProduct.fulfilled]: (state, action) => {
+      const { formik, newProd } = action.payload;
+      state.allProducts.status = status.succeded;
+      state.allProducts.list.push(newProd);
+      state.allProducts.lastAdded = newProd;
+      formik.resetForm();
+    },
+    [postNewProduct.rejected]: (state, action) => {
+      state.allProducts.status = status.failed;
+      state.allProducts.error = action.error;
+    },
   },
 });
 
-export const { findWine, addWine, OTRO_REDUCER } = productsSlice.actions;
+export const { findWine, addWine } = productsSlice.actions;
 
 export default productsSlice;
