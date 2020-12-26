@@ -42,15 +42,16 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true, // Funcionalidad completa será agregada más adelante
       },
-    }, { timestamps: false },
+    },// { timestamps: false },
     {
+      timestamps: false,
       hooks: {
-        beforeCreate: function (user) {
+        beforeCreate (user) {
           let ageCheck = new Date();
           ageCheck.setFullYear(ageCheck.getFullYear() - 18);
           let bd = new Date(user.birthdate);
           if (ageCheck < bd) {
-            throw new Error('Solo apto para mayores de edad');
+            throw new TypeError('Solo apto para mayores de edad');
           }
         },
       },

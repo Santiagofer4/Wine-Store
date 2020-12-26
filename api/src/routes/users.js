@@ -7,7 +7,7 @@ const { User, Order, Product, OrderLine } = require("../db.js");
 // Listar todos los USERS
 
 server.get("/", (req, res, next) => {
-  console.log("GET a USERS");
+  //console.log("GET a USERS");
 
   User.findAll()
     .then((user) => {
@@ -19,18 +19,9 @@ server.get("/", (req, res, next) => {
 //Agregar un USER
 
 server.post("/", (req, res, next) => {
-  let {
-    firstName,
-    lastName,
-    email,
-    birthdate,
-    cellphone,
-    password,
-  } = req.body;
+  let { firstName, lastName, email, birthdate, cellphone, password } = req.body;
 
-  //console.log("Creo o modifico USER");
-
-  if (!email) return res.status(400).send('Debe ingresar un email');
+  //if (!email) return res.status(400).send('Debe ingresar un email');
 
   User.findOrCreate({
     where: {
@@ -46,20 +37,9 @@ server.post("/", (req, res, next) => {
       password,
     },
   })
-
-/*User.create({
-  firstName,
-  lastName,
-  email,
-  birthdate,
-  cellphone,
-  isAdmin: false,
-  password,
-})
-*/
     .then((user) => {
       const [instance, wasCreated] = user;
-      console.log(instance);
+      //console.log(instance);
       if(wasCreated) {
         return res.status(200).send(`El usuario ha sido creado`);
       } else {
@@ -67,7 +47,8 @@ server.post("/", (req, res, next) => {
       }
     })
     .catch((err) => {
-      return res.status(400).send(err);
+      //console.log(err.message)
+      return res.status(400).send(err.message);
     });
 });
 
@@ -83,9 +64,9 @@ server.put("/:id", (req, res) => {
     cellphone,
     password,
   } = req.body;
-  let oldInfo;
+  //let oldInfo;
 
-  console.log("modifico USER");
+  //console.log("modifico USER");
   if (!id) return res.status(400).send("El usuario no existe");
 
   User.findByPk(id)
@@ -195,7 +176,6 @@ server.get("/:id/cart", (req, res) => {
   });
 });
 
-
 // Ruta para agregar item al carrito - POST a /users/:id/cart
 
 // server.post("/:id/cart", (req, res) => {
@@ -272,7 +252,7 @@ server.post("/:userId/cart", (req, res) => {
       if(!wasCreated){
         OrderLine.update({quantity},{where:{productId: id}})
       }
-      console.log(instance)
+      //console.log(instance)
       instance.setProduct(id);
       instance.setOrder(instacia.id);
       // console.log("exito", productId);
@@ -285,7 +265,7 @@ server.post("/:userId/cart", (req, res) => {
 // Borrar producto del carrito
 
 server.delete("/:idUser/cart/:productId", (req, res) => {
-  console.log("Entré")
+  //console.log("Entré")
   let { idUser, productId } = req.params;
  
 
