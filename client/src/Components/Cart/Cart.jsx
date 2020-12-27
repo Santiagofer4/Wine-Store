@@ -14,8 +14,6 @@ function Cart() {
   const status = useSelector(allProductsCartStatusSelector)
   const [subTotal, setSubTotal] = useState(0)
 
-  //console.log('SUBTOTAL INICIO', subTotal)
-
   const handleDelete = () => {
     dispatch(deleteCart())
     dispatch(deleteProductsCart(1))
@@ -35,7 +33,6 @@ function Cart() {
   }
 
   const total = () => {
-    //console.log('SUBTOTAL total', subTotal)
     let x = 0;
     AllProductsCart.forEach(p => {
       x = x + p.price * p.quantity

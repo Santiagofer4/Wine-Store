@@ -59,7 +59,7 @@ function LoadProduct() {
       product,
       formik,
     };
-    console.log(payload);
+    // console.log(payload);
     dispatch(postNewProduct(payload));
   };
 

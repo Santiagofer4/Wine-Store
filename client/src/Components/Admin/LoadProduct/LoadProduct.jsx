@@ -17,11 +17,11 @@ import { setProductDetail, getProductsList } from '../../../actions';
 import {
   productDetailSelector,
   allCatsOfProductSelector,
-  allCategoriesSelector,
+  //allCategoriesSelector,
   allCategoriesStatusSelector,
 } from '../../../selectors/index.js';
 import { getAllCategories } from '../../../slices/categorySlice';
-import { setWineDetailAsync } from '../../../slices/productDetailSlice';
+//import { setWineDetailAsync } from '../../../slices/productDetailSlice';
 
 // ---- FUNCIONA PERO TIENE MUCHAS VUELTAS :S ----
 //? el select de las options no renderizan de primera, hay que ver la forma de se rerenderize cuando el fetch termina...el fetch lo hace pero no lo renderiza correctamente
@@ -53,16 +53,12 @@ const LoadProduct = (props) => {
   const [tasteList, setTasteList] = useState([]); //mantiene actualziada la lista de sabores(nuestras categorías)...no me convence...creo que es al pedo definir un estado local si tenemos un store
   const history = useHistory(); //para redirect despues del create-update-delete
   // const [deleteTaste, setDeleteTaste] = useState(''); // Probando a hacer que active la actualización de los sabores
-  // console.log('PROPS LOAD', props.strainList);
-  // console.log('LOADING', loading);
 
   const callTastes = async () => {
     // await props.getCategoryList();
     (await Array.isArray(props.categoryList)) &&
       props.categoryList.length > 0 &&
       setTasteList(formatArrayToOption(categoryList, 'taste')); //? Tiene que haber una mejor manera para solucionar esto...
-    // console.log('CATS LIST', categoryList);
-    // console.log('dentro de calltests', tasteList);
   };
 
   const wineDetail = useSelector(productDetailSelector);
@@ -70,10 +66,7 @@ const LoadProduct = (props) => {
   const prodCats = useSelector(allCatsOfProductSelector);
 
   const allCatStatus = useSelector(allCategoriesStatusSelector);
-  const allCats = useSelector(allCategoriesSelector);
-
-  console.log('CATEGORIAS DEL VINO', prodCats);
-  console.log('CAT 1', prodCats[0]);
+  //const allCats = useSelector(allCategoriesSelector);
 
   // ESTE BLOQUE HAY QUE ANALZIARLO Y DEBUGEARLO BIEN --------->>>>>>>>>>>
   useEffect(() => {
@@ -94,7 +87,6 @@ const LoadProduct = (props) => {
         taste2: !!prodCats[1] ? prodCats[1].id : '',
         taste3: !!prodCats[2] ? prodCats[2].id : '',
       });
-      // console.log('prodCats useEffect', prodCats);
     }
   }, [wineDetail, categoryList, prodCats]);
 
@@ -108,7 +100,6 @@ const LoadProduct = (props) => {
   // <<<<<<<<<<<<<<<<<<----------------------
 
   const handleSubmit = async (values, onSubmitProps) => {
-    // console.log(values);
 
     //Esto se tiene que poder hacer sin escribir tanto
     //armo el objeto para pasarle a la API
@@ -124,7 +115,6 @@ const LoadProduct = (props) => {
     };
     try {
       //si edit es un update (put), si !edit entonces es un create (post)
-      // console.log('ID enviado', wineDetail.id);
       const res = edit
         ? await axios.put(
             `http://localhost:3000/products/${wineDetail.id}`,
@@ -164,7 +154,6 @@ const LoadProduct = (props) => {
   };
 
   const handleDelete = async (formik) => {
-    // console.log('DELETING');
     try {
       const res = await axios.delete(
         `http://localhost:3000/products/${wineDetail.id}`
@@ -182,7 +171,6 @@ const LoadProduct = (props) => {
   };
 
   const handleReset = (formik) => {
-    // console.log(formik);
     //func para resetear el form
     formik.resetForm({
       values: { ...emptyValues },
@@ -198,7 +186,6 @@ const LoadProduct = (props) => {
   const deleteTasteHandler = async (e) => {
     let select = e.target.name;
     // let label ='';
-    // console.log(select);
     try {
       var remove_cat_id = tasteList.find(
         (taste) =>
@@ -217,9 +204,7 @@ const LoadProduct = (props) => {
       if (res.status === 200) {
         props.getProductsList();
         document.querySelector(`#${select}`).textContent = 'Eliminada';
-        // console.log('Queryselector', document.querySelector(`#${select}`))
         // history.push(`/admin/edit/${wineDetail.id}`); //intento fallido de forzar el renderizado del componente
-        // console.log('DELETE');
       }
     } catch (error) {
       // console.log(error);
@@ -231,8 +216,6 @@ const LoadProduct = (props) => {
   const handleOnClickSelect = (e) => {
     let taste = e.target.name;
     initialValues[taste] = e.target.value;
-    //  console.log(e.target.value);
-    //  console.log(initialValues);
   };
 
   return (

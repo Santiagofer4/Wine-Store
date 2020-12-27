@@ -1,17 +1,25 @@
+.AdminPanel{
+  padding-top: 5.5rem;
+}
+
 .AdminPanel__Ul {
   list-style-type: none !important;
 }
+
 .AdminPanel__Panel {
   padding: 1rem;
-  height: 55rem;
+  height: 40rem;
+  width: 40rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .imgAdmin {
-  height: 20rem;
+  height: 17rem;
   width: auto;
 }
 .AdminPanel__Title {
-  padding-top: 8rem;
+  padding-top: 1rem;
   padding-bottom: 1rem;
   color: #be9063;
 }
@@ -22,57 +30,20 @@
   padding-bottom: 3rem;
 }
 
-.dropdown {
-  float: center;
-  overflow: hidden;
-}
-
-.dropbutton {
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  font-family: inherit;
-}
-
-.dropdown .dropbutton {
-  border: none;
-  outline: none;
-  color: white;
-  background-color: #be9063;
-  width: 12rem;
-}
-
-.dropdown-content {
-  display: none;
-  position: center;
-  background-color: white;
-  margin-left: auto;
-  margin-right: auto;
-  width: 10rem;
-}
-
 .links {
   float: none;
-  border: 10px solid;
+  border: 5px solid;
   color: white;
-  padding: 1rem;
+  padding: 0.5rem;
   background-color: #be9063;
   text-decoration: none;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 13rem;
+  width: 12rem;
   font-family: inherit;
 }
 
-.dropdown-content a:hover {
-  background-color: #e9ded3;
-  color: black;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-  float: center;
-}
 .Admin__H1 {
   color: #c5c5c5;
 }
@@ -80,4 +51,4 @@
 #backgroundPaper {
   opacity: 80%;
   border-radius: 57%;
-}
+} 

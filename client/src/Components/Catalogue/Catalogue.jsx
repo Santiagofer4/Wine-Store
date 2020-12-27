@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import {/* connect,*/ useDispatch, useSelector } from 'react-redux';
 import { Button, CircularProgress } from '@material-ui/core';
 import './Catalogue.modules.css';
 
 import ProductCard from '../ProductCard/ProductCard.jsx';
 import Sidebar from '../Sidebar/Sidebar.jsx';
-import { getCategoryList } from '../../actions';
-import { getAllProducts, findWine } from '../../slices/productSlice';
+//import { getCategoryList } from '../../actions';
+import { getAllProducts, /*findWine */} from '../../slices/productSlice';
 import {
   allProductsSelector,
   allProductsStatusSelector,
   allProductsErrorSelector,
-  allProdsByCategoryStatusSelector,
-  allProdsByCategoryErrorSelector,
-  allProdsByCategorySelector,
+  //allProdsByCategoryStatusSelector,
+  //allProdsByCategoryErrorSelector,
+  //allProdsByCategorySelector,
 } from '../../selectors';
 
 function Catalogue() {

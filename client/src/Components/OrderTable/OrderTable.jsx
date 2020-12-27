@@ -16,7 +16,7 @@ function OrderTable(props) {
         props.getOrderList();
 
     },[])
-    // console.log(props.orderList)
+
     return (
         <div className='OrderTable__Container'>
                 <ul className='OrderTable__Ul'>

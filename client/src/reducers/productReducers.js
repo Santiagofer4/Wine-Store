@@ -9,7 +9,6 @@ import {
   DELETE_CATEGORY,
   GET_PRODUCTS_CART,
   GET_ORDER_LIST,
-  ADD_PRODUCT_CART,
 } from '../actions/actions';
 
 const initialState = {
@@ -31,25 +30,18 @@ const productReducers = (state = initialState, action) => {
         allProducts: [action.payload.data],
       };
     case GET_PRODUCTS_LIST:
-      // console.log('datos payload', action.payload);
-      // console.log('GET_PRODUCTS_LIST datos', state);
-
       return {
         ...state,
         allProducts: [action.payload.data],
       };
-
     case SET_PRODUCT_DETAIL:
-      // console.log('REDUCER', action.payload);
       return { ...state, wineDetail: action.payload };
     case GET_PRODUCTS_CATEGORY:
-      // console.log(action.payload);
       return {
         ...state,
         allProducts: [action.payload.data[0].products],
       };
     case GET_CATEGORY_LIST:
-      // console.log('Get_category_list', action.payload.data)
       return {
         ...state,
         categories: action.payload.data,

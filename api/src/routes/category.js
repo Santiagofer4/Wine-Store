@@ -76,14 +76,12 @@ server.delete('/:id', (req, res) => {
       id,
     },
   }).then((category) => {
-    console.log('200 OK - DELETE');
-    return res.sendStatus(200).send(category);
+    return res.status(200).send(category);
   });
 });
 
 server.post('/', (req, res) => {
   let { taste } = req.body;
-
   // console.log('Creo o modifico categoría - POST a /products/category/');
   if (!taste) return res.status(400).send('No se puede crear la categoría');
 

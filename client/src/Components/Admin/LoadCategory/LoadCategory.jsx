@@ -12,14 +12,10 @@ import { useHistory } from 'react-router-dom';
 
 export const LoadCategory = (props) => {
   const history = useHistory();
-  // console.log('es un arreglo?',props.categoryList[0].data)
   const initialValues = {
     taste: '',
   };
   
-  console.log('PROPS category' ,props)
-  // props.getCategoryList()
-  // console.log('con datos', props.categoryList)
   const [borrar, setBorrar] = useState(false);
   const [tasteList, setTasteList] = useState([]); //mantiene actualziada la lista de sabores(nuestras categorías)...no me convence...creo que es al pedo definir un estado local si tenemos un store
 
@@ -29,7 +25,6 @@ export const LoadCategory = (props) => {
         'http://localhost:3000/products/category',
         category
       );
-      // console.log('POST', resp);
     } catch (error) {
       //  console.error(error);
     }
@@ -43,11 +38,9 @@ export const LoadCategory = (props) => {
     (await Array.isArray(props.categoryList)) &&
       props.categoryList.length > 0 &&
       setTasteList(formatArrayToOption(props.categoryList, 'taste')); //? Tiene que haber una mejor manera para solucionar esto...
-    // console.log('dentro de calltests', tasteList);
   };
 
   const handleSubmit = (values, onSubmitProps) => {
-    //console.log('VALUES', values);
     if(borrar){
       props.deleteCategory(values.taste)
       history.push('/catalogue');
@@ -66,7 +59,6 @@ export const LoadCategory = (props) => {
         color="secondary"
         onClick={() => {
           setBorrar(!borrar);
-          // callTastes()
         }}
       >
         {borrar ? 'CARGAR' : 'BORRAR'}

@@ -59,7 +59,6 @@ router.get('/search', (req, res) => {
       conditions.push({ yearHarvest: { [Op.eq]: number } });
     }
   }
-
   // console.log('QUERY', conditions);
   Product.findAll({
     where: {

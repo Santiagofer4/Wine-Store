@@ -71,7 +71,6 @@ export const deleteProductsCart = createAsyncThunk(
       },
       subtractToCart(state, action){
         const  id = action.payload;
-        console.log('jajaja',id)
         let obj = state.allProductsCart.list.findIndex(e => e.id === id);
         if(state.allProductsCart.list[obj].quantity == 1){
           state.allProductsCart.list = state.allProductsCart.list.filter(e => e.id !== id)

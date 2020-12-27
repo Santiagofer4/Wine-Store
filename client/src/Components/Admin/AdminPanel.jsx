@@ -57,7 +57,6 @@ const AdminPanel = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  // console.log('estado', state);
   return {
     strains: state.productReducers.strains,
     categories: state.productReducers.categories,

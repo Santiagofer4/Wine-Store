@@ -4,13 +4,12 @@ import './NavBar.modules.css';
 import { Link } from 'react-router-dom';
 import { getAllProducts } from '../../slices/productSlice';
 import { getAllCategories } from '../../slices/categorySlice';
-import { useSelector, useDispatch} from 'react-redux';
-import { allProductsSelector } from '../../selectors/index';
+import { /*useSelector,*/ useDispatch} from 'react-redux';
+//import { allProductsSelector } from '../../selectors/index';
 
 
 function NavBar() {
-
-  const allProducts = useSelector(allProductsSelector);
+  //const allProducts = useSelector(allProductsSelector);
   const dispatch = useDispatch();
 
   return (

@@ -1,29 +1,29 @@
 import React, { useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import {/* connect, */useDispatch, useSelector } from 'react-redux';
 import { Button, CircularProgress } from '@material-ui/core';
 import './CatalogueByTaste.modules.css';
 
 import ProductCard from '../ProductCard/ProductCard.jsx';
 import Sidebar from '../Sidebar/Sidebar.jsx';
-import { getCategoryList } from '../../actions';
+//import { getCategoryList } from '../../actions';
 import { getAllProducts } from '../../slices/productSlice';
 import {
-  allProductsSelector,
-  allProductsStatusSelector,
-  allProductsErrorSelector,
+  //allProductsSelector,
+  //allProductsStatusSelector,
+  //allProductsErrorSelector,
   allProdsByCategoryStatusSelector,
   allProdsByCategoryErrorSelector,
   allProdsByCategorySelector,
   filteredTasteSelector,
 } from '../../selectors';
 
-function CatalogueByTaste(props) {
+function CatalogueByTaste() {
   const dispatch = useDispatch();
   const allProdsByCatStatus = useSelector(allProdsByCategoryStatusSelector);
   const allProdsByCat = useSelector(allProdsByCategorySelector);
   const allProdsByCatError = useSelector(allProdsByCategoryErrorSelector);
   const filteredTaste = useSelector(filteredTasteSelector);
-  const allProducts = useSelector(allProductsSelector);
+  //const allProducts = useSelector(allProductsSelector);
 
   useEffect(()=>{
     dispatch(getAllProducts())

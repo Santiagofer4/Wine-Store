@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import './Sidebar.modules.css';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllProducts } from '../../slices/productSlice';
 import {
@@ -9,23 +9,23 @@ import {
 } from '../../slices/categorySlice';
 import {
   allProductsSelector,
-  allProductsStatusSelector,
-  allProductsErrorSelector,
+  //allProductsStatusSelector,
+  //allProductsErrorSelector,
   allCategoriesStatusSelector,
-  allCategoriesErrorSelector,
+  //allCategoriesErrorSelector,
   allCategoriesSelector,
-  allProdsByCategorySelector,
+  //allProdsByCategorySelector,
 } from '../../selectors';
 import { CircularProgress, Button } from '@material-ui/core';
 
-function Sidebar(props) {
+function Sidebar() {
   const dispatch = useDispatch();
   const history = useHistory();
   const allProducts = useSelector(allProductsSelector);
   const allCategories = useSelector(allCategoriesSelector);
   const allCatsStatus = useSelector(allCategoriesStatusSelector);
-  const allCatsError = useSelector(allCategoriesErrorSelector);
-  const allProdsByCat = useSelector(allProdsByCategorySelector);
+  //const allCatsError = useSelector(allCategoriesErrorSelector);
+  //const allProdsByCat = useSelector(allProdsByCategorySelector);
 
   useEffect(() => {
     if (allCatsStatus === 'idle') dispatch(getAllCategories());
@@ -33,7 +33,6 @@ function Sidebar(props) {
 
   const categoryClickHandler = (e) => {
     let taste = e.target.name.toLowerCase();
-    console.log('LINK');
     history.push(`/catalogue/${taste}`);
     dispatch(getAllProdsByCategory(taste));
     // props.getProductsCategory(categoryName);

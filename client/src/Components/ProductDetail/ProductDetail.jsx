@@ -53,9 +53,6 @@ function ProductDetail() {
     // props.setProductDetail(wineDetail); //necesario en caso que ingrese al product detail sin pasar por catalogue.
     //Actualmente no es posible, pero podria ser una opcion en el futuro
     dispatch(getAllCatsOfProduct(id))
-    // props.getCatsOfProduct(id);
-    console.log('detalle', id)
-    console.log('INFO', productDetail)
     history.push( id ? { 
       pathname: `/admin/edit/${id}`,
       state: {
