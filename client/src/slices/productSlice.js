@@ -1,14 +1,7 @@
-import { SnackbarContent } from '@material-ui/core';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
 import { productEndpoint, searchProductEndpoint } from '../constants/endpoints';
 import { status } from '../constants/helpers';
-import { getAllCategories } from './categorySlice';
-import { Component } from 'react';
-import Sidebar from '../Components/Sidebar/Sidebar';
-import { thunk } from 'redux-thunk';
-import { setWineDetailAsync } from './productDetailSlice';
 
 const initialState_product = {
   allProducts: {

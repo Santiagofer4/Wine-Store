@@ -1,4 +1,3 @@
-import { NextWeek } from '@material-ui/icons';
 import axios from 'axios';
 import {
   GET_PRODUCTS_CATEGORY,
@@ -15,7 +14,6 @@ import {
   GET_PRODUCTS_CART,
   GET_ORDER_LIST,
   DELETE_PRODUCTS_CART,
-  ADD_PRODUCT_CART,
 } from './actions';
 
 export function getProductSearch(payload) {

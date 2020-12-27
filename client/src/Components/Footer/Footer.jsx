@@ -13,14 +13,14 @@ function Footer() {
       </div>
       <div className="rrssContainer">
         <div className="rrssImgContainer"> 
-        <a href="#" className='red' ><i class="fab fa-facebook-f"></i></a>
+        <a href="http://facebook.com" className='red' ><i class="fab fa-facebook-f"></i></a>
 
         </div>
         <div className="rrssImgContainer">
-          <a href="#" className='red__instagram'><i class="fab fa-instagram"></i></a>
+          <a href="http://instagram.com" className='red__instagram'><i class="fab fa-instagram"></i></a>
         </div>
         <div className="rrssImgContainer">
-          <a href="#" className='red__instagram'><i class="fab fa-twitter"></i></a>
+          <a href="http://twitter.com" className='red__instagram'><i class="fab fa-twitter"></i></a>
         </div>
       </div>
     </div>

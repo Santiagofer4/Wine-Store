@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { Container, Paper, CardContent, CardActions, Card, Typography, Button, } from '@material-ui/core';
 import './ProductDetail.modules.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -110,8 +110,8 @@ function ProductDetail() {
           </CardContent>
 
           <CardActions id="buttons">
-            <Button  id="backButton" size="small" onClick={() => history.goBack()} > <img id="backButtonImage" src="https://static.thenounproject.com/png/251451-200.png"></img>VOLVER</Button>
-            <Button size="small" onClick={editHandler}> <img id="editImage" src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"></img>
+            <Button  id="backButton" size="small" onClick={() => history.goBack()} > <img id="backButtonImage" src="https://static.thenounproject.com/png/251451-200.png" alt="backBtn"></img>VOLVER</Button>
+            <Button size="small" onClick={editHandler}> <img id="editImage" src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png" alt="editBtn"></img>
             {/* <i class="fa fa-pencil-square-o" aria-hidden="true"></i> */}
             EDITAR
             </Button>

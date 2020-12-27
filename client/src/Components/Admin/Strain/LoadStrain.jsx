@@ -11,7 +11,7 @@ import {
   strainsStatusSelector,
   strainsErrorSelector,
 } from '../../../selectors';
-import { getAllStrains, postNewStrain } from '../../../slices/strainSlice';
+import { postNewStrain } from '../../../slices/strainSlice';
 
 export const LoadStrain = (props) => {
   const dispatch = useDispatch();

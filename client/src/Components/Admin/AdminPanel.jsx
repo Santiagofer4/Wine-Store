@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Paper, Container } from '@material-ui/core';
 import './AdminPanel.modules.css';
 import { Link } from 'react-router-dom';
-import LoadProduct from './LoadProduct/LoadProduct';
 import { Route } from 'react-router-dom';
-import LoadCategory from './LoadCategory/LoadCategory';
 import { getCategoryList, getStrainList } from '../../actions';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import AdminStrain from './LoadCategory/AdminStrain';
 import AdminCategory from './LoadCategory/AdminCategory';
 import AdminProduct from './LoadProduct/AdminProduct';

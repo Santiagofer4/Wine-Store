@@ -1,12 +1,7 @@
-import { SnackbarContent } from '@material-ui/core';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
-import { getAllProdsEndpoint ,getAllProductsCartEnpoint, postProductsCardEnpoint, deleteProductCarEnpoint } from '../constants/endpoints';
+import { getAllProductsCartEnpoint, postProductsCardEnpoint, deleteProductCarEnpoint } from '../constants/endpoints';
 import { status } from '../constants/helpers';
-import { getAllCategories } from './categorySlice';
-import { Component } from 'react';
-import Sidebar from '../Components/Sidebar/Sidebar';
 
 const initialState_product = {
   allProductsCart: {
@@ -72,7 +67,7 @@ export const deleteProductsCart = createAsyncThunk(
       subtractToCart(state, action){
         const  id = action.payload;
         let obj = state.allProductsCart.list.findIndex(e => e.id === id);
-        if(state.allProductsCart.list[obj].quantity == 1){
+        if(state.allProductsCart.list[obj].quantity === 1){
           state.allProductsCart.list = state.allProductsCart.list.filter(e => e.id !== id)
         }else{
           let index = state.allProductsCart.list.findIndex( e => e.id === id)

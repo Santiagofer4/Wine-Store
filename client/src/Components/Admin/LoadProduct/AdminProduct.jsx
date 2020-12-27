@@ -1,18 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Button, CircularProgress } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import './LoadProduct.modules.css';
 import { getAllCategories } from '../../../slices/categorySlice';
 import { getAllStrains } from '../../../slices/strainSlice';
-
-import {
-  allCategoriesStatusSelector,
-  strainsStatusSelector,
-  productDetailStatusSelector,
-  productDetailErrorSelector,
-} from '../../../selectors/index';
-import { setWineDetailAsync } from '../../../slices/productDetailSlice';
+import { allCategoriesStatusSelector, strainsStatusSelector, productDetailStatusSelector, productDetailErrorSelector} from '../../../selectors/index';
 import EditProduct from './EditProduct';
 import _LoadProduct from './_LoadProduct';
 
