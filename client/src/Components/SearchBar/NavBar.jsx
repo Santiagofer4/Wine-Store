@@ -41,6 +41,12 @@ function NavBar() {
               Admin
             </Link>
           </li>
+          <li className="Nav__li">
+          {' '}
+            <Link to="/form/user" className="Nav__Link">
+              Regístrate
+            </Link>
+          </li>
         </ul>
         <div id="search-cart">
           <div>

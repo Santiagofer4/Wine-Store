@@ -41,6 +41,11 @@ const AdminPanel = (props) => {
               Cargar/Borrar Cepa
             </Link>
           </li>
+          <li>
+            <Link className="links" to="/order-table">
+              Ver Órdenes
+            </Link>
+          </li>
         </ul>
       </Paper>
       <br></br>

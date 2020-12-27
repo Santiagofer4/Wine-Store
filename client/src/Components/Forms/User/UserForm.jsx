@@ -31,7 +31,7 @@ function UserForm() {
 
     return (
         <div className = "formUser">
-            <form
+            <form id="form"
             //action='/users'
             method='POST'
         onSubmit={(e) => {
@@ -41,6 +41,7 @@ function UserForm() {
         autoComplete="off"
       >
         <TextField
+          className="text__field"
           id={state.firstName ? 'accepted' : 'error'}
           name="firstName"
           label="Nombre"
@@ -51,6 +52,7 @@ function UserForm() {
           }}
         />
         <TextField
+          className="text__field"
           id={state.lastName ? 'accepted' : 'error'}
           name="lastName"
           label="Apellido"
@@ -61,6 +63,7 @@ function UserForm() {
           }}
         />
         <TextField
+          className="text__field"
           id={state.email ? 'accepted' : 'error'}
           name="email"
           label="Correo electrónico"
@@ -70,6 +73,7 @@ function UserForm() {
           }}
         />
         <TextField
+          className="text__field"
           id={state.birthdate ? 'accepted' : 'error'}
           name="birthdate"
           label="Fecha de nacimiento"
@@ -80,6 +84,7 @@ function UserForm() {
           }}
         />
         <TextField
+          className="text__field"
           id={state.cellphone ? 'accepted' : 'error'}
           name="cellphone"
           label="Teléfono"
@@ -89,6 +94,7 @@ function UserForm() {
           }}
         />
         <TextField
+          className="text__field"
           id={state.password ? 'accepted' : 'error'}
           name="password"
           label="Contraseña"
@@ -98,7 +104,9 @@ function UserForm() {
             handleOnChange(e);
           }}
         />
-        <Button id="btnUser" type="submit">Agregar</Button>
+        <div className="center">
+        <Button id="btnUser" type="submit">Registrarse</Button>
+        </div>
       </form>
         </div>
     )
