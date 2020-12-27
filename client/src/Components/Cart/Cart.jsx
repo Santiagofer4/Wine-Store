@@ -128,14 +128,14 @@ function Cart() {
             <h2 className="titleCart">Detalle de compra</h2>
             <hr className="line" />
             <div className="Summary">
-              <p>SUBTOTAL $ {subTotal}</p>
-              <p>IVA $ {Math.ceil(subTotal * 21 / 100)}</p>
+              <p id="subtotal">SUBTOTAL $ {subTotal}</p>
+              <p id="iva">IVA $ {Math.ceil(subTotal * 21 / 100)}</p>
               <hr className="line" />
-              <p>TOTAL $ {Math.ceil(subTotal * 121 / 100)}</p>
+              <p id="total">TOTAL $ {Math.ceil(subTotal * 121 / 100)}</p>
             </div>
             <div>
-              <Button className="buttonCart" onClick={handleConfirm}>Confirmar</Button>
-              <Button className="buttonCart" onClick={handleDelete}>Cancelar</Button>
+              <Button id="confirmBtn" className="buttonCart" onClick={handleConfirm}>Confirmar</Button>
+              <Button id="cancelBtn" className="buttonCart" onClick={handleDelete}>Cancelar</Button>
             </div>
           </div>
         </div>

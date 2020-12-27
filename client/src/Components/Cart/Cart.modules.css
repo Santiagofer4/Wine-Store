@@ -58,7 +58,7 @@
 .Summary {
     align-content: center;
     font-size: 0.8rem;
-    height: 7rem;
+    height: 9rem;
 }
 
 .infoProduct {
@@ -95,6 +95,7 @@
 .titleCart {
     text-align: left;
     font-weight: lighter;
+    font-size: 1.5rem;
 }
 
 .detail {
@@ -122,4 +123,21 @@
 .Cart__DeleteProduct{
     text-decoration: none;
     color: brown;
+}
+#subtotal{
+    font-size: 1.1rem;
+}
+#iva{
+    font-size: 1rem;
+}
+#total{
+    font-size: 1.5rem;
+}
+
+#cancelBtn{
+    color: #ca6049;
+}
+
+#confirmBtn{
+    color:  #47a260 ;
 }

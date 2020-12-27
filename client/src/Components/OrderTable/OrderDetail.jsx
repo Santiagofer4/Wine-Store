@@ -7,17 +7,17 @@ function OrderDetail(props) {
         <div className='OrderDetail__Container' id={props.id}>
                 <ul className='OrderDetail__Ul'>
                     <li className='OrderDetail__Text' >Quantity</li>
-                    <li className='OrderDetail__Text' >Price</li>
                     <li className='OrderDetail__Text' >Product name</li>
                     <li className='OrderDetail__Text' >Product price</li>
+                    <li className='OrderDetail__Text' >Price</li>
                 </ul>
             { props.data.map(element =>{
             return(
                 <ul className='OrderDetail__Ul'>
                 <li className='OrderDetail__Text' >{element.quantity}</li>
-                <li className='OrderDetail__Text' >{element.product.price * element.quantity}</li>
                 <li className='OrderDetail__Text' >{element.product.name}</li>
                 <li className='OrderDetail__Text' >{element.product.price}</li>
+                <li className='OrderDetail__Text' >{element.product.price * element.quantity}</li>
 
             </ul>
                 )
