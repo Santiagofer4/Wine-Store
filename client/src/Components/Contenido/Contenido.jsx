@@ -22,9 +22,8 @@ function Contenido() {
           ></img>
           <div className="card__back">
             <h3>Nuestra Vision</h3>
-            <p>Vision 1</p>
-            <p>Vision 2</p>
-            <p>Vision 3</p>
+            <p>Seguir siendo un opción segura y de confianza para nuestros clientes en un 
+              mercado atomizado con infinidad de marcas</p>
           </div>
         </article>
         <article key="2" className="card">
@@ -36,9 +35,8 @@ function Contenido() {
           ></img>
           <div className="card__back">
             <h3>Nuestra Mision</h3>
-            <p>Mision 1</p>
-            <p>Mision 2</p>
-            <p>Mision 3</p>
+            <p>Entender las necesidades actuales y futuras de nuestros clientes, 
+              esforzándonos permanentemente por cumplir y superar lealmente sus expectativas</p>
           </div>
         </article>
         <article key="3" className="card">
@@ -50,9 +48,9 @@ function Contenido() {
           ></img>
           <div className="card__back">
             <h3>Nuestros Valores</h3>
-            <p>Valor 1</p>
-            <p>Valor 2</p>
-            <p>Valor 3</p>
+            <p>Trabajo en equipo</p>
+            <p>Entusiasmo</p>
+            <p>Compromiso</p>
           </div>
         </article>
       </div>
