@@ -38,3 +38,18 @@ height: 80px;
   
   
   }
+
+  #fechaNac{
+    display: flex;
+    flex-direction: row;
+  }
+
+  .fieldDate{
+    width: 70% !important;
+  }
+
+  #lblDate{
+    width: 30% !important;
+    display: flex;
+    align-content: flex-start;
+  }

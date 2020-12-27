@@ -72,17 +72,20 @@ function UserForm() {
             handleOnChange(e);
           }}
         />
+        <div id="fechaNac">
+          <p id="lblDate">Fecha de nacimiento</p>
         <TextField
-          className="text__field"
+          className="fieldDate"
           id={state.birthdate ? 'accepted' : 'error'}
           name="birthdate"
-          label="Fecha de nacimiento"
+          // label="Fecha de nacimiento"
           type="date"
           required
           onChange={(e) => {
             handleOnChange(e);
           }}
-        />
+          />
+          </div>
         <TextField
           className="text__field"
           id={state.cellphone ? 'accepted' : 'error'}
