@@ -48,17 +48,17 @@ export const deleteProductsCart = createAsyncThunk(
   name: 'productsCart',
   initialState: initialState_product,
   reducers: {
-      addToCart(state,action){
-        const {id,price, image, name, stock} = action.payload.productDetail
+      addToCart(state, action) {
+        const { id, price, image, name, stock } = action.payload.productDetail
          let obj = state.allProductsCart.list.find(e => e.id === id);
-         state.allProductsCart.userId =action.payload.userId
-         if( !obj){
-           
-           state.allProductsCart.list.push({id, price, image, name, quantity: 1, stock})
-          }else{
-            
-           let index = state.allProductsCart.list.findIndex( e => e.id === id)
-           state.allProductsCart.list[index].quantity++
+         state.allProductsCart.userId = action.payload.userId
+         if(!obj) {
+           state.allProductsCart.list.push({ id, price, image, name, quantity: 1, stock })
+          } else {            
+           let index = state.allProductsCart.list.findIndex(e => e.id === id)
+           if(state.allProductsCart.list[index].stock > state.allProductsCart.list[index].quantity) {
+             state.allProductsCart.list[index].quantity++
+            }
          }        
       },
       sync(state,action){

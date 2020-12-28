@@ -40,14 +40,12 @@ function Cart() {
     setSubTotal(x)
   }
 
-  const handleIncrement = (e, stock, quantity) => {
+  const handleIncrement = (e) => {
     let id = e.target.name * 1;
-    if (stock > quantity) {
       let productDetail = {
         id,
       }
       dispatch(addToCart({ productDetail }))
-    }
   };
 
   const handlerDeleteElement = (id) => {

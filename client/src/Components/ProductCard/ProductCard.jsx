@@ -7,7 +7,7 @@ import CardActions from '@material-ui/core/CardActions';
 import './ProductCard.modules.css';
 import { useDispatch} from 'react-redux';
 import { wineDetails} from '../../slices/productDetailSlice';
-import { addToCart, postProductsCar} from '../../slices/productsCartSlice'
+import { addToCart, postProductsCar } from '../../slices/productsCartSlice'
 import { useHistory } from 'react-router-dom';
 
 // Recibe props con Products.info
@@ -24,11 +24,10 @@ function ProductCard(props) {
 
   // refactorizar esta funcion
   function handlerProductToCart(userId, id, price) {
-    let productDetail ={image, name, price, id, stock, quantity:1}
-      dispatch(addToCart({userId,productDetail}))
+    let productDetail = { image, name, price, id, stock, quantity: 1 }
+      dispatch(addToCart({ userId, productDetail }))
       let e = productDetail;
-      dispatch(postProductsCar({e,userId}))
- 
+      dispatch(postProductsCar({ e, userId }))
   }
 
   return (
