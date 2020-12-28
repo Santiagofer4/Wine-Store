@@ -30,7 +30,7 @@ function RadioGroupField({
             component="fieldset"
             error={form.errors && form.errors[name]}
           >
-            {console.log('FIELD', field, 'META', meta, 'FORM', form)}
+            {/* {console.log('FIELD', field, 'META', meta, 'FORM', form)} */}
             <RadioGroup {...field} {...props}>
               {options.map((option, idx) => (
                 <FormControlLabel
