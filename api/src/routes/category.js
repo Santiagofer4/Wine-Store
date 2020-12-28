@@ -76,7 +76,8 @@ server.delete('/:id', (req, res) => {
       id,
     },
   }).then((category) => {
-    return res.status(200).send(category);
+     console.log('200 OK - DELETED');
+    return res.sendStatus(200).send(category);
   });
 });
 
