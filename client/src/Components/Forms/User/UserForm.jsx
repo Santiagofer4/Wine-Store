@@ -41,7 +41,7 @@ function UserForm() {
         autoComplete="off"
       >
         <TextField
-          className="text__field"
+          className="text__field UserForm__lb"
           id={state.firstName ? 'accepted' : 'error'}
           name="firstName"
           label="Nombre"
@@ -52,7 +52,7 @@ function UserForm() {
           }}
         />
         <TextField
-          className="text__field"
+          className="text__field UserForm__lb"
           id={state.lastName ? 'accepted' : 'error'}
           name="lastName"
           label="Apellido"
@@ -63,7 +63,7 @@ function UserForm() {
           }}
         />
         <TextField
-          className="text__field"
+          className="text__field UserForm__lb"
           id={state.email ? 'accepted' : 'error'}
           name="email"
           label="Correo electrónico"
@@ -72,22 +72,20 @@ function UserForm() {
             handleOnChange(e);
           }}
         />
-        <div id="fechaNac">
-          <p id="lblDate">Fecha de nacimiento</p>
         <TextField
-          className="fieldDate"
+          className="text__field UserForm__lb"
           id={state.birthdate ? 'accepted' : 'error'}
           name="birthdate"
-          // label="Fecha de nacimiento"
+          label="Fecha de nacimiento"
           type="date"
           required
           onChange={(e) => {
             handleOnChange(e);
           }}
           />
-          </div>
+
         <TextField
-          className="text__field"
+          className="text__field UserForm__lb"
           id={state.cellphone ? 'accepted' : 'error'}
           name="cellphone"
           label="Teléfono"
@@ -97,7 +95,7 @@ function UserForm() {
           }}
         />
         <TextField
-          className="text__field"
+          className="text__field UserForm__lb"
           id={state.password ? 'accepted' : 'error'}
           name="password"
           label="Contraseña"

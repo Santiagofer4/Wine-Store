@@ -44,12 +44,6 @@ height: 80px;
     flex-direction: row;
   }
 
-  .fieldDate{
-    width: 70% !important;
-  }
-
-  #lblDate{
-    width: 30% !important;
-    display: flex;
-    align-content: flex-start;
-  }
+ .UserForm__lb label {
+    transform: none !important;
+ }
