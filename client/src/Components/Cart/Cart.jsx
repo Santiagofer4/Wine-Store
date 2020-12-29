@@ -18,6 +18,7 @@ function Cart() {
     dispatch(deleteCart())
     dispatch(deleteProductsCart(1))
   };
+
   window.onbeforeunload = function () {
     AllProductsCart.map(e => {
       dispatch(postProductsCar({ e, userId: 1 }))
@@ -62,7 +63,10 @@ function Cart() {
       dispatch(sync(true))
     } else {
       total()
-    }
+    };
+    AllProductsCart.map(e => {
+      dispatch(postProductsCar({ e, userId: 1 }))
+    })
   }, [AllProductsCart]);
 
   if (status === 'succeded') {

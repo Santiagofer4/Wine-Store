@@ -44,6 +44,35 @@ server.get("/:id", (req, res) => {
   });
 });
 
+
+//Ruta que retorna el total de una orden en particular
+
+server.get("/total/:id", (req, res) => {
+  const { id } = req.params;
+  if(!id) return res.status(400).send('No existe la orden seleccionada')
+  
+  OrderLine.findAll({
+    where: {
+      orderId : id,
+    },
+  }).then((orderLine) => {
+    var sumaTotal = 0;
+    
+       
+          orderLine.forEach((t) => {
+        
+          sumaTotal += parseInt(t.quantity) * parseInt(t.price);
+         
+          console.log('Suma Total', sumaTotal)
+        }) 
+        sumaTotal = Math.ceil(sumaTotal * 1.21)
+        return res.status(200).json(sumaTotal);
+        
+    })
+
+    
+  });
+
 //Ruta para crear una orden
 
 server.post("/", (req, res) => {
