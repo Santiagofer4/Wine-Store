@@ -57,21 +57,17 @@ server.get("/total/:id", (req, res) => {
     },
   }).then((orderLine) => {
     var sumaTotal = 0;
-    
-       
           orderLine.forEach((t) => {
-        
+      
           sumaTotal += parseInt(t.quantity) * parseInt(t.price);
          
           console.log('Suma Total', sumaTotal)
         }) 
         sumaTotal = Math.ceil(sumaTotal * 1.21)
         return res.status(200).json(sumaTotal);
-        
     })
-
-    
   });
+
 
 //Ruta para crear una orden
 

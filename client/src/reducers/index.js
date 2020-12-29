@@ -7,6 +7,7 @@ import categorySlice from '../slices/categorySlice.js';
 import productDetailSlice from '../slices/productDetailSlice'
 import productsCart from '../slices/productsCartSlice'
 import { strainSlice } from '../slices/strainSlice';
+import orderTableSlice from '../slices/orderTableSlice';
 
 
 // const rootReducer = combineReducers({
@@ -24,6 +25,7 @@ const rootReducer = {
   formReducers,
   utilsReducers,
   strains: strainSlice.reducer,
+  orderTable: orderTableSlice.reducer,
 };
 
 export default rootReducer;

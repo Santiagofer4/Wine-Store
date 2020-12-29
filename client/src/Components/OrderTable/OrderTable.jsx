@@ -1,45 +1,51 @@
-import React, {useEffect} from 'react'
-import {connect} from 'react-redux';
-import { getOrderList } from '../../actions';
-import {sliceTime} from '../utils.js'
+import React, { useEffect } from 'react'
+import { sliceTime, total } from '../utils.js'
 import OrderDetail from './OrderDetail';
 import './OrderTable.modules.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getOrderTable } from '../../slices/orderTableSlice';
+import {
+    allOrderSelector,
+    allOrderStatusSelector,
+} from '../../selectors';
 
-// Tabla que muestra una lista de ordenes.s
 // Esta tabla es para el admin.
 // Tiene que mostrar todas las ordenes de todos los usuarios.
 
+function OrderTable() {
+    const dispatch = useDispatch();
+    const orderTable = useSelector(allOrderSelector);
+    const status = useSelector(allOrderStatusSelector);
 
-// get a /orders
-function OrderTable(props) {
     useEffect(()=>{
-        props.getOrderList();
-
-    },[])
+        dispatch(getOrderTable());
+        console.log(dispatch(getOrderTable()))
+    }, [])
 
     return (
         <div className='OrderTable__Container'>
                 <ul className='OrderTable__Ul'>
+                    <li className='OrderTable__index' >ID</li>
                     <li className='OrderTable__index' >Total</li>
                     <li className='OrderTable__index' >Status</li>
                     <li className='OrderTable__index' >User Id</li>
                     <li className='OrderTable__index' >Fecha</li>
                     <li className='OrderTable__index' >Detalle</li>
-
                 </ul>
 
-            {props.orderList && props.orderList.map(element =>{
+            {status === 'succeded' && orderTable.map(order => {
                 return(
                     <>
                     <ul className='OrderTable__Ul'>
-                    <li className='OrderTable__Text' >{element.total}</li>
-                    <li className='OrderTable__Text' >{element.status}</li>
-                    <li className='OrderTable__Text' >{element.userId}</li>
-                    <li className='OrderTable__Text' >{sliceTime(element.updatedAt)}</li>
-                    <li className='OrderTable__Text'> <button onClick={()=>{ hide(element.id)}}>D</button></li>
+                    <li className='OrderTable__Text' >{order.id}</li>
+                    <li className='OrderTable__Text' >{Math.ceil(total(order.orderLines) * 121 / 100)}</li>
+                    <li className='OrderTable__Text' >{order.status}</li>
+                    <li className='OrderTable__Text' >{order.userId}</li>
+                    <li className='OrderTable__Text' >{sliceTime(order.updatedAt)}</li>
+                    <li className='OrderTable__Text'> <button onClick={()=>{ hide(order.id) }}>D</button></li>
 
                     </ul>
-                     <OrderDetail id={element.id} data={element.orderLines} ></OrderDetail>
+                     <OrderDetail id={order.id} data={order.orderLines} ></OrderDetail>
                      </>
                 )
             })}
@@ -58,9 +64,4 @@ function hide(id){
     }
 }
 
-function mapStateToProps(state){
-    return{
-        orderList: state.productReducers.orderList ? state.productReducers.orderList : []
-    }
-}
-export default connect(mapStateToProps,{getOrderList})(OrderTable)
+export default OrderTable;

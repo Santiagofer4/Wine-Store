@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@material-ui/core";
 import { allProductsCartSelector, allProductsCartSyncSelector, allProductsCartStatusSelector } from '../../selectors'
-import { getAllProductsCart, sync, addToCart, subtractToCart, deleteFromCart, deleteCart, postProductsCar, deleteProductCar, deleteProductsCart } from '../../slices/productsCartSlice'
-
+import { getAllProductsCart, sync, addToCart, subtractToCart, deleteFromCart, deleteCart, postProductsCar, deleteProductCar, deleteProductsCart } from '../../slices/productsCartSlice';
+import { total } from '../../Components/utils';
 
 function Cart() {
   const dispatch = useDispatch()
@@ -18,7 +18,6 @@ function Cart() {
     dispatch(deleteCart())
     dispatch(deleteProductsCart(1))
   };
-
   window.onbeforeunload = function () {
     AllProductsCart.map(e => {
       dispatch(postProductsCar({ e, userId: 1 }))
@@ -31,14 +30,6 @@ function Cart() {
     if (quantity > 1) {
       dispatch(subtractToCart(id))
     }
-  }
-
-  const total = () => {
-    let x = 0;
-    AllProductsCart.forEach(p => {
-      x = x + p.price * p.quantity
-    })
-    setSubTotal(x)
   }
 
   const handleIncrement = (e) => {
@@ -57,13 +48,11 @@ function Cart() {
   const handleConfirm = () => { }
 
   useEffect(() => {
+    setSubTotal(total(AllProductsCart));
     if (sincronizar === false) {
-      total()
       dispatch(getAllProductsCart(1))
       dispatch(sync(true))
-    } else {
-      total()
-    };
+    }
     AllProductsCart.map(e => {
       dispatch(postProductsCar({ e, userId: 1 }))
     })
