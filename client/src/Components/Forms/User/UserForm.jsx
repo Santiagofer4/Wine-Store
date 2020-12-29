@@ -4,8 +4,10 @@ import Button from '@material-ui/core/Button';
 import './UserForm.modules.css';
 import { useDispatch } from 'react-redux';
 import { createUser } from '../../../slices/userSlice';
+import { useHistory } from 'react-router-dom';
 
 function UserForm() {
+    const history = useHistory();
     const [state, setState] = useState({
         firstName: "",
         lastName: "",
@@ -27,6 +29,7 @@ function UserForm() {
     function handleOnSubmit(e){
       e.preventDefault();
       dispatch(createUser(state));
+      history.push('/catalogue'); //En el futuro puede redireccionar a /me
     };
 
     return (

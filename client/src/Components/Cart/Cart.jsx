@@ -18,12 +18,13 @@ function Cart() {
     dispatch(deleteCart())
     dispatch(deleteProductsCart(1))
   };
-  window.onbeforeunload = function () {
+
+ /* window.onbeforeunload = function () {
     AllProductsCart.map(e => {
       dispatch(postProductsCar({ e, userId: 1 }))
     })
     return 'Texto de aviso';
-  };
+  };*/
 
   const handleDecrement = (e, quantity) => {
     let id = e.target.name * 1
@@ -54,6 +55,7 @@ function Cart() {
       dispatch(sync(true))
     }
     AllProductsCart.map(e => {
+      console.log(e)
       dispatch(postProductsCar({ e, userId: 1 }))
     })
   }, [AllProductsCart]);
@@ -68,7 +70,6 @@ function Cart() {
             <hr className="line" />
             <ul>
               {AllProductsCart.map((p) => (
-
                 <li className="productCart" key={p.id}>
                   <div>
                     <img
@@ -80,9 +81,6 @@ function Cart() {
                   <div className="infoProduct">
                     <div>
                       <p>{p.name}</p>
-                      <p className="ProductDescription">
-                        {p.description}
-                      </p>
                       <p>$ {p.price}</p>
                     </div>
                     <div className="quantity">

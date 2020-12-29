@@ -6,7 +6,7 @@ import { Container, Paper, Button } from '@material-ui/core';
 import '../LoadProduct/LoadProduct.modules.css';
 import axios from 'axios';
 
-export const LoadProduct = (props) => {
+export const LoadProduct = () => {
   const initialValues = {
     name: '',
     description: '',
