@@ -61,7 +61,7 @@ function ProductCard(props) {
               </Button>
             )}
             <Button id="Button__Info" onClick={detailClickHandler}>
-            <i class="fa fa-plus-square" aria-hidden="true"></i>
+            <i className="fa fa-plus-square" aria-hidden="true"></i>
 
             </Button>
           </div>

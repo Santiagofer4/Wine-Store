@@ -9,12 +9,8 @@ import {
 } from '../../slices/categorySlice';
 import {
   allProductsSelector,
-  //allProductsStatusSelector,
-  //allProductsErrorSelector,
   allCategoriesStatusSelector,
-  //allCategoriesErrorSelector,
   allCategoriesSelector,
-  //allProdsByCategorySelector,
 } from '../../selectors';
 import { CircularProgress, Button } from '@material-ui/core';
 
@@ -24,8 +20,6 @@ function Sidebar() {
   const allProducts = useSelector(allProductsSelector);
   const allCategories = useSelector(allCategoriesSelector);
   const allCatsStatus = useSelector(allCategoriesStatusSelector);
-  //const allCatsError = useSelector(allCategoriesErrorSelector);
-  //const allProdsByCat = useSelector(allProdsByCategorySelector);
 
   useEffect(() => {
     if (allCatsStatus === 'idle') dispatch(getAllCategories());
@@ -35,7 +29,6 @@ function Sidebar() {
     let taste = e.target.name.toLowerCase();
     history.push(`/catalogue/${taste}`);
     dispatch(getAllProdsByCategory(taste));
-    // props.getProductsCategory(categoryName);
   };
 
   let content;

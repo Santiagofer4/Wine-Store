@@ -18,12 +18,13 @@ function Cart() {
     dispatch(deleteCart())
     dispatch(deleteProductsCart(1))
   };
-  window.onbeforeunload = function () {
+
+ /* window.onbeforeunload = function () {
     AllProductsCart.map(e => {
       dispatch(postProductsCar({ e, userId: 1 }))
     })
     return 'Texto de aviso';
-  };
+  };*/
 
   const handleDecrement = (event,price, quantity) => {
     let id = event.target.name * 1;
@@ -77,7 +78,6 @@ function Cart() {
             <hr className="line" />
             <ul>
               {AllProductsCart.map((p) => (
-
                 <li className="productCart" key={p.id}>
                   <div>
                     <img
@@ -89,9 +89,6 @@ function Cart() {
                   <div className="infoProduct">
                     <div>
                       <p>{p.name}</p>
-                      <p className="ProductDescription">
-                        {p.description}
-                      </p>
                       <p>$ {p.price}</p>
                     </div>
                     <div className="quantity">
