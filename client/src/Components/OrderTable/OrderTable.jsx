@@ -19,7 +19,6 @@ function OrderTable() {
 
     useEffect(()=>{
         dispatch(getOrderTable());
-        console.log(dispatch(getOrderTable()))
     }, [])
 
     return (

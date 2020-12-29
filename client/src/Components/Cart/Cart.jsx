@@ -55,7 +55,6 @@ function Cart() {
       dispatch(sync(true))
     }
     AllProductsCart.map(e => {
-      console.log(e)
       dispatch(postProductsCar({ e, userId: 1 }))
     })
   }, [AllProductsCart]);
