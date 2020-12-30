@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-import productReducers from './productReducers.js';
-import formReducers from './formReducers.js';
-import utilsReducers from './utilsReducers.js';
+// import productReducers from './productReducers.js';
+// import formReducers from './formReducers.js';
+// import utilsReducers from './utilsReducers.js';
 import productSlice from '../slices/productSlice';
 import categorySlice from '../slices/categorySlice.js';
 import productDetailSlice from '../slices/productDetailSlice'
@@ -21,9 +21,9 @@ const rootReducer = {
   categories: categorySlice.reducer,
   wineDetail: productDetailSlice.reducer,
   productsCart: productsCart.reducer,
-  productReducers,
-  formReducers,
-  utilsReducers,
+  // productReducers,
+  // formReducers,
+  // utilsReducers,
   strains: strainSlice.reducer,
   orderTable: orderTableSlice.reducer,
 };

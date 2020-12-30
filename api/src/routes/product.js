@@ -74,6 +74,7 @@ server.put('/:id', async (req, res) => {
     );
 
     if (categories && categories.length > 0) {
+      categories = categories.filter(c => c !== '')
       await updatedWine.setCategories([...categories]);
     }
     return res.status(200).send(updatedWine);

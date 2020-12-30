@@ -8,7 +8,6 @@ import NavBar from './Components/SearchBar/NavBar.jsx';
 import Inicio from './Components/Inicio/Inicio.jsx';
 import TestForm from './Components/FormComponents/TestForm.jsx';
 import AdminPanel from './Components/Admin/AdminPanel';
-// import { LoadProduct } from './Components/Admin/LoadProduct/LoadProduct';
 import ProductDetail from './Components/ProductDetail/ProductDetail';
 import Cart from './Components/Cart/Cart.jsx';
 import OrderTable from './Components/OrderTable/OrderTable.jsx';

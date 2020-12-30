@@ -52,6 +52,12 @@ function SelectField({
                 {...field}
                 {...props}
               >
+                {
+                  placeholder &&         
+                   <MenuItem value="">
+                  <em>{placeholder}</em>
+                </MenuItem>
+                }
                 {placeholder ||
                   (!options && (
                     <MenuItem value="" disabled>

@@ -63,17 +63,23 @@ function EditProduct(props) {
       emptyValues,
       formik,
     };
+    console.log("Categorias", payload.product.categories)
     dispatch(updateProduct(payload));
   };
-  const handleCatDelete = (e, formik) => {};
+  const handleCatDelete = (e, formik) => {
+    let name = e.target.name;
+    formik.setFieldValue(name,"")
+
+  };
 
   const handleDelete = (formik) => {
-    const id = wineDetail.id;
+    const id = wineDetail.wine.id;
     const payload = {
       id,
       formik,
     };
     dispatch(deleteProduct(payload));
+    history.push('/catalogue')
   };
 
   const handleReset = (formik) => {
@@ -156,6 +162,7 @@ function EditProduct(props) {
                 required
               />
               <FormField
+                placeholder="ninguna"
                 fieldType="select"
                 label="Sabor 1"
                 name="taste1"
@@ -167,12 +174,13 @@ function EditProduct(props) {
                 variant="outlined"
                 color="primary"
                 label="Eliminar"
-                name="delete1"
+                name="taste1"
                 onClick={(e) => handleCatDelete(e, formik)}
               >
                 X
               </Button>
               <FormField
+                placeholder="ninguna"
                 fieldType="select"
                 label="Sabor 2"
                 name="taste2"
@@ -184,12 +192,13 @@ function EditProduct(props) {
                 variant="outlined"
                 color="primary"
                 label="Eliminar"
-                name="delete2"
+                name="taste2"
                 onClick={(e) => handleCatDelete(e, formik)}
               >
                 X
               </Button>
               <FormField
+                placeholder="ninguna"
                 fieldType="select"
                 label="Sabor 3"
                 name="taste3"
@@ -201,7 +210,7 @@ function EditProduct(props) {
                 variant="outlined"
                 color="primary"
                 label="Eliminar"
-                name="delete3"
+                name="taste3"
                 onClick={(e) => handleCatDelete(e, formik)}
               >
                 X

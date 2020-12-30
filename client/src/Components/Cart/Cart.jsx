@@ -97,7 +97,7 @@ function Cart() {
                       <Button
                         name={p.id}
                         className="button"
-                        onClick={(e) => handleDecrement(e, p.quantity, p.price)}
+                        onClick={(e) => handleDecrement(e, p.price, p.quantity )}
                       >
                         -
                     </Button>

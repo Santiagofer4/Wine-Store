@@ -3,16 +3,13 @@ import { Paper, Container } from '@material-ui/core';
 import './AdminPanel.modules.css';
 import { Link } from 'react-router-dom';
 import { Route } from 'react-router-dom';
-import { getCategoryList, getStrainList } from '../../actions';
-import { connect, useDispatch } from 'react-redux';
 import AdminStrain from './LoadCategory/AdminStrain';
 import AdminCategory from './LoadCategory/AdminCategory';
 import AdminProduct from './LoadProduct/AdminProduct';
 import _LoadProduct from './LoadProduct/_LoadProduct';
 
 const AdminPanel = (props) => {
-  const dispatch = useDispatch();
-
+ 
   return (
     <Container className="AdminPanel">
       <Paper id="backgroundPaper" className="AdminPanel__Panel">
@@ -59,13 +56,4 @@ const AdminPanel = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    strains: state.productReducers.strains,
-    categories: state.productReducers.categories,
-  };
-};
-
-export default connect(mapStateToProps, { getCategoryList, getStrainList })(
-  AdminPanel
-); //export default AdminPanel;
+export default AdminPanel;
