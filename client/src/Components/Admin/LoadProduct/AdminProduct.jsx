@@ -27,14 +27,19 @@ import { formatArrayToOption } from '../../utils';
 function AdminProduct(props) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const edit = props.location.state ? props.location.state.edit : false;
-  const param_id = props.location.pathname.split('/').slice(-1)[0];
+  let param_id;
+  const edit = props.location.state ? props.location.state.edit : false; //?booleano para determinar si se desea EDITAR la instancia
+  if (edit) {
+    param_id = props.location.pathname.split('/').slice(-1)[0];
+  }
+  //* Levanta el id del parametro si estamos editando
 
   const [options, setOptions] = useState({
     strainOption: '',
     tasteOption: '',
   });
 
+  //* Selectors de estado de llamadas async
   const wineDetail = useSelector(wineDetailSelector);
   const allCats = useSelector(allCategoriesSelector);
   const allStrains = useSelector(allStrainsSelector);
@@ -43,6 +48,7 @@ function AdminProduct(props) {
   const wineDetailAsyncStatus = useSelector(productDetailStatusSelector);
 
   useEffect(() => {
+    //? useEffect para despachar la accion de obtener las categorias, las cepas y la info (detalle) de un producto
     if (allCatStatus === 'idle') dispatch(getAllCategories());
     if (strainStatus === 'idle') dispatch(getAllStrains());
     if (edit && wineDetailAsyncStatus === 'idle')
@@ -50,12 +56,17 @@ function AdminProduct(props) {
   }, [wineDetailAsyncStatus, allCatStatus, strainStatus, dispatch]);
 
   useEffect(() => {
+    //? Cleanup del status del detalle del vino
     return () => {
       dispatch(resetDetailStatus());
     };
   }, []);
 
   useEffect(() => {
+    //? useEffect para tomar las categorias (sabores//taste) y cepas (strains)
+    //? y convertirlas en formato apto para `dropdown`
+    //? formatArrayToOptions se encarga de esto y lo guardamos en el estado,
+    //? que pasamos luego como prop a los otros componentes
     if (allCatStatus === 'succeded' && strainStatus === 'succeded') {
       setOptions({
         tasteOption: formatArrayToOption(allCats, 'taste'),
@@ -70,6 +81,7 @@ function AdminProduct(props) {
     strainStatus === 'loading' ||
     wineDetailAsyncStatus === 'loading'
   ) {
+    //* si alguno de los estados es ='loading' renderizamos `Cargando...`
     content = (
       <Container>
         <h2>Cargando....</h2>
@@ -78,8 +90,10 @@ function AdminProduct(props) {
     );
   } else {
     if (edit) {
+      //* si edit entonces renderizamos el componente para editar
       content = <EditProduct options={options} />;
     } else {
+      //* si !edit entonces renderizamos el form `vacio` para cargar un nuevo producto
       content = <LoadProduct options={options} />;
     }
   }

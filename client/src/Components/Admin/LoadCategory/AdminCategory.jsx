@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container } from '@material-ui/core';
-import {
-  //allCategoriesSelector,
-  allCategoriesStatusSelector,
-  //allCategoriesErrorSelector,
-} from '../../../selectors/index';
+import { allCategoriesStatusSelector } from '../../../selectors/index';
 import { getAllCategories } from '../../../slices/categorySlice';
 import DeleteCategory from './Category/DeleteCategory';
 import LoadCategory from './Category/LoadCategory';

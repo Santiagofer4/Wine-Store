@@ -16,6 +16,8 @@ import { postNewProduct } from '../../../slices/productSlice';
 function LoadProduct(props) {
   const { tasteOption, strainOption } = props.options;
   const dispatch = useDispatch();
+
+  //*valores iniciales del form
   const emptyValues = {
     name: '',
     strain: '',
@@ -35,35 +37,42 @@ function LoadProduct(props) {
   let content;
 
   const handleSubmit = (values, formik) => {
-    const product = {
-      name: values.name,
-      strain: values.strain,
-      description: values.description,
-      yearHarvest: values.yearHarvest,
-      price: values.price,
-      stock: values.stock,
-      image: values.image,
-      categories: [values.taste1, values.taste2, values.taste3],
-    };
+    //*armamos el objeto `payload` levantado los datos del formulario, y ademas agregamos,
+    //* el objeto `formik` con las funciones de formik
     const payload = {
-      product,
+      product: {
+        name: values.name,
+        strain: values.strain,
+        description: values.description,
+        yearHarvest: values.yearHarvest,
+        price: values.price,
+        stock: values.stock,
+        image: values.image,
+        categories: [values.taste1, values.taste2, values.taste3],
+      },
       formik,
     };
     dispatch(postNewProduct(payload));
   };
 
   const handleReset = (formik) => {
+    //func para resetear el form
     formik.resetForm({
       values: { ...emptyValues },
       errors: { ...emptyValues },
     });
   };
-
+  const handleRetry = () => {
+    //func para reintentar y forzar refresh
+    // history.push(props.location.pathname);
+    window.location.reload();
+    return false;
+  };
   if (allCatStatus === 'failed' || strainStatus === 'failed') {
     content = (
       <>
         <h3>Ha ocurrido un error</h3>
-        <Button>Reintentar</Button>
+        <Button onClick={handleRetry}>Reintentar</Button>
       </>
     );
   } else if (allCatStatus === 'succeded' && strainStatus === 'succeded') {

@@ -1,5 +1,4 @@
-import { isPending } from '@reduxjs/toolkit';
-
+//* objeto con los diferentes estados para trackear una promesa
 export const status = Object.freeze({
   idle: 'idle',
   loading: 'loading',

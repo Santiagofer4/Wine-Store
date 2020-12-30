@@ -23,7 +23,7 @@ import { validationSchemaLoadProducts } from '../adminValidations';
 import { deleteProduct, updateProduct } from '../../../slices/productSlice';
 
 function EditProduct(props) {
-  const { strainOption, tasteOption } = props.options;
+  const { strainOption, tasteOption } = props.options; //opciones para los dropdown
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -35,6 +35,7 @@ function EditProduct(props) {
 
   let content;
 
+  //? objeto con los valores vacio para limpiar el form, en caso de `reset`
   const emptyValues = {
     name: '',
     strain: '',
@@ -47,7 +48,10 @@ function EditProduct(props) {
     taste2: '',
     taste3: '',
   };
+
   const handleSubmit = (values, formik) => {
+    //*armamos el objeto `payload` levantado los datos del formulario, y ademas agregamos,
+    //* emptyValues para resetear y el objeto `formik` con las funciones de formik
     const payload = {
       product: {
         id: wineDetail.wine.id,
@@ -63,31 +67,39 @@ function EditProduct(props) {
       emptyValues,
       formik,
     };
-    console.log("Categorias", payload.product.categories)
     dispatch(updateProduct(payload));
   };
   const handleCatDelete = (e, formik) => {
+    //* func para borrar una categoria seteamos el valor del campo =''
+    //* el Back se encarga del resto
     let name = e.target.name;
-    formik.setFieldValue(name,"")
-
+    formik.setFieldValue(name, '');
   };
 
   const handleDelete = (formik) => {
+    //* func para borrar producto, redirige a `catalogue` una vez borrado
     const id = wineDetail.wine.id;
     const payload = {
       id,
       formik,
     };
     dispatch(deleteProduct(payload));
-    history.push('/catalogue')
+    history.push('/catalogue');
   };
 
   const handleReset = (formik) => {
-    //func para resetear el form
+    //* func para resetear el form
     formik.resetForm({
       values: { ...emptyValues },
       errors: { ...emptyValues },
     });
+  };
+
+  const handleRetry = () => {
+    //func que recarga la pagina
+    // history.push(props.location.pathname);
+    window.location.reload();
+    return false;
   };
 
   if (
@@ -95,10 +107,11 @@ function EditProduct(props) {
     strainStatus === 'failed' ||
     wineDetailStatus === 'failed'
   ) {
+    //? en caso de error renderiza un mensaje y un boton de reintentar
     content = (
       <>
         <h3>Ha ocurrido un error</h3>
-        <Button>Reintentar</Button>
+        <Button onClick={handleRetry}>Reintentar</Button>
       </>
     );
   } else if (
@@ -106,6 +119,8 @@ function EditProduct(props) {
     strainStatus === 'succeded' &&
     wineDetailStatus === 'succeded'
   ) {
+    //* cuando todas las llamadas a la API son success armamos un objeto con todos los valores de la DB
+    //* este objeto lo pasamos como valores iniciales al form
     const editValues = {
       name: wineDetail.wine.name,
       strain: wineDetail.wine.strainId,

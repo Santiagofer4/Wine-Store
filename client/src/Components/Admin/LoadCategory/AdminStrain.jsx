@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from 'react';
-//import FormField from '../../FormComponents/FormField';
-//import { validationSchemaLoadStrains } from '../adminValidations.js';
-import { Container, Button/*, CircularProgress */} from '@material-ui/core';
+import { Container, Button } from '@material-ui/core';
 import '../LoadProduct/LoadProduct.modules.css';
-import {/* connect,*/ useSelector, useDispatch } from 'react-redux';
-import {
-  //allStrainsSelector,
-  strainsStatusSelector,
-  //strainsErrorSelector,
-} from '../../../selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { strainsStatusSelector } from '../../../selectors';
 import DeleteStrain from '../Strain/DeleteStrain.jsx';
 import LoadStrain from '../Strain/LoadStrain.jsx';
 import { getAllStrains } from '../../../slices/strainSlice';

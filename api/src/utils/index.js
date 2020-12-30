@@ -1,6 +1,7 @@
 const extractDigitsFromString = (str) => {
-  //* Funcion que recibe la string del search input y devuelve un objeto
+  //* func que recibe la string del search input y devuelve un objeto
   //* que contiene un array de palabras y un array de numeros
+  //* str<String> => <{digits:null|[...],words:null|[...]}>
   if (typeof str !== 'string') return null;
   let words, digits;
   let search = {

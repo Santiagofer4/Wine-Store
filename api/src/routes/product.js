@@ -56,7 +56,8 @@ server.put('/:id', async (req, res) => {
   } = req.body;
   if (!id) return res.status(400).send('El producto no existe');
   try {
-    const wineToUpdate = await Product.findByPk(id);
+    const wineToUpdate = await Product.findByPk(id); //? Instanciamos el producto a ser modificado
+
     const updatedWine = await wineToUpdate.update(
       {
         name,
@@ -72,49 +73,18 @@ server.put('/:id', async (req, res) => {
         plain: true,
       }
     );
+    //* Actualizamos la instrancia y lo guardamos en un objeto
 
+    //* Si recibimos categorias las `seteamos` (pisamos los valores anteriores)
     if (categories && categories.length > 0) {
-      categories = categories.filter(c => c !== '')
+      categories = categories.filter((c) => c !== '');
       await updatedWine.setCategories([...categories]);
     }
-    return res.status(200).send(updatedWine);
+    return res.status(200).send(updatedWine); //* Devuelve objeto actualizado
   } catch (error) {
     console.error(error);
     return res.status(500).send(error);
   }
-
-  // let oldCategories;
-  // Product.update(
-  //   { name, price, description, yearHarvest, image, stock, strainId: strain },
-  //   { where: { id } }
-  // );
-  // Category.findAll({
-  //   include: {
-  //     model: Product,
-  //     where: { id },
-  //   },
-  // })
-  //   .then((categories) => {
-  //     oldCategories = categories;
-  //     // console.log(oldCategories);
-  //     return Product.findByPk(id);
-  //   })
-  //   .then((product) => {
-  //     oldCategories.forEach((category) => {
-  //       product.removeCategory(category);
-  //     });
-  //     return product;
-  //   })
-  //   .then((product) => {
-  //     categories.forEach((categoryId) => {
-  //       Category.findByPk(categoryId).then((category) =>
-  //         product.addCategory(category)
-  //       );
-  //     });
-  //   })
-  //   .then(() => {
-  //     return res.status(200).send('El producto ha sido actualizado');
-  //   });
 });
 
 server.delete('/:id', async (req, res) => {
@@ -124,6 +94,7 @@ server.delete('/:id', async (req, res) => {
   // console.log('Elimino un producto - DELETE a /products/:id');
   if (!id) return res.status(400).send('No se recibio ID');
   try {
+    //* Instanciamos el prod a borrar y las categorias correspondientes a ese prod
     wine = await Product.findOne({ where: { id } });
     categories = await Category.findAll({
       include: { model: Product, where: { id } },
@@ -133,18 +104,11 @@ server.delete('/:id', async (req, res) => {
       categories,
     };
     await wine.destroy();
-    return res.status(200).send(payload);
+    return res.status(200).send(payload); //? devolvemos el producto borrado con sus categorias correspondientes
   } catch (error) {
     console.error(error);
     return res.status(500).send('No se pudo borrar el producto');
   }
-  // Product.destroy({
-  //   where: {
-  //     id,
-  //   },
-  // }).then(() => {
-  //   return res.status(200).send(`Producto borrado ${id}`);
-  // });
 });
 
 server.delete('/:idProduct/category/:idCategory', (req, res) => {
@@ -176,6 +140,7 @@ server.post('/', async (req, res, next) => {
   } = req.body;
 
   try {
+    //* Instanciamos el producto a crear
     let product = await Product.create({
       name,
       price,
@@ -185,12 +150,13 @@ server.post('/', async (req, res, next) => {
       stock,
       strainId: strain,
     });
+    //* loopeamos por las categorias recibidas y las asignamos
     await categories.forEach((categoryId) => {
       Category.findByPk(categoryId).then((category) =>
         product.addCategory(category)
       );
     });
-    return res.status(200).send(product);
+    return res.status(200).send(product); //? devuelve el producto creado
   } catch (error) {
     console.error(error);
     return res.status(500).send(error);

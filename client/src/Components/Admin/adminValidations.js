@@ -51,8 +51,4 @@ export const validationSchemaLoadStrains = yup.object({
 
 export const validationSchemaLoadCategories = yup.object({
   taste: yup.string().required('El nombre de la categoría es requerido'),
-  // description: yup
-  //   .string()
-  //   .max(500, 'Descripción demasiado larga')
-  //   .required('Descripción de la marca requerida'),
 });

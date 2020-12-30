@@ -20,32 +20,13 @@ router.use('/strain', strainRouter);
 router.use('/users', usersRouter);
 router.use('/orders', ordersRouter);
 
-// router.get('/search', (req, res) => {
-//   // console.log('Ruta de search by query.');
-//   let { word } = req.query;
-//   let search = extractDigitsFromString(word);
-//   Product.findAll({
-//     where: {
-//       [Op.or]: [
-//         { name: { [Op.iLike]: `%${word}%` } },
-//         { description: { [Op.iLike]: `%${word}%` } },
-//         // { yearHarvest: { [Op.iLike]: `%${word}%` } },
-//       ], //falta hacerlo case sensitive
-//     },
-//   })
-//     .then((products) => {
-//       return res.status(200).send(products);
-//     })
-//     .catch((err) => {
-//       return console.log(err);
-//     });
-// });
-
 router.get('/search', (req, res) => {
   let { word } = req.query;
-  let search = extractDigitsFromString(word);
+  let search = extractDigitsFromString(word); //func para extraer numeros de string de busqueda
   // console.log('SEARCH', search);
   let conditions = [];
+
+  //* Si `search.words` pusheamos al array de condiciones de busqueda (name & description)
   if (search.words && search.words.length > 0) {
     for (const word of search.words) {
       conditions.push(
@@ -54,6 +35,8 @@ router.get('/search', (req, res) => {
       );
     }
   }
+
+  //* Si `search.digits` pusheamos al array de condiciones de busqueda (yearHarvest)
   if (search.digits && search.digits.length > 0) {
     for (const number of search.digits) {
       conditions.push({ yearHarvest: { [Op.eq]: number } });

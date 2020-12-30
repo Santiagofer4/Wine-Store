@@ -13,6 +13,7 @@ const initialState_strain = {
   },
 };
 
+//*Busca todas las cepas `strains` y devuelve un array de objetos
 export const getAllStrains = createAsyncThunk(
   'strain/getAllStrains',
   async () => {
@@ -21,6 +22,7 @@ export const getAllStrains = createAsyncThunk(
   }
 );
 
+//*Postea una nueva cepa, y devuelve la cepa posteada
 export const postNewStrain = createAsyncThunk(
   'strain/postNewStrain',
   async ({ newStrain, formik }) => {
@@ -30,6 +32,7 @@ export const postNewStrain = createAsyncThunk(
   }
 );
 
+//*Borra la cepa y devuele la cepa borrada
 export const deleteStrain = createAsyncThunk(
   'strain/deleteStrain',
   async ({ strainId, formik }) => {
@@ -42,15 +45,7 @@ export const deleteStrain = createAsyncThunk(
 export const strainSlice = createSlice({
   name: 'strain',
   initialState: initialState_strain,
-  reducers: {
-    // addStrain: (state, action) => {
-    //   const { newStrain } = action.payload;
-    //   postNewStrain(newStrain);
-    // },
-    reset: (state, action) => {
-      state.status = status.idle;
-    },
-  },
+  reducers: {},
   extraReducers: {
     [getAllStrains.pending]: (state, action) => {
       state.status = status.loading;
@@ -99,7 +94,5 @@ export const strainSlice = createSlice({
     },
   },
 });
-
-export const { addStrain } = strainSlice.actions;
 
 export default strainSlice;

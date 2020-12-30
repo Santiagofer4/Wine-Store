@@ -37,6 +37,7 @@ function DeleteCategory() {
   };
 
   if (allCatStatus === 'loading') {
+    //* si loading renderizamos `Cargando...`
     content = (
       <>
         <h2>Cargando....</h2>
@@ -44,6 +45,7 @@ function DeleteCategory() {
       </>
     );
   } else if (allCatStatus === 'succeded') {
+    //* Si success renderizamos un dropdown con todas las categorias
     content = (
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {(formik) => (
