@@ -21,7 +21,7 @@ router.use('/users', usersRouter);
 router.use('/orders', ordersRouter);
 
 // router.get('/search', (req, res) => {
-//   // console.log('Ruta de search by query.');
+// console.log('Ruta de search by query.');
 //   let { word } = req.query;
 //   let search = extractDigitsFromString(word);
 //   Product.findAll({
@@ -29,7 +29,7 @@ router.use('/orders', ordersRouter);
 //       [Op.or]: [
 //         { name: { [Op.iLike]: `%${word}%` } },
 //         { description: { [Op.iLike]: `%${word}%` } },
-//         // { yearHarvest: { [Op.iLike]: `%${word}%` } },
+// { yearHarvest: { [Op.iLike]: `%${word}%` } },
 //       ], //falta hacerlo case sensitive
 //     },
 //   })
@@ -44,7 +44,6 @@ router.use('/orders', ordersRouter);
 router.get('/search', (req, res) => {
   let { word } = req.query;
   let search = extractDigitsFromString(word);
-  // console.log('SEARCH', search);
   let conditions = [];
   if (search.words && search.words.length > 0) {
     for (const word of search.words) {
@@ -59,15 +58,14 @@ router.get('/search', (req, res) => {
       conditions.push({ yearHarvest: { [Op.eq]: number } });
     }
   }
-  // console.log('QUERY', conditions);
+  
   Product.findAll({
     where: {
       [Op.or]: conditions,
     },
   })
     .then((result) => {
-      // console.log('RESULT', result);
-      return res.status(200).send(result);
+       return res.status(200).send(result);
     })
     .catch((err) => console.error(err));
 });
