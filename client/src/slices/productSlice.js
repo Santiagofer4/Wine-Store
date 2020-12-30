@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { productEndpoint, searchProductEndpoint } from '../constants/endpoints';
 import { status } from '../constants/helpers';
+import { thunk } from 'redux-thunk';
 
 const initialState_product = {
   allProducts: {
@@ -9,6 +10,8 @@ const initialState_product = {
     status: 'idle',
     error: null,
     lastAdded: {},
+    lastDeleted: {},
+    lastUpdated: {},
   },
   vinoEncontrado: '',
 };
@@ -34,6 +37,15 @@ export const postNewProduct = createAsyncThunk(
   }
 );
 
+export const deleteProduct = createAsyncThunk(
+  'product/deleteProduct',
+  async ({ id, formik }, thunkApi) => {
+    const deletedWine = await axios.delete(productEndpoint + id);
+    const payload = { deletedWine: deletedWine.data, formik };
+    return payload;
+  }
+);
+
 export const getProductSearch = createAsyncThunk(
   'product/getProductSearch',
   async (inputSearch) => {
@@ -41,6 +53,20 @@ export const getProductSearch = createAsyncThunk(
     //console.log('ENDPOINT', searchProductEndpoint + `${inputSearch}`);
     const resp = await axios.get(searchProductEndpoint + `${inputSearch}`);
     return resp;
+  }
+);
+export const updateProduct = createAsyncThunk(
+  'product/updateProduct',
+  async ({ product, formik, emptyValues }, thunkApi) => {
+    const categories = product.categories;
+    const updated_prod = await axios.put(productEndpoint + product.id, product);
+    const payload = {
+      updatedProduct: updated_prod.data,
+      formik,
+      emptyValues,
+      categories,
+    };
+    return payload;
   }
 );
 
@@ -96,6 +122,52 @@ const productsSlice = createSlice({
       formik.resetForm();
     },
     [postNewProduct.rejected]: (state, action) => {
+      state.allProducts.status = status.failed;
+      state.allProducts.error = action.error;
+    },
+    [deleteProduct.pending]: (state, action) => {
+      state.allProducts.status = status.loading;
+    },
+    [deleteProduct.fulfilled]: (state, action) => {
+      const { formik, deletedWine } = action.payload;
+      state.allProducts.status = status.succeded;
+      state.allProducts.list = state.allProducts.list.filter(
+        ({ id }) => id !== deletedWine.wine.id
+      );
+      state.allProducts.lastDeleted = deletedWine;
+      formik.resetForm();
+    },
+    [deleteProduct.rejected]: (state, action) => {
+      state.allProducts.status = status.failed;
+      state.allProducts.error = action.error;
+    },
+    [updateProduct.pending]: (state, action) => {
+      state.allProducts.status = status.loading;
+    },
+    [updateProduct.fulfilled]: (state, action) => {
+      const {
+        formik,
+        updatedProduct,
+        emptyValues,
+        categories,
+      } = action.payload;
+      let catToReset = {
+        taste1: !!categories[0] ? categories[0] : '',
+        taste2: !!categories[1] ? categories[1] : '',
+        taste3: !!categories[2] ? categories[2] : '',
+      };
+      state.allProducts.status = status.succeded;
+      state.allProducts.lastUpdated = updatedProduct;
+      let idx = state.allProducts.list.findIndex(
+        ({ id }) => id === updatedProduct.id
+      );
+      state.allProducts.list[idx] = { ...updatedProduct };
+      formik.resetForm({
+        values: { ...updatedProduct, ...catToReset },
+        errors: { ...emptyValues },
+      });
+    },
+    [updateProduct.rejected]: (state, action) => {
       state.allProducts.status = status.failed;
       state.allProducts.error = action.error;
     },

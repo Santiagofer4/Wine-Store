@@ -1,4 +1,5 @@
 const server = require('express').Router();
+const { Sequelize } = require('sequelize');
 const { Product, Category, Strain } = require('../db.js');
 // const { Sequelize } = require('sequelize');
 const categoryRouter = require('./category.js');
@@ -18,8 +19,6 @@ server.get('/', (req, res, next) => {
     res.send(products);
   });
 });
-
-server.get('/', (req, res) => {});
 
 server.get('/:id', (req, res) => {
   let { id } = req.params;
@@ -43,7 +42,7 @@ server.get('/productsByCategory/:category', (req, res) => {
   });
 });
 
-server.put('/:id', (req, res) => {
+server.put('/:id', async (req, res) => {
   let { id } = req.params;
   let {
     name,
@@ -53,56 +52,98 @@ server.put('/:id', (req, res) => {
     image,
     stock,
     categories,
+    strain,
   } = req.body;
-  let oldCategories;
-  // console.log('Modifico producto - PUT a /products/:id');
   if (!id) return res.status(400).send('El producto no existe');
+  try {
+    const wineToUpdate = await Product.findByPk(id);
+    const updatedWine = await wineToUpdate.update(
+      {
+        name,
+        price,
+        description,
+        yearHarvest,
+        image,
+        stock,
+        strainId: strain,
+      },
+      {
+        returning: true,
+        plain: true,
+      }
+    );
 
-  Product.update(
-    { name, price, description, yearHarvest, image, stock },
-    { where: { id } }
-  );
-  Category.findAll({
-    include: {
-      model: Product,
-      where: { id },
-    },
-  })
-    .then((categories) => {
-      oldCategories = categories;
-      console.log(oldCategories);
-      return Product.findByPk(id);
-    })
-    .then((product) => {
-      oldCategories.forEach((category) => {
-        product.removeCategory(category);
-      });
-      return product;
-    })
-    .then((product) => {
-      categories.forEach((categoryId) => {
-        Category.findByPk(categoryId).then((category) =>
-          product.addCategory(category)
-        );
-      });
-    })
-    .then(() => {
-      return res.status(200).send('El producto ha sido actualizado');
-    });
+    if (categories && categories.length > 0) {
+      await updatedWine.setCategories([...categories]);
+    }
+    return res.status(200).send(updatedWine);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send(error);
+  }
+
+  // let oldCategories;
+  // Product.update(
+  //   { name, price, description, yearHarvest, image, stock, strainId: strain },
+  //   { where: { id } }
+  // );
+  // Category.findAll({
+  //   include: {
+  //     model: Product,
+  //     where: { id },
+  //   },
+  // })
+  //   .then((categories) => {
+  //     oldCategories = categories;
+  //     // console.log(oldCategories);
+  //     return Product.findByPk(id);
+  //   })
+  //   .then((product) => {
+  //     oldCategories.forEach((category) => {
+  //       product.removeCategory(category);
+  //     });
+  //     return product;
+  //   })
+  //   .then((product) => {
+  //     categories.forEach((categoryId) => {
+  //       Category.findByPk(categoryId).then((category) =>
+  //         product.addCategory(category)
+  //       );
+  //     });
+  //   })
+  //   .then(() => {
+  //     return res.status(200).send('El producto ha sido actualizado');
+  //   });
 });
 
-server.delete('/:id', (req, res) => {
+server.delete('/:id', async (req, res) => {
   let { id } = req.params;
+  let wine;
+  let categories;
   // console.log('Elimino un producto - DELETE a /products/:id');
-  if (!id) return res.status(400).send('No se encontró el producto a eliminar');
-
-  Product.destroy({
-    where: {
-      id,
-    },
-  }).then(() => {
-    return res.status(200).send(`Producto borrado ${id}`);
-  });
+  if (!id) return res.status(400).send('No se recibio ID');
+  try {
+    wine = await Product.findOne({ where: { id } });
+    categories = await Category.findAll({
+      include: { model: Product, where: { id } },
+    });
+    const payload = {
+      wine,
+      categories,
+    };
+    await wine.destroy();
+    return res.status(200).send(payload);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('No se pudo borrar el producto');
+  }
+  // Product.destroy({
+  //   where: {
+  //     id,
+  //   },
+  // }).then(() => {
+  //   return res.status(200).send(`Producto borrado ${id}`);
+  // });
 });
 
 server.delete('/:idProduct/category/:idCategory', (req, res) => {
@@ -151,41 +192,8 @@ server.post('/', async (req, res, next) => {
     return res.status(200).send(product);
   } catch (error) {
     console.error(error);
+    return res.status(500).send(error);
   }
-
-  // console.log('Creo nuevo producto - POST a /products');
-  // let strain_row = await Strain.findByPk(strain);
-  // console.log('ROW', strain_row);
-
-  // console.log('PROD', product);
-  // let strain_name = await Strain.findByPk(strain);
-  // console.log('STRAIN_NAME', strain_name.dataValues.name);
-  // let data = await Strain.findAll({
-  //   where: { id: strain },
-  //   include: { model: Product },
-  // });
-  // console.log('DATA', data[0]);
-  // console.log('DATA', data[0].dataValues);
-  // console.log('DATA', data[0].dataValues.products);
-  // console.log('DATA', data[0].dataValues.products.product);
-  // await categories.forEach(async (categoryId) => {
-  //       let category = await findByPk(categoryId)
-  //       product.addCategory(category)
-  // });
-
-  // .then((product) => {
-  //   console.log(product);
-  //   categories.forEach((categoryId) => {
-  //     Category.findByPk(categoryId).then((category) =>
-  //       product.addCategory(category)
-  //     );
-  //   });
-  //   console.log(product);
-  //   // Strain.findByPk(strain).then((strain) => product.addStrain(strain));
-  //   // console.log(product);
-  // })
-  // .then(() => res.status(200).send(prod))
-  // .catch(next);
 });
 
 server.post('/:idProduct/category', (req, res) => {

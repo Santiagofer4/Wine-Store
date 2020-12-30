@@ -30,6 +30,8 @@ export const filteredTasteSelector = (state) =>
 export const productDetailSelector = (state) =>
   state.wineDetail.wineDetail.wine;
 
+export const wineDetailSelector = (state) => state.wineDetail.wineDetail;
+
 export const productDetailCatSelector = (state) =>
   state.wineDetail.wineDetail.categories;
 

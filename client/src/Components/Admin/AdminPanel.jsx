@@ -53,7 +53,7 @@ const AdminPanel = (props) => {
         <Route path="/admin/loadproduct" component={AdminProduct} />
         <Route path="/admin/loadcategory" component={AdminCategory} />
         <Route path="/admin/loadstrain" component={AdminStrain} />
-        <Route path="/admin/edit/:id" component={_LoadProduct} />
+        <Route path="/admin/edit/:id" component={AdminProduct} />
       </Container>
     </Container>
   );

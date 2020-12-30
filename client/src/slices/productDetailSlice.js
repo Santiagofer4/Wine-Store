@@ -5,7 +5,6 @@ import { productEndpoint } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 import { getAllCatsOfProduct } from './categorySlice';
 
-
 const initialState_product = {
   wineDetail: {
     wine: {},
@@ -18,6 +17,7 @@ const initialState_product = {
 export const setWineDetailAsync = createAsyncThunk(
   'productDetail/setWineDetailAsync',
   async (id, thunkApi) => {
+    let state = thunkApi.getState();
     const categories = await thunkApi.dispatch(getAllCatsOfProduct(id));
     const prod_detail = await axios.get(productEndpoint + id);
     const payload = {
@@ -35,6 +35,9 @@ const productDetailSlice = createSlice({
     wineDetails(state, action) {
       state.wineDetail.wine = action.payload;
     },
+    resetDetailStatus(state, action) {
+      state.wineDetail.status = status.idle;
+    },
   },
   extraReducers: {
     [setWineDetailAsync.pending]: (state, action) => {
@@ -51,5 +54,5 @@ const productDetailSlice = createSlice({
     },
   },
 });
-export const { wineDetails } = productDetailSlice.actions;
+export const { wineDetails, resetDetailStatus } = productDetailSlice.actions;
 export default productDetailSlice;

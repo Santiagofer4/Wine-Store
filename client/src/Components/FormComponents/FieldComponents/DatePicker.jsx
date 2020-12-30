@@ -21,7 +21,7 @@ function DatePicker({
     <div>
       <Field name={name}>
         {({ field: { onChange: _onChange, ...field }, meta, form }) => {
-          const fieldError = getIn(form.errors, field.name);
+          // const fieldError = getIn(form.errors, field.name);
           const showError = meta.touched && !!form.errors[name];
           return (
             <MuiPickersUtilsProvider utils={DateFnsUtils}>

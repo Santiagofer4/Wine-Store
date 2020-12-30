@@ -13,7 +13,8 @@ import { formatArrayToOption } from '../../utils';
 import FormField from '../../FormComponents/FormField';
 import { postNewProduct } from '../../../slices/productSlice';
 
-function LoadProduct() {
+function LoadProduct(props) {
+  const { tasteOption, strainOption } = props.options;
   const dispatch = useDispatch();
   const emptyValues = {
     name: '',
@@ -27,22 +28,11 @@ function LoadProduct() {
     taste2: '',
     taste3: '',
   };
-  const [strainOption, setStrainOption] = useState([]);
-  const [tasteOption, setTasteOption] = useState([]);
 
-  const allCats = useSelector(allCategoriesSelector);
-  const allStrains = useSelector(allStrainsSelector);
   const allCatStatus = useSelector(allCategoriesStatusSelector);
   const strainStatus = useSelector(strainsStatusSelector);
 
   let content;
-
-  useEffect(() => {
-    if (allCatStatus === 'succeded')
-      setTasteOption(formatArrayToOption(allCats, 'taste'));
-    if (strainStatus === 'succeded')
-      setStrainOption(formatArrayToOption(allStrains));
-  }, [allCatStatus, strainStatus, dispatch]);
 
   const handleSubmit = (values, formik) => {
     const product = {
@@ -59,7 +49,6 @@ function LoadProduct() {
       product,
       formik,
     };
-    // console.log(payload);
     dispatch(postNewProduct(payload));
   };
 
@@ -70,14 +59,6 @@ function LoadProduct() {
     });
   };
 
-  if (allCatStatus === 'loading' || strainStatus === 'loading') {
-    content = (
-      <>
-        <h2>Cargando...</h2>
-        <CircularProgress />
-      </>
-    );
-  }
   if (allCatStatus === 'failed' || strainStatus === 'failed') {
     content = (
       <>
@@ -85,8 +66,7 @@ function LoadProduct() {
         <Button>Reintentar</Button>
       </>
     );
-  }
-  if (allCatStatus === 'succeded' && strainStatus === 'succeded') {
+  } else if (allCatStatus === 'succeded' && strainStatus === 'succeded') {
     content = (
       <Formik
         initialValues={emptyValues}
