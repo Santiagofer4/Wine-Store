@@ -6,7 +6,7 @@ import { Route } from 'react-router-dom';
 import AdminStrain from './LoadCategory/AdminStrain';
 import AdminCategory from './LoadCategory/AdminCategory';
 import AdminProduct from './LoadProduct/AdminProduct';
-import _LoadProduct from './LoadProduct/_LoadProduct';
+import LoadProduct from './LoadProduct/LoadProduct';
 
 const AdminPanel = (props) => {
  

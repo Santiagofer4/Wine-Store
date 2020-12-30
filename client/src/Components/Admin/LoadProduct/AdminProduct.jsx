@@ -17,7 +17,7 @@ import {
   wineDetailSelector,
 } from '../../../selectors/index';
 import EditProduct from './EditProduct';
-import _LoadProduct from './_LoadProduct';
+import LoadProduct from './LoadProduct';
 import {
   resetDetailStatus,
   setWineDetailAsync,
@@ -80,7 +80,7 @@ function AdminProduct(props) {
     if (edit) {
       content = <EditProduct options={options} />;
     } else {
-      content = <_LoadProduct options={options} />;
+      content = <LoadProduct options={options} />;
     }
   }
 

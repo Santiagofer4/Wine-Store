@@ -7,6 +7,7 @@ import { allProductsCartSelector, allProductsCartSyncSelector, allProductsCartSt
 import { getAllProductsCart, sync, addToCart, subtractToCart, deleteFromCart, deleteCart, postProductsCar, deleteProductCar, deleteProductsCart } from '../../slices/productsCartSlice';
 import { total } from '../../Components/utils';
 
+
 function Cart() {
   const dispatch = useDispatch()
   const AllProductsCart = useSelector(allProductsCartSelector)

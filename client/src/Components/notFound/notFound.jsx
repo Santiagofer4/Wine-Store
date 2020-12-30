@@ -7,7 +7,7 @@ function notFound() {
   return (
     <Container className="notFound">
       <h1>Pagina no encontrada</h1>
-      <h2>Aca estaria bueno agregar alguna imagen</h2>
+      <img src="https://i.ibb.co/Jxv0WcQ/error-404-cork-removebg-preview.png"></img>
       <Link to="/">Volver al inicio</Link>
     </Container>
   );
