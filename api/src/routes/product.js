@@ -1,37 +1,33 @@
 const server = require('express').Router();
 const { Sequelize } = require('sequelize');
 const { Product, Category, Strain } = require('../db.js');
-// const { Sequelize } = require('sequelize');
 const categoryRouter = require('./category.js');
-
-// [FLAVIO] SIEMPRE RETORNAR UN STATUS DE CUALQUIER METODO QUE SE LE HACE A LA API:
-// PUEDE SER DE 3 maneras (desconozco si habra otra manera de hacerlo):
-// 1. return res.status(XXX).send(`CON O SIN CONTENIDO)
-// 2. return res.send(xxx,`CON O SON CONTENIDO`)
-// 3. return res.sendStatus(XXX)
-// Cualquiera de las formas es correcta, pero, res.status(XXX) NO DEVUELVE NADA -- OJO -- cambié el color del comentario por la demo
 
 server.use('/category', categoryRouter);
 
+//Listado de todos los Productos
+
 server.get('/', (req, res, next) => {
-  //  console.log('Traigo todos los productos - GET a /products');
-  Product.findAll().then((products) => {
+   Product.findAll().then((products) => {
     res.send(products);
   });
 });
 
+//Devuelve un producto según el ID
+
 server.get('/:id', (req, res) => {
   let { id } = req.params;
-  // console.log('Filtro productos por id - GET a /products/:id');
   if (!id) return res.status(404).send('No existe el producto');
   Product.findByPk(id).then((product) => {
     return res.status(200).send(product);
   });
 });
 
+//Filtrar productos por categoría
+
 server.get('/productsByCategory/:category', (req, res) => {
   let { category } = req.params;
-  // console.log('Productos con la :category - GET a /products/productsByCategory/:category')
+  
   if (!category) return res.status(404).send('Se necesita categoría');
 
   Category.findAll({
@@ -41,6 +37,8 @@ server.get('/productsByCategory/:category', (req, res) => {
     res.json(s);
   });
 });
+
+//Modificar Producto
 
 server.put('/:id', async (req, res) => {
   let { id } = req.params;
@@ -87,11 +85,13 @@ server.put('/:id', async (req, res) => {
   }
 });
 
+//Eliminar un Producto
+
 server.delete('/:id', async (req, res) => {
   let { id } = req.params;
   let wine;
   let categories;
-  // console.log('Elimino un producto - DELETE a /products/:id');
+  
   if (!id) return res.status(400).send('No se recibio ID');
   try {
     //* Instanciamos el prod a borrar y las categorias correspondientes a ese prod
@@ -111,9 +111,11 @@ server.delete('/:id', async (req, res) => {
   }
 });
 
+//Borrar categoría de un producto
+
 server.delete('/:idProduct/category/:idCategory', (req, res) => {
   const { idProduct, idCategory } = req.params;
-  // console.log('Borro categoría de producto - DELETE a /products/:idProduct/category/:idCategory')
+ 
   if (!idProduct || idCategory)
     return res.status(400).send('No existe el producto o la categoría');
 
@@ -127,7 +129,9 @@ server.delete('/:idProduct/category/:idCategory', (req, res) => {
     .catch((e) => console.log(e));
 });
 
-server.post('/', async (req, res, next) => {
+//Crear un nuevo Producto
+
+server.post('/', async (req, res) => {
   let {
     name,
     price,
@@ -162,6 +166,8 @@ server.post('/', async (req, res, next) => {
     return res.status(500).send(error);
   }
 });
+
+//Agregar categoría a un Producto
 
 server.post('/:idProduct/category', (req, res) => {
   let { idProduct } = req.params;

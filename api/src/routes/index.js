@@ -42,14 +42,13 @@ router.get('/search', (req, res) => {
       conditions.push({ yearHarvest: { [Op.eq]: number } });
     }
   }
-  // console.log('QUERY', conditions);
+
   Product.findAll({
     where: {
       [Op.or]: conditions,
     },
   })
     .then((result) => {
-      // console.log('RESULT', result);
       return res.status(200).send(result);
     })
     .catch((err) => console.error(err));

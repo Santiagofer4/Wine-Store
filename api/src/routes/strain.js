@@ -1,8 +1,9 @@
 const server = require('express').Router();
 const { Strain } = require('../db.js');
 
+//Listados de Strains (Cepas)
+
 server.get('/', (req, res, next) => {
-  // console.log('Trae todas las cepas - GET a /strain');
   Strain.findAll()
     .then((strain) => {
       return res.status(200).json(strain);
@@ -10,9 +11,10 @@ server.get('/', (req, res, next) => {
     .catch(next);
 });
 
+//Creo o modifico cepa
+
 server.post('/', (req, res) => {
   let { name, description, pairing, origin } = req.body;
-  // console.log('Creo o modifico cepa - POST a /strain');
   if (!name)
     return res.status(400).send('No se puede crear o modificar la cepa');
 
@@ -27,10 +29,11 @@ server.post('/', (req, res) => {
       origin,
     },
   }).then((strain) => {
-    // console.log('200 OK', strain);
     return res.status(201).send(strain);
   });
 });
+
+//Eliminar Cepa
 
 server.delete('/:id', (req, res) => {
   let { id } = req.params;

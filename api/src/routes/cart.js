@@ -1,11 +1,12 @@
 const server = require("express").Router();
-const { User, Order, OrderLine } = require("../db.js");
+const { Order, OrderLine } = require("../db.js");
+
+//El Carrito va a ser una orden con un status CART
 
 //Obtener la orden CARRITO (CART)
 
 server.post("/", (req, res) => {
   let { id } = req.params;
-  console.log("ID", id);
   let { productId, quantity, price } = req.body;
 
   if (!productId || id)
@@ -34,28 +35,3 @@ server.post("/", (req, res) => {
 });
 
 module.exports = server;
-
-//   models.sequelize.transaction(function(t) {
-//     return models.users.findOrCreate({
-//       where: {
-//         userId:    profile.userId,
-//         name:      profile.name
-//       },
-//       transaction: t
-//     })
-//     .spread(function(userResult, created){
-//       // userResult is the user instance
-
-//       if (created) {
-//         // created will be true if a new user was created
-//       }
-//     });
-//   });
-
-//   if (!idProduct || Category)
-//   return res.status(400).send('No se puede agregar la categoría');
-
-// Product.findByPk(idProduct).then((product) => {
-//   product.addCategory(Category);
-//   return res.send('Se agregó la categoría');
-// });
