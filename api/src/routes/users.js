@@ -112,7 +112,7 @@ server.get("/:id/orders", (req, res) => {
 server.post("/", (req, res, next) => {
   let { firstName, lastName, email, birthdate, cellphone, password } = req.body;
 
-  //if (!email) return res.status(400).send('Debe ingresar un email');
+  if (!email) return res.status(400).send('Debe ingresar un email');
 
   User.findOrCreate({
     where: {

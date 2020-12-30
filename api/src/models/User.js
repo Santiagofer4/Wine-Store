@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const bcrypt = require("bcrypt");
 
 module.exports = (sequelize) => {
   // defino el modelo
@@ -40,7 +41,14 @@ module.exports = (sequelize) => {
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: true, // Funcionalidad completa será agregada más adelante
+        allowNull: true, 
+        set(value) {
+          if (value) {
+            const salt = bcrypt.genSaltSync(10);
+            const hash = bcrypt.hashSync(value, salt);
+            this.setDataValue("password", hash);
+          }
+        },      
       },
     },// { timestamps: false },
     {

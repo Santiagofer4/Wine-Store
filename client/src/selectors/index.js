@@ -67,3 +67,7 @@ export const allStrainsSelector = (state) => state.strains.allStrains.list;
 export const strainsStatusSelector = (state) => state.strains.status;
 
 export const strainsErrorSelector = (state) => state.strains.error;
+
+export const allOrderSelector = (state) => state.orderTable.orderTable.orders;
+
+export const allOrderStatusSelector = (state) => state.orderTable.orderTable.status;

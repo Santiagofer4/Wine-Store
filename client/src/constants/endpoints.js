@@ -24,3 +24,5 @@ export const strainsEndpoint = baseEndpoint + 'strain/';
 export const searchProductEndpoint = baseEndpoint + 'search?word=';
 
 export const addUserEndpoint = baseEndpoint + 'users/';
+
+export const getOrderTableEndpoint = baseEndpoint + 'orders/';

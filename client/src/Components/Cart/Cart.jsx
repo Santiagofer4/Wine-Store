@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@material-ui/core";
 import { allProductsCartSelector, allProductsCartSyncSelector, allProductsCartStatusSelector } from '../../selectors'
-import { getAllProductsCart, sync, addToCart, subtractToCart, deleteFromCart, deleteCart, postProductsCar, deleteProductCar, deleteProductsCart } from '../../slices/productsCartSlice'
-
+import { getAllProductsCart, sync, addToCart, subtractToCart, deleteFromCart, deleteCart, postProductsCar, deleteProductCar, deleteProductsCart } from '../../slices/productsCartSlice';
+import { total } from '../../Components/utils';
 
 function Cart() {
   const dispatch = useDispatch()
@@ -18,34 +18,36 @@ function Cart() {
     dispatch(deleteCart())
     dispatch(deleteProductsCart(1))
   };
-  window.onbeforeunload = function () {
+
+ /* window.onbeforeunload = function () {
     AllProductsCart.map(e => {
       dispatch(postProductsCar({ e, userId: 1 }))
     })
     return 'Texto de aviso';
-  };
+  };*/
 
-  const handleDecrement = (e, quantity) => {
-    let id = e.target.name * 1
+  const handleDecrement = (event,price, quantity) => {
+    let id = event.target.name * 1;
+    let e = { id, quantity: quantity -1, price }
     if (quantity > 1) {
-      dispatch(subtractToCart(id))
+      let valueInput = document.getElementById(id).value
+      if(valueInput > 1){
+        dispatch(subtractToCart(id))
+        dispatch(postProductsCar({ e, userId: 1 }))
+
+      }
     }
   }
 
-  const total = () => {
-    let x = 0;
-    AllProductsCart.forEach(p => {
-      x = x + p.price * p.quantity
-    })
-    setSubTotal(x)
-  }
-
-  const handleIncrement = (e) => {
-    let id = e.target.name * 1;
-      let productDetail = {
-        id,
+  const handleIncrement = (event,price,quantity, stock) => {
+    let id = event.target.name * 1;
+      let productDetail = {id,}
+      let valueInput = document.getElementById(id).value;
+      if(valueInput < stock){
+        let e = { id, quantity: quantity +1, price }
+        dispatch(addToCart({ productDetail }))
+        dispatch(postProductsCar({ e, userId: 1 }))
       }
-      dispatch(addToCart({ productDetail }))
   };
 
   const handlerDeleteElement = (id) => {
@@ -56,13 +58,14 @@ function Cart() {
   const handleConfirm = () => { }
 
   useEffect(() => {
+    setSubTotal(total(AllProductsCart));
     if (sincronizar === false) {
-      total()
       dispatch(getAllProductsCart(1))
       dispatch(sync(true))
-    } else {
-      total()
     }
+    // AllProductsCart.map(e => { // esto se puede factorizar, usando la ruta a la api para modificar cantidades
+    //   dispatch(postProductsCar({ e, userId: 1 }))
+    // })
   }, [AllProductsCart]);
 
   if (status === 'succeded') {
@@ -75,7 +78,6 @@ function Cart() {
             <hr className="line" />
             <ul>
               {AllProductsCart.map((p) => (
-
                 <li className="productCart" key={p.id}>
                   <div>
                     <img
@@ -87,9 +89,6 @@ function Cart() {
                   <div className="infoProduct">
                     <div>
                       <p>{p.name}</p>
-                      <p className="ProductDescription">
-                        {p.description}
-                      </p>
                       <p>$ {p.price}</p>
                     </div>
                     <div className="quantity">
@@ -111,7 +110,7 @@ function Cart() {
                       <Button
                         name={p.id}
                         className="button"
-                        onClick={(e) => handleIncrement(e, p.stock, p.quantity)}
+                        onClick={(e) => handleIncrement(e, p.price, p.quantity, p.stock)}
                       >
                         +
                     </Button>
