@@ -185,7 +185,7 @@ function EditProduct(props) {
                 color="primary"
                 label="Eliminar"
                 name="delete2"
-                onClick={() => handleCatDelete(e, formik)}
+                onClick={(e) => handleCatDelete(e, formik)}
               >
                 X
               </Button>
@@ -202,7 +202,7 @@ function EditProduct(props) {
                 color="primary"
                 label="Eliminar"
                 name="delete3"
-                onClick={() => handleCatDelete(e, formik)}
+                onClick={(e) => handleCatDelete(e, formik)}
               >
                 X
               </Button>
@@ -227,7 +227,7 @@ function EditProduct(props) {
                   variant="outlined"
                   color="primary"
                   disabled={!formik.isValid}
-                  onClick={() => handleDelete(formik)}
+                  onClick={(e) => handleDelete(formik)}
                 >
                   DELETE
                 </Button>
