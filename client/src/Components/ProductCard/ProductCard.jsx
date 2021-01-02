@@ -7,7 +7,11 @@ import CardActions from '@material-ui/core/CardActions';
 import './ProductCard.modules.css';
 import { useDispatch } from 'react-redux';
 import { wineDetails } from '../../slices/productDetailSlice';
-import { addToCart, postProductsCar } from '../../slices/productsCartSlice';
+import {
+  addToCart,
+  postProductsCar,
+  postProductToCart,
+} from '../../slices/productsCartSlice';
 import { useHistory } from 'react-router-dom';
 
 function ProductCard(props) {
@@ -21,11 +25,22 @@ function ProductCard(props) {
   };
 
   // refactorizar esta funcion
-  function handlerProductToCart(userId, id, price) {
-    let productDetail = { image, name, price, id, stock, quantity: 1 };
-    dispatch(addToCart({ userId, productDetail }));
-    let e = productDetail;
-    dispatch(postProductsCar({ e, userId }));
+  function handlerProductToCart(userId, id) {
+    // let productDetail = { image, name, price, id, stock, quantity: 1 };
+    // dispatch(addToCart({ userId, productDetail }));
+    // let e = productDetail;
+    // dispatch(postProductsCar({ e, userId }));
+    const { price: _price, ...detail } = props.data;
+    const payload = {
+      id,
+      price,
+      detail,
+      userId,
+      quantity: 1,
+      increment: true,
+    };
+    // console.log('PAYLOAD', payload);
+    dispatch(postProductToCart(payload));
   }
 
   return (
@@ -55,7 +70,7 @@ function ProductCard(props) {
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  handlerProductToCart(1, id, price);
+                  handlerProductToCart(1, id);
                 }}
               >
                 Comprar

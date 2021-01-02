@@ -69,12 +69,87 @@ export const deleteSingleProdFromCart = createAsyncThunk(
   }
 );
 
+export const postProductsCar = createAsyncThunk(
+  'productsCart/postProductsCard',
+  async (producto) => {
+    let { id, price, quantity } = producto.e;
+    const resp = await axios.post(
+      postProductsCardEnpoint + producto.userId + '/cart',
+      { id, price, quantity }
+    );
+    return resp;
+  }
+);
+export const deleteProductCar = createAsyncThunk(
+  'product/deleteProductsCard',
+  async (producto) => {
+    let { id, userId } = producto;
+    const resp = await axios.delete(
+      deleteProductCarEnpoint + userId + '/cart/' + id
+    );
+    return resp;
+  }
+);
+export const deleteProductsCart = createAsyncThunk(
+  'cart/delateCartofUser',
+  async (userId) => {
+    const resp = await axios.delete(
+      deleteProductCarEnpoint + userId + '/cart/'
+    );
+    return resp;
+  }
+);
+
 const productsCartSlice = createSlice({
   name: 'productsCart',
   initialState: initialState_product,
   reducers: {
+    addToCart(state, action) {
+      const { id, price, image, name, stock } = action.payload.productDetail;
+      let obj = state.allProductsCart.list.find((e) => e.id === id);
+      state.allProductsCart.userId = action.payload.userId;
+      if (!obj) {
+        state.allProductsCart.list.push({
+          id,
+          price,
+          image,
+          name,
+          quantity: 1,
+          stock,
+        });
+      } else {
+        let index = state.allProductsCart.list.findIndex((e) => e.id === id);
+        if (
+          state.allProductsCart.list[index].stock >
+          state.allProductsCart.list[index].quantity
+        ) {
+          state.allProductsCart.list[index].quantity++;
+        }
+      }
+    },
     sync(state, action) {
       state.allProductsCart.sync = action.payload;
+    },
+    subtractToCart(state, action) {
+      const id = action.payload;
+      let obj = state.allProductsCart.list.findIndex((e) => e.id === id);
+      if (state.allProductsCart.list[obj].quantity === 1) {
+        state.allProductsCart.list = state.allProductsCart.list.filter(
+          (e) => e.id !== id
+        );
+      } else {
+        let index = state.allProductsCart.list.findIndex((e) => e.id === id);
+        state.allProductsCart.list[index].quantity--;
+      }
+    },
+    deleteFromCart(state, action) {
+      const id = action.payload;
+      state.allProductsCart.list = state.allProductsCart.list.filter(
+        (e) => e.id !== id
+      );
+    },
+    deleteCart(state, action) {
+      state.allProductsCart.list = [];
     },
   },
   extraReducers: {
@@ -97,6 +172,16 @@ const productsCartSlice = createSlice({
         });
     },
     [getAllProductsCart.rejected]: (state, action) => {
+      state.allProductsCart.status = status.failed;
+      state.allProductsCart.error = action.error;
+    },
+    [postProductsCar.pending]: (state, action) => {
+      state.allProductsCart.status = status.loading;
+    },
+    [postProductsCar.fulfilled]: (state, { payload }) => {
+      state.allProductsCart.status = status.succeded;
+    },
+    [postProductsCar.rejected]: (state, action) => {
       state.allProductsCart.status = status.failed;
       state.allProductsCart.error = action.error;
     },

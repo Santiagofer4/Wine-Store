@@ -1,15 +1,15 @@
-const server = require("express").Router();
-const { User, Order, Product, OrderLine } = require("../db.js");
+const server = require('express').Router();
+const { User, Order, Product, OrderLine } = require('../db.js');
 //const cartRouter = require('./cart.js');
 
 //server.use('/:id/cart', cartRouter);
 
 //Borrar un USER by ID
 
-server.delete("/:id", (req, res) => {
+server.delete('/:id', (req, res) => {
   let { id } = req.params;
 
-  if (!id) return res.status(400).send("No se encontró el usuario a eliminar");
+  if (!id) return res.status(400).send('No se encontró el usuario a eliminar');
 
   User.destroy({
     where: {
@@ -22,38 +22,60 @@ server.delete("/:id", (req, res) => {
 
 //Vaciar carrito
 
-server.delete("/:idUser/cart", (req, res) => {
-  let { idUser } = req.params;
+server.delete('/:userId/cart', async (req, res) => {
+  let { userId } = req.params;
 
-  if (!idUser) return res.send(400, "No hay carrito asociado al usuario");
+  if (!userId) return res.send(400, 'No hay carrito asociado al usuario');
 
-  Order.findOne({
-    where: {
-      status: "cart",
-      userId: idUser,
-    },
-  }).then((orders) => {
-    let id = orders.id;
-    OrderLine.destroy({
+  try {
+    let cartFromUser = await Order.findOne({
       where: {
-        orderId: id,
+        status: 'cart',
+        userId: userId,
       },
-    }).then(() => {
-      return res.send(200, "El carrito del usuario se ha borrado");
     });
-  });
+    if (cartFromUser.dataValues && cartFromUser.dataValues.id) {
+      let deletedOrderLines = await OrderLine.destroy({
+        where: {
+          orderId: cartFromUser.dataValues.id,
+        },
+      });
+      return res.status(200).send(String(deletedOrderLines));
+    } else {
+      return res.status(400).send('el usuario no tiene carrito');
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send(error);
+  }
+
+  // Order.findOne({
+  //   where: {
+  //     status: 'cart',
+  //     userId: userId,
+  //   },
+  // }).then((orders) => {
+  //   let id = orders.id;
+  //   OrderLine.destroy({
+  //     where: {
+  //       orderId: id,
+  //     },
+  //   }).then(() => {
+  //     return res.send(200, 'El carrito del usuario se ha borrado');
+  //   });
+  // });
 });
 
 // Borrar producto del carrito
 
-server.delete("/:idUser/cart/:productId", (req, res) => {
+server.delete('/:idUser/cart/:productId', (req, res) => {
   let { idUser, productId } = req.params;
 
-  if (!idUser) return res.send(400, "No hay carrito asociado al usuario");
+  if (!idUser) return res.send(400, 'No hay carrito asociado al usuario');
 
   Order.findOne({
     where: {
-      status: "cart",
+      status: 'cart',
       userId: idUser,
     },
   }).then((orders) => {
@@ -64,14 +86,14 @@ server.delete("/:idUser/cart/:productId", (req, res) => {
         productId,
       },
     }).then(() => {
-      return res.status(200).send("El producto ha sido eliminado del carrito");
+      return res.status(200).send('El producto ha sido eliminado del carrito');
     });
   });
 });
 
 // Listar todos los USERS
 
-server.get("/", (req, res, next) => {
+server.get('/', (req, res, next) => {
   User.findAll()
     .then((user) => {
       return res.status(200).send(user);
@@ -81,10 +103,10 @@ server.get("/", (req, res, next) => {
 
 // Ruta que retorna todos los items del carrito - GET a /users/:id/cart
 
-server.get("/:id/cart", (req, res) => {
+server.get('/:id/cart', (req, res) => {
   let { id } = req.params;
   Order.findAll({
-    where: { status: "cart", userId: id },
+    where: { status: 'cart', userId: id },
     include: { model: OrderLine, include: [{ model: Product }] },
   }).then((ord) => {
     return res.status(200).send(ord);
@@ -93,7 +115,7 @@ server.get("/:id/cart", (req, res) => {
 
 // Ruta que retorna todas las ordenes de un usuario
 
-server.get("/:id/orders", (req, res) => {
+server.get('/:id/orders', (req, res) => {
   const { id } = req.params;
   id = id * 1;
   Order.findAll({
@@ -109,7 +131,7 @@ server.get("/:id/orders", (req, res) => {
 
 //Agregar un USER
 
-server.post("/", (req, res, next) => {
+server.post('/', (req, res, next) => {
   let { firstName, lastName, email, birthdate, cellphone, password } = req.body;
 
   if (!email) return res.status(400).send('Debe ingresar un email');
@@ -143,53 +165,92 @@ server.post("/", (req, res, next) => {
 
 // Agregar elemento al carrito
 
-server.post("/:userId/cart", (req, res) => {
+server.post('/:userId/cart', async (req, res) => {
   let { userId } = req.params;
-  let { id, price, quantity } = req.body;
+  let { id, price, quantity, increment } = req.body;
+  // console.log('BODY', req.body);
+  // console.log('USER ID', userId);
 
   if (!id || !userId)
-    return res.status(400).send("No se puede agregar el producto al carrito");
-  let instacia;
-  Order.findOrCreate({
-    where: {
-      userId,
-      status: "cart",
-    },
-    defaults: {
-      total: 0,
-      status: "cart",
-    },
-  }).then((order) => {
-    const [instance, wasCreated] = order; // si crea el dato wasCreated = true sino false
-    instacia = instance;
-    orderLine = OrderLine.findOrCreate({
+    return res.status(400).send('Id de usuario o producto faltante');
+
+  try {
+    const [newOrder, newOrderCreated] = await Order.findOrCreate({
+      where: {
+        userId,
+        status: 'cart',
+      },
+      defaults: {
+        total: 0,
+        status: 'cart',
+      },
+    });
+
+    const [newOrderLine, newOrderLineCreated] = await OrderLine.findOrCreate({
       where: {
         productId: id,
       },
       defaults: {
         productId: id,
-        quantity,
+        quantity: increment ? quantity++ : quantity--,
         price,
       },
-    }).then((orderLine) => {
-      const [instance, wasCreated] = orderLine;
-      if (!wasCreated) {
-        OrderLine.update({ quantity }, { where: { productId: id } });
-      }
-      instance.setProduct(id);
-      instance.setOrder(instacia.id);
-      });
-  });
-  res.status(200).send("Entré a agregar item al carrito");
+    });
+
+    if (!newOrderLineCreated) {
+      await newOrderLine.update({ quantity }, { where: { productId: id } });
+    }
+
+    await newOrderLine.setProduct(id);
+    await newOrderLine.setOrder(newOrder.dataValues.id);
+
+    return res.status(200).send({ newOrder, newOrderLine });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send(error);
+  }
+
+  // let instacia;
+  // Order.findOrCreate({
+  //   where: {
+  //     userId,
+  //     status: 'cart',
+  //   },
+  //   defaults: {
+  //     total: 0,
+  //     status: 'cart',
+  //   },
+  // }).then((order) => {
+  //   const [instance, wasCreated] = order; // si crea el dato wasCreated = true sino false
+  //   instacia = instance;
+  //   orderLine = OrderLine.findOrCreate({
+  //     where: {
+  //       productId: id,
+  //     },
+  //     defaults: {
+  //       productId: id,
+  //       quantity,
+  //       price,
+  //     },
+  //   }).then((orderLine) => {
+  //     const [instance, wasCreated] = orderLine;
+  //     if (!wasCreated) {
+  //       OrderLine.update({ quantity }, { where: { productId: id } });
+  //     }
+  //     instance.setProduct(id);
+  //     instance.setOrder(instacia.id);
+  //   });
+  // });
+  // res.status(200).send('Entré a agregar item al carrito');
 });
 
 //Editar un USER by ID
 
-server.put("/:id", (req, res) => {
+server.put('/:id', (req, res) => {
   let { id } = req.params;
   let { firstName, lastName, email, birthdate, cellphone, password } = req.body;
 
-  if (!id) return res.status(400).send("El usuario no existe");
+  if (!id) return res.status(400).send('El usuario no existe');
 
   User.findByPk(id)
     .then(
@@ -199,22 +260,22 @@ server.put("/:id", (req, res) => {
       )
     )
     .then(() => {
-      return res.status(200).send("Se ha modificado el usuario");
+      return res.status(200).send('Se ha modificado el usuario');
     });
 });
 
 //Editar cantidades de producto
 
-server.put("/:idUser/cart", (req, res) => {
+server.put('/:idUser/cart', (req, res) => {
   let { idUser } = req.params;
   idUser = idUser * 1;
   let { productId, quantity } = req.body;
 
-  if (!idUser) return res.status(400).send("El usuario no existe");
+  if (!idUser) return res.status(400).send('El usuario no existe');
 
   Order.findOne({
     where: {
-      status: "cart",
+      status: 'cart',
       userId: idUser,
     },
   })
@@ -226,7 +287,7 @@ server.put("/:idUser/cart", (req, res) => {
       );
     })
     .then(() => {
-      return res.send(200, "El carrito del usuario se ha actualizado");
+      return res.send(200, 'El carrito del usuario se ha actualizado');
     });
 });
 

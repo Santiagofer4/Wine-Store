@@ -13,9 +13,9 @@ function CartItem(props) {
   const dispatch = useDispatch();
   const { id, image, name, price, quantity, stock } = props.prod;
   const {
-    handlerDeleteElement,
-    handleIncrement,
-    handleDecrement,
+    deleteItemHandler,
+    incrementHandler,
+    decrementHandler,
   } = props.handlers;
 
   return (
@@ -37,13 +37,13 @@ function CartItem(props) {
             <a href="#" className="Cart__DeleteProduct">
               <i
                 class="fas fa-trash-alt"
-                onClick={(e) => handlerDeleteElement({ id, userId: 1 })}
+                onClick={(e) => deleteItemHandler({ id, userId: 1 })}
               ></i>
             </a>
             <Button
               name={id}
               className="button"
-              onClick={(e) => handleDecrement(e, price, quantity)}
+              onClick={(e) => decrementHandler(e, price, quantity)}
             >
               -
             </Button>
@@ -51,7 +51,7 @@ function CartItem(props) {
             <Button
               name={id}
               className="button"
-              onClick={(e) => handleIncrement(e, price, quantity, stock)}
+              onClick={(e) => incrementHandler(e, price, quantity, stock)}
             >
               +
             </Button>

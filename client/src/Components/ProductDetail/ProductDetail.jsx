@@ -13,7 +13,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { wineDetails } from '../../slices/productDetailSlice';
-import { addToCart, postProductsCar } from '../../slices/productsCartSlice';
+import {
+  addToCart,
+  postProductsCar,
+  postProductToCart,
+} from '../../slices/productsCartSlice';
 import { getAllCatsOfProduct } from '../../slices/categorySlice';
 import { productDetailSelector } from '../../selectors/index';
 
@@ -76,9 +80,18 @@ function ProductDetail() {
 
   // esta funcion debe ser refactorizada
   function handlerProductToCart(userId) {
-    dispatch(addToCart({ userId, productDetail }));
-    let e = { id, price, quantity: 1 };
-    dispatch(postProductsCar({ e, userId: 1 }));
+    // dispatch(addToCart({ userId, productDetail }));
+    // let e = { id, price, quantity: 1 };
+    // dispatch(postProductsCar({ e, userId: 1 }));
+    const payload = {
+      id,
+      price,
+      detail: productDetail,
+      quantity: 1,
+      userId,
+      increment: true,
+    };
+    dispatch(postProductToCart(payload));
   }
 
   return (

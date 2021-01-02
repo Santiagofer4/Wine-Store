@@ -18,6 +18,9 @@ import {
   postProductsCar,
   deleteProductCar,
   deleteProductsCart,
+  postProductToCart,
+  deleteAllProductsFromCart,
+  deleteSingleProdFromCart,
 } from '../../slices/productsCartSlice';
 import { total } from '../../Components/utils';
 import CartItem from './CartItem/CartItem';
@@ -30,8 +33,9 @@ function Cart() {
   const [subTotal, setSubTotal] = useState(0);
 
   const handleDelete = () => {
-    dispatch(deleteCart());
-    dispatch(deleteProductsCart(1));
+    // dispatch(deleteCart());
+    // dispatch(deleteProductsCart(1));
+    dispatch(deleteAllProductsFromCart({ userId: 1 }));
   };
 
   /* window.onbeforeunload = function () {
@@ -41,40 +45,62 @@ function Cart() {
     return 'Texto de aviso';
   };*/
 
-  const handleDecrement = (event, price, quantity) => {
+  const decrementHandler = (event, price, quantity) => {
     let id = event.target.name * 1;
     let e = { id, quantity: quantity - 1, price };
+    const payload = {
+      id,
+      price,
+      quantity,
+      userId: 1,
+      increment: false,
+    };
     if (quantity > 1) {
       let valueInput = document.getElementById(id).value;
       if (valueInput > 1) {
-        dispatch(subtractToCart(id));
-        dispatch(postProductsCar({ e, userId: 1 }));
+        dispatch(postProductToCart(payload));
+        // dispatch(subtractToCart(id));
+        // dispatch(postProductsCar({ e, userId: 1 }));
       }
     }
   };
 
-  const handleIncrement = (event, price, quantity, stock) => {
+  const incrementHandler = (event, price, quantity, stock) => {
     let id = event.target.name * 1;
     let productDetail = { id };
     let valueInput = document.getElementById(id).value;
+    const payload = {
+      id,
+      price,
+      quantity,
+      stock,
+      userId: 1,
+      increment: true,
+    };
     if (valueInput < stock) {
-      let e = { id, quantity: quantity + 1, price };
-      dispatch(addToCart({ productDetail }));
-      dispatch(postProductsCar({ e, userId: 1 }));
+      dispatch(postProductToCart(payload));
+      // let e = { id, quantity: quantity + 1, price };
+      // dispatch(addToCart({ productDetail }));
+      // dispatch(postProductsCar({ e, userId: 1 }));
     }
   };
 
-  const handlerDeleteElement = (id) => {
-    dispatch(deleteFromCart(id.id));
-    dispatch(deleteProductCar(id));
+  const deleteItemHandler = ({ id, userId }) => {
+    const payload = {
+      productId: id,
+      userId,
+    };
+    dispatch(deleteSingleProdFromCart(payload));
+    // dispatch(deleteFromCart(id.id));
+    // dispatch(deleteProductCar(id));
   };
 
   const handleConfirm = () => {};
 
   const handlers = {
-    handlerDeleteElement,
-    handleIncrement,
-    handleDecrement,
+    deleteItemHandler,
+    incrementHandler,
+    decrementHandler,
   };
   useEffect(() => {
     setSubTotal(total(AllProductsCart));
