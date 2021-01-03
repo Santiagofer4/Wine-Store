@@ -11,7 +11,7 @@ list-style: none;
 width: 20%;
 
 }
-.OrderDetail__Ul{
+.OrderDetail__li{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
