@@ -28,8 +28,11 @@ function UserForm() {
 
     function handleOnSubmit(e){
       e.preventDefault();
-      dispatch(createUser(state));
-      history.push('/catalogue'); //En el futuro puede redireccionar a /me
+      dispatch(createUser(state))
+      .then((payload) => {
+        if (payload.type === "user/register/fulfilled") {history.push('/welcome')}
+        else { history.push('/failure')}
+      }); //En el futuro puede redireccionar a /me
     };
 
     return (

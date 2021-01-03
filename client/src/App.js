@@ -12,6 +12,8 @@ import ProductDetail from './Components/ProductDetail/ProductDetail';
 import Cart from './Components/Cart/Cart.jsx';
 import OrderTable from './Components/OrderTable/OrderTable.jsx';
 import UserForm from './Components/Forms/User/UserForm.jsx';
+import Welcome from './Components/Contenido/Welcome';
+import Failure from './Components/Contenido/Failure';
 import notFound from './Components/notFound/notFound';
 
 function App() {
@@ -35,6 +37,8 @@ function App() {
         <Route path="/cart" component={Cart} />
         <Route path="/order-table" component={OrderTable} />
         <Route path="/form/user" component={UserForm} />
+        <Route path="/welcome" component={Welcome} />
+        <Route path="/failure" component={Failure} />
         <Route path="/404" component={notFound} />
         <Redirect to="/404" />
       </Switch>
