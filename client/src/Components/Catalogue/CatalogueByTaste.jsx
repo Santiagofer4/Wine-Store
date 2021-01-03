@@ -1,16 +1,12 @@
 import React, { useEffect } from 'react';
-import {/* connect, */useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, CircularProgress } from '@material-ui/core';
 import './CatalogueByTaste.modules.css';
 
 import ProductCard from '../ProductCard/ProductCard.jsx';
 import Sidebar from '../Sidebar/Sidebar.jsx';
-//import { getCategoryList } from '../../actions';
 import { getAllProducts } from '../../slices/productSlice';
 import {
-  //allProductsSelector,
-  //allProductsStatusSelector,
-  //allProductsErrorSelector,
   allProdsByCategoryStatusSelector,
   allProdsByCategoryErrorSelector,
   allProdsByCategorySelector,
@@ -23,12 +19,13 @@ function CatalogueByTaste() {
   const allProdsByCat = useSelector(allProdsByCategorySelector);
   const allProdsByCatError = useSelector(allProdsByCategoryErrorSelector);
   const filteredTaste = useSelector(filteredTasteSelector);
-  //const allProducts = useSelector(allProductsSelector);
 
   useEffect(()=>{
     dispatch(getAllProducts())
-  },[])
+  }, [dispatch])
+
   let content;
+
   if (allProdsByCatStatus === 'loading') {
     content = (
       <>

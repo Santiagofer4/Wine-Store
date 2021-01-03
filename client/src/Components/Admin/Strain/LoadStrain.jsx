@@ -35,7 +35,7 @@ export const LoadStrain = (props) => {
     //   dispatch(getAllStrains());
     // }
     setStrainOption(formatArrayToOption(allStrains, 'name'));
-  }, [strainsStatus, dispatch]);
+  }, [/*strainsStatus,*/ dispatch, allStrains]);
 
   const handleSubmit = (values, onSubmitProps) => {
     dispatch(postNewStrain({ newStrain: values, formik: onSubmitProps }));

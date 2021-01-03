@@ -131,7 +131,7 @@ server.get('/:id/orders', (req, res) => {
 
 //Agregar un USER
 
-server.post('/', (req, res, next) => {
+server.post('/', (req, res) => {
   let { firstName, lastName, email, birthdate, cellphone, password } = req.body;
 
   if (!email) return res.status(400).send('Debe ingresar un email');
@@ -168,8 +168,6 @@ server.post('/', (req, res, next) => {
 server.post('/:userId/cart', async (req, res) => {
   let { userId } = req.params;
   let { id, price, quantity, increment } = req.body;
-  // console.log('BODY', req.body);
-  // console.log('USER ID', userId);
 
   if (!id || !userId)
     return res.status(400).send('Id de usuario o producto faltante');

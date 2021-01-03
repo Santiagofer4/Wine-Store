@@ -26,8 +26,6 @@ function Cart() {
   const [subTotal, setSubTotal] = useState(0);
 
   const handleDelete = () => {
-    // dispatch(deleteCart());
-    // dispatch(deleteProductsCart(1));
     dispatch(deleteAllProductsFromCart({ userId: 1 }));
   };
 
@@ -44,8 +42,6 @@ function Cart() {
       let valueInput = document.getElementById(id).value;
       if (valueInput > 1) {
         dispatch(postProductToCart(payload));
-        // dispatch(subtractToCart(id));
-        // dispatch(postProductsCar({ e, userId: 1 }));
       }
     }
   };
@@ -63,9 +59,6 @@ function Cart() {
     };
     if (valueInput < stock) {
       dispatch(postProductToCart(payload));
-      // let e = { id, quantity: quantity + 1, price };
-      // dispatch(addToCart({ productDetail }));
-      // dispatch(postProductsCar({ e, userId: 1 }));
     }
   };
 
@@ -75,8 +68,6 @@ function Cart() {
       userId,
     };
     dispatch(deleteSingleProdFromCart(payload));
-    // dispatch(deleteFromCart(id.id));
-    // dispatch(deleteProductCar(id));
   };
 
   const handleConfirm = () => {};
@@ -92,10 +83,7 @@ function Cart() {
       dispatch(getAllProductsCart(1));
       dispatch(sync(true));
     }
-    // AllProductsCart.map(e => { // esto se puede factorizar, usando la ruta a la api para modificar cantidades
-    //   dispatch(postProductsCar({ e, userId: 1 }))
-    // })
-  }, [AllProductsCart]);
+  }, [AllProductsCart, sincronizar, dispatch]);
 
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {
@@ -165,54 +153,3 @@ function Cart() {
 }
 
 export default Cart;
-
-//  {AllProductsCart.map((p) => (
-//       <li className="productCart" key={p.id}>
-//         <div>
-//           <img
-//             className="imageProductCart"
-//             src={p.image}
-//             alt="Producto sin imagen"
-//           />
-//         </div>
-//         <div className="infoProduct">
-//           <div>
-//             <p>{p.name}</p>
-//             <p>$ {p.price}</p>
-//           </div>
-//           <div className="quantity">
-//             <a href="#" className="Cart__DeleteProduct">
-//               <i
-//                 class="fas fa-trash-alt"
-//                 onClick={(e) =>
-//                   handlerDeleteElement({ id: p.id, userId: 1 })
-//                 }
-//               ></i>
-//             </a>
-//             <Button
-//               name={p.id}
-//               className="button"
-//               onClick={(e) =>
-//                 handleDecrement(e, p.price, p.quantity)
-//               }
-//             >
-//               -
-//             </Button>
-//             <input
-//               className="input"
-//               id={p.id}
-//               value={p.quantity}
-//             ></input>
-//             <Button
-//               name={p.id}
-//               className="button"
-//               onClick={(e) =>
-//                 handleIncrement(e, p.price, p.quantity, p.stock)
-//               }
-//             >
-//               +
-//             </Button>
-//           </div>
-//         </div>
-//       </li>
-//     ))}

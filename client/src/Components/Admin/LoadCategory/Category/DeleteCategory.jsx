@@ -27,7 +27,7 @@ function DeleteCategory() {
     if (allCatStatus === 'succeded') {
       setCategoryOption(formatArrayToOption(allCats, 'taste'));
     }
-  }, [allCatStatus, dispatch]);
+  }, [allCatStatus, dispatch, allCats]);
 
   const handleSubmit = (values, onSubmitProps) => {
     const categoryId = values.tasteToDelete;

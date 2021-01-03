@@ -41,7 +41,7 @@ module.exports = (sequelize) => {
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: true, 
+        allowNull: false, 
         set(value) {
           if (value) {
             const salt = bcrypt.genSaltSync(10);
@@ -50,7 +50,7 @@ module.exports = (sequelize) => {
           }
         },      
       },
-    },// { timestamps: false },
+    },
     {
       timestamps: false,
       hooks: {

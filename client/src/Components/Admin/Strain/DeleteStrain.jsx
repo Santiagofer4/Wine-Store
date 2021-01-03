@@ -27,7 +27,7 @@ function DeleteStrain() {
     if (strainsStatus === 'succeded') {
       setStrainOption(formatArrayToOption(allStrains, 'name'));
     }
-  }, [strainsStatus, dispatch]);
+  }, [strainsStatus, dispatch, allStrains]);
 
   const handleSubmit = (values, onSubmitProps) => {
     const strainId = values.strainToDelete;

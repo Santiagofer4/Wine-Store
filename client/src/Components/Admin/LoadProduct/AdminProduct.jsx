@@ -46,14 +46,14 @@ function AdminProduct(props) {
     if (strainStatus === 'idle') dispatch(getAllStrains());
     if (edit && wineDetailAsyncStatus === 'idle')
       dispatch(setWineDetailAsync(param_id));
-  }, [wineDetailAsyncStatus, allCatStatus, strainStatus, dispatch]);
+  }, [wineDetailAsyncStatus, allCatStatus, strainStatus, dispatch, edit, param_id]);
 
   useEffect(() => {
     //? Cleanup del status del detalle del vino
     return () => {
       dispatch(resetDetailStatus());
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     //? useEffect para tomar las categorias (sabores//taste) y cepas (strains)
@@ -66,7 +66,7 @@ function AdminProduct(props) {
         strainOption: formatArrayToOption(allStrains),
       });
     }
-  }, [allCatStatus, strainStatus, dispatch]);
+  }, [allCatStatus, strainStatus, dispatch, allCats, allStrains]);
   let content;
 
   if (

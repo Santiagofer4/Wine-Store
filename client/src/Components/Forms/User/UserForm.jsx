@@ -48,7 +48,8 @@ function UserForm() {
       >
         <TextField
           className="text__field UserForm__lb"
-          id={state.firstName ? 'accepted' : 'error'}
+          /* id={state.firstName ? 'accepted' : 'error'} */
+          error={!state.firstName}
           name="firstName"
           label="Nombre"
           type="string"
@@ -59,7 +60,8 @@ function UserForm() {
         />
         <TextField
           className="text__field UserForm__lb"
-          id={state.lastName ? 'accepted' : 'error'}
+          /* id={state.lastName ? 'accepted' : 'error'} */
+          error={!state.lastName}
           name="lastName"
           label="Apellido"
           type="string"
@@ -70,7 +72,8 @@ function UserForm() {
         />
         <TextField
           className="text__field UserForm__lb"
-          id={state.email ? 'accepted' : 'error'}
+          /* id={state.email ? 'accepted' : 'error'} */
+          error={!state.email}
           name="email"
           label="Correo electrónico"
           type="email"
@@ -80,7 +83,8 @@ function UserForm() {
         />
         <TextField
           className="text__field UserForm__lb"
-          id={state.birthdate ? 'accepted' : 'error'}
+          /* id={state.birthdate ? 'accepted' : 'error'} */
+          error={!state.birthdate}
           name="birthdate"
           label="Fecha de nacimiento"
           type="date"
@@ -92,7 +96,8 @@ function UserForm() {
 
         <TextField
           className="text__field UserForm__lb"
-          id={state.cellphone ? 'accepted' : 'error'}
+          /* id={state.cellphone ? 'accepted' : 'error'} */
+          error={!state.cellphone}
           name="cellphone"
           label="Teléfono"
           type="tel"
@@ -102,7 +107,8 @@ function UserForm() {
         />
         <TextField
           className="text__field UserForm__lb"
-          id={state.password ? 'accepted' : 'error'}
+          /* id={state.password ? 'accepted' : 'error'} */
+          error={!state.password}
           name="password"
           label="Contraseña"
           type="password"

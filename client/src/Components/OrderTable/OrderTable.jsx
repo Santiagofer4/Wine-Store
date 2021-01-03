@@ -19,7 +19,7 @@ function OrderTable() {
 
     useEffect(()=>{
         dispatch(getOrderTable());
-    }, [])
+    }, [dispatch])
 
     return (
         <div className='OrderTable__Container'>
@@ -41,8 +41,7 @@ function OrderTable() {
                     <li className='OrderTable__Text' >{order.status}</li>
                     <li className='OrderTable__Text' >{order.userId}</li>
                     <li className='OrderTable__Text' >{sliceTime(order.updatedAt)}</li>
-                    <li className='OrderTable__Text'> <button onClick={()=>{ hide(order.id) }}>D</button></li>
-
+                    <li className='OrderTable__Text' > <button onClick={()=>{ hide(order.id) }}>D</button></li>
                     </ul>
                      <OrderDetail id={order.id} data={order.orderLines} ></OrderDetail>
                      </>
