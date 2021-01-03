@@ -1,16 +1,7 @@
 import React from 'react';
 import { Button, Container } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import {
-  addToCart,
-  deleteCart,
-  postProductsCar,
-  subtractToCart,
-  deleteProductCar,
-} from '../../../slices/productsCartSlice';
 
 function CartItem(props) {
-  const dispatch = useDispatch();
   const { id, image, name, price, quantity, stock } = props.prod;
   const {
     deleteItemHandler,

@@ -12,13 +12,9 @@ import './ProductDetail.modules.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
-import { wineDetails } from '../../slices/productDetailSlice';
 import {
-  addToCart,
-  postProductsCar,
   postProductToCart,
 } from '../../slices/productsCartSlice';
-import { getAllCatsOfProduct } from '../../slices/categorySlice';
 import { productDetailSelector } from '../../selectors/index';
 
 const useStyles = makeStyles({

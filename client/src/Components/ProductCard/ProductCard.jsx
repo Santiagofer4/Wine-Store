@@ -8,8 +8,6 @@ import './ProductCard.modules.css';
 import { useDispatch } from 'react-redux';
 import { wineDetails } from '../../slices/productDetailSlice';
 import {
-  addToCart,
-  postProductsCar,
   postProductToCart,
 } from '../../slices/productsCartSlice';
 import { useHistory } from 'react-router-dom';

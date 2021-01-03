@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { productEndpoint, searchProductEndpoint } from '../constants/endpoints';
 import { status } from '../constants/helpers';
-import { thunk } from 'redux-thunk';
 
 const initialState_product = {
   allProducts: {
@@ -26,7 +25,7 @@ export const getAllProducts = createAsyncThunk(
 
 export const postNewProduct = createAsyncThunk(
   'product/postNewProduct',
-  async ({ product, formik }, thunkApi) => {
+  async ({ product, formik }) => {
     const newProd = await axios.post(productEndpoint, product);
     // await thunkApi.dispatch(setWineDetailAsync(product));
     const payload = {
@@ -39,7 +38,7 @@ export const postNewProduct = createAsyncThunk(
 
 export const deleteProduct = createAsyncThunk(
   'product/deleteProduct',
-  async ({ id, formik }, thunkApi) => {
+  async ({ id, formik }) => {
     const deletedWine = await axios.delete(productEndpoint + id);
     const payload = { deletedWine: deletedWine.data, formik };
     return payload;
@@ -57,7 +56,7 @@ export const getProductSearch = createAsyncThunk(
 );
 export const updateProduct = createAsyncThunk(
   'product/updateProduct',
-  async ({ product, formik, emptyValues }, thunkApi) => {
+  async ({ product, formik, emptyValues }) => {
     const categories = product.categories;
     const updated_prod = await axios.put(productEndpoint + product.id, product);
     const payload = {

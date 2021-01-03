@@ -11,13 +11,6 @@ import {
 import {
   getAllProductsCart,
   sync,
-  addToCart,
-  subtractToCart,
-  deleteFromCart,
-  deleteCart,
-  postProductsCar,
-  deleteProductCar,
-  deleteProductsCart,
   postProductToCart,
   deleteAllProductsFromCart,
   deleteSingleProdFromCart,
@@ -38,16 +31,8 @@ function Cart() {
     dispatch(deleteAllProductsFromCart({ userId: 1 }));
   };
 
-  /* window.onbeforeunload = function () {
-    AllProductsCart.map(e => {
-      dispatch(postProductsCar({ e, userId: 1 }))
-    })
-    return 'Texto de aviso';
-  };*/
-
   const decrementHandler = (event, price, quantity) => {
     let id = event.target.name * 1;
-    let e = { id, quantity: quantity - 1, price };
     const payload = {
       id,
       price,
@@ -67,7 +52,6 @@ function Cart() {
 
   const incrementHandler = (event, price, quantity, stock) => {
     let id = event.target.name * 1;
-    let productDetail = { id };
     let valueInput = document.getElementById(id).value;
     const payload = {
       id,

@@ -1,21 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container } from '@material-ui/core';
-import { formatArrayToOption } from '../../utils.js';
-import {
-  resetDetailStatus,
-  setWineDetailAsync,
-} from '../../../slices/productDetailSlice';
 import { Formik, Form } from 'formik';
 import {
-  allCategoriesSelector,
-  allStrainsSelector,
   allCategoriesStatusSelector,
   strainsStatusSelector,
-  productDetailSelector,
   productDetailStatusSelector,
-  productDetailErrorSelector,
   wineDetailSelector,
 } from '../../../selectors';
 import FormField from '../../FormComponents/FormField';
@@ -31,7 +22,6 @@ function EditProduct(props) {
   const strainStatus = useSelector(strainsStatusSelector);
   const wineDetail = useSelector(wineDetailSelector);
   const wineDetailStatus = useSelector(productDetailStatusSelector);
-  const wineDetailError = useSelector(productDetailErrorSelector);
 
   let content;
 

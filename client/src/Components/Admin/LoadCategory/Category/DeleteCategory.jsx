@@ -6,7 +6,6 @@ import { formatArrayToOption } from '../../../utils.js';
 import FormField from '../../../FormComponents/FormField';
 import {
   allCategoriesStatusSelector,
-  allCategoriesErrorSelector,
   allCategoriesSelector,
 } from '../../../../selectors';
 import { deleteCategory } from '../../../../slices/categorySlice';
@@ -14,7 +13,6 @@ import { deleteCategory } from '../../../../slices/categorySlice';
 function DeleteCategory() {
   const dispatch = useDispatch();
   const allCatStatus = useSelector(allCategoriesStatusSelector);
-  const allCatError = useSelector(allCategoriesErrorSelector);
   const allCats = useSelector(allCategoriesSelector);
 
   const initialValues = {

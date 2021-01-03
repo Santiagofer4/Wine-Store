@@ -7,8 +7,7 @@ import { formatArrayToOption } from '../../utils.js';
 import { Formik, Form } from 'formik';
 import {
   allStrainsSelector,
-  strainsStatusSelector,
-  strainsErrorSelector,
+  strainsStatusSelector
 } from '../../../selectors';
 import { deleteStrain } from '../../../slices/strainSlice';
 
@@ -16,7 +15,6 @@ function DeleteStrain() {
   const dispatch = useDispatch();
   const allStrains = useSelector(allStrainsSelector);
   const strainsStatus = useSelector(strainsStatusSelector);
-  const strainsError = useSelector(strainsErrorSelector);
 
   const initialValues = {
     strainToDelete: '',

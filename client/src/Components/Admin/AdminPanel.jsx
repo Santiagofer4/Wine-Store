@@ -6,9 +6,8 @@ import { Route } from 'react-router-dom';
 import AdminStrain from './LoadCategory/AdminStrain';
 import AdminCategory from './LoadCategory/AdminCategory';
 import AdminProduct from './LoadProduct/AdminProduct';
-import LoadProduct from './LoadProduct/LoadProduct';
 
-const AdminPanel = (props) => {
+const AdminPanel = () => {
  
   return (
     <Container className="AdminPanel">

@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CircularProgress, Container } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 import './LoadProduct.modules.css';
 import { getAllCategories } from '../../../slices/categorySlice';
 import { getAllStrains } from '../../../slices/strainSlice';
 import {
-  allCatStatus,
-  strainStatus,
   allCategoriesSelector,
   allStrainsSelector,
   allCategoriesStatusSelector,
   strainsStatusSelector,
-  productDetailStatusSelector,
-  productDetailErrorSelector,
-  wineDetailSelector,
+  productDetailStatusSelector
 } from '../../../selectors/index';
 import EditProduct from './EditProduct';
 import LoadProduct from './LoadProduct';
@@ -26,7 +21,6 @@ import { formatArrayToOption } from '../../utils';
 
 function AdminProduct(props) {
   const dispatch = useDispatch();
-  const history = useHistory();
   let param_id;
   const edit = props.location.state ? props.location.state.edit : false; //?booleano para determinar si se desea EDITAR la instancia
   if (edit) {
@@ -40,7 +34,6 @@ function AdminProduct(props) {
   });
 
   //* Selectors de estado de llamadas async
-  const wineDetail = useSelector(wineDetailSelector);
   const allCats = useSelector(allCategoriesSelector);
   const allStrains = useSelector(allStrainsSelector);
   const allCatStatus = useSelector(allCategoriesStatusSelector);

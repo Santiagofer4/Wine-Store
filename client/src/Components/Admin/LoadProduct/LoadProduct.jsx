@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { CircularProgress, Container, Button } from '@material-ui/core';
+import React from 'react';
+import { Container, Button } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 import { validationSchemaLoadProducts } from '../adminValidations';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  allCategoriesSelector,
-  allStrainsSelector,
   strainsStatusSelector,
   allCategoriesStatusSelector,
 } from '../../../selectors';
-import { formatArrayToOption } from '../../utils';
 import FormField from '../../FormComponents/FormField';
 import { postNewProduct } from '../../../slices/productSlice';
 

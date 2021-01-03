@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field, getIn } from 'formik';
+import { Field } from 'formik';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,

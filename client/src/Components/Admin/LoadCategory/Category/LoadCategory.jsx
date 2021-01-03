@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Formik, Form } from 'formik';
 import { Container, Button, CircularProgress } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { postNewCategory } from '../../../../slices/categorySlice';
 import {
   allCategoriesStatusSelector,
-  allCategoriesErrorSelector,
-  allCategoriesSelector,
+  allCategoriesErrorSelector
 } from '../../../../selectors/index';
 import { validationSchemaLoadCategories } from '../../../Admin/adminValidations';
 import FormField from '../../../FormComponents/FormField';
@@ -15,7 +14,6 @@ function LoadCategory() {
   const dispatch = useDispatch();
   const allCatStatus = useSelector(allCategoriesStatusSelector);
   const allCatError = useSelector(allCategoriesErrorSelector);
-  const allCats = useSelector(allCategoriesSelector);
 
   let content;
 

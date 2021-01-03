@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
   getAllProductsCartEnpoint,
-  postProductsCardEnpoint,
-  deleteProductCarEnpoint,
   usersEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
