@@ -95,7 +95,7 @@ function Cart() {
               <hr className="line" />
               <ul>
                 {AllProductsCart.map((product) => {
-                  return <CartItem prod={product} handlers={handlers} />;
+                  return <CartItem  key={product.id} prod={product} handlers={handlers} />;
                 })}
               </ul>
             </div>

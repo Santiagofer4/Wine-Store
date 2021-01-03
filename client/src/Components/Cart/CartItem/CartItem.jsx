@@ -11,7 +11,7 @@ function CartItem(props) {
 
   return (
     <Container>
-      <li className="productCart" key={id}>
+      <li className="productCart">
         <div>
           <img
             className="imageProductCart"
