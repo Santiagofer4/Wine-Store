@@ -8,7 +8,7 @@ server.use('/category', categoryRouter);
 //Listado de todos los Productos
 
 server.get('/', (req, res, next) => {
-   Product.findAll().then((products) => {
+  Product.findAll().then((products) => {
     res.send(products);
   });
 });
@@ -27,7 +27,7 @@ server.get('/:id', (req, res) => {
 
 server.get('/productsByCategory/:category', (req, res) => {
   let { category } = req.params;
-  
+
   if (!category) return res.status(404).send('Se necesita categoría');
 
   Category.findAll({
@@ -91,7 +91,7 @@ server.delete('/:id', async (req, res) => {
   let { id } = req.params;
   let wine;
   let categories;
-  
+
   if (!id) return res.status(400).send('No se recibio ID');
   try {
     //* Instanciamos el prod a borrar y las categorias correspondientes a ese prod
@@ -115,7 +115,7 @@ server.delete('/:id', async (req, res) => {
 
 server.delete('/:idProduct/category/:idCategory', (req, res) => {
   const { idProduct, idCategory } = req.params;
- 
+
   if (!idProduct || idCategory)
     return res.status(400).send('No existe el producto o la categoría');
 
@@ -140,9 +140,9 @@ server.post('/', async (req, res) => {
     image,
     stock,
     categories,
-    strainId,
+    strain,
   } = req.body;
-
+  // console.log('STRAIN', strain);
   try {
     //* Instanciamos el producto a crear
     let product = await Product.create({
@@ -152,7 +152,7 @@ server.post('/', async (req, res) => {
       yearHarvest,
       image,
       stock,
-      strainId,
+      strainId: strain,
     });
     //* loopeamos por las categorias recibidas y las asignamos
     await categories.forEach((categoryId) => {

@@ -138,7 +138,7 @@ function EditProduct(props) {
                 label="Cepa"
                 name="strain"
                 options={strainOption}
-                value={editValues.strain}
+                // value={editValues.strain}
               />
               <FormField
                 fieldType="input"

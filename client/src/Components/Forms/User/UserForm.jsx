@@ -125,6 +125,7 @@ function UserForm() {
                 required
                 className="text__field UserForm__lb"
                 type="password"
+                type={viewPassword ? 'text' : 'password'}
               />
               <br></br>
               <Container className="center">
