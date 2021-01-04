@@ -1,22 +1,25 @@
 .OrderTable__Container{
     padding-top: 10rem;
     background-size: contain;
-    /* height: 78vh; */
 }
+
 .OrderTable__Text{
-margin: 0px;
+margin: 0rem;
 color: white;
 list-style: none;
 width: 20%;
+display: inline
 }
-.OrderTable__Ul{
+
+.OrderTable__li{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    padding: 0px;
+    padding: 0.5rem;
 }
+
 .OrderTable__index{
-    margin: 0px;
+    margin: 0rem;
     color: white;
     list-style: none;
     width: 20%;
@@ -24,4 +27,5 @@ width: 20%;
     padding: 1rem 0rem;
     border-bottom: 0.1rem solid white;
     border-top: 0.1rem solid white;
+    display: inline
     }
