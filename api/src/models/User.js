@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const bcrypt = require("bcrypt");
 
 module.exports = (sequelize) => {
   // defino el modelo
@@ -29,28 +30,36 @@ module.exports = (sequelize) => {
         },
       },
       cellphone: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         validate: {
           isNumeric: true,
         },
       },
-      role: {
-        type: DataTypes.ENUM(['user', 'admin']),
+      isAdmin: {
+        type: DataTypes.BOOLEAN,
         allowNull: false,
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: true, // Funcionalidad completa será agregada más adelante
+        allowNull: false, 
+        set(value) {
+          if (value) {
+            const salt = bcrypt.genSaltSync(10);
+            const hash = bcrypt.hashSync(value, salt);
+            this.setDataValue("password", hash);
+          }
+        },      
       },
-    }, { timestamps: false },
+    },
     {
+      timestamps: false,
       hooks: {
-        beforeCreate: function (user) {
+        beforeCreate (user) {
           let ageCheck = new Date();
           ageCheck.setFullYear(ageCheck.getFullYear() - 18);
           let bd = new Date(user.birthdate);
           if (ageCheck < bd) {
-            throw new Error('Solo apto para mayores de edad');
+            throw new TypeError('Solo apto para mayores de edad');
           }
         },
       },

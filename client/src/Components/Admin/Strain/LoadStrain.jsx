@@ -1,13 +1,26 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import FormField from '../../FormComponents/FormField';
 import { Formik, Form } from 'formik';
-import { validationSchemaLoadStrains } from '../adminValidations.js';
-import { Container, Paper, Button } from '@material-ui/core';
+import { validationSchemaLoadStrains } from '../adminValidations';
+import { Container, Button, CircularProgress } from '@material-ui/core';
 import '../LoadProduct/LoadProduct.modules.css';
-import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { formatArrayToOption } from '../../utils.js';
+import {
+  allStrainsSelector,
+  strainsStatusSelector,
+  strainsErrorSelector,
+} from '../../../selectors';
+import { postNewStrain } from '../../../slices/strainSlice';
 
-//Probar si anda este. Si anda, borrar StrainForm
 export const LoadStrain = (props) => {
+  const dispatch = useDispatch();
+  const allStrains = useSelector(allStrainsSelector);
+  const strainsStatus = useSelector(strainsStatusSelector);
+  const strainsError = useSelector(strainsErrorSelector);
+
+  let content;
+
   const initialValues = {
     name: '',
     description: '',
@@ -15,23 +28,28 @@ export const LoadStrain = (props) => {
     origin: '',
   };
 
-  const postNewStrain = async (strain) => {
-    try {
-      const resp = await axios.post('http://localhost:3000/strain', strain);
-      // console.log('POST', resp);
-    } catch (error) {
-      // console.error(error);
-    }
-  };
+  const [strainOption, setStrainOption] = useState([]);
+
+  useEffect(() => {
+    // if (strainsStatus === 'idle') {
+    //   dispatch(getAllStrains());
+    // }
+    setStrainOption(formatArrayToOption(allStrains, 'name'));
+  }, [/*strainsStatus,*/ dispatch, allStrains]);
+
   const handleSubmit = (values, onSubmitProps) => {
-    // console.log('VALUES', values);
-    postNewStrain(values);
-    // onSubmitProps.resetForm();
+    dispatch(postNewStrain({ newStrain: values, formik: onSubmitProps }));
   };
 
-  return (
-    <Container className="">
-      <h1>Carga de cepas</h1>
+  if (strainsStatus === 'loading') {
+    content = (
+      <>
+        <h2>Cargando....</h2>
+        <CircularProgress />
+      </>
+    );
+  } else if (strainsStatus === 'succeded') {
+    content = (
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchemaLoadStrains}
@@ -66,6 +84,7 @@ export const LoadStrain = (props) => {
                 name="origin"
                 required
               />
+
               <br></br>
               <Container>
                 <Button
@@ -82,8 +101,19 @@ export const LoadStrain = (props) => {
           </Container>
         )}
       </Formik>
-    </Container>
-  );
-};
+    );
+  } else if (strainsStatus === 'failed') {
+    content = (
+      <>
+        <h3>Error al cargar productos</h3>
+        {console.error(strainsError)}
+        <p>{strainsError.name}</p>
+        <p>{strainsError.message}</p>
+        <Button>Reintentar</Button>
+      </>
+    );
+  }
 
+  return <>{content}</>;
+};
 export default LoadStrain;

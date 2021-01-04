@@ -1,70 +1,90 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Sidebar.modules.css';
-import { connect } from 'react-redux';
-import { getCategoryList, getProductsCategory } from '../../actions';
-// import { Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllProducts } from '../../slices/productSlice';
+import {
+  getAllCategories,
+  getAllProdsByCategory,
+} from '../../slices/categorySlice';
+import {
+  allProductsSelector,
+  allCategoriesStatusSelector,
+  allCategoriesSelector,
+} from '../../selectors';
+import { CircularProgress, Button } from '@material-ui/core';
 
-function Sidebar(props) {
-  // cuando este lista las relaciones  de la DB, esta funcion debe pisar el estado 'List'
-  //con el array de objetos devueltos. para que el map haga el render
+function Sidebar() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const allProducts = useSelector(allProductsSelector);
+  const allCategories = useSelector(allCategoriesSelector);
+  const allCatsStatus = useSelector(allCategoriesStatusSelector);
 
-  function categoria(e) {
-    let categoryName = e.target.innerText;
-    props.getProductsCategory(categoryName);
-  }
+  useEffect(() => {
+    if (allCatsStatus === 'idle') dispatch(getAllCategories());
+  }, [allCatsStatus, dispatch]);
 
-  // console.log('paso 1',props.categories)
-  if (props.categories !== undefined) {
-    // console.log('paso 2',props.categories)
-    if (props.categories.length === 0) {
-      return (
-        <div className="Sidebar__container">
-          <div className="Sidebar__lista">
-            <h6> No hay categorias</h6>
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div className="Sidebar__container">
-          <div className="Sidebar__lista">
-            {props.categories.map((product, index) => {
-              return (
-                // <Button>
-                <a
-                  className="Sidebar__Text"
-                  href="#"
-                  onClick={(e) => {
-                    categoria(e);
-                  }}
-                >
-                  {product.taste}
-                </a>
-                // </Button>
-              );
-            })}
-          </div>
-        </div>
-      );
-    }
-  } else {
-    return (
-      <h3>
-        <p />
-        <p /> No hay productos
-      </h3>
-    );
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {
-    products: state.productReducers ? state.productReducers.allProducts : [],
-    categories: state.productReducers ? state.productReducers.categories : [],
+  const categoryClickHandler = (e) => {
+    let taste = e.target.name.toLowerCase();
+    history.push(`/catalogue/${taste}`);
+    dispatch(getAllProdsByCategory(taste));
   };
-};
 
-export default connect(mapStateToProps, {
-  getCategoryList,
-  getProductsCategory,
-})(Sidebar);
+  let content;
+  if (allCatsStatus === 'loading') {
+    content = (
+      <>
+        <p>Cargando sabores...</p>
+        <CircularProgress />
+      </>
+    );
+    return content;
+  } else if (allCatsStatus === 'succeded') {
+    if (allCategories.length < 1) {
+      content = <p>No hay sabores cargados</p>;
+      return content;
+    }
+    content = allCategories.map((category, idx) => {
+      return (
+        <Button
+          variant="text"
+          className="Sidebar__Text"
+          color="inherit"
+          fullWidth
+          key={idx}
+          name={category.taste}
+          onClick={(e) => categoryClickHandler(e)}
+        >
+          {category.taste}
+        </Button>
+      );
+    });
+  }
+  return (
+    <div className="Sidebar__container">
+      <div className="Sidebar__lista">
+        {allProducts.length > 0 ? (
+          <Button
+            color="primary"
+            variant="text"
+            className="Sidebar__Text"
+            id="verTodos"
+            fullWidth
+            onClick={() => {
+              history.push(`/catalogue`);
+              dispatch(getAllProducts());
+            }}
+          >
+            {' '}
+            Ver Todos
+          </Button>
+        ) : (
+          <p>No hay productos</p>
+        )}{' '}
+        {content}
+      </div>
+    </div>
+  );
+}
+export default Sidebar;

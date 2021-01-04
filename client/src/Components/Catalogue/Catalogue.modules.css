@@ -12,11 +12,16 @@
   display: flex;
   background-image: url('https://image.freepik.com/foto-gratis/bodega_181624-1264.jpg%27');
   background-size: cover;
+  /* height: 100vh;
+  width: 100vw; */
 }
 .Catalogue__containerCargando {
-  display: flex;
+  margin: 0px;
+  /* margin-left: 20%; */
+  padding-top: 200px;
   height: 100vh;
-  width: 100vw;
-  background-image: url('https://image.freepik.com/foto-gratis/bodega_181624-1264.jpg%27');
-  background-size: cover;
+  width: 100%;
+  position: fixed;
+  background-color: black;
+  color: white;
 }

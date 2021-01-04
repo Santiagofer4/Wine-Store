@@ -2,8 +2,16 @@ import React from 'react';
 import SearchBar from './SearchBar.jsx';
 import './NavBar.modules.css';
 import { Link } from 'react-router-dom';
+import { getAllProducts } from '../../slices/productSlice';
+import { getAllCategories } from '../../slices/categorySlice';
+import { /*useSelector,*/ useDispatch} from 'react-redux';
+//import { allProductsSelector } from '../../selectors/index';
+
 
 function NavBar() {
+  //const allProducts = useSelector(allProductsSelector);
+  const dispatch = useDispatch();
+
   return (
     <div>
       <nav className="Nav">
@@ -16,8 +24,15 @@ function NavBar() {
           </li>
           <li className="Nav__li">
             {' '}
-            <Link to="/catalogue" className="Nav__Link">
-              Catalogue
+            <Link
+              to="/catalogue"
+              className="Nav__Link"
+              onClick={() => {
+                dispatch(getAllProducts());      // ! Al que comenta esto le corto las manos xD
+                dispatch(getAllCategories());            
+                }}
+            >
+              Catalogo
             </Link>
           </li>
           <li className="Nav__li">
@@ -26,11 +41,35 @@ function NavBar() {
               Admin
             </Link>
           </li>
+          <li className="Nav__li">
+          {' '}
+            <Link to="/form/user" className="Nav__Link">
+              Regístrate
+            </Link>
+          </li>
         </ul>
-        <SearchBar></SearchBar>
+        <div id="search-cart">
+          <div>
+            <SearchBar id="searchbar"></SearchBar>
+          </div>
+          <div id="cartDiv">
+            <Link
+              id="cart"
+              to="/cart"
+              className="Nav__Link"
+            >
+              <img
+                id="imgCart"
+                src="https://i.ibb.co/FsngVZ5/carrito1.png"
+                alt="Carrito"
+              />
+            </Link>
+          </div>
+        </div>
       </nav>
     </div>
   );
 }
+
 
 export default NavBar;

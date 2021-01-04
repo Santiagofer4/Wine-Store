@@ -2,17 +2,13 @@ import React from 'react';
 import { Paper, Container } from '@material-ui/core';
 import './AdminPanel.modules.css';
 import { Link } from 'react-router-dom';
-import LoadProduct from './LoadProduct/LoadProduct';
 import { Route } from 'react-router-dom';
-import LoadCategory from './LoadCategory/LoadCategory';
-import LoadStrain from './LoadCategory/LoadStrain';
-import { getCategoryList, getStrainList } from '../../actions';
-import { connect } from 'react-redux';
+import AdminStrain from './LoadCategory/AdminStrain';
+import AdminCategory from './LoadCategory/AdminCategory';
+import AdminProduct from './LoadProduct/AdminProduct';
 
-const AdminPanel = (props) => {
-  //  props.getCategoryList()
-  //  console.log("viendo el estado",props.categories)
-
+const AdminPanel = () => {
+ 
   return (
     <Container className="AdminPanel">
       <Paper id="backgroundPaper" className="AdminPanel__Panel">
@@ -30,25 +26,18 @@ const AdminPanel = (props) => {
             </Link>
           </li>
           <li>
-            <Link
-              className="links"
-              to="/admin/loadcategory"
-              onClick={() => {
-                props.getCategoryList();
-              }}
-            >
+            <Link className="links" to="/admin/loadcategory">
               Cargar/Borrar Categoria
             </Link>
           </li>
           <li>
-            <Link
-              className="links"
-              to="/admin/loadstrain"
-              onClick={() => {
-                props.getStrainList();
-              }}
-            >
+            <Link className="links" to="/admin/loadstrain">
               Cargar/Borrar Cepa
+            </Link>
+          </li>
+          <li>
+            <Link className="links" to="/order-table">
+              Ver Órdenes
             </Link>
           </li>
         </ul>
@@ -57,20 +46,13 @@ const AdminPanel = (props) => {
       <h1 className="Admin__H1">Formularios del Administrador</h1>
       <br></br>
       <Container className="AdminPanel__Form">
-        <Route path="/admin/loadproduct" component={LoadProduct} />
-        <Route path="/admin/loadcategory" component={LoadCategory} />
-        <Route path="/admin/loadstrain" component={LoadStrain} />
-        <Route path="/admin/edit/:id" component={LoadProduct} />
+        <Route path="/admin/loadproduct" component={AdminProduct} />
+        <Route path="/admin/loadcategory" component={AdminCategory} />
+        <Route path="/admin/loadstrain" component={AdminStrain} />
+        <Route path="/admin/edit/:id" component={AdminProduct} />
       </Container>
     </Container>
   );
 };
 
-const mapStateToProps = (state) => {
-  // console.log('estado', state);
-  return {
-    categories: state.productReducers.categories,
-  };
-};
-
-export default connect(mapStateToProps, { getCategoryList })(AdminPanel); //export default AdminPanel;
+export default AdminPanel;

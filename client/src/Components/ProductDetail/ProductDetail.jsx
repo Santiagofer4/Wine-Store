@@ -9,10 +9,14 @@ import {
   Button,
 } from '@material-ui/core';
 import './ProductDetail.modules.css';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
-import { setProductDetail, setHistory, getCatsOfProduct } from '../../actions';
+import {
+  postProductToCart,
+} from '../../slices/productsCartSlice';
+import { productDetailSelector } from '../../selectors/index';
+
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -30,7 +34,13 @@ const useStyles = makeStyles({
   },
 });
 
-function ProductDetail({ wineDetail, ...props }) {
+function ProductDetail() {
+  const productDetail = useSelector(productDetailSelector);
+  const dispatch = useDispatch();
+
+  const history = useHistory();
+  const classes = useStyles();
+
   const {
     id,
     name,
@@ -38,32 +48,55 @@ function ProductDetail({ wineDetail, ...props }) {
     yearHarvest,
     description,
     image,
+    stock,
     categories,
-  } = wineDetail;
-  const classes = useStyles();
-
+  } = productDetail;
   //* EDITHANDLER, redirect a form para editar producto
-  const history = useHistory();
   const editHandler = () => {
-    props.setProductDetail(wineDetail); //necesario en caso que ingrese al product detail sin pasar por catalogue.
+    // dispatch(wineDetails(productDetail));
+    // props.setProductDetail(wineDetail); //necesario en caso que ingrese al product detail sin pasar por catalogue.
     //Actualmente no es posible, pero podria ser una opcion en el futuro
-    props.getCatsOfProduct(id);
-
-    history.push({
-      pathname: `/admin/edit/${id}`,
-      state: {
-        edit: true,
-      },
-    });
+    // dispatch(getAllCatsOfProduct(id));
+    history.push(
+      id
+        ? {
+            pathname: `/admin/edit/${id}`,
+            state: {
+              edit: true,
+            },
+          }
+        : {
+            pathname: '/catalogue',
+            state: {
+              edit: false,
+            },
+          }
+    );
   };
 
+  // esta funcion debe ser refactorizada
+  function handlerProductToCart(userId) {
+    // dispatch(addToCart({ userId, productDetail }));
+    // let e = { id, price, quantity: 1 };
+    // dispatch(postProductsCar({ e, userId: 1 }));
+    const payload = {
+      id,
+      price,
+      detail: productDetail,
+      quantity: 1,
+      userId,
+      increment: true,
+    };
+    dispatch(postProductToCart(payload));
+  }
+
   return (
-    <Container className="ProductDetail__Container">
-      <Paper className="ProductDetail__Paper">
-        <Container>
-          <img id='prodImg' src={image} alt={`imagen del vino ${name}`} />
+    <Container id="pageContainer" className="ProductDetail__Container">
+      <Paper id="paper" className="ProductDetail__Paper">
+        <Container id="imgContainer">
+          <img id="prodImg" src={image} alt={`imagen del vino ${name}`} />
         </Container>
-        <Card className={classes.root} variant="outlined">
+        <Card id="detailsContainer" className={classes.root} variant="outlined">
           <CardContent className="ProdDetail__CardText">
             <Typography
               className={classes.title}
@@ -88,11 +121,43 @@ function ProductDetail({ wineDetail, ...props }) {
               {description}
             </Typography>
           </CardContent>
-          <CardActions>
-            <Button size="small">BACK</Button>
-            <Button size="small" onClick={editHandler}>
-              EDIT
+
+          <CardActions id="buttons">
+            <Button
+              id="backButton"
+              size="small"
+              onClick={() => history.goBack()}
+            >
+              {' '}
+              <img
+                id="backButtonImage"
+                src="https://static.thenounproject.com/png/251451-200.png"
+                alt="backBtn"
+              ></img>
+              VOLVER
             </Button>
+            <Button size="small" onClick={editHandler}>
+              {' '}
+              <img
+                id="editImage"
+                src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"
+                alt="editBtn"
+              ></img>
+              {/* <i class="fa fa-pencil-square-o" aria-hidden="true"></i> */}
+              EDITAR
+            </Button>
+            {stock === 0 ? (
+              <h3>No hay STOCK</h3>
+            ) : (
+              <Button
+                id="Button__Buy"
+                onClick={() => {
+                  handlerProductToCart(1);
+                }}
+              >
+                Comprar
+              </Button>
+            )}
           </CardActions>
         </Card>
       </Paper>
@@ -100,12 +165,4 @@ function ProductDetail({ wineDetail, ...props }) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  wineDetail: state.productReducers.wineDetail,
-});
-
-export default connect(mapStateToProps, {
-  setProductDetail,
-  setHistory,
-  getCatsOfProduct,
-})(ProductDetail);
+export default ProductDetail;

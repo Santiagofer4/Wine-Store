@@ -8,12 +8,12 @@ module.exports = (sequelize) => {
     'product',
     {
       name: {
-        // Marca + cepa
+        // Marca + cepa + Año de cosecha. Unique: true;
         type: DataTypes.STRING,
         allowNull: false,
       },
       price: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.INTEGER,
         validate: {
           //isNumeric: true,
           min: 0,

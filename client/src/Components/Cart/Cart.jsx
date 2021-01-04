@@ -1,0 +1,155 @@
+import React, { useEffect, useState } from 'react';
+import './Cart.modules.css';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button } from '@material-ui/core';
+import {
+  allProductsCartSelector,
+  allProductsCartSyncSelector,
+  allProductsCartStatusSelector,
+} from '../../selectors';
+import {
+  getAllProductsCart,
+  sync,
+  postProductToCart,
+  deleteAllProductsFromCart,
+  deleteSingleProdFromCart,
+} from '../../slices/productsCartSlice';
+import { total } from '../../Components/utils';
+import CartItem from './CartItem/CartItem';
+
+function Cart() {
+  const dispatch = useDispatch();
+  const AllProductsCart = useSelector(allProductsCartSelector);
+  const sincronizar = useSelector(allProductsCartSyncSelector);
+  const status = useSelector(allProductsCartStatusSelector);
+  const [subTotal, setSubTotal] = useState(0);
+
+  const handleDelete = () => {
+    dispatch(deleteAllProductsFromCart({ userId: 1 }));
+  };
+
+  const decrementHandler = (event, price, quantity) => {
+    let id = event.target.name * 1;
+    const payload = {
+      id,
+      price,
+      quantity,
+      userId: 1,
+      increment: false,
+    };
+    if (quantity > 1) {
+      let valueInput = document.getElementById(id).value;
+      if (valueInput > 1) {
+        dispatch(postProductToCart(payload));
+      }
+    }
+  };
+
+  const incrementHandler = (event, price, quantity, stock) => {
+    let id = event.target.name * 1;
+    let valueInput = document.getElementById(id).value;
+    const payload = {
+      id,
+      price,
+      quantity,
+      stock,
+      userId: 1,
+      increment: true,
+    };
+    if (valueInput < stock) {
+      dispatch(postProductToCart(payload));
+    }
+  };
+
+  const deleteItemHandler = ({ id, userId }) => {
+    const payload = {
+      productId: id,
+      userId,
+    };
+    dispatch(deleteSingleProdFromCart(payload));
+  };
+
+  const handleConfirm = () => {};
+
+  const handlers = {
+    deleteItemHandler,
+    incrementHandler,
+    decrementHandler,
+  };
+  useEffect(() => {
+    setSubTotal(total(AllProductsCart));
+    if (sincronizar === false) {
+      dispatch(getAllProductsCart(1));
+      dispatch(sync(true));
+    }
+  }, [AllProductsCart, sincronizar, dispatch]);
+
+  if (status === 'succeded') {
+    if (AllProductsCart.length > 0) {
+      return (
+        <div className="ShoppingCartBackImg">
+          <div className="ShoppingCart">
+            <div className="products">
+              <h2 className="titleCart">Carrito de compras</h2>
+              <hr className="line" />
+              <ul>
+                {AllProductsCart.map((product) => {
+                  return <CartItem  key={product.id} prod={product} handlers={handlers} />;
+                })}
+              </ul>
+            </div>
+            <div className="detail">
+              <h2 className="titleCart">Detalle de compra</h2>
+              <hr className="line" />
+              <div className="Summary">
+                <p id="subtotal">SUBTOTAL $ {subTotal}</p>
+                <p id="iva">IVA $ {Math.ceil((subTotal * 21) / 100)}</p>
+                <hr className="line" />
+                <p id="total">TOTAL $ {Math.ceil((subTotal * 121) / 100)}</p>
+              </div>
+              <div>
+                <Button
+                  id="confirmBtn"
+                  className="buttonCart"
+                  onClick={handleConfirm}
+                >
+                  Confirmar
+                </Button>
+                <Button
+                  id="cancelBtn"
+                  className="buttonCart"
+                  onClick={handleDelete}
+                >
+                  Cancelar
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="ShoppingCartEmpty">
+          <h1 className="titleCart">Carrito de compras</h1>
+          <hr className="lineEmpty" />
+          <h2 className="titleCart">Su carrito de compras está vacío</h2>
+          <img
+            className="imgCartEmpty"
+            src="https://i.ibb.co/NWgzJPf/botella.png"
+            alt="Carrito vacío"
+          />
+          <p>
+            <Link to="/catalogue" className="link">
+              Volver al catálogo
+            </Link>
+          </p>
+        </div>
+      );
+    }
+  } else {
+    return <h3 className="Cart__Cargando">Cargando... </h3>;
+  }
+}
+
+export default Cart;

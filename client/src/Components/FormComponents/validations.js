@@ -34,4 +34,5 @@ export const validationSchema = yup.object({
   //     .max(500, 'Description must be less than 500 characters')
   //     .required('product description is required'),
   //   url: yup.string().url('valid URL is required'),
+  bday: yup.date().required('Indicar fecha de nac'),
 });

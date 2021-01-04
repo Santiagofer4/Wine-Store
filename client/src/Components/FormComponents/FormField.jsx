@@ -5,6 +5,7 @@ import SelectField from './FieldComponents/SelectField.jsx';
 import CheckboxField from './FieldComponents/CheckboxField.jsx';
 import SwitchField from './FieldComponents/SwitchField.jsx';
 import RadioGroupField from './FieldComponents/RadioGroupField.jsx';
+import DatePicker from './FieldComponents/DatePicker.jsx';
 
 function FormField(props) {
   const { fieldType, ...rest } = props;
@@ -21,6 +22,8 @@ function FormField(props) {
       return <SwitchField {...rest} />;
     case 'radio':
       return <RadioGroupField {...rest} />;
+    case 'datepicker':
+      return <DatePicker {...rest} />;
     default:
       return null;
   }

@@ -5,21 +5,41 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
 import './ProductCard.modules.css';
-import { connect } from 'react-redux';
-import { setProductDetail } from '../../actions';
+import { useDispatch } from 'react-redux';
+import { wineDetails } from '../../slices/productDetailSlice';
+import {
+  postProductToCart,
+} from '../../slices/productsCartSlice';
 import { useHistory } from 'react-router-dom';
 
-// Recibe props con Products.info
-
 function ProductCard(props) {
-  const { image, name, price, id } = props.data;
+  const dispatch = useDispatch();
+  const { image, name, price, id, stock } = props.data;
   const history = useHistory();
 
   const detailClickHandler = () => {
-    // console.log('CLICK CARD', props.data);
-    props.setProductDetail(props.data);
+    dispatch(wineDetails(props.data));
     history.push(`/product/${id}`);
   };
+
+  // refactorizar esta funcion
+  function handlerProductToCart(userId, id) {
+    // let productDetail = { image, name, price, id, stock, quantity: 1 };
+    // dispatch(addToCart({ userId, productDetail }));
+    // let e = productDetail;
+    // dispatch(postProductsCar({ e, userId }));
+    const { price: _price, ...detail } = props.data;
+    const payload = {
+      id,
+      price,
+      detail,
+      userId,
+      quantity: 1,
+      increment: true,
+    };
+    // console.log('PAYLOAD', payload);
+    dispatch(postProductToCart(payload));
+  }
 
   return (
     <Card className="ProCards_Card">
@@ -41,17 +61,26 @@ function ProductCard(props) {
           </Typography>
         </CardContent>
         <CardActions id="Button__Card">
-          <Button id="Button__Base">Comprar</Button>
-          <Button id="Button__Base" onClick={detailClickHandler}>
-            +
-          </Button>
+          <div id="buttonsContainer">
+            {stock === 0 ? (
+              <h3>No hay STOCK</h3>
+            ) : (
+              <Button
+                id="Button__Buy"
+                onClick={() => {
+                  handlerProductToCart(1, id);
+                }}
+              >
+                Comprar
+              </Button>
+            )}
+            <Button id="Button__Info" onClick={detailClickHandler}>
+              <i className="fa fa-plus-square" aria-hidden="true"></i>
+            </Button>
+          </div>
         </CardActions>
       </div>
     </Card>
   );
 }
-
-export default connect(null, { setProductDetail })(ProductCard);
-
-// Este componente es una tarjeta donde tiene la información básica del Producto.
-// Nos va a servir para ser usado en el componente Catálogo.
+export default ProductCard;

@@ -5,7 +5,8 @@ const { Product } = require('../db.js');
 const productRouter = require('./product.js');
 const usersRouter = require('./users.js');
 const ordersRouter = require('./orders.js');
-//const strainRouter = require('./strain.js')
+const strainRouter = require('./strain.js');
+const { extractDigitsFromString } = require('../utils/index.js');
 
 const router = Router();
 
@@ -14,30 +15,43 @@ const router = Router();
 // router.use('/auth', authRouter);
 
 //Rutas
-
 router.use('/products', productRouter);
 router.use('/strain', strainRouter);
 router.use('/users', usersRouter);
 router.use('/orders', ordersRouter);
 
 router.get('/search', (req, res) => {
-  console.log('Ruta de search by query.');
   let { word } = req.query;
+  let search = extractDigitsFromString(word); //func para extraer numeros de string de busqueda
+  // console.log('SEARCH', search);
+  let conditions = [];
+
+  //* Si `search.words` pusheamos al array de condiciones de busqueda (name & description)
+  if (search.words && search.words.length > 0) {
+    for (const word of search.words) {
+      conditions.push(
+        { name: { [Op.iLike]: '%' + word + '%' } },
+        { description: { [Op.iLike]: '%' + word + '%' } }
+      );
+    }
+  }
+
+  //* Si `search.digits` pusheamos al array de condiciones de busqueda (yearHarvest)
+  if (search.digits && search.digits.length > 0) {
+    for (const number of search.digits) {
+      conditions.push({ yearHarvest: { [Op.eq]: number } });
+    }
+  }
 
   Product.findAll({
     where: {
-      [Op.or]: [
-        { name: { [Op.like]: `%${word}%` } },
-        { description: { [Op.like]: `%${word}%` } },
-      ], //falta hacerlo case sensitive
+      [Op.or]: conditions,
     },
   })
-    .then((products) => {
-      return res.status(200).send(products);
+    .then((result) => {
+      return res.status(200).send(result);
     })
-    .catch((err) => {
-      return console.log(err);
-    });
+    .catch((err) => console.error(err));
 });
 
 module.exports = router;

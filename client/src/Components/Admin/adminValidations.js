@@ -49,18 +49,6 @@ export const validationSchemaLoadStrains = yup.object({
     .required('El origen de la cepa es requerido'),
 });
 
-export const validationSchemaLoadBrands = yup.object({
-  name: yup.string().required('El nombre de la marca es requerido'),
-  history: yup
-    .string()
-    .max(500, 'Historia demasiado larga')
-    .required('Historia de la marca requerida'),
-});
-
 export const validationSchemaLoadCategories = yup.object({
   taste: yup.string().required('El nombre de la categoría es requerido'),
-  // description: yup
-  //   .string()
-  //   .max(500, 'Descripción demasiado larga')
-  //   .required('Descripción de la marca requerida'),
 });

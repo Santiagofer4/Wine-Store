@@ -7,7 +7,16 @@ const capitalize = (str) => {
 };
 
 export const formatArrayToOption = (array, propName) => {
+  //*func que devuelve un array preparado para ser usado como `options` de un select/radio field
+  //* => [{label:`propName|PROP_CHECK`,value:`ID`},...]
+  //* recibe 2 parametros, siendo el segundo opcional:
+  //* array<array|object> puede ser un objeto o un array de objetos
+  //* propName?<string> si es pasado como parametro, se utiliza como parametros para buscar,
+  //* si no, se utilizan los valores `default` de `PROP_CHECK`
+  //! Asume que todos los objetos dentro del array son de la misma estructura
+  //! en caso de error devuelve `EMPTY_OPTION`
   const EMPTY_OPTION = [{ label: 'EMPTY', value: '' }];
+
   if (!Array.isArray(array) || !(array.length > 0)) return EMPTY_OPTION;
 
   const PROP_CHECK = ['name', 'value'];
@@ -15,6 +24,8 @@ export const formatArrayToOption = (array, propName) => {
   let arrayKeys = [];
   let arrayIdProp = false;
 
+  //*si recibe un objeto armamos un array con todas las propiedades propias del obj,
+  //* y verificamos si existe una con nombre `id`
   if (TYPE === 'object') {
     for (const prop in array[0]) {
       if (Object.hasOwnProperty.call(array[0], prop)) {
@@ -27,17 +38,20 @@ export const formatArrayToOption = (array, propName) => {
     }
   }
 
+  //*si NO recibe segundo parametro verificamos contra la lista `default` de `PROP_CHECK`
   if (typeof propName === 'undefined') {
     propName = PROP_CHECK.find((prop) =>
       PROP_CHECK.includes(prop.toLowerCase())
     );
   }
 
+  //* Si se recibe `propName` y no se encuentra ninguna propiedad con ese nombre se devuelve `EMPTY_OPTION`
   if (!arrayKeys.includes(propName)) {
     return EMPTY_OPTION;
   }
 
   try {
+    //* segun de que este compuesto el array:
     switch (TYPE) {
       case 'string':
         return array.map((element) => {
@@ -78,3 +92,15 @@ export const formatArrayToOption = (array, propName) => {
 //   typeof reset === 'undefined' ? (reset = false) : true;
 //   labels.map(label);
 // };
+
+export function sliceTime(str) {
+  return str.slice(8, 10) + '/' + str.slice(5, 7) + '/' + str.slice(0, 4);
+}
+
+export const total = (arr) => {
+  let x = 0;
+  arr.forEach((p) => {
+    x = x + p.price * p.quantity;
+  });
+  return x;
+};
