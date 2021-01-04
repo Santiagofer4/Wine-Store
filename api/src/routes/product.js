@@ -8,17 +8,11 @@ server.use('/category', categoryRouter);
 //Listado de todos los Productos
 
 server.get('/', (req, res, next) => {
-<<<<<<< HEAD
    Product.findAll()
     .then((products) => {
       res.send(products);
     })
     .catch(next);
-=======
-  Product.findAll().then((products) => {
-    res.send(products);
-  });
->>>>>>> demo2
 });
 
 //Devuelve un producto según el ID
