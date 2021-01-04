@@ -140,7 +140,6 @@ function _UserForm(props) {
                   ),
                 }}
               />
-              />
               <br></br>
               <Container className="center">
                 <Button type="submit" id="btnUser">
