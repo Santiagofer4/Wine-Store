@@ -64,7 +64,7 @@ server.put('/:id', async (req, res) => {
         yearHarvest,
         image,
         stock,
-        strainId: strain,
+        strainId: strain && parseInt(strain),
       },
       {
         returning: true,
@@ -152,7 +152,7 @@ server.post('/', async (req, res) => {
       yearHarvest,
       image,
       stock,
-      strainId: strain,
+      strainId: strain && parseInt(strain),
     });
     //* loopeamos por las categorias recibidas y las asignamos
     await categories.forEach((categoryId) => {
