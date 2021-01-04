@@ -1,128 +1,153 @@
 import React, { useState } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import { Formik, Form } from 'formik';
+import {
+  Button,
+  Container,
+  InputAdornment,
+  IconButton,
+} from '@material-ui/core';
+import FormField from '../../FormComponents/FormField';
 import './UserForm.modules.css';
+import { validationSchemaUserRegister } from './userValidations';
 import { useDispatch } from 'react-redux';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { createUser } from '../../../slices/userSlice';
 import { useHistory } from 'react-router-dom';
 
 function UserForm() {
-    const history = useHistory();
-    const [state, setState] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        birthdate: "",
-        cellphone: "",
-        password: ""
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const [viewPassword, setViewPassword] = useState(false);
+  const emptyValues = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    cellphone: '',
+    birthdate: new Date('01/01/2000'),
+    password: '',
+    confirmPassword: '',
+  };
+  const handleSubmit = (values, formik) => {
+    const payload = {
+      user: { ...values },
+      formik,
+    };
+    dispatch(createUser(payload)).then((payload) => {
+      if (payload.type === 'user/register/fulfilled') {
+        history.push('/welcome');
+      } else {
+        history.push('/failure');
+      }
     });
+  };
 
-    const dispatch = useDispatch();
+  const handleReset = (formik) => {
+    //func para resetear el form
+    formik.resetForm({
+      values: { ...emptyValues },
+      errors: { ...emptyValues },
+    });
+  };
 
-    function handleOnChange(e){
-      setState({
-        ...state,
-        [e.target.name]: e.target.value
-      })
-    };
+  const handleClickShowPassword = () => {
+    setViewPassword(!viewPassword);
+  };
 
-    function handleOnSubmit(e){
-      e.preventDefault();
-      dispatch(createUser(state))
-      .then((payload) => {
-        if (payload.type === "user/register/fulfilled") {history.push('/welcome')}
-        else { history.push('/failure')}
-      }); //En el futuro puede redireccionar a /me
-    };
-
-    return (
-        <div className = "formUser">
-            <form id="form"
-            //action='/users'
-            method='POST'
-        onSubmit={(e) => {
-          handleOnSubmit(e);
-        }}
-        noValidate
-        autoComplete="off"
+  return (
+    <Container className="formUser">
+      <Formik
+        initialValues={emptyValues}
+        validationSchema={validationSchemaUserRegister}
+        onSubmit={handleSubmit}
       >
-        <TextField
-          className="text__field UserForm__lb"
-          /* id={state.firstName ? 'accepted' : 'error'} */
-          error={!state.firstName}
-          name="firstName"
-          label="Nombre"
-          type="string"
-          required
-          onChange={(e) => {
-            handleOnChange(e);
-          }}
-        />
-        <TextField
-          className="text__field UserForm__lb"
-          /* id={state.lastName ? 'accepted' : 'error'} */
-          error={!state.lastName}
-          name="lastName"
-          label="Apellido"
-          type="string"
-          required
-          onChange={(e) => {
-            handleOnChange(e);
-          }}
-        />
-        <TextField
-          className="text__field UserForm__lb"
-          /* id={state.email ? 'accepted' : 'error'} */
-          error={!state.email}
-          name="email"
-          label="Correo electrónico"
-          type="email"
-          onChange={(e) => {
-            handleOnChange(e);
-          }}
-        />
-        <TextField
-          className="text__field UserForm__lb"
-          /* id={state.birthdate ? 'accepted' : 'error'} */
-          error={!state.birthdate}
-          name="birthdate"
-          label="Fecha de nacimiento"
-          type="date"
-          required
-          onChange={(e) => {
-            handleOnChange(e);
-          }}
-          />
-
-        <TextField
-          className="text__field UserForm__lb"
-          /* id={state.cellphone ? 'accepted' : 'error'} */
-          error={!state.cellphone}
-          name="cellphone"
-          label="Teléfono"
-          type="tel"
-          onChange={(e) => {
-            handleOnChange(e);
-          }}
-        />
-        <TextField
-          className="text__field UserForm__lb"
-          /* id={state.password ? 'accepted' : 'error'} */
-          error={!state.password}
-          name="password"
-          label="Contraseña"
-          type="password"
-          required
-          onChange={(e) => {
-            handleOnChange(e);
-          }}
-        />
-        <div className="center">
-        <Button id="btnUser" type="submit">Registrarse</Button>
-        </div>
-      </form>
-        </div>
-    )
+        {(formik) => (
+          <Container>
+            <Form>
+              <FormField
+                fieldType="input"
+                label="Nombre"
+                name="firstName"
+                required
+                className="text__field UserForm__lb"
+              />
+              <FormField
+                fieldType="input"
+                label="Apellido"
+                name="lastName"
+                required
+                className="text__field UserForm__lb"
+              />
+              <FormField
+                fieldType="input"
+                label="Correo Electronico"
+                name="email"
+                required
+                className="text__field UserForm__lb"
+              />
+              <FormField
+                fieldType="datepicker"
+                label="Fecha de Nacimiento"
+                name="birthdate"
+                required
+                className="text__field UserForm__lb"
+                placeholder={'dd/mm/aaaa'}
+              />
+              <FormField
+                fieldType="input"
+                label="Teléfono"
+                name="cellphone"
+                className="text__field UserForm__lb"
+              />
+              <FormField
+                fieldType="input"
+                label="Contraseña"
+                name="password"
+                required
+                className="text__field UserForm__lb"
+                type={viewPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                      >
+                        {viewPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <FormField
+                fieldType="input"
+                label="Repetir Contraseña"
+                name="confirmPassword"
+                required
+                className="text__field UserForm__lb"
+                type="password"
+                type={viewPassword ? 'text' : 'password'}
+              />
+              <br></br>
+              <Container className="center">
+                <Button type="submit" id="btnUser">
+                  Registrarse
+                </Button>
+                <br></br>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => handleReset(formik)}
+                  type="reset"
+                >
+                  RESET
+                </Button>
+              </Container>
+            </Form>
+          </Container>
+        )}
+      </Formik>
+    </Container>
+  );
 }
 
-export default UserForm
+export default UserForm;

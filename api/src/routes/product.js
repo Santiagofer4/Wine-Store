@@ -8,11 +8,17 @@ server.use('/category', categoryRouter);
 //Listado de todos los Productos
 
 server.get('/', (req, res, next) => {
+<<<<<<< HEAD
    Product.findAll()
     .then((products) => {
       res.send(products);
     })
     .catch(next);
+=======
+  Product.findAll().then((products) => {
+    res.send(products);
+  });
+>>>>>>> demo2
 });
 
 //Devuelve un producto según el ID
@@ -29,7 +35,7 @@ server.get('/:id', (req, res) => {
 
 server.get('/productsByCategory/:category', (req, res) => {
   let { category } = req.params;
-  
+
   if (!category) return res.status(404).send('Se necesita categoría');
 
   Category.findAll({
@@ -66,7 +72,7 @@ server.put('/:id', async (req, res) => {
         yearHarvest,
         image,
         stock,
-        strainId: strain,
+        strainId: strain && parseInt(strain),
       },
       {
         returning: true,
@@ -93,7 +99,7 @@ server.delete('/:id', async (req, res) => {
   let { id } = req.params;
   let wine;
   let categories;
-  
+
   if (!id) return res.status(400).send('No se recibio ID');
   try {
     //* Instanciamos el prod a borrar y las categorias correspondientes a ese prod
@@ -117,7 +123,7 @@ server.delete('/:id', async (req, res) => {
 
 server.delete('/:idProduct/category/:idCategory', (req, res) => {
   const { idProduct, idCategory } = req.params;
- 
+
   if (!idProduct || idCategory)
     return res.status(400).send('No existe el producto o la categoría');
 
@@ -142,9 +148,9 @@ server.post('/', async (req, res) => {
     image,
     stock,
     categories,
-    strainId,
+    strain,
   } = req.body;
-
+  // console.log('STRAIN', strain);
   try {
     //* Instanciamos el producto a crear
     let product = await Product.create({
@@ -154,13 +160,15 @@ server.post('/', async (req, res) => {
       yearHarvest,
       image,
       stock,
-      strainId,
+      strainId: strain && parseInt(strain),
     });
     //* loopeamos por las categorias recibidas y las asignamos
     await categories.forEach((categoryId) => {
-      Category.findByPk(categoryId).then((category) =>
-        product.addCategory(category)
-      );
+      if (categoryId !== '') {
+        Category.findByPk(categoryId)
+          .then((category) => product.addCategory(category))
+          .catch((err) => console.error(err));
+      }
     });
     return res.status(200).send(product); //? devuelve el producto creado
   } catch (error) {

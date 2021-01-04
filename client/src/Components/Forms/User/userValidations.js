@@ -35,7 +35,7 @@ export const validationSchemaUserRegister = yup.object({
     .max(20, 'Maximo 20 caracteres')
     .matches(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      'La contraseña debe tener 8 caracteres, una mayuscula, un numbero y un caracter especial'
+      'La contraseña debe tener 8 caracteres, una mayuscula, un numero y un caracter especial'
     )
     .required('Debe ingresar contraseña'),
   confirmPassword: yup

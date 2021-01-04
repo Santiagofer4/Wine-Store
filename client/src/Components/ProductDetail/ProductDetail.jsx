@@ -74,11 +74,7 @@ function ProductDetail() {
     );
   };
 
-  // esta funcion debe ser refactorizada
   function handlerProductToCart(userId) {
-    // dispatch(addToCart({ userId, productDetail }));
-    // let e = { id, price, quantity: 1 };
-    // dispatch(postProductsCar({ e, userId: 1 }));
     const payload = {
       id,
       price,

@@ -1,5 +1,4 @@
 import React from 'react';
-import './Inicio.modules.css';
 import Carrousel from '../Carrousel/Carrousel.jsx';
 import Contenido from '../Contenido/Contenido.jsx';
 import Footer from '../Footer/Footer.jsx';
