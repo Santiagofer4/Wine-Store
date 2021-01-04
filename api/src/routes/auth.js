@@ -55,7 +55,12 @@ server.get("/me", async (req, res, next) => {
         const prueba = correctUser.compare(password)
        // console.log(prueba)
        if (correctUser.compare(password)) {
-         res.sendStatus(200) // en el front, si recibe 200, guardar el user en el Store.
+         res.send({
+           firstName: correctUser.firstName, 
+           lastName: correctUser.lastName , 
+           id: correctUser.id,       
+           email: correctUser.email,      
+          }) // en el front, si recibe 200, guardar el user en el Store.
        } else {
          res.sendStatus(401) // si recibe 401, rechazar la conexión???
        }
