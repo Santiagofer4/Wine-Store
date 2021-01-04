@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import FormField from '../../FormComponents/FormField';
 import './UserForm.modules.css';
-import { validationSchemaUserRegister } from './userValidations';
+//import { validationSchemaUserRegister } from './userValidations';
 import { useDispatch } from 'react-redux';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
