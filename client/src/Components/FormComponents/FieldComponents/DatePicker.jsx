@@ -21,8 +21,10 @@ function DatePicker({
     <div>
       <Field name={name}>
         {({ field: { onChange: _onChange, ...field }, meta, form }) => {
+          // console.log('FORM', form);
+          // console.log('META', meta);
           // const fieldError = getIn(form.errors, field.name);
-          const showError = meta.touched && !!form.errors[name];
+          // const showError = meta.touched && form.errors[name];
           return (
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
@@ -33,12 +35,18 @@ function DatePicker({
                 onChange={
                   onChange ??
                   function (date) {
-                    form.setFieldValue(field.name, date);
+                    form.setFieldValue(field.name, date, false);
                   }
                 }
+                // onBlur={
+                //   onBlur ??
+                //   function (e) {
+                //     fieldOnBlur(e ?? field.name);
+                //   }
+                // }
                 value={field.value}
-                error={showError}
-                helperText={showError ? form.errors[name] : props.helperText}
+                error={meta.touched && form.errors[name]}
+                helperText={meta.touched && form.errors[name]}
                 // onError={
                 //   onError ??
                 //   form.setFieldError(

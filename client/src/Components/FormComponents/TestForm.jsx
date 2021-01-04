@@ -95,6 +95,10 @@ function Test() {
   //* Parametros <<opcionales>> a pasar a <FormField/>:
   //? Todos los parametros opcionales que pueden pasarse a un Field de MUI, del mismo tipo a renderizar,
   //? pueden ser pasados como props adicionales.
+  //? Algunas props complejas, que renderizan jsx adiciona, como `startAdornment` o
+  //?`endAdornment` no pueden pasarse directamente, deben pasarse a traves de:
+  //? 'InputProps', por ej.: ...InputProps={{startAdornment:("JSX"),... }}
+  //? Importante el doble juego de llaves, `{{}}`
 
   //Proceso de submit:
   //1. `field.touched=true` para todos los fields con `initialValues` [!IMPORTANTE SETEAR TODOS LOS initialValues]

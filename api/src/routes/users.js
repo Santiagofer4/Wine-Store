@@ -153,9 +153,11 @@ server.post('/', (req, res) => {
     .then((user) => {
       const [instance, wasCreated] = user;
       if (wasCreated) {
-        return res.status(200).send(`El usuario ha sido creado`);
+        return res.status(200).send(user);
       } else {
-        return res.status(200).send(`El usuario ya existe`);
+        return res
+          .status(200)
+          .send({ message: `El usuario ya existe`, wasCreated });
       }
     })
     .catch((err) => {

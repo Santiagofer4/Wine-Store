@@ -15,6 +15,7 @@ import UserForm from './Components/Forms/User/UserForm.jsx';
 import Welcome from './Components/Contenido/Welcome';
 import Failure from './Components/Contenido/Failure';
 import notFound from './Components/notFound/notFound';
+import _UserForm from './Components/Forms/User/_UserForm';
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
         <Route path="/admin" component={AdminPanel} />
         <Route path="/cart" component={Cart} />
         <Route path="/order-table" component={OrderTable} />
-        <Route path="/form/user" component={UserForm} />
+        <Route path="/form/user" component={_UserForm} />
         <Route path="/welcome" component={Welcome} />
         <Route path="/failure" component={Failure} />
         <Route path="/404" component={notFound} />
