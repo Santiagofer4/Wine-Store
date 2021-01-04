@@ -22,12 +22,7 @@ function ProductCard(props) {
     history.push(`/product/${id}`);
   };
 
-  // refactorizar esta funcion
   function handlerProductToCart(userId, id) {
-    // let productDetail = { image, name, price, id, stock, quantity: 1 };
-    // dispatch(addToCart({ userId, productDetail }));
-    // let e = productDetail;
-    // dispatch(postProductsCar({ e, userId }));
     const { price: _price, ...detail } = props.data;
     const payload = {
       id,
@@ -37,7 +32,6 @@ function ProductCard(props) {
       quantity: 1,
       increment: true,
     };
-    // console.log('PAYLOAD', payload);
     dispatch(postProductToCart(payload));
   }
 

@@ -2,8 +2,6 @@ import React from 'react';
 import './Contenido.modules.css';
 
 function Contenido() {
-  //le borré props, porque en teoría no necesita recibir nada.
-
   return (
     <div id="contenido">
       <img
