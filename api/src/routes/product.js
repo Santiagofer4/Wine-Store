@@ -156,9 +156,11 @@ server.post('/', async (req, res) => {
     });
     //* loopeamos por las categorias recibidas y las asignamos
     await categories.forEach((categoryId) => {
-      Category.findByPk(categoryId).then((category) =>
-        product.addCategory(category)
-      );
+      if (categoryId !== '') {
+        Category.findByPk(categoryId)
+          .then((category) => product.addCategory(category))
+          .catch((err) => console.error(err));
+      }
     });
     return res.status(200).send(product); //? devuelve el producto creado
   } catch (error) {
