@@ -15,7 +15,7 @@ import Welcome from './Components/Contenido/Welcome';
 import Failure from './Components/Contenido/Failure';
 import notFound from './Components/notFound/notFound';
 import UserForm from './Components/Forms/User/UserForm';
-
+import UserLogin from './Components/Forms/User/UserLogin'
 function App() {
   return (
     <div className="App">
@@ -36,6 +36,7 @@ function App() {
         <Route path="/admin" component={AdminPanel} />
         <Route path="/cart" component={Cart} />
         <Route path="/order-table" component={OrderTable} />
+        <Route path="/form/user/login" component={UserLogin} />
         <Route path="/form/user" component={UserForm} />
         <Route path="/welcome" component={Welcome} />
         <Route path="/failure" component={Failure} />
