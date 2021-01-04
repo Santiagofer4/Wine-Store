@@ -1,7 +1,7 @@
 import { responsiveFontSizes } from '@material-ui/core';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { usersEndpoint } from '../constants/endpoints';
+import { usersEndpoint, UserLoginEndpoint } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 
 const initialState_user = {
@@ -22,6 +22,17 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
   return resPayload;
 });
 
+export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
+  const { user, formik } = payload;
+  console.log('entre', payload)
+  const userLogin_response = await axios.post(UserLoginEndpoint,user);
+  const resPayload = {
+    userLogin_response: userLogin_response.data[0],
+    formik,
+  };
+  return resPayload;
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState: initialState_user,
@@ -33,13 +44,26 @@ const userSlice = createSlice({
     [createUser.fulfilled]: (state, { payload }) => {
       const { user_response, formik } = payload;
       state.user.status = status.succeded;
-      state.user.info = user_response;
+      // state.user.info = user_response;
       formik.resetForm();
     },
     [createUser.rejected]: (state, action) => {
       state.user.status = status.failed;
       state.user.error = action.error;
     },
+  },
+  [postUserLogin.pending]: (state, action) => {
+    state.user.status = status.loading;
+  },
+  [postUserLogin.fulfilled]: (state, { payload }) => {
+    const { userLogin_response, formik } = payload;
+    state.user.status = status.succeded;
+    state.user.info = userLogin_response;
+    formik.resetForm();
+  },
+  [postUserLogin.rejected]: (state, action) => {
+    state.user.status = status.failed;
+    state.user.error = action.error;
   },
 });
 
