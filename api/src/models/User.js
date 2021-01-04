@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define(
+  const User = sequelize.define(
     'user',
     {
       firstName: {
@@ -65,4 +65,9 @@ module.exports = (sequelize) => {
       },
     }
   );
+  User.prototype.compare = function (pass) {
+    return bcrypt.compareSync(pass, this.password);
+
+  }
+  return User;
 };

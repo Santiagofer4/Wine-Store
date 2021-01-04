@@ -35,7 +35,6 @@ server.get('/product/:id', (req, res, next) => {
 
 server.put('/:id', (req, res) => {
   let { id } = req.params;
-  
   if (!id) return res.status(400).send('La categoría no existe');
 
   Category.update({ taste }, { where: { id } }).then(() => {
@@ -64,7 +63,6 @@ server.delete('/:id', (req, res) => {
 
 server.post('/', (req, res) => {
   let { taste } = req.body;
-  
   if (!taste) return res.status(400).send('No se puede crear la categoría');
 
   Category.findOrCreate({

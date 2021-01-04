@@ -1,6 +1,6 @@
 const server = require('express').Router();
 const { Sequelize } = require('sequelize');
-const { Product, Category, Strain } = require('../db.js');
+const { Product, Category } = require('../db.js');
 const categoryRouter = require('./category.js');
 
 server.use('/category', categoryRouter);
@@ -8,16 +8,18 @@ server.use('/category', categoryRouter);
 //Listado de todos los Productos
 
 server.get('/', (req, res, next) => {
-   Product.findAll().then((products) => {
-    res.send(products);
-  });
+   Product.findAll()
+    .then((products) => {
+      res.send(products);
+    })
+    .catch(next);
 });
 
 //Devuelve un producto según el ID
 
 server.get('/:id', (req, res) => {
   let { id } = req.params;
-  if (!id) return res.status(404).send('No existe el producto');
+   if (!id) return res.status(404).send('No existe el producto');
   Product.findByPk(id).then((product) => {
     return res.status(200).send(product);
   });

@@ -7,6 +7,7 @@ const usersRouter = require('./users.js');
 const ordersRouter = require('./orders.js');
 const strainRouter = require('./strain.js');
 const { extractDigitsFromString } = require('../utils/index.js');
+const authRouter = require('./auth.js');
 
 const router = Router();
 
@@ -19,6 +20,7 @@ router.use('/products', productRouter);
 router.use('/strain', strainRouter);
 router.use('/users', usersRouter);
 router.use('/orders', ordersRouter);
+router.use('/auth', authRouter);
 
 router.get('/search', (req, res) => {
   let { word } = req.query;
