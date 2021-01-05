@@ -30,7 +30,6 @@ function UserLogin() {
             },
             formik,
         };
-        console.log('tu vieja', payload);
       dispatch(postUserLogin(payload)).then((payload) => {
         if (payload.type === 'user/login/fulfilled') {
           history.push('/welcome');

@@ -72,8 +72,8 @@ export const allOrderSelector = (state) => state.orderTable.orderTable.orders;
 
 export const allOrderStatusSelector = (state) => state.orderTable.orderTable.status;
 
-export const userSelector = (state) => state.userSlice.user.info;
+export const userSelector = (state) => state.user.user.info;
 
-export const userStatusSelector = (state) => state.userSlice.status;
+export const userStatusSelector = (state) => state.user.user.status;
 
-export const userErrorSelector = (state) => state.userSlice.error;
+export const userErrorSelector = (state) => state.user.user.error;
