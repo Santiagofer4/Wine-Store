@@ -17,6 +17,13 @@ server.get("/me", async (req, res, next) => {
     }
   });
 
+  // Ruta para desloguearse (Habría que probarla a ver si anda)
+
+  server.get("/logout",(req,res)=>{
+    req.logout();
+    res.redirect('/');
+   })
+
 //Ruta para Registrarse
 
   server.post("/register", async function (req, res, next) {
@@ -72,5 +79,42 @@ server.get("/me", async (req, res, next) => {
   });
 
 
+  // Hacer admin a un user (promote User)
+
+  server.put('/:id', (req, res) => {
+    let { id } = req.params;
+    if (!id) return res.status(400).send('El usuario no existe');
+  
+    User.findByPk(id)
+      .then(
+        User.update(
+          { isAdmin: true },
+          { where: { id } }
+        )
+      )
+      .then(() => {
+        return res.status(200).send('Se ha ascendido el usuario a Admin');
+      });
+  });
+  
+ //Reiniciar la contraseña
+
+ server.put('/pass/:id', (req, res) => {
+  let { id } = req.params;
+  let { password } = req.body;
+
+  if (!id) return res.status(400).send('El usuario no existe');
+
+  User.findByPk(id)
+    .then(
+      User.update(
+        { password },
+        { where: { id } }
+      )
+    )
+    .then(() => {
+      return res.status(200).send('Se ha modificado la contraseña correctamente');
+    });
+});
 
 module.exports = server;
