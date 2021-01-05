@@ -9,15 +9,19 @@ import {
 import FormField from '../../FormComponents/FormField';
 import './UserForm.modules.css';
 import { validationSchemaUserRegister } from './userValidations';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { createUser } from '../../../slices/userSlice';
 import { useHistory } from 'react-router-dom';
+import { userErrorSelector, userStatusSelector } from "../../../selectors/index.js";
 
 function UserForm() {
   const dispatch = useDispatch();
   const history = useHistory();
   const [viewPassword, setViewPassword] = useState(false);
+  const status = useSelector(userStatusSelector);
+  const error = useSelector(userErrorSelector);
+
   const emptyValues = {
     firstName: '',
     lastName: '',
@@ -27,16 +31,22 @@ function UserForm() {
     password: '',
     confirmPassword: '',
   };
+
   const handleSubmit = (values, formik) => {
     const payload = {
       user: { ...values },
       formik,
     };
     dispatch(createUser(payload)).then((payload) => {
+      console.log('STATUS', status)
+      console.log('ERRORAFUERA', error)
       if (payload.type === 'user/register/fulfilled') {
         history.push('/welcome');
       } else {
-        history.push('/failure');
+        console.log('ERRORADENTRO', error)
+        if(payload.type === 'user/register/rejected') {
+          error.includes(409) ? history.push('/failure') : history.push('/catalogue')
+        }
       }
     });
   };
