@@ -16,6 +16,8 @@ import {
   postProductToCart,
 } from '../../slices/productsCartSlice';
 import { productDetailSelector } from '../../selectors/index';
+import Rating from '@material-ui/lab/Rating';
+import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles({
   root: {
@@ -40,6 +42,8 @@ function ProductDetail() {
 
   const history = useHistory();
   const classes = useStyles();
+
+  const [value, setValue] = React.useState(4); // Rating traer promedio de calificación de base de datos según producto
 
   const {
     id,
@@ -116,6 +120,9 @@ function ProductDetail() {
             <Typography variant="body2" component="p">
               {description}
             </Typography>
+            <Box component="fieldset" mt={3} borderColor="transparent">
+        <Rating value={value} readOnly />
+      </Box>
           </CardContent>
 
           <CardActions id="buttons">

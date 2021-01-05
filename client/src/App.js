@@ -15,7 +15,8 @@ import Welcome from './Components/Contenido/Welcome';
 import Failure from './Components/Contenido/Failure';
 import notFound from './Components/notFound/notFound';
 import UserForm from './Components/Forms/User/UserForm';
-import UserLogin from './Components/Forms/User/UserLogin'
+import UserLogin from './Components/Forms/User/UserLogin';
+
 function App() {
   return (
     <div className="App">

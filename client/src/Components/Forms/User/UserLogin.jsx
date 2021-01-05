@@ -12,7 +12,8 @@ import './UserForm.modules.css';
 import { useDispatch } from 'react-redux';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
-import {postUserLogin} from '../../../slices/userSlice.js'
+import { postUserLogin } from '../../../slices/userSlice.js'
+
 function UserLogin() {
 
     const dispatch = useDispatch();
@@ -111,4 +112,4 @@ function UserLogin() {
     );
 }
 
-export default UserLogin
+export default UserLogin;

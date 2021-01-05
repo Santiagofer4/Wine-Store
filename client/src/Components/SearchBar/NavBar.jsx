@@ -40,6 +40,12 @@ function NavBar() {
           </li>
           <li className="Nav__li">
           {' '}
+            <Link to="/form/user/login" className="Nav__Link">
+              Ingresar
+            </Link>
+          </li>
+          <li className="Nav__li">
+          {' '}
             <Link to="/form/user" className="Nav__Link">
               Regístrate
             </Link>
