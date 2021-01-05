@@ -93,10 +93,28 @@ server.get("/me", async (req, res, next) => {
         )
       )
       .then(() => {
-        return res.status(200).send('Se ha modificado el usuario');
+        return res.status(200).send('Se ha ascendido el usuario a Admin');
       });
   });
   
- 
+ //Reiniciar la contraseña
+
+ server.put('/pass/:id', (req, res) => {
+  let { id } = req.params;
+  let { password } = req.body;
+
+  if (!id) return res.status(400).send('El usuario no existe');
+
+  User.findByPk(id)
+    .then(
+      User.update(
+        { password },
+        { where: { id } }
+      )
+    )
+    .then(() => {
+      return res.status(200).send('Se ha modificado la contraseña correctamente');
+    });
+});
 
 module.exports = server;
