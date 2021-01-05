@@ -17,6 +17,13 @@ server.get("/me", async (req, res, next) => {
     }
   });
 
+  // Ruta para desloguearse (Habría que probarla a ver si anda)
+
+  server.get("/logout",(req,res)=>{
+    req.logout();
+    res.redirect('/');
+   })
+
 //Ruta para Registrarse
 
   server.post("/register", async function (req, res, next) {
@@ -90,6 +97,6 @@ server.get("/me", async (req, res, next) => {
       });
   });
   
-
+ 
 
 module.exports = server;
