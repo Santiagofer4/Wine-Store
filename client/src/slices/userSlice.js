@@ -47,8 +47,16 @@ const userSlice = createSlice({
       formik.resetForm();
     },
     [createUser.rejected]: (state, action) => {
+      const infoComplete = action.meta.arg;
+      const info = {
+        formik: infoComplete.formik,
+        user: {
+          email: infoComplete.user.email,
+        }
+      }
       state.user.status = status.failed;
       state.user.error = action.error;
+      state.user.info = info;
     },
     [postUserLogin.pending]: (state, action) => {
       state.user.status = status.loading;

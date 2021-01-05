@@ -157,7 +157,7 @@ server.post('/', (req, res) => {
       } else {
         return res
           .status(409)
-          .send(`El usuario ya existe`);
+          .send(user);
       }
     })
     .catch((err) => {
