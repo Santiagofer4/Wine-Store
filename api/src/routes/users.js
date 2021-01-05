@@ -141,8 +141,8 @@ server.post('/', (req, res) => {
       email,
     },
     defaults: {
-      firstName,
-      lastName,
+      firstName: firstName[0].toUpperCase() + firstName.slice(1).toLowerCase(),
+      lastName: lastName[0].toUpperCase() + lastName.slice(1).toLowerCase(),
       email,
       birthdate,
       cellphone,
@@ -156,8 +156,8 @@ server.post('/', (req, res) => {
         return res.status(200).send(user);
       } else {
         return res
-          .status(200)
-          .send({ message: `El usuario ya existe`, wasCreated });
+          .status(409)
+          .send(`El usuario ya existe`);
       }
     })
     .catch((err) => {
