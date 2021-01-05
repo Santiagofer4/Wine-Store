@@ -72,5 +72,24 @@ server.get("/me", async (req, res, next) => {
   });
 
 
+  // Hacer admin a un user (promote User)
+
+  server.put('/:id', (req, res) => {
+    let { id } = req.params;
+    if (!id) return res.status(400).send('El usuario no existe');
+  
+    User.findByPk(id)
+      .then(
+        User.update(
+          { isAdmin: true },
+          { where: { id } }
+        )
+      )
+      .then(() => {
+        return res.status(200).send('Se ha modificado el usuario');
+      });
+  });
+  
+
 
 module.exports = server;
