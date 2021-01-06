@@ -36,9 +36,15 @@ const capitalize = (str) => {
 };
 
 const makeJWT = (user) => {
+  /**
+   * func para crear un jw token
+   * recibe user y devuelve un token con la info del user
+   */
   const { email, id } = user;
-  const expiresIn = '1d';
 
+  const options = {
+    expiresIn: '1d',
+  };
   const payload = {
     sub: email,
     id,
@@ -47,13 +53,16 @@ const makeJWT = (user) => {
     audience: 'localhost:3000',
   };
 
-  const signedToken = jwt.sign(payload, SECRET_KEY, {
-    expiresIn: expiresIn,
-  });
+  const signedToken = jwt.sign(payload, SECRET_KEY, options);
+
+  //? solo para probar, comentar o borrar luego---->
+  const token = jwt.verify(signedToken, SECRET_KEY);
+  console.log('TOKEN VERIFICADO', token); //deberia devoler la misma info que la cargada como payload
+  //?<-----------------
 
   return {
     token: 'Bearer ' + signedToken,
-    expires: expiresIn,
+    expires: options.expiresIn,
   };
 };
 

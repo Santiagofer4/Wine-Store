@@ -88,11 +88,20 @@ server.post(
 
 //*ruta para probar la validacion con el JWT
 server.post(
+  /**
+   * Para probar con postman las rutas protegidas:
+   * 1. verificar que la ruta y el metodo sea el correcto
+   * 2. en caso que sea necesario, enviar la informacion por body en el formato correcta
+   * 3. Enviar en `headers` la 'key'=>`Authorization` con la string del JWT
+   * el formato es: "Bearer `aca viene el choclo de string ilegible`" (sin ninguna comilla, solo la string)
+   *
+   */
   '/test',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     console.log('INGRESO A RUTA PROTEGIDA', req.body);
-    res.send(200).json('prueba de ruta protegia');
+    return res.send('prueba de ruta protegia');
+    // return res.send(req.user);
   }
 );
 
