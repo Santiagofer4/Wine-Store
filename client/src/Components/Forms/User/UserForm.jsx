@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { Formik, Form, Field } from "formik";
+import React, { useState, useEffect } from 'react';
+import { Formik, Form, Field } from 'formik';
 import {
   Button,
   Container,
   InputAdornment,
   IconButton,
-} from "@material-ui/core";
-import FormField from "../../FormComponents/FormField";
-import "./UserForm.modules.css";
-import { validationSchemaUserRegister } from "./userValidations";
-import { useDispatch, useSelector } from "react-redux";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
-import { createUser } from "../../../slices/userSlice";
-import { useHistory } from "react-router-dom";
+} from '@material-ui/core';
+import FormField from '../../FormComponents/FormField';
+import './UserForm.modules.css';
+import { validationSchemaUserRegister } from './userValidations';
+import { useDispatch, useSelector } from 'react-redux';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { createUser } from '../../../slices/userSlice';
+import { useHistory } from 'react-router-dom';
 import {
   userErrorSelector,
   userStatusSelector,
   userSelector,
-} from "../../../selectors/index.js";
+} from '../../../selectors/index.js';
 
 function UserForm() {
   const dispatch = useDispatch();
@@ -28,13 +28,13 @@ function UserForm() {
   const info = useSelector(userSelector);
 
   const emptyValues = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    cellphone: "",
-    birthdate: new Date("01/01/2000"),
-    password: "",
-    confirmPassword: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    cellphone: '',
+    birthdate: new Date('01/01/2000'),
+    password: '',
+    confirmPassword: '',
   };
 
   const handleSubmit = (values, formik) => {
@@ -47,21 +47,21 @@ function UserForm() {
 
   const emailTaken = () => {
     info.formik.setSubmitting(false);
-    info.formik.setErrors({"email": "El email ya está registrado"});
+    info.formik.setErrors({ email: 'El email ya está registrado' });
 
-    info.formik.setFieldValue("password", "", false);
+    info.formik.setFieldValue('password', '', false);
     info.formik.setFieldTouched('password', true);
-    info.formik.setFieldValue("confirmPassword", "", false);
+    info.formik.setFieldValue('confirmPassword', '', false);
     info.formik.setFieldTouched('confirmPassword', true);
   };
 
   useEffect(() => {
-    if (status === "succeded") {
-      history.push("/welcome");
+    if (status === 'succeded') {
+      history.push('/welcome');
     }
-    if (status === "failed") {
-      console.log("INFO", info);
-      error.message.includes("409") ? emailTaken() : history.push("/failure");
+    if (status === 'failed') {
+      console.log('INFO', info);
+      error.message.includes('409') ? emailTaken() : history.push('/failure');
     }
   }, [status]);
 
@@ -87,7 +87,9 @@ function UserForm() {
         {(formik) => (
           <Container>
             <Form>
-              <Field>{({ field, meta, form }) => <>{console.log(form)}</>}</Field>
+              <Field>
+                {({ field, meta, form }) => <>{console.log(form)}</>}
+              </Field>
               <FormField
                 fieldType="input"
                 label="Nombre"
@@ -115,7 +117,7 @@ function UserForm() {
                 name="birthdate"
                 required
                 className="text__field UserForm__lb"
-                placeholder={"dd/mm/aaaa"}
+                placeholder={'dd/mm/aaaa'}
               />
               <FormField
                 fieldType="input"
@@ -129,7 +131,7 @@ function UserForm() {
                 name="password"
                 required
                 className="text__field UserForm__lb"
-                type={viewPassword ? "text" : "password"}
+                type={viewPassword ? 'text' : 'password'}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -150,7 +152,7 @@ function UserForm() {
                 required
                 className="text__field UserForm__lb"
                 type="password"
-                type={viewPassword ? "text" : "password"}
+                type={viewPassword ? 'text' : 'password'}
               />
               <br></br>
               <Container className="center">

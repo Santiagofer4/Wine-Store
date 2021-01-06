@@ -17,10 +17,12 @@ export const strainsEndpoint = baseEndpoint + 'strain/';
 
 export const searchProductEndpoint = baseEndpoint + 'search?word=';
 
-export const addUserEndpoint = baseEndpoint + 'users/';
+// export const addUserEndpoint = baseEndpoint + 'users/';
+
+export const addUserEndpoint = baseEndpoint + 'auth/register/';
 
 export const getOrderTableEndpoint = baseEndpoint + 'orders/';
 
 export const UserLoginEndpoint = baseEndpoint + 'auth/login';
 
-export const userOrdersEndpoint = baseEndpoint + 'users/' // ${id}/
+export const userOrdersEndpoint = baseEndpoint + 'users/'; // ${id}/orders

@@ -143,6 +143,7 @@ server.post('/', (req, res) => {
     },
     defaults: {
       firstName: firstName[0].toUpperCase() + firstName.slice(1).toLowerCase(),
+      email,
       lastName: lastName[0].toUpperCase() + lastName.slice(1).toLowerCase(),
       email,
       birthdate,
@@ -156,9 +157,7 @@ server.post('/', (req, res) => {
       if (wasCreated) {
         return res.status(200).send(user);
       } else {
-        return res
-          .status(409)
-          .send(user);
+        return res.status(409).send(user);
       }
     })
     .catch((err) => {
