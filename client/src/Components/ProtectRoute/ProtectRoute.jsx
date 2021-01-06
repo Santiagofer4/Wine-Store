@@ -1,9 +1,8 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { AdminStrain } from '../Admin/LoadCategory/AdminStrain';
-import React from 'react';
 
-function ProtectRoute({ Component, isLogged, ...rest }) {
+function ProtectRoute({ component: Component, isLogged, ...rest }) {
   return (
     <Route
       {...rest}
@@ -16,6 +15,9 @@ function ProtectRoute({ Component, isLogged, ...rest }) {
 
 export default ProtectRoute;
 /**
+ * TODO: funciones userIsLogged & AdminIsLogged
+ *
+ *
  * ?Protejo ruta de `usuario comun`, y le paso func que devuelve true|false si el usuario esta logeado
  * @param{userIsLogged}
  * <ProtectRoute Component={Profile} path="xxxx" isLogged={userIsLogged} />;

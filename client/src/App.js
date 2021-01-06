@@ -18,12 +18,15 @@ import UserForm from './Components/Forms/User/UserForm';
 import UserLogin from './Components/Forms/User/UserLogin';
 import Profile from './Components/Profile/Profile';
 import axios from 'axios';
+import ProtectRoute from './Components/ProtectRoute/ProtectRoute';
 
 function App() {
+  //!SOLUCION CAVERNICOLA!
   axios.defaults.headers.common['Authorization'] = localStorage.getItem(
     'token'
   );
-  hasToken()=>true|false
+  //!<-----------------
+
   return (
     <div className="App">
       <link
@@ -47,7 +50,14 @@ function App() {
         <Route path="/form/user" component={UserForm} />
         <Route path="/welcome" component={Welcome} />
         <Route path="/failure" component={Failure} />
-        <Route path="/user/profile" component={Profile} />
+        <ProtectRoute
+          path="/user/profile"
+          component={Profile}
+          isLogged={() => {
+            return true;
+          }}
+        />
+        {/* <Route path="/user/profile" component={Profile} /> */}
         <Route path="/404" component={notFound} />
         <Redirect to="/404" />
       </Switch>
