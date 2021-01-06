@@ -3,8 +3,8 @@ const { User } = require('../db.js');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const { makeJWT } = require('../utils');
-// Ruta ME
 
+// Ruta ME
 server.get('/me', async (req, res, next) => {
   try {
     if (req.user) {
@@ -74,7 +74,7 @@ server.post(
 //Ruta para Loguearse
 // server.post(
 //   '/login', //function(req,res,next)
-//   passport.authenticate('local-login', function(){} ),
+//   passport.authenticate('local-login', {session:false} ),
 //   async (req, res) => {
 //     const user = req.body;
 //     const token = makeJWT(user);
@@ -95,7 +95,7 @@ server.post('/login',function(req,res,next){
     else {
       return res.json({
         message: 'Registro exitoso',
-        token: jwt.sign(user,'EL BARTO'),
+        token: makeJWT(user),
         user,
       })
       }
@@ -103,7 +103,7 @@ server.post('/login',function(req,res,next){
 })
 
 //*ruta para probar la validacion con el JWT
-server.post(
+server.get(
   /**
    * Para probar con postman las rutas protegidas:
    * 1. verificar que la ruta y el metodo sea el correcto
