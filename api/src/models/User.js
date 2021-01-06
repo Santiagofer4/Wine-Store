@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const bcrypt = require("bcrypt");
+const { capitalize } = require('../utils');
 
 module.exports = (sequelize) => {
   // defino el modelo
@@ -55,6 +56,9 @@ module.exports = (sequelize) => {
       timestamps: false,
       hooks: {
         beforeCreate (user) {
+          console.log(user.firstName)
+          user.firstName = capitalize(user.firstName);
+          user.lastName = capitalize(user.lastName);
           let ageCheck = new Date();
           ageCheck.setFullYear(ageCheck.getFullYear() - 18);
           let bd = new Date(user.birthdate);
