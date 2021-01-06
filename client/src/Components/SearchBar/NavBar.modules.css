@@ -80,3 +80,8 @@
 .avatar {
   width: 15% !important;
 }
+
+.menu {
+  text-decoration: none;
+  color: black;
+}

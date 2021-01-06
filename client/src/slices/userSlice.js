@@ -2,16 +2,17 @@ import { responsiveFontSizes } from '@material-ui/core';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
-  usersEndpoint,
   UserLoginEndpoint,
   addUserEndpoint,
   authLoginEndpoint,
+  userOrdersEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 
 const initialState_user = {
   user: {
     info: {},
+    orders: {},
     status: 'idle',
     error: null,
   },
@@ -36,6 +37,11 @@ export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
     formik,
   };
   return resPayload;
+});
+
+export const userOrders = createAsyncThunk('user/getUserOrders', async (id) => {
+  const resp = await axios.get(userOrdersEndpoint + id + '/orders');
+  return resp;
 });
 
 const userSlice = createSlice({
@@ -74,6 +80,18 @@ const userSlice = createSlice({
       formik.resetForm();
     },
     [postUserLogin.rejected]: (state, action) => {
+      state.user.status = status.failed;
+      state.user.error = action.error;
+    },
+    [userOrders.pending]: (state, action) => {
+      state.user.status = status.loading;
+    },
+    [userOrders.fulfilled]: (state, { payload }) => {
+      state.user.status = status.succeded;
+      state.user.orders = payload.data;
+      console.log('PAYLOAD.DATA USER ORDERS', payload.data);
+    },
+    [userOrders.rejected]: (state, action) => {
       state.user.status = status.failed;
       state.user.error = action.error;
     },
