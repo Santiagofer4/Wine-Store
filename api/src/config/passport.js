@@ -66,7 +66,7 @@ module.exports = function (passport) {
 
   //*estrategia para login con JWT
   passport.use(
-    'jwt-login',
+    'jwt',
     new JWTstrategy(jwt_options, async (jwt_payload, done) => {
       console.log('JWT_PAYLOAD', jwt_payload);
       try {

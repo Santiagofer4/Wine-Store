@@ -86,6 +86,16 @@ server.post(
   }
 );
 
+//*ruta para probar la validacion con el JWT
+server.post(
+  '/test',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    console.log('INGRESO A RUTA PROTEGIDA', req.body);
+    res.send(200).json('prueba de ruta protegia');
+  }
+);
+
 // server.post('/login', (req, res) => {
 //   console.log('req', req.body);
 // });
