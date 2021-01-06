@@ -76,6 +76,7 @@ module.exports = function (passport) {
       {
         usernameField: 'email',
         passwordField: 'password',
+        session:false,
       },
       async (email, password, done) => {
         try {

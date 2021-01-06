@@ -18,7 +18,7 @@ import {
   userStatusSelector,
   userSelector,
 } from '../../../selectors/index.js';
-
+// import {LocalStorage} from 'node-localstorage'
 function UserForm() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -42,6 +42,7 @@ function UserForm() {
       user: { ...values },
       formik,
     };
+    localStorage.setItem('datos', payload.user.firstName)
     dispatch(createUser(payload));
   };
 

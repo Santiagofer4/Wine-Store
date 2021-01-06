@@ -9,7 +9,7 @@ server.get('/me', async (req, res, next) => {
   try {
     if (req.user) {
       const { id } = req.user;
-      const result = await User.findByPk(id);
+      const result = await User.findOne(id);
       res.json(result);
     } else res.sendStatus(401);
   } catch (error) {
@@ -72,19 +72,35 @@ server.post(
 // });
 
 //Ruta para Loguearse
-server.post(
-  '/login',
-  passport.authenticate('local-login', { session: false }),
-  async (req, res) => {
-    const user = req.body;
-    const token = makeJWT(user);
-    return res.json({
-      message: 'login exitoso',
-      token,
-      user,
-    });
-  }
-);
+// server.post(
+//   '/login', //function(req,res,next)
+//   passport.authenticate('local-login', function(){} ),
+//   async (req, res) => {
+//     const user = req.body;
+//     const token = makeJWT(user);
+//     return res.json({
+//       message: 'login exitoso',
+//       token,
+//       user,
+//     });
+//   }
+// );
+
+server.post('/login',function(req,res,next){
+  passport.authenticate('local-login',function(err,user){
+    console.log('LOGIN',user)
+    if(err)return next(err);
+    else if(!user)res.status(401)
+    
+    else {
+      return res.json({
+        message: 'Registro exitoso',
+        token: jwt.sign(user,'EL BARTO'),
+        user,
+      })
+      }
+  })(req,res,next)
+})
 
 //*ruta para probar la validacion con el JWT
 server.post(

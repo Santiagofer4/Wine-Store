@@ -142,9 +142,8 @@ server.post('/', (req, res) => {
       email,
     },
     defaults: {
-      firstName: firstName[0].toUpperCase() + firstName.slice(1).toLowerCase(),
-      email,
-      lastName: lastName[0].toUpperCase() + lastName.slice(1).toLowerCase(),
+      firstName,
+      lastName,
       email,
       birthdate,
       cellphone,
