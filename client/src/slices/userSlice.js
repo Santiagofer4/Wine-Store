@@ -76,7 +76,7 @@ const userSlice = createSlice({
     [postUserLogin.fulfilled]: (state, { payload }) => {
       const { userLogin_response, formik } = payload;
       state.user.status = status.succeded;
-      state.user.info = userLogin_response;
+      state.user.info = userLogin_response.user;
       formik.resetForm();
     },
     [postUserLogin.rejected]: (state, action) => {
