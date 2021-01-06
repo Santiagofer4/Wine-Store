@@ -21,6 +21,8 @@ export const searchProductEndpoint = baseEndpoint + 'search?word=';
 
 export const addUserEndpoint = baseEndpoint + 'auth/register/';
 
+export const authLoginEndpoint = baseEndpoint + 'auth/login/';
+
 export const getOrderTableEndpoint = baseEndpoint + 'orders/';
 
 export const UserLoginEndpoint = baseEndpoint + 'auth/login';

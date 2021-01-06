@@ -2,8 +2,7 @@ const server = require('express').Router();
 const { User } = require('../db.js');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const SECRET_KEY = require('../config/jwt.js');
-
+const { makeJWT } = require('../utils');
 // Ruta ME
 
 server.get('/me', async (req, res, next) => {
@@ -30,8 +29,11 @@ server.post(
   '/register',
   passport.authenticate('register', { session: false }),
   async (req, res) => {
-    res.status(200).json({
+    console.log('REGISTEr', req.body);
+    const token = makeJWT(req.body);
+    return res.json({
       message: 'Registro exitoso',
+      token,
       user: req.user,
     });
   }
@@ -72,18 +74,41 @@ server.post(
 //Ruta para Loguearse
 server.post(
   '/login',
-  passport.authenticate('jwt-login', { session: false }),
-  async (err, user, info) => {
-    console.log('INFO', info)
-    console.log('user', user)
-    const token = jwt.sign(user, SECRET_KEY);
-    console.log('TOKEN', token);
+  passport.authenticate('local-login', { session: false }),
+  async (req, res) => {
+    const user = req.body;
+    const token = makeJWT(user);
     return res.json({
       message: 'login exitoso',
       token,
+      user,
     });
   }
 );
+
+//*ruta para probar la validacion con el JWT
+server.post(
+  /**
+   * Para probar con postman las rutas protegidas:
+   * 1. verificar que la ruta y el metodo sea el correcto
+   * 2. en caso que sea necesario, enviar la informacion por body en el formato correcta
+   * 3. Enviar en `headers` la 'key'=>`Authorization` con la string del JWT
+   * el formato es: "Bearer `aca viene el choclo de string ilegible`" (sin ninguna comilla, solo la string)
+   *
+   */
+  '/test',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    console.log('INGRESO A RUTA PROTEGIDA', req.body);
+    return res.send('prueba de ruta protegia');
+    // return res.send(req.user);
+  }
+);
+
+// server.post('/login', (req, res) => {
+//   console.log('req', req.body);
+// });
+
 // server.post('/login', async function (req, res, next) {
 //   const { password, email } = req.body;
 //   if (!password || !email) {

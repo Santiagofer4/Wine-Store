@@ -4,14 +4,15 @@ import axios from 'axios';
 import {
   UserLoginEndpoint,
   addUserEndpoint,
-  userOrdersEndpoint
+  authLoginEndpoint,
+  userOrdersEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 
 const initialState_user = {
   user: {
     info: {},
-    orders:{},
+    orders: {},
     status: 'idle',
     error: null,
   },
@@ -29,7 +30,8 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
 
 export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   const { user, formik } = payload;
-  const userLogin_response = await axios.post(UserLoginEndpoint, user);
+  const userLogin_response = await axios.post(authLoginEndpoint, user);
+  console.log('RESPONSe', userLogin_response);
   const resPayload = {
     userLogin_response: userLogin_response.data,
     formik,
@@ -62,8 +64,8 @@ const userSlice = createSlice({
         formik: infoComplete.formik,
         user: {
           email: infoComplete.user.email,
-        }
-      }
+        },
+      };
       state.user.status = status.failed;
       state.user.error = action.error;
       state.user.info = info;
@@ -84,10 +86,10 @@ const userSlice = createSlice({
     [userOrders.pending]: (state, action) => {
       state.user.status = status.loading;
     },
-    [userOrders.fulfilled]: (state, {payload}) => {
+    [userOrders.fulfilled]: (state, { payload }) => {
       state.user.status = status.succeded;
       state.user.orders = payload.data;
-      console.log('PAYLOAD.DATA USER ORDERS', payload.data)
+      console.log('PAYLOAD.DATA USER ORDERS', payload.data);
     },
     [userOrders.rejected]: (state, action) => {
       state.user.status = status.failed;
