@@ -106,7 +106,7 @@ function NavBar() {
             >
               <Avatar>
                 {logged
-                  ? user.firstName.charAt(0) + user.lastName.charAt(0)
+                  ? user.user.firstName.charAt(0) + user.user.lastName.charAt(0)
                   : "?"}
               </Avatar>
             </Button>
