@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Formik, Form } from 'formik';
+import React, { useState, useEffect } from 'react';
+import { Formik, Form, Field } from 'formik';
 import {
   Button,
   Container,
@@ -16,6 +16,7 @@ import { useHistory } from 'react-router-dom';
 import {
   userErrorSelector,
   userStatusSelector,
+  userSelector,
 } from '../../../selectors/index.js';
 
 function UserForm() {
@@ -24,6 +25,7 @@ function UserForm() {
   const [viewPassword, setViewPassword] = useState(false);
   const status = useSelector(userStatusSelector);
   const error = useSelector(userErrorSelector);
+  const info = useSelector(userSelector);
 
   const emptyValues = {
     firstName: '',
@@ -40,18 +42,28 @@ function UserForm() {
       user: { ...values },
       formik,
     };
-    dispatch(createUser(payload)).then((payload) => {
-      if (payload.type === 'user/register/fulfilled') {
-        history.push('/welcome');
-      } else {
-        if (payload.type === 'user/register/rejected') {
-          error.includes(409)
-            ? history.push('/failure')
-            : history.push('/catalogue');
-        }
-      }
-    });
+    dispatch(createUser(payload));
   };
+
+  const emailTaken = () => {
+    info.formik.setSubmitting(false);
+    info.formik.setErrors({ email: 'El email ya está registrado' });
+
+    info.formik.setFieldValue('password', '', false);
+    info.formik.setFieldTouched('password', true);
+    info.formik.setFieldValue('confirmPassword', '', false);
+    info.formik.setFieldTouched('confirmPassword', true);
+  };
+
+  useEffect(() => {
+    if (status === 'succeded') {
+      history.push('/welcome');
+    }
+    if (status === 'failed') {
+      console.log('INFO', info);
+      error.message.includes('409') ? emailTaken() : history.push('/failure');
+    }
+  }, [status]);
 
   const handleReset = (formik) => {
     //func para resetear el form
@@ -75,6 +87,9 @@ function UserForm() {
         {(formik) => (
           <Container>
             <Form>
+              <Field>
+                {({ field, meta, form }) => <>{console.log(form)}</>}
+              </Field>
               <FormField
                 fieldType="input"
                 label="Nombre"
