@@ -136,6 +136,12 @@ function NavBar() {
                           <>
                             {" "}
                             <MenuItem onClick={handleClose}>
+                                Ingresado como 
+                                <br></br>
+                                {user.firstName + ' ' + user.lastName}
+                            </MenuItem>
+                            <hr className="line"></hr>
+                            <MenuItem onClick={handleClose}>
                               <Link to="/user/profile" className="menu">
                                 Mi cuenta
                               </Link>

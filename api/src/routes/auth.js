@@ -74,6 +74,8 @@ server.post(
   '/login',
   passport.authenticate('jwt-login', { session: false }),
   async (err, user, info) => {
+    console.log('INFO', info)
+    console.log('user', user)
     const token = jwt.sign(user, SECRET_KEY);
     console.log('TOKEN', token);
     return res.json({
