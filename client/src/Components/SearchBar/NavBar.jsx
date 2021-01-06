@@ -16,7 +16,7 @@ import Popper from "@material-ui/core/Popper";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import { userSelector, userStatusSelector } from "../../selectors/index.js";
-
+import axios from 'axios'
 function NavBar() {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
@@ -109,6 +109,7 @@ function NavBar() {
                   ? user.firstName.charAt(0) + user.lastName.charAt(0)
                   : "?"}
               </Avatar>
+ 
             </Button>
             <Popper
               open={open}
@@ -138,6 +139,11 @@ function NavBar() {
                             <MenuItem onClick={handleClose}>
                               <Link to="/user/profile" className="menu">
                                 Mi cuenta
+                              </Link>
+                            </MenuItem>
+                            <MenuItem onClick={()=>{ axios.get('http://localhost:3000/auth/test')}}>
+                              <Link to="/user/prueba" className="menu">
+                                Prueba
                               </Link>
                             </MenuItem>
                             <MenuItem onClick={handleClose}>
