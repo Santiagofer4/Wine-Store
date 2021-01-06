@@ -116,10 +116,11 @@ server.get('/:id/cart', (req, res) => {
 // Ruta que retorna todas las ordenes de un usuario
 
 server.get('/:id/orders', (req, res) => {
-  const { id } = req.params;
+  let { id } = req.params;
   id = id * 1;
   Order.findAll({
     where: { userId: id },
+    include: { model: OrderLine, include: [{ model: Product }] },
   })
     .then((list) => {
       res.json(list);

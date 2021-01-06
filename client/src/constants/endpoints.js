@@ -22,3 +22,5 @@ export const addUserEndpoint = baseEndpoint + 'users/';
 export const getOrderTableEndpoint = baseEndpoint + 'orders/';
 
 export const UserLoginEndpoint = baseEndpoint + 'auth/login';
+
+export const userOrdersEndpoint = baseEndpoint + 'users/' // ${id}/

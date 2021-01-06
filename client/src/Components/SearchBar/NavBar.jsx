@@ -132,17 +132,35 @@ function NavBar() {
                         id="menu-list-grow"
                         onKeyDown={handleListKeyDown}
                       >
-                        <MenuItem onClick={handleClose}>
-                          <Link to="/form/user/login" className="Nav__Link">
-                            Ingresar
-                          </Link>
-                        </MenuItem>
-                        <MenuItem onClick={handleClose}>
-                          <Link to="/form/user" className="Nav__Link">
-                            Regístrate
-                          </Link>
-                        </MenuItem>
-                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                        {logged ? (
+                          <>
+                            {" "}
+                            <MenuItem onClick={handleClose}>
+                              <Link to="/user/profile" className="menu">
+                                Mi cuenta
+                              </Link>
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                              <Link to="/form/user/logout" className="menu">
+                                Cerrar sesión
+                              </Link>
+                            </MenuItem>{" "}
+                          </>
+                        ) : (
+                          <>
+                            {" "}
+                            <MenuItem onClick={handleClose}>
+                              <Link to="/form/user/login" className="menu">
+                                Ingresar
+                              </Link>
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                              <Link to="/form/user" className="menu">
+                                Regístrate
+                              </Link>
+                            </MenuItem>{" "}
+                          </>
+                        )}
                       </MenuList>
                     </ClickAwayListener>
                   </Paper>

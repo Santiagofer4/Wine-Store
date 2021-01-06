@@ -16,6 +16,7 @@ import Failure from './Components/Contenido/Failure';
 import notFound from './Components/notFound/notFound';
 import UserForm from './Components/Forms/User/UserForm';
 import UserLogin from './Components/Forms/User/UserLogin';
+import Profile from './Components/Profile/Profile';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/form/user" component={UserForm} />
         <Route path="/welcome" component={Welcome} />
         <Route path="/failure" component={Failure} />
+        <Route path="/user/profile" component={Profile} />
         <Route path="/404" component={notFound} />
         <Redirect to="/404" />
       </Switch>
