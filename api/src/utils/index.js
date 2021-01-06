@@ -28,5 +28,9 @@ const extractDigitsFromString = (str) => {
 
   return search;
 };
+const capitalize = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
 
 exports.extractDigitsFromString = extractDigitsFromString;
+exports.capitalize = capitalize;

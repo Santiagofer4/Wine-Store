@@ -1,7 +1,11 @@
 import { responsiveFontSizes } from '@material-ui/core';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { usersEndpoint, UserLoginEndpoint } from '../constants/endpoints';
+import {
+  usersEndpoint,
+  UserLoginEndpoint,
+  addUserEndpoint,
+} from '../constants/endpoints';
 import { status } from '../constants/helpers';
 
 const initialState_user = {
@@ -14,9 +18,9 @@ const initialState_user = {
 
 export const createUser = createAsyncThunk('user/register', async (payload) => {
   const { user, formik } = payload;
-  const user_response = await axios.post(usersEndpoint, user);
+  const user_response = await axios.post(addUserEndpoint, user);
   const resPayload = {
-    user_response: user_response.data[0],
+    user_response: user_response.data.user,
     formik,
   };
   return resPayload;
@@ -53,8 +57,8 @@ const userSlice = createSlice({
     [postUserLogin.pending]: (state, action) => {
       state.user.status = status.loading;
     },
-    [postUserLogin.fulfilled]: (state, {payload}) => {
-      const { userLogin_response, formik } = payload
+    [postUserLogin.fulfilled]: (state, { payload }) => {
+      const { userLogin_response, formik } = payload;
       state.user.status = status.succeded;
       state.user.info = userLogin_response;
       formik.resetForm();

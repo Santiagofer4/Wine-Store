@@ -13,7 +13,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { createUser } from '../../../slices/userSlice';
 import { useHistory } from 'react-router-dom';
-import { userErrorSelector, userStatusSelector } from "../../../selectors/index.js";
+import {
+  userErrorSelector,
+  userStatusSelector,
+} from '../../../selectors/index.js';
 
 function UserForm() {
   const dispatch = useDispatch();
@@ -38,14 +41,13 @@ function UserForm() {
       formik,
     };
     dispatch(createUser(payload)).then((payload) => {
-      console.log('STATUS', status)
-      console.log('ERRORAFUERA', error)
       if (payload.type === 'user/register/fulfilled') {
         history.push('/welcome');
       } else {
-        console.log('ERRORADENTRO', error)
-        if(payload.type === 'user/register/rejected') {
-          error.includes(409) ? history.push('/failure') : history.push('/catalogue')
+        if (payload.type === 'user/register/rejected') {
+          error.includes(409)
+            ? history.push('/failure')
+            : history.push('/catalogue');
         }
       }
     });
