@@ -5,6 +5,7 @@ import {
   usersEndpoint,
   UserLoginEndpoint,
   addUserEndpoint,
+  authLoginEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 
@@ -28,7 +29,8 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
 
 export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   const { user, formik } = payload;
-  const userLogin_response = await axios.post(UserLoginEndpoint, user);
+  const userLogin_response = await axios.post(authLoginEndpoint, user);
+  console.log('RESPONSe', userLogin_response);
   const resPayload = {
     userLogin_response: userLogin_response.data,
     formik,
@@ -56,8 +58,8 @@ const userSlice = createSlice({
         formik: infoComplete.formik,
         user: {
           email: infoComplete.user.email,
-        }
-      }
+        },
+      };
       state.user.status = status.failed;
       state.user.error = action.error;
       state.user.info = info;

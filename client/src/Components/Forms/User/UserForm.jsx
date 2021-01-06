@@ -87,9 +87,9 @@ function UserForm() {
         {(formik) => (
           <Container>
             <Form>
-              <Field>
+              {/* <Field>
                 {({ field, meta, form }) => <>{console.log(form)}</>}
-              </Field>
+              </Field> */}
               <FormField
                 fieldType="input"
                 label="Nombre"
