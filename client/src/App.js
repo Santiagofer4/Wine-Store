@@ -17,8 +17,13 @@ import notFound from './Components/notFound/notFound';
 import UserForm from './Components/Forms/User/UserForm';
 import UserLogin from './Components/Forms/User/UserLogin';
 import Profile from './Components/Profile/Profile';
+import axios from 'axios';
 
 function App() {
+  axios.defaults.headers.common['Authorization'] = localStorage.getItem(
+    'token'
+  );
+  hasToken()=>true|false
   return (
     <div className="App">
       <link

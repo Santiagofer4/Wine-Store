@@ -22,7 +22,7 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
   const { user, formik } = payload;
   const user_response = await axios.post(addUserEndpoint, user);
   const resPayload = {
-    user_response: user_response.data.user,
+    userRegister_response: user_response.data,
     formik,
   };
   return resPayload;
@@ -31,11 +31,11 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
 export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   const { user, formik } = payload;
   const userLogin_response = await axios.post(authLoginEndpoint, user);
-  console.log('RESPONSe', userLogin_response);
   const resPayload = {
     userLogin_response: userLogin_response.data,
     formik,
   };
+
   return resPayload;
 });
 
@@ -53,9 +53,10 @@ const userSlice = createSlice({
       state.user.status = status.loading;
     },
     [createUser.fulfilled]: (state, { payload }) => {
-      const { user_response, formik } = payload;
+      const { userRegister_response, formik } = payload;
       state.user.status = status.succeded;
-      state.user.info = user_response;
+      state.user.info = userRegister_response.user;
+      localStorage.setItem('token', userRegister_response.token.token);
       formik.resetForm();
     },
     [createUser.rejected]: (state, action) => {
@@ -77,7 +78,7 @@ const userSlice = createSlice({
       const { userLogin_response, formik } = payload;
       state.user.status = status.succeded;
       state.user.info = userLogin_response.user;
-      localStorage.setItem('token', JSON.stringify(userLogin_response.token))
+      localStorage.setItem('token', userLogin_response.token.token);
       formik.resetForm();
     },
     [postUserLogin.rejected]: (state, action) => {

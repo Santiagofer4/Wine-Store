@@ -42,7 +42,6 @@ function UserForm() {
       user: { ...values },
       formik,
     };
-    localStorage.setItem('datos', payload.user.firstName)
     dispatch(createUser(payload));
   };
 
@@ -82,7 +81,7 @@ function UserForm() {
     <Container className="formUser">
       <Formik
         initialValues={emptyValues}
-        validationSchema={validationSchemaUserRegister}
+        // validationSchema={validationSchemaUserRegister}
         onSubmit={handleSubmit}
       >
         {(formik) => (
