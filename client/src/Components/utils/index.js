@@ -97,7 +97,7 @@ export const formatArrayToOption = (array, propName) => {
 
 export function sliceTime(str) {
   return str.slice(8, 10) + '/' + str.slice(5, 7) + '/' + str.slice(0, 4);
-}
+};
 
 export const total = (arr) => {
   let x = 0;
@@ -105,6 +105,11 @@ export const total = (arr) => {
     x = x + p.price * p.quantity;
   });
   return x;
+};
+
+export const search = (id, array) => {
+  let index = array.findIndex(e => id === e.productId);
+  return index === -1 ? true : false;
 };
 
 export const isLogged = () => {

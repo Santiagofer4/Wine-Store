@@ -59,19 +59,46 @@ server.delete('/:id', (req, res) => {
 
 //Ver todas las Reviews de un Producto
 
-server.get('/:id', (req, res, next) => {
-  let { id } = req.params;
+server.get('/:productId', (req, res, next) => {
+  let { productId } = req.params;
   console.log('Ver Reviews de un producto - GET a /review/:id');
 
-  if (!id) return res.status(404).send('No existen reviews para ese producto');
+  if (!productId) return res.status(404).send('No existen reviews para ese producto');
 
   Review.findAll({
-    include: { model: Product, where: { id } },
+    where: {
+      productId,
+    }
+/*     include: { model: Product, where: { productId } }, */
   })
     .then((revs) => {
       res.json(
         revs.map((r) => {
-          return { id: r.id, points: r.points, description: r.description };
+          return { id: r.id, points: r.points, description: r.description, productId };
+        })
+      );
+    })
+    .catch(next);
+});
+
+//Ver todas las Reviews de un Usuario
+
+server.get('/user/:userId', (req, res, next) => {
+  let { userId } = req.params;
+  console.log('Ver Reviews de un usuario - GET a /review/user/:id');
+
+  if (!userId) return res.status(404).send('No existen reviews de ese usuario');
+
+  Review.findAll({
+    where: {
+      userId,
+    }
+/*     include: { model: User, where: { id: userId } }, */
+  })
+    .then((revs) => {
+      res.json(
+        revs.map((r) => {
+          return { id: r.id, points: r.points, description: r.description, productId: r.productId };
         })
       );
     })
