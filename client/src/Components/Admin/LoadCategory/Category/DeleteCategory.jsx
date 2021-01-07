@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CircularProgress, Container, Button } from '@material-ui/core';
 import { Formik, Form } from 'formik';
-import { formatArrayToOption } from '../../../utils.js';
+import { formatArrayToOption } from '../../../utils';
 import FormField from '../../../FormComponents/FormField';
 import {
   allCategoriesStatusSelector,

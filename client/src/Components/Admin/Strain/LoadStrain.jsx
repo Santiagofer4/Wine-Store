@@ -5,7 +5,7 @@ import { validationSchemaLoadStrains } from '../adminValidations';
 import { Container, Button, CircularProgress } from '@material-ui/core';
 import '../LoadProduct/LoadProduct.modules.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { formatArrayToOption } from '../../utils.js';
+import { formatArrayToOption } from '../../utils';
 import {
   allStrainsSelector,
   strainsStatusSelector,
