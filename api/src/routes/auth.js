@@ -27,10 +27,10 @@ server.get('/logout', (req, res) => {
 //Ruta para Registrarse
 server.post(
   '/register',
-  passport.authenticate('register', { session: false }),
+  passport.authenticate('register-local', { session: false }),
   async (req, res) => {
-    console.log('REGISTEr', req.body);
-    const token = makeJWT(req.body);
+    console.log('REGISTEr', req.user);
+    const token = makeJWT(req.user);
     return res.json({
       message: 'Registro exitoso',
       token,
@@ -86,22 +86,25 @@ server.post(
 //   }
 // );
 
-server.post('/login',function(req,res,next){
-  passport.authenticate('local-login',function(err,user){
-    console.log('LOGIN',user)
-    if(err)return next(err);
-    else if(!user)res.status(401)
-    
+server.post('/login', function (req, res, next) {
+  passport.authenticate('local-login', function (err, user) {
+    // console.log('LOGIN', user);
+    if (err) return next(err);
+    else if (!user) res.status(401);
     else {
       return res.json({
         message: 'Registro exitoso',
         token: makeJWT(user),
         user,
-      })
-      }
-  })(req,res,next)
-})
+      });
+    }
+  })(req, res, next);
+});
 
+server.get('/head', (req, res) => {
+  // console.log('req', req);
+  return res.send(200);
+});
 //*ruta para probar la validacion con el JWT
 server.get(
   /**
