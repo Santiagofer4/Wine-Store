@@ -19,6 +19,7 @@ function OrderDetail(props) {
                     <div className='OrderDetail__Text' >{element.product.name}</div>
                     <div className='OrderDetail__Text' >{element.product.price}</div>
                     <div className='OrderDetail__Text' >{element.product.price * element.quantity}</div>
+                    <>{props.review ? props.review : null}</>
                 </li>
                 )
         }) }

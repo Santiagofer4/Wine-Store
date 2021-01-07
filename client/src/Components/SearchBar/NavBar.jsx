@@ -1,22 +1,22 @@
-import React, { useEffect, useState, useRef } from 'react';
-import SearchBar from './SearchBar.jsx';
-import './NavBar.modules.css';
-import { Link } from 'react-router-dom';
-import { getAllProducts } from '../../slices/productSlice';
-import { getAllCategories } from '../../slices/categorySlice';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState, useRef } from "react";
+import SearchBar from "./SearchBar.jsx";
+import "./NavBar.modules.css";
+import { Link } from "react-router-dom";
+import { getAllProducts } from "../../slices/productSlice";
+import { getAllCategories } from "../../slices/categorySlice";
+import { useDispatch, useSelector } from "react-redux";
 
-import Avatar from '@material-ui/core/Avatar';
-import Grid from '@material-ui/core/Grid';
-import { Button } from '@material-ui/core';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import { userSelector, userStatusSelector } from '../../selectors/index.js';
-import axios from 'axios';
+import Avatar from "@material-ui/core/Avatar";
+import Grid from "@material-ui/core/Grid";
+import { Button } from "@material-ui/core";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import Grow from "@material-ui/core/Grow";
+import Paper from "@material-ui/core/Paper";
+import Popper from "@material-ui/core/Popper";
+import MenuItem from "@material-ui/core/MenuItem";
+import MenuList from "@material-ui/core/MenuList";
+import { userSelector, userStatusSelector } from "../../selectors/index.js";
+import axios from "axios";
 function NavBar() {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
@@ -38,7 +38,7 @@ function NavBar() {
   };
 
   function handleListKeyDown(event) {
-    if (event.key === 'Tab') {
+    if (event.key === "Tab") {
       event.preventDefault();
       setOpen(false);
     }
@@ -47,14 +47,12 @@ function NavBar() {
   const prevOpen = useRef(open);
 
   useEffect(() => {
-    if (status === 'succeded') {
+    if (status === "succeded") {
       setLogin(true);
     }
-
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
-
     prevOpen.current = open;
   }, [user, open]);
 
@@ -63,13 +61,13 @@ function NavBar() {
       <nav className="Nav">
         <ul className="Nav__ul">
           <li className="Nav__li">
-            {' '}
+            {" "}
             <Link to="/" className="Nav__Link">
               Home
             </Link>
           </li>
           <li className="Nav__li">
-            {' '}
+            {" "}
             <Link
               to="/catalogue"
               className="Nav__Link"
@@ -87,19 +85,19 @@ function NavBar() {
               onClick={() => {
                 let config = {
                   headers: {
-                    Authorization: localStorage.getItem('token'),
+                    Authorization: localStorage.getItem("token"),
                   },
                 };
                 axios
-                  .get('http://localhost:3000/auth/test')
-                  .then((x) => console.log('XXX', x));
+                  .get("http://localhost:3000/auth/test")
+                  .then((x) => console.log("XXX", x));
               }}
             >
               HEADERS
             </Button>
           </li>
           <li className="Nav__li">
-            {' '}
+            {" "}
             <Link to="/admin" className="Nav__Link" id="invisible">
               Admin
             </Link>
@@ -117,14 +115,14 @@ function NavBar() {
           >
             <Button
               ref={anchorRef}
-              aria-controls={open ? 'menu-list-grow' : undefined}
+              aria-controls={open ? "menu-list-grow" : undefined}
               aria-haspopup="true"
               onClick={handleToggle}
             >
               <Avatar>
                 {logged
                   ? user.firstName.charAt(0) + user.lastName.charAt(0)
-                  : '?'}
+                  : "?"}
               </Avatar>
             </Button>
             <Popper
@@ -139,7 +137,7 @@ function NavBar() {
                   {...TransitionProps}
                   style={{
                     transformOrigin:
-                      placement === 'bottom' ? 'center top' : 'center bottom',
+                      placement === "bottom" ? "center top" : "center bottom",
                   }}
                 >
                   <Paper>
@@ -151,13 +149,22 @@ function NavBar() {
                       >
                         {logged ? (
                           <>
-                            {' '}
+                            {" "}
                             <MenuItem onClick={handleClose}>
-                                Ingresado como 
-                                <br></br>
-                                {user.firstName + ' ' + user.lastName}
+                              Ingresado como
+                              <br></br>
+                              {user.firstName + " " + user.lastName}
                             </MenuItem>
                             <hr className="line"></hr>
+                            {user.isAdmin ? (
+                              <>
+                                <MenuItem onClick={handleClose}>
+                                  <Link to="/admin" className="menu">
+                                    Panel admin
+                                  </Link>
+                                </MenuItem>
+                              </>
+                            ) : null}
                             <MenuItem onClick={handleClose}>
                               <Link to="/user/profile" className="menu">
                                 Mi cuenta
@@ -167,11 +174,11 @@ function NavBar() {
                               <Link to="/form/user/logout" className="menu">
                                 Cerrar sesión
                               </Link>
-                            </MenuItem>{' '}
+                            </MenuItem>{" "}
                           </>
                         ) : (
                           <>
-                            {' '}
+                            {" "}
                             <MenuItem onClick={handleClose}>
                               <Link to="/form/user/login" className="menu">
                                 Ingresar
@@ -181,7 +188,7 @@ function NavBar() {
                               <Link to="/form/user" className="menu">
                                 Regístrate
                               </Link>
-                            </MenuItem>{' '}
+                            </MenuItem>{" "}
                           </>
                         )}
                       </MenuList>

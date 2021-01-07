@@ -88,7 +88,9 @@ function Cart() {
     dispatch(deleteSingleProdFromCart(payload));    
   };
 
-  const handleConfirm = () => {};
+  const handleConfirm = () => {
+    //agregar total para guardar
+  };
 
   const handlers = {
     deleteItemHandler,
