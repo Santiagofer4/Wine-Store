@@ -85,7 +85,7 @@ function NavBar() {
               to="/catalogue"
               className="Nav__Link"
               onClick={() => {
-                dispatch(getAllProducts()); // ! Al que comenta esto le corto las manos xD
+                dispatch(getAllProducts());
                 dispatch(getAllCategories());
               }}
             >

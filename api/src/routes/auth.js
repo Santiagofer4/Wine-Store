@@ -2,7 +2,7 @@ const server = require('express').Router();
 const { User } = require('../db.js');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const { makeJWT, cookieMaker } = require('../utils');
+const { makeJWT, cookieMaker, refreshTime } = require('../utils');
 
 // Ruta ME
 server.get('/me', async (req, res, next) => {
@@ -33,8 +33,7 @@ server.post(
   passport.authenticate('register-local', { session: false }),
   async (req, res) => {
     try {
-      // console.log('REGISTEr', req.user);
-      const token = makeJWT(req.user, 60 * 5 * 1000);
+      const token = makeJWT(req.user, refreshTime);
       const refresh_token = makeJWT(req.user);
       cookieMaker('jwt', token, res);
       cookieMaker('refreshToken', refresh_token, res);
@@ -49,66 +48,26 @@ server.post(
     }
   }
 );
-// server.post('/register', async function (req, res, next) {
-//   try {
-//     const user = await User.create(req.body);
-//     const {
-//       id,
-//       firstName,
-//       lastName,
-//       email,
-//       birthdate,
-//       cellphone,
-//       role,
-//       password,
-//     } = user;
-//     return res.send(
-//       jwt.sign(
-//         {
-//           id,
-//           firstName,
-//           lastName,
-//           email,
-//           birthdate,
-//           cellphone,
-//           role,
-//           password,
-//         },
-//         'secret word'
-//       )
-//     );
-//   } catch (error) {
-//     res.sendStatus(500).send(error);
-//   }
-// });
 
 //Ruta para Loguearse
-// server.post(
-//   '/login', //function(req,res,next)
-//   passport.authenticate('local-login', {session:false} ),
-//   async (req, res) => {
-//     const user = req.body;
-//     const token = makeJWT(user);
-//     return res.json({
-//       message: 'login exitoso',
-//       token,
-//       user,
-//     });
-//   }
-// );
-
 server.post(
   '/login',
   passport.authenticate('local-login', { session: false }),
   async (req, res) => {
-    console.log('LOGIn', req.user);
-    const token = makeJWT(req.user);
+    try {
+    const token = makeJWT(req.user, refreshTime); // guardar los tiempos de refresh en variable y aplicarselo a ambas
+    const refresh_token = makeJWT(req.user);
     cookieMaker('jwt', token, res);
+    cookieMaker('refreshToken', refresh_token, res);
     return res.send({
       message: 'Login exitoso',
       token,
+      refresh_token,
       user: req.user,
     });
+  }catch (error) {
+      console.error(`CATCH LOGIN`, error);
+    }
   }
 );
 
@@ -117,7 +76,7 @@ server.get(
   passport.authenticate('jwt-refresh', { session: false }),
   async (req, res) => {
     // console.log('REFRESHING', req.user);
-    const token = makeJWT(req.user, 60 * 5 * 1000);
+    const token = makeJWT(req.user, refreshTime);
     const refresh_token = makeJWT(req.user);
     cookieMaker('jwt', token, res);
     cookieMaker('refreshToken', refresh_token, res);

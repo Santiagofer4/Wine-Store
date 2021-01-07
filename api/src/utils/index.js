@@ -43,7 +43,7 @@ const makeJWT = (user, expiresIn) => {
   const { id } = user;
 
   const options = {
-    expiresIn: 60 * 1000 || expiresIn, //5 min
+    expiresIn: 60 * 5 * 1000 || expiresIn, //5 min
   };
   const payload = {
     id,
@@ -80,7 +80,12 @@ const cookieMaker = (name, token, res) => {
   return res.cookie(name, token, cookieOptions);
 };
 
+const refreshTime = () => {
+  60 * 5 * 1000
+}
+
 exports.extractDigitsFromString = extractDigitsFromString;
 exports.capitalize = capitalize;
 exports.makeJWT = makeJWT;
 exports.cookieMaker = cookieMaker;
+exports.refreshTime = refreshTime;

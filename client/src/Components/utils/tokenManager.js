@@ -86,7 +86,7 @@ const tokenManager = () => {
   const refreshToken = (expires) => {
     console.log('SETTING REFRESH TIMEOUT');
     let delay = expires - 5000;
-    refreshTimeOutId = window.setTimeout(getRefreshedToken, 3000);
+    refreshTimeOutId = window.setTimeout(getRefreshedToken, delay);
   };
 
   const abordRefreshToken = () => {
