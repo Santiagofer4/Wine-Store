@@ -40,14 +40,14 @@ const makeJWT = (user) => {
    * func para crear un jw token
    * recibe user y devuelve un token con la info del user
    */
-  const { email, id } = user;
+  const { id } = user;
 
   const options = {
     expiresIn: '1d',
   };
   const payload = {
-    sub: email,
     id,
+    user,
     iat: Date.now(),
     issuer: 'wineStore',
     audience: 'localhost:3000',
@@ -60,12 +60,27 @@ const makeJWT = (user) => {
   console.log('TOKEN VERIFICADO', token); //deberia devoler la misma info que la cargada como payload
   //?<-----------------
 
+  // return {
+  //   token: 'Bearer ' + signedToken,
+  //   expires: options.expiresIn,
+  // };
   return {
-    token: 'Bearer ' + signedToken,
+    token: signedToken,
     expires: options.expiresIn,
   };
+};
+
+const cookieMaker = (name, token, res) => {
+  let cookieOptions = {
+    httpOnly: true,
+    sameSite: true,
+    signed: true,
+    secure: true,
+  };
+  return res.cookie(name, token, cookieOptions);
 };
 
 exports.extractDigitsFromString = extractDigitsFromString;
 exports.capitalize = capitalize;
 exports.makeJWT = makeJWT;
+exports.cookieMaker = cookieMaker;
