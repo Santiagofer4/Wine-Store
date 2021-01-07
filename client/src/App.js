@@ -21,11 +21,12 @@ import axios from 'axios';
 import ProtectRoute from './Components/ProtectRoute/ProtectRoute';
 
 function App() {
-  //!SOLUCION CAVERNICOLA!
-  axios.defaults.headers.common['Authorization'] = localStorage.getItem(
-    'token'
-  );
-  //!<-----------------
+  // //!SOLUCION CAVERNICOLA!
+  // axios.defaults.headers.common['Authorization'] = localStorage.getItem(
+  //   'token'
+  // );
+  axios.defaults.withCredentials = true;
+  // //!<-----------------
 
   return (
     <div className="App">

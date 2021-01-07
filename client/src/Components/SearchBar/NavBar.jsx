@@ -89,8 +89,9 @@ function NavBar() {
                   },
                 };
                 axios
-                  .get("http://localhost:3000/auth/test")
-                  .then((x) => console.log("XXX", x));
+                  .get('http://localhost:3000/auth/test')
+                  .then((x) => console.log('XXX', x))
+                  .catch((err) => console.error(err));
               }}
             >
               HEADERS

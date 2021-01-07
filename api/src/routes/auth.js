@@ -2,7 +2,7 @@ const server = require('express').Router();
 const { User } = require('../db.js');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const { makeJWT } = require('../utils');
+const { makeJWT, cookieMaker } = require('../utils');
 
 // Ruta ME
 server.get('/me', async (req, res, next) => {
@@ -31,7 +31,9 @@ server.post(
   async (req, res) => {
     console.log('REGISTEr', req.user);
     const token = makeJWT(req.user);
-    return res.json({
+    cookieMaker('jwt', token, res);
+    // res.cookie('jwt', token, cookieOptions);
+    return res.send({
       message: 'Registro exitoso',
       token,
       user: req.user,
@@ -86,25 +88,35 @@ server.post(
 //   }
 // );
 
-server.post('/login', function (req, res, next) {
-  passport.authenticate('local-login', function (err, user) {
-    // console.log('LOGIN', user);
-    if (err) return next(err);
-    else if (!user) res.status(401);
-    else {
-      return res.json({
-        message: 'Registro exitoso',
-        token: makeJWT(user),
-        user,
-      });
-    }
-  })(req, res, next);
-});
+server.post(
+  '/login',
+  passport.authenticate('local-login', { session: false }),
+  async (req, res) => {
+    console.log('LOGIn', req.user);
+    const token = makeJWT(req.user);
+    cookieMaker('jwt', token, res);
+    return res.send({
+      message: 'Login exitoso',
+      token,
+      user: req.user,
+    });
+  }
+);
 
-server.get('/head', (req, res) => {
-  // console.log('req', req);
-  return res.send(200);
-});
+// , function (err, user) {
+//   // console.log('LOGIN', user);
+//   if (err) return next(err);
+//   else if (!user) res.status(401);
+//   else {
+//     cookieMaker('jwt', token, res);
+//     return res.json({
+//       message: 'Registro exitoso',
+//       token: makeJWT(user),
+//       user,
+//     });
+//   }
+// })(req, res, next);
+
 //*ruta para probar la validacion con el JWT
 server.get(
   /**
@@ -116,7 +128,7 @@ server.get(
    *
    */
   '/test',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt-cookie', { session: false }),
   async (req, res) => {
     console.log('INGRESO A RUTA PROTEGIDA', req.body);
     return res.send('prueba de ruta protegia');

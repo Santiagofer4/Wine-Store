@@ -57,16 +57,6 @@ module.exports = function (passport) {
     )
   );
 
-  //?Opciones de JWT
-  const jwt_options = {
-    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    secretOrKey: SECRET_KEY,
-    // issuer: 'wineStore',
-    // audience: 'localhost:3000',
-    // usernameField: 'email',
-    // passwordField: 'password',
-  };
-
   passport.use(
     /**
      * Estrategia para hacer login con email//pass
@@ -101,6 +91,50 @@ module.exports = function (passport) {
     )
   );
 
+  const cookieExtractor = (req) => {
+    let token = null;
+    if (req && req.cookies) token = req.signedCookies.jwt.token;
+    return token;
+  };
+
+  //?Opciones de JWT
+  const jwtCookies_options = {
+    jwtFromRequest: cookieExtractor,
+    secretOrKey: SECRET_KEY,
+    // issuer: 'wineStore',
+    // audience: 'localhost:3000',
+    // usernameField: 'email',
+    // passwordField: 'password',
+  };
+
+  passport.use(
+    'jwt-cookie',
+    new JWTstrategy(jwtCookies_options, async (jwt_payload, done) => {
+      console.log('jwtCookie_PAYLOAD', jwt_payload);
+      try {
+        const user = await User.findOne({
+          where: { email: jwt_payload.sub },
+        });
+        if (!user) {
+          return done(null, false, {
+            message: 'No se encontro el usuario',
+          });
+        }
+        let user_obj = { ...user.dataValues };
+        delete user_obj.password;
+        console.log('RETURN JWT', user_obj);
+        return done(null, user_obj, { message: 'Token Autorizado' });
+      } catch (error) {
+        return done(error);
+      }
+    })
+  );
+
+  //?Opciones de JWT
+  const jwt_options = {
+    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    secretOrKey: SECRET_KEY,
+  };
   //*estrategia para login con JWT
   passport.use(
     'jwt',
