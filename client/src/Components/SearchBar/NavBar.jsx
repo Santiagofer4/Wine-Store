@@ -172,7 +172,9 @@ function NavBar() {
                               </Link>
                             </MenuItem>
                             <MenuItem onClick={handleClose}>
-                              <Link to="/form/user/logout" className="menu">
+                              <Link to="/form/user/logout" className="menu" onCLick={axios
+                  .get('http://localhost:3000/auth/logout')}>
+                    {/* solucion cavernícola!! */}
                                 Cerrar sesión
                               </Link>
                             </MenuItem>{" "}
