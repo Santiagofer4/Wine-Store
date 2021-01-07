@@ -4,6 +4,7 @@ import './NavBar.modules.css';
 import { Link, useHistory } from 'react-router-dom';
 import { getAllProducts } from '../../slices/productSlice';
 import { getAllCategories } from '../../slices/categorySlice';
+
 import { useDispatch, useSelector } from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -19,6 +20,8 @@ import { userSelector, userStatusSelector } from '../../selectors/index.js';
 import axios from 'axios';
 import tokenManager from '../utils/tokenManager';
 import { isLogged } from '../utils/index';
+import store from '../../store';
+import { userLogout } from '../../slices/userSlice.js';
 
 function NavBar() {
   const dispatch = useDispatch();
@@ -47,14 +50,11 @@ function NavBar() {
       setOpen(false);
     }
   }
-  const handleLogout = async () => {
-    console.log('LOGGIN OUT');
-    const resp = await axios.get('http://localhost:3000/auth/logout');
-    console.log('RESP', resp, resp.status);
-    if (resp.status === 200) {
-      tokenManager.ereaseToken();
-      history.push('/logout');
-    }
+  const handleLogout = () => {
+    dispatch(userLogout());
+    // if (status === 'idle') {
+    //   history.push('/logout')
+    // }
   };
 
   const prevOpen = useRef(open);
@@ -110,12 +110,12 @@ function NavBar() {
               HEADERS
             </Button>
           </li>
-          <li className="Nav__li">
+          {/* <li className="Nav__li">
             {' '}
             <Link to="/admin" className="Nav__Link" id="invisible">
               Admin
             </Link>
-          </li>
+          </li> */}
         </ul>
         <div id="search-cart">
           <div>

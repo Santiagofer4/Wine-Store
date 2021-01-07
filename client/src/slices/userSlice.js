@@ -2,7 +2,7 @@ import { responsiveFontSizes } from '@material-ui/core';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
-  UserLoginEndpoint,
+  userLogoutEndpoint,
   addUserEndpoint,
   authLoginEndpoint,
   userOrdersEndpoint,
@@ -43,6 +43,18 @@ export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   return resPayload;
 });
 
+export const userLogout = createAsyncThunk('user/logout', async (payload, thunkApi) => {
+  const userLogout_response = await axios.get(userLogoutEndpoint);
+  console.log('LOGGIN OUT');
+  if (userLogout_response.status === 200) {
+      tokenManager.ereaseToken();
+     
+    }
+    const state = thunkApi.getState();
+    state.user = initialState_user;
+   return;
+});
+
 export const userOrders = createAsyncThunk('user/getUserOrders', async (id) => {
   const resp = await axios.get(userOrdersEndpoint + id + '/orders');
   return resp;
@@ -51,7 +63,7 @@ export const userOrders = createAsyncThunk('user/getUserOrders', async (id) => {
 const userSlice = createSlice({
   name: 'user',
   initialState: initialState_user,
-  reducers: {},
+  reducers: { },
   extraReducers: {
     [createUser.pending]: (state, action) => {
       state.user.status = status.loading;
@@ -101,6 +113,9 @@ const userSlice = createSlice({
       state.user.status = status.failed;
       state.user.error = action.error;
     },
+    [userLogout.fulfilled]: (state, action) => {
+      
+    }
   },
 });
 

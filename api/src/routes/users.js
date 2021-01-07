@@ -147,7 +147,7 @@ server.post('/', (req, res) => {
       email,
       birthdate,
       cellphone,
-      isAdmin,
+      isAdmin: false,
       password,
     },
   })
