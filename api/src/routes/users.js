@@ -1,5 +1,5 @@
 const server = require('express').Router();
-const { User, Order, Product, OrderLine } = require('../db.js');
+const { User, Order, Product, OrderLine, Review } = require('../db.js');
 //const cartRouter = require('./cart.js');
 
 //server.use('/:id/cart', cartRouter);
@@ -120,7 +120,7 @@ server.get('/:id/orders', (req, res) => {
   id = id * 1;
   Order.findAll({
     where: { userId: id },
-    include: { model: OrderLine, include: [{ model: Product }] },
+    include: { model: OrderLine, include: [{ model: Product, include: [{ model: Review }] }]},
   })
     .then((list) => {
       res.json(list);

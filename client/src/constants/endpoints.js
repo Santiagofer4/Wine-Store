@@ -27,6 +27,10 @@ export const getOrderTableEndpoint = baseEndpoint + 'orders/';
 
 export const UserLoginEndpoint = baseEndpoint + 'auth/login';
 
-export const userOrdersEndpoint = baseEndpoint + 'users/'; // ${id}/orders
+export const userOrdersEndpoint = baseEndpoint + 'users/'; // ${userId}/orders
 
 export const addUserReviewEndpoint = baseEndpoint + 'review/'; //${productId}
+
+export const getUserReviewsEndpoint = baseEndpoint + 'review/user/'; // ${userId}
+
+export const getProductReviews = baseEndpoint + 'review/'; // ${productId}

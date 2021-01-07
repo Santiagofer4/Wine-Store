@@ -12,7 +12,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
 import { useDispatch } from "react-redux";
-import { createReview } from "../../slices/reviewSlice";
+import { createReview, postReview } from "../../slices/reviewSlice";
 
 const styles = (theme) => ({
   root: {
@@ -59,18 +59,19 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 
-
-
-
-
-
-
+//
+//
+// CAMBIAR ESTILOS A HOJA MODULES
+//
+//
 
 
 function UserReview(props) {
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
+
+  const { product } = props.data;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -82,8 +83,9 @@ function UserReview(props) {
   console.log('PROPS', props);
 
   const handleSave = () => {
-    let comment = document.getElementById("outlined-multiline-static").value;
-    dispatch(createReview({ productId: props.id, userId: 1, points: value, description: comment }));
+    let description = document.getElementById("outlined-multiline-static").value;
+    dispatch(createReview({ productId: product.id, userId: 1, points: value, description }));
+    dispatch(postReview({ productId: product.id, userId: 1, points: value, description }));
     handleClose();
   };
 
@@ -98,7 +100,7 @@ function UserReview(props) {
         open={open}
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          {props.name}
+          {props ? product.name : 'Producto'}
         </DialogTitle>
         <DialogContent dividers>
           <Box component="fieldset" mb={3} borderColor="transparent">

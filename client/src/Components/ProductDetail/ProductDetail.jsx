@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   Paper,
@@ -15,9 +15,11 @@ import { useHistory } from 'react-router-dom';
 import {
   postProductToCart,
 } from '../../slices/productsCartSlice';
-import { productDetailSelector } from '../../selectors/index';
+import { productReviews } from "../../slices/reviewSlice";
+import { productDetailSelector, reviewsListSelector } from '../../selectors/index';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
+import ReviewCard from '../Review/ReviewCard';
 
 const useStyles = makeStyles({
   root: {
@@ -37,14 +39,15 @@ const useStyles = makeStyles({
 });
 
 function ProductDetail() {
-  const productDetail = useSelector(productDetailSelector);
   const dispatch = useDispatch();
+  const productDetail = useSelector(productDetailSelector);
+  const reviews = useSelector(reviewsListSelector);
 
   const history = useHistory();
   const classes = useStyles();
 
-  const [value, setValue] = React.useState(4); // Rating traer promedio de calificación de base de datos según producto
-
+  const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
+  
   const {
     id,
     name,
@@ -55,6 +58,10 @@ function ProductDetail() {
     stock,
     categories,
   } = productDetail;
+
+  useEffect(() => {
+    dispatch(productReviews(id));
+  }, []);
   //* EDITHANDLER, redirect a form para editar producto
   const editHandler = () => {
     // dispatch(wineDetails(productDetail));
@@ -162,6 +169,9 @@ function ProductDetail() {
               </Button>
             )}
           </CardActions>
+          {(reviews.length > 0) && reviews.map(review => {
+            return <ReviewCard data={review}/>
+          })}
         </Card>
       </Paper>
     </Container>

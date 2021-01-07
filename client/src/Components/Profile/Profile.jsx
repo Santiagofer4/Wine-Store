@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link, Paper, CircularProgress, Button } from "@material-ui/core";
 import "./Profile.modules.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,8 +7,8 @@ import {
   userOrdersSelector,
 } from "../../selectors/index.js";
 import { userOrders } from "../../slices/userSlice";
+import { userReviews } from "../../slices/reviewSlice";
 import OrderDetail from "../OrderTable/OrderDetail";
-import UserReview from "../Review/UserReview";
 
 function Profile() {
   const dispatch = useDispatch();
@@ -18,6 +18,7 @@ function Profile() {
 
   useEffect(() => {
     dispatch(userOrders(1));
+    dispatch(userReviews(1));
   }, []);
 
   console.log("ORDERS USER AFUERA", orders);
@@ -37,7 +38,6 @@ function Profile() {
         </>
       );
     } else if (status === "succeded") {
-      console.log("ORDERS USER MAP", orders);
       allUserOrders = orders.map((order) => {
         return (
           <>
@@ -58,7 +58,7 @@ function Profile() {
                 </Button>
               </div>
             </li>
-            <OrderDetail id={order.id} data={order.orderLines} review={<UserReview data={order} />}></OrderDetail>
+            <OrderDetail id={order.id} data={order.orderLines} review={true} ></OrderDetail>
           </>
         );
       });

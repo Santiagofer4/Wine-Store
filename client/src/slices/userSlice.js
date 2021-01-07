@@ -35,7 +35,6 @@ export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
     userLogin_response: userLogin_response.data,
     formik,
   };
-
   return resPayload;
 });
 
