@@ -29,15 +29,22 @@ server.post(
   '/register',
   passport.authenticate('register-local', { session: false }),
   async (req, res) => {
-    console.log('REGISTEr', req.user);
-    const token = makeJWT(req.user);
-    cookieMaker('jwt', token, res);
-    // res.cookie('jwt', token, cookieOptions);
-    return res.send({
-      message: 'Registro exitoso',
-      token,
-      user: req.user,
-    });
+    try {
+      console.log('REGISTEr', req.user);
+      const token = makeJWT(req.user, 60 * 60 * 5 * 1000);
+      const refresh_token = makeJWT(req.user);
+      cookieMaker('jwt', token, res);
+      cookieMaker('refreshToken', refresh_token, res);
+      // res.cookie('jwt', token, cookieOptions);
+      return res.send({
+        message: 'Registro exitoso',
+        token,
+        refresh_token,
+        user: req.user,
+      });
+    } catch (error) {
+      console.error(`CATCH REGISTER`, error);
+    }
   }
 );
 // server.post('/register', async function (req, res, next) {
@@ -98,6 +105,24 @@ server.post(
     return res.send({
       message: 'Login exitoso',
       token,
+      user: req.user,
+    });
+  }
+);
+
+server.get(
+  '/refresh',
+  passport.authenticate('jwt-refresh', { session: false }),
+  async (req, res) => {
+    console.log('REFRESHING', req.user);
+    const token = makeJWT(req.user, 60 * 60 * 5 * 1000);
+    const refresh_token = makeJWT(req.user);
+    cookieMaker('jwt', token, res);
+    cookieMaker('refreshToken', refresh_token, res);
+    return res.send({
+      message: 'Refresh exitoso',
+      token,
+      refresh_token,
       user: req.user,
     });
   }

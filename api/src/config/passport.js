@@ -93,7 +93,7 @@ module.exports = function (passport) {
 
   const cookieExtractor = (req) => {
     let token = null;
-    if (req && req.cookies) token = req.signedCookies.jwt.token;
+    if (req && req.signedCookies) token = req.signedCookies.jwt.token;
     return token;
   };
 
@@ -101,10 +101,6 @@ module.exports = function (passport) {
   const jwtCookies_options = {
     jwtFromRequest: cookieExtractor,
     secretOrKey: SECRET_KEY,
-    // issuer: 'wineStore',
-    // audience: 'localhost:3000',
-    // usernameField: 'email',
-    // passwordField: 'password',
   };
 
   passport.use(
@@ -139,20 +135,6 @@ module.exports = function (passport) {
   passport.use(
     'jwt',
     new JWTstrategy(jwt_options, async (jwt_payload, done) => {
-      console.log('JWT_PAYLOAD', jwt_payload);
-      /**
-       * No es necesario hacer todo el try catch si
-       * dentro del jwt recibimos toda la data del user
-       * que necesitariamos para hacer las operaciones
-       * en la DB...esto esta a modo de prueba
-       *
-       * Deberiamos pulir el jwt para enviar la info del user
-       * y luego levantamos la info del jwt y hacemos las llamadas al a DB
-       *
-       * ahora busca que el usuario este en la db y devuelve esa info...no tiene mucho sentido...
-       *
-       */
-
       try {
         const user = await User.findOne({
           where: { email: jwt_payload.sub },
@@ -164,6 +146,31 @@ module.exports = function (passport) {
         delete user_obj.password;
         console.log('RETURN JWT', user_obj);
         return done(null, user_obj, { message: 'Token Autorizado' });
+      } catch (error) {
+        return done(error);
+      }
+    })
+  );
+
+  const refreshCookieExtractor = (req) => {
+    let token = null;
+    if (req && req.signedCookies) token = req.signedCookies.refreshToken.token;
+    console.log('REFRESH COOKIE EXTRACTOR->TOKEN', token);
+    return token;
+  };
+
+  const jwtRefresh_options = {
+    jwtFromRequest: refreshCookieExtractor,
+    secretOrKey: SECRET_KEY,
+    passReqToCallback: true,
+  };
+  //*Refresh strategy
+  passport.use(
+    'jwt-refresh',
+    new JWTstrategy(jwtRefresh_options, async (req, jwt_payload, done) => {
+      console.log('REFRESHING STRAT', jwt_payload, req.body);
+      try {
+        return done(null, jwt_payload.user, { message: 'Token Autorizado' });
       } catch (error) {
         return done(error);
       }
