@@ -1,3 +1,5 @@
+import tokenManager from './tokenManager';
+
 function THROW(msg) {
   throw new Error(msg);
 }
@@ -103,4 +105,8 @@ export const total = (arr) => {
     x = x + p.price * p.quantity;
   });
   return x;
+};
+
+export const isLogged = () => {
+  return tokenManager.getToken();
 };

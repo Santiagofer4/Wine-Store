@@ -13,6 +13,24 @@ const SECRET_KEY = require('./jwt').SECRET_KEY;
  * TODO: hacer mas modular dividiendo cada `opcion` y `estrategia` en su propia variable, luego llamarlas en el use y exportarlas
  */
 
+const isLogged = (req, res, next) => {
+  if (req.isLogged()) {
+    return next();
+  }
+
+  return res.sendStatus(401);
+};
+
+const isAdmin = () => {
+  //será necesario pasarle "false" por defecto? Evitaría algún problema?
+  return function (req, res, next) {
+    if (!req.user || (req.user.isAdmin = false)) {
+      return response.sendStatus(401);
+    }
+    return next();
+  };
+};
+
 module.exports = function (passport) {
   //*Estrategia para registro de un nuevo usuario
   passport.use(
@@ -47,7 +65,7 @@ module.exports = function (passport) {
           //clonamos el objeto user, eliminamos el campo password y devolvemos el obj user
           let user_obj = { ...user.dataValues };
           delete user_obj.password;
-          console.log('REGISTER STRATEGY', user_obj);
+          // console.log('REGISTER STRATEGY', user_obj);
           return done(null, user_obj);
         } catch (error) {
           console.error(error);
@@ -155,20 +173,19 @@ module.exports = function (passport) {
   const refreshCookieExtractor = (req) => {
     let token = null;
     if (req && req.signedCookies) token = req.signedCookies.refreshToken.token;
-    console.log('REFRESH COOKIE EXTRACTOR->TOKEN', token);
+    // console.log('REFRESH COOKIE EXTRACTOR->TOKEN', token);
     return token;
   };
 
   const jwtRefresh_options = {
     jwtFromRequest: refreshCookieExtractor,
     secretOrKey: SECRET_KEY,
-    passReqToCallback: true,
   };
   //*Refresh strategy
   passport.use(
     'jwt-refresh',
-    new JWTstrategy(jwtRefresh_options, async (req, jwt_payload, done) => {
-      console.log('REFRESHING STRAT', jwt_payload, req.body);
+    new JWTstrategy(jwtRefresh_options, async (jwt_payload, done) => {
+      // console.log('REFRESHING STRAT', jwt_payload);
       try {
         return done(null, jwt_payload.user, { message: 'Token Autorizado' });
       } catch (error) {

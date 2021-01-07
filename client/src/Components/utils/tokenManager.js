@@ -104,7 +104,10 @@ const tokenManager = () => {
     return true;
   };
 
+  const logout = () => ereaseToken;
+
   const ereaseToken = () => {
+    console.log('ERASING TOKEN');
     inMemoryJWT = null;
     abordRefreshToken();
     window.localStorage.setItem(logoutEventName, Date.now());

@@ -43,7 +43,7 @@ const makeJWT = (user, expiresIn) => {
   const { id } = user;
 
   const options = {
-    expiresIn: 60 * 60 * 1 * 1000 || expiresIn, //5 min
+    expiresIn: 60 * 1000 || expiresIn, //5 min
   };
   const payload = {
     id,

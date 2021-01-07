@@ -21,8 +21,10 @@ server.get('/me', async (req, res, next) => {
 
 server.get('/logout', (req, res) => {
   req.logout();
-  res.clearCookie("jwt").send("Cerrar sesión");
-  res.redirect('/');
+  res.clearCookie('jwt');
+  res.clearCookie('refreshtoken');
+  res.status(200).send('Cerrar sesión');
+  // res.redirect('/');
 });
 
 //Ruta para Registrarse
@@ -31,12 +33,11 @@ server.post(
   passport.authenticate('register-local', { session: false }),
   async (req, res) => {
     try {
-      console.log('REGISTEr', req.user);
-      const token = makeJWT(req.user, 60 * 60 * 5 * 1000);
+      // console.log('REGISTEr', req.user);
+      const token = makeJWT(req.user, 60 * 5 * 1000);
       const refresh_token = makeJWT(req.user);
       cookieMaker('jwt', token, res);
       cookieMaker('refreshToken', refresh_token, res);
-      // res.cookie('jwt', token, cookieOptions);
       return res.send({
         message: 'Registro exitoso',
         token,
@@ -115,8 +116,8 @@ server.get(
   '/refresh',
   passport.authenticate('jwt-refresh', { session: false }),
   async (req, res) => {
-    console.log('REFRESHING', req.user);
-    const token = makeJWT(req.user, 60 * 60 * 5 * 1000);
+    // console.log('REFRESHING', req.user);
+    const token = makeJWT(req.user, 60 * 5 * 1000);
     const refresh_token = makeJWT(req.user);
     cookieMaker('jwt', token, res);
     cookieMaker('refreshToken', refresh_token, res);
