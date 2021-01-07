@@ -13,6 +13,24 @@ const SECRET_KEY = require('./jwt').SECRET_KEY;
  * TODO: hacer mas modular dividiendo cada `opcion` y `estrategia` en su propia variable, luego llamarlas en el use y exportarlas
  */
 
+const isLogged = (req, res, next) => {
+  if (req.isLogged()) {
+    return next();
+  }
+
+  return res.sendStatus(401);
+};
+
+const isAdmin = () => {
+  //será necesario pasarle "false" por defecto? Evitaría algún problema?
+  return function (req, res, next) {
+    if (!req.user || (req.user.isAdmin = false)) {
+      return response.sendStatus(401);
+    }
+    return next();
+  };
+};
+
 module.exports = function (passport) {
   //*Estrategia para registro de un nuevo usuario
   passport.use(
@@ -47,7 +65,7 @@ module.exports = function (passport) {
           //clonamos el objeto user, eliminamos el campo password y devolvemos el obj user
           let user_obj = { ...user.dataValues };
           delete user_obj.password;
-          console.log('REGISTER STRATEGY', user_obj);
+          // console.log('REGISTER STRATEGY', user_obj);
           return done(null, user_obj);
         } catch (error) {
           console.error(error);
@@ -93,7 +111,7 @@ module.exports = function (passport) {
 
   const cookieExtractor = (req) => {
     let token = null;
-    if (req && req.cookies) token = req.signedCookies.jwt.token;
+    if (req && req.signedCookies) token = req.signedCookies.jwt.token;
     return token;
   };
 
@@ -101,10 +119,6 @@ module.exports = function (passport) {
   const jwtCookies_options = {
     jwtFromRequest: cookieExtractor,
     secretOrKey: SECRET_KEY,
-    // issuer: 'wineStore',
-    // audience: 'localhost:3000',
-    // usernameField: 'email',
-    // passwordField: 'password',
   };
 
   passport.use(
@@ -139,20 +153,6 @@ module.exports = function (passport) {
   passport.use(
     'jwt',
     new JWTstrategy(jwt_options, async (jwt_payload, done) => {
-      console.log('JWT_PAYLOAD', jwt_payload);
-      /**
-       * No es necesario hacer todo el try catch si
-       * dentro del jwt recibimos toda la data del user
-       * que necesitariamos para hacer las operaciones
-       * en la DB...esto esta a modo de prueba
-       *
-       * Deberiamos pulir el jwt para enviar la info del user
-       * y luego levantamos la info del jwt y hacemos las llamadas al a DB
-       *
-       * ahora busca que el usuario este en la db y devuelve esa info...no tiene mucho sentido...
-       *
-       */
-
       try {
         const user = await User.findOne({
           where: { email: jwt_payload.sub },
@@ -164,6 +164,30 @@ module.exports = function (passport) {
         delete user_obj.password;
         console.log('RETURN JWT', user_obj);
         return done(null, user_obj, { message: 'Token Autorizado' });
+      } catch (error) {
+        return done(error);
+      }
+    })
+  );
+
+  const refreshCookieExtractor = (req) => {
+    let token = null;
+    if (req && req.signedCookies) token = req.signedCookies.refreshToken.token;
+    // console.log('REFRESH COOKIE EXTRACTOR->TOKEN', token);
+    return token;
+  };
+
+  const jwtRefresh_options = {
+    jwtFromRequest: refreshCookieExtractor,
+    secretOrKey: SECRET_KEY,
+  };
+  //*Refresh strategy
+  passport.use(
+    'jwt-refresh',
+    new JWTstrategy(jwtRefresh_options, async (jwt_payload, done) => {
+      // console.log('REFRESHING STRAT', jwt_payload);
+      try {
+        return done(null, jwt_payload.user, { message: 'Token Autorizado' });
       } catch (error) {
         return done(error);
       }

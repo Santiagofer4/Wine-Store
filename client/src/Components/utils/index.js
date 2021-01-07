@@ -1,3 +1,5 @@
+import tokenManager from './tokenManager';
+
 function THROW(msg) {
   throw new Error(msg);
 }
@@ -108,4 +110,8 @@ export const total = (arr) => {
 export const search = (id, array) => {
   let index = array.findIndex(e => id === e.productId);
   return index === -1 ? true : false;
+};
+
+export const isLogged = () => {
+  return tokenManager.getToken();
 };

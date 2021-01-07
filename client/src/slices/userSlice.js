@@ -8,6 +8,7 @@ import {
   userOrdersEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
+import tokenManager from '../Components/utils/tokenManager';
 
 const initialState_user = {
   user: {
@@ -21,6 +22,8 @@ const initialState_user = {
 export const createUser = createAsyncThunk('user/register', async (payload) => {
   const { user, formik } = payload;
   const user_response = await axios.post(addUserEndpoint, user);
+  const { refresh_token } = user_response.data;
+  tokenManager.setToken(refresh_token.token, refresh_token.expires);
   const resPayload = {
     userRegister_response: user_response.data,
     formik,
@@ -31,6 +34,8 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
 export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   const { user, formik } = payload;
   const userLogin_response = await axios.post(authLoginEndpoint, user);
+  const { refresh_token } = userLogin_response.data;
+  tokenManager.setToken(refresh_token.token, refresh_token.expires);
   const resPayload = {
     userLogin_response: userLogin_response.data,
     formik,
