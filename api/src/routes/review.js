@@ -5,22 +5,26 @@ const { Product, Review, User } = require('../db.js');
 
 server.post('/:idProduct/', (req, res) => {
   let { idProduct } = req.params;
-  let { points, description } = req.body;
-  console.log('Creo Review - POST a /review/:idProduct/');
+  let { points, description, userId } = req.body;
+  
+  //console.log('Creo Review - POST a /review/:idProduct/');
 
-  if (!idProduct || !points)
+  if (!idProduct || !points || !userId)
     return res.status(400).send('No se puede agregar la Review');
 
-  console.log('ENTRÉ');
-  Review.create({
-    points,
-    description,
-  }).then((rev) => {
-    Product.findByPk(idProduct).then((product) => {
-      product.addReview(rev);
-      return res.send('Se agregó la Review');
-    });
-  });
+  User.findByPk(userId)
+    .then(() => {
+      Review.create({
+        points,
+        description,
+      }).then((rev) => {
+        Product.findByPk(idProduct).then((product) => {
+          product.addReview(rev);
+          rev.setUser(userId);
+          return res.send('Se agregó la Review');
+        });
+      });
+    })
 });
 
 //Editar una Review

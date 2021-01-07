@@ -7,6 +7,7 @@ const ordersRouter = require('./orders.js');
 const strainRouter = require('./strain.js');
 const authRouter = require('./auth.js');
 const searchRouter = require('./search.js');
+const reviewRouter = require('./review.js');
 
 const router = Router();
 
@@ -21,5 +22,6 @@ router.use('/users', usersRouter);
 router.use('/orders', ordersRouter);
 router.use('/auth', authRouter);
 router.use('/search', searchRouter);
+router.use('/review', reviewRouter);
 
 module.exports = router;

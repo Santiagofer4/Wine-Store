@@ -133,7 +133,7 @@ server.get('/:id/orders', (req, res) => {
 //Agregar un USER
 
 server.post('/', (req, res) => {
-  let { firstName, lastName, email, birthdate, cellphone, password } = req.body;
+  let { firstName, lastName, email, birthdate, cellphone, password, isAdmin } = req.body;
 
   if (!email) return res.status(400).send('Debe ingresar un email');
 
@@ -147,7 +147,7 @@ server.post('/', (req, res) => {
       email,
       birthdate,
       cellphone,
-      isAdmin: false,
+      isAdmin,
       password,
     },
   })

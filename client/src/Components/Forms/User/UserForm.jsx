@@ -18,7 +18,7 @@ import {
   userStatusSelector,
   userSelector,
 } from '../../../selectors/index.js';
-// import {LocalStorage} from 'node-localstorage'
+
 function UserForm() {
   const dispatch = useDispatch();
   const history = useHistory();
