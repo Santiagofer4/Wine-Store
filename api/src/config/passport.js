@@ -16,7 +16,7 @@ const SECRET_KEY = require('./jwt').SECRET_KEY;
 module.exports = function (passport) {
   //*Estrategia para registro de un nuevo usuario
   passport.use(
-    'register',
+    'register-local',
     new LocalStrategy(
       {
         usernameField: 'email',
@@ -33,6 +33,7 @@ module.exports = function (passport) {
             password,
             cellphone,
           } = req.body;
+
           const user_data = {
             firstName,
             lastName,
@@ -46,10 +47,11 @@ module.exports = function (passport) {
           //clonamos el objeto user, eliminamos el campo password y devolvemos el obj user
           let user_obj = { ...user.dataValues };
           delete user_obj.password;
-          done(null, user_obj);
+          console.log('REGISTER STRATEGY', user_obj);
+          return done(null, user_obj);
         } catch (error) {
           console.error(error);
-          done(error);
+          return done(error);
         }
       }
     )
@@ -76,7 +78,7 @@ module.exports = function (passport) {
       {
         usernameField: 'email',
         passwordField: 'password',
-        session:false,
+        session: false,
       },
       async (email, password, done) => {
         try {

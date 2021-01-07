@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 const { capitalize } = require('../utils');
 
 module.exports = (sequelize) => {
@@ -42,21 +42,20 @@ module.exports = (sequelize) => {
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: false, 
+        allowNull: false,
         set(value) {
           if (value) {
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(value, salt);
-            this.setDataValue("password", hash);
+            this.setDataValue('password', hash);
           }
-        },      
+        },
       },
     },
     {
       timestamps: false,
       hooks: {
-        beforeCreate (user) {
-          console.log(user.firstName)
+        beforeCreate(user) {
           user.firstName = capitalize(user.firstName);
           user.lastName = capitalize(user.lastName);
           let ageCheck = new Date();
@@ -71,7 +70,6 @@ module.exports = (sequelize) => {
   );
   User.prototype.compare = function (pass) {
     return bcrypt.compareSync(pass, this.password);
-
-  }
+  };
   return User;
 };
