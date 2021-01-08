@@ -19,7 +19,8 @@ import UserLogin from './Components/Forms/User/UserLogin';
 import Profile from './Components/Profile/Profile';
 import axios from 'axios';
 import ProtectRoute from './Components/ProtectRoute/ProtectRoute';
-
+import Logout from './Components/Contenido/Logout';
+import { isLogged } from './Components/utils/index';
 function App() {
   // //!SOLUCION CAVERNICOLA!
   // axios.defaults.headers.common['Authorization'] = localStorage.getItem(
@@ -50,13 +51,12 @@ function App() {
         <Route path="/form/user/login" component={UserLogin} />
         <Route path="/form/user" component={UserForm} />
         <Route path="/welcome" component={Welcome} />
+        <Route path="/logout" component={Logout} />
         <Route path="/failure" component={Failure} />
         <ProtectRoute
           path="/user/profile"
           component={Profile}
-          isLogged={() => {
-            return true;
-          }}
+          isLogged={isLogged}
         />
         {/* <Route path="/user/profile" component={Profile} /> */}
         <Route path="/404" component={notFound} />

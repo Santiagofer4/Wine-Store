@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { sliceTime, total } from '../utils.js';
+import { sliceTime, total } from '../utils';
 import OrderDetail from './OrderDetail';
 import './OrderTable.modules.css';
 import { useDispatch, useSelector } from 'react-redux';

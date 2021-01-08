@@ -2,12 +2,13 @@ import { responsiveFontSizes } from '@material-ui/core';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
-  UserLoginEndpoint,
+  userLogoutEndpoint,
   addUserEndpoint,
   authLoginEndpoint,
   userOrdersEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
+import tokenManager from '../Components/utils/tokenManager';
 
 const initialState_user = {
   user: {
@@ -21,6 +22,8 @@ const initialState_user = {
 export const createUser = createAsyncThunk('user/register', async (payload) => {
   const { user, formik } = payload;
   const user_response = await axios.post(addUserEndpoint, user);
+  const { refresh_token } = user_response.data;
+  tokenManager.setToken(refresh_token.token, refresh_token.expires);
   const resPayload = {
     userRegister_response: user_response.data,
     formik,
@@ -31,12 +34,25 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
 export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   const { user, formik } = payload;
   const userLogin_response = await axios.post(authLoginEndpoint, user);
+  const { refresh_token } = userLogin_response.data;
+  tokenManager.setToken(refresh_token.token, refresh_token.expires);
   const resPayload = {
     userLogin_response: userLogin_response.data,
     formik,
   };
-
   return resPayload;
+});
+
+export const userLogout = createAsyncThunk('user/logout', async (payload, thunkApi) => {
+  const userLogout_response = await axios.get(userLogoutEndpoint);
+  console.log('LOGGIN OUT');
+  if (userLogout_response.status === 200) {
+      tokenManager.ereaseToken();
+     
+    }
+    const state = thunkApi.getState();
+    state.user = initialState_user;
+   return;
 });
 
 export const userOrders = createAsyncThunk('user/getUserOrders', async (id) => {
@@ -47,7 +63,7 @@ export const userOrders = createAsyncThunk('user/getUserOrders', async (id) => {
 const userSlice = createSlice({
   name: 'user',
   initialState: initialState_user,
-  reducers: {},
+  reducers: { },
   extraReducers: {
     [createUser.pending]: (state, action) => {
       state.user.status = status.loading;
@@ -97,6 +113,9 @@ const userSlice = createSlice({
       state.user.status = status.failed;
       state.user.error = action.error;
     },
+    [userLogout.fulfilled]: (state, action) => {
+      
+    }
   },
 });
 

@@ -3,11 +3,16 @@ import { Route, Redirect } from 'react-router-dom';
 import { AdminStrain } from '../Admin/LoadCategory/AdminStrain';
 
 function ProtectRoute({ component: Component, isLogged, ...rest }) {
+  console.log('PROTECT', isLogged());
   return (
     <Route
       {...rest}
       render={(props) =>
-        isLogged() ? <Component {...props} /> : <Redirect to="/login" />
+        isLogged() ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/form/user/login" />
+        )
       }
     />
   );
