@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Paper,
@@ -7,29 +7,31 @@ import {
   Card,
   Typography,
   Button,
-} from '@material-ui/core';
-import './ProductDetail.modules.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
-import {
-  postProductToCart,
-} from '../../slices/productsCartSlice';
+} from "@material-ui/core";
+import "./ProductDetail.modules.css";
+import { useDispatch, useSelector } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
+import { postProductToCart } from "../../slices/productsCartSlice";
 import { productReviews } from "../../slices/reviewSlice";
-import { productDetailSelector, reviewsListSelector, reviewsListStatusSelector } from '../../selectors/index';
-import Rating from '@material-ui/lab/Rating';
-import Box from '@material-ui/core/Box';
-import ReviewCard from '../Review/ReviewCard';
-import { average } from "../utils/index"
+import {
+  productDetailSelector,
+  reviewsListSelector,
+  reviewsListStatusSelector,
+} from "../../selectors/index";
+import Rating from "@material-ui/lab/Rating";
+import Box from "@material-ui/core/Box";
+import ReviewCard from "../Review/ReviewCard";
+import { average } from "../utils/index";
 
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
   },
   bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)",
   },
   title: {
     fontSize: 14,
@@ -48,7 +50,7 @@ function ProductDetail() {
   const classes = useStyles();
 
   const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
-  
+
   const {
     id,
     name,
@@ -67,7 +69,7 @@ function ProductDetail() {
     }
   }, []);
   //* EDITHANDLER, redirect a form para editar producto
-  const editHandler = () => {  
+  const editHandler = () => {
     // dispatch(wineDetails(productDetail));
     // props.setProductDetail(wineDetail); //necesario en caso que ingrese al product detail sin pasar por catalogue.
     //Actualmente no es posible, pero podria ser una opcion en el futuro
@@ -81,7 +83,7 @@ function ProductDetail() {
             },
           }
         : {
-            pathname: '/catalogue',
+            pathname: "/catalogue",
             state: {
               edit: false,
             },
@@ -132,8 +134,9 @@ function ProductDetail() {
               {description}
             </Typography>
             <Box component="fieldset" mt={3} borderColor="transparent">
-        <Rating value={value} readOnly /> <div>{reviews.length} reviews</div>
-      </Box>
+              <Rating value={value} readOnly />{" "}
+              <div>{reviews.length} reviews</div>
+            </Box>
           </CardContent>
 
           <CardActions id="buttons">
@@ -142,7 +145,7 @@ function ProductDetail() {
               size="small"
               onClick={() => history.goBack()}
             >
-              {' '}
+              {" "}
               <img
                 id="backButtonImage"
                 src="https://static.thenounproject.com/png/251451-200.png"
@@ -151,7 +154,7 @@ function ProductDetail() {
               VOLVER
             </Button>
             <Button size="small" onClick={editHandler}>
-              {' '}
+              {" "}
               <img
                 id="editImage"
                 src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"
@@ -173,9 +176,10 @@ function ProductDetail() {
               </Button>
             )}
           </CardActions>
-          {(reviews.length > 0) && reviews.map(review => {
-            return <ReviewCard data={review}/>
-          })}
+          {reviews.length > 0 &&
+            reviews.map((review) => {
+              return <ReviewCard data={review} />;
+            })}
         </Card>
       </Paper>
     </Container>

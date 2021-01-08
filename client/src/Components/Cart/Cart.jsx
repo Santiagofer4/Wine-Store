@@ -24,6 +24,7 @@ function Cart() {
   const sincronizar = useSelector(allProductsCartSyncSelector);
   const status = useSelector(allProductsCartStatusSelector);
   const [subTotal, setSubTotal] = useState(0);
+  const [login, setLogin] = useState(false);
 
   const handleDelete = () => {
     dispatch(deleteAllProductsFromCart({ userId: 1 }));
@@ -98,8 +99,11 @@ function Cart() {
     decrementHandler,
   };
   useEffect(() => {
+    console.log('LOGIN PRIMERO', login)
     setSubTotal(total(AllProductsCart));
     if (sincronizar === false) {
+      setLogin(false);
+      console.log('LOGIN', login)
       dispatch(getAllProductsCart(1));
       dispatch(sync(true));
     }
