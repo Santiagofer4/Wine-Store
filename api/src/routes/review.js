@@ -68,18 +68,50 @@ server.get('/:productId', (req, res, next) => {
   Review.findAll({
     where: {
       productId,
-    }
-/*     include: { model: Product, where: { productId } }, */
+    },
+
+     include: { model: User}, 
   })
     .then((revs) => {
+      console.log('que es', revs)
       res.json(
         revs.map((r) => {
-          return { id: r.id, points: r.points, description: r.description, productId };
+          return { id: r.id, points: r.points, description: r.description, productId, firstName: r.user.firstName, lastName: r.user.lastName };
         })
       );
     })
     .catch(next);
 });
+
+
+// server.get('/:productId', (req, res, next) => {
+//   let { productId } = req.params;
+//   console.log('Ver Reviews de un producto - GET a /review/:id');
+
+//   if (!productId) return res.status(404).send('No existen reviews para ese producto');
+//   let r = 0;
+//   Review.findAll({
+//     where: {
+//       productId,
+//     }
+// /*     include: { model: Product, where: { productId } }, */
+//   })
+//     .then((revs) => {
+//       res.json(
+//         revs.map((revieww) => {
+//         r = revieww;
+//           User.findByPk(r.userId)
+//           .then( user =>{
+//             console.log('tu vieja',user)
+            
+//             return { id: r.id, points: r.points, description: r.description, productId, firstName: user.firstName };
+//             })
+//         })
+//         );
+//     })
+//     .catch(next);
+// });
+
 
 //Ver todas las Reviews de un Usuario
 
