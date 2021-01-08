@@ -46,7 +46,8 @@ function App() {
         <Route path="/admin/form-product" component={ProductForm} />
         <Route path="/form/test" component={TestForm} />
         <Route path="/admin" component={AdminPanel} />
-        <Route path="/cart" component={Cart} />
+        <Route path="/cart" component={Cart}/>
+        {/* <Route path="/cart" render={() => isLogged() ? <Cart logueado={true}/> : (<Cart logueado={true}/> )} /> */}
         <Route path="/order-table" component={OrderTable} />
         <Route path="/form/user/login" component={UserLogin} />
         <Route path="/form/user" component={UserForm} />

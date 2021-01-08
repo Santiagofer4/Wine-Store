@@ -7,7 +7,6 @@ import {
   allProductsCartSelector,
   allProductsCartSyncSelector,
   allProductsCartStatusSelector,
-  userStatusSelector,
 } from '../../selectors';
 import {
   getAllProductsCart,
@@ -16,20 +15,15 @@ import {
   deleteAllProductsFromCart,
   deleteSingleProdFromCart,
 } from '../../slices/productsCartSlice';
-import { total, isLogged } from '../utils/index';
+import { total } from '../../Components/utils';
 import CartItem from './CartItem/CartItem';
 
-
 function Cart() {
-  var l = null;
-   // console.log('PROPS CART',props)
   const dispatch = useDispatch();
   const AllProductsCart = useSelector(allProductsCartSelector);  // tiene los prods del cart
   const sincronizar = useSelector(allProductsCartSyncSelector);
   const status = useSelector(allProductsCartStatusSelector);
   const [subTotal, setSubTotal] = useState(0);
-  const statusUser = useSelector(userStatusSelector);
-  const [login, setLogin] = useState(false)
 
   const handleDelete = () => {
     dispatch(deleteAllProductsFromCart({ userId: 1 }));
@@ -103,45 +97,14 @@ function Cart() {
     incrementHandler,
     decrementHandler,
   };
-
-
-  // useEffect(() => {
-   
-  //   setSubTotal(total(AllProductsCart));
-  //   if (sincronizar === false) {
-  //     dispatch(getAllProductsCart(1));
-  //     dispatch(sync(true));
-  //   }
-  // }, [AllProductsCart, sincronizar, dispatch]);
-
-  
   useEffect(() => {
-    l = isLogged();
-    console.log('está logueado?', l)
- 
-    if ( l === null) {
-       setLogin(false);
-      //carrito guest
-console.log('entré al null', l)
-
-} 
-
-    if ( l !== null ) {
-      setLogin(true);
-// carrito logueado
-console.log('entré logueado', l)
-//buscar el id del user y traer el cart de la DB
-
-  setSubTotal(total(AllProductsCart));
+    setSubTotal(total(AllProductsCart));
     if (sincronizar === false) {
       dispatch(getAllProductsCart(1));
       dispatch(sync(true));
-
     }
-  }
-    }, [])
+  }, [AllProductsCart, sincronizar, dispatch]);
 
- 
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {
       return (
