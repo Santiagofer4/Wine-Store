@@ -7,7 +7,6 @@ import {
   allProductsCartSelector,
   allProductsCartSyncSelector,
   allProductsCartStatusSelector,
-  userStatusSelector,
 } from '../../selectors';
 import {
   getAllProductsCart,
@@ -16,19 +15,15 @@ import {
   deleteAllProductsFromCart,
   deleteSingleProdFromCart,
 } from '../../slices/productsCartSlice';
-import { total, isLogged } from '../utils/index';
+import { total } from '../../Components/utils';
 import CartItem from './CartItem/CartItem';
 
-
 function Cart() {
-  var l = null;
-   // console.log('PROPS CART',props)
   const dispatch = useDispatch();
   const AllProductsCart = useSelector(allProductsCartSelector);  // tiene los prods del cart
   const sincronizar = useSelector(allProductsCartSyncSelector);
   const status = useSelector(allProductsCartStatusSelector);
   const [subTotal, setSubTotal] = useState(0);
-  const [login, setLogin] = useState(false);
 
   const handleDelete = () => {
     dispatch(deleteAllProductsFromCart({ userId: 1 }));
@@ -102,30 +97,14 @@ function Cart() {
     incrementHandler,
     decrementHandler,
   };
-
-
-  // useEffect(() => {
-   
-  //   setSubTotal(total(AllProductsCart));
-  //   if (sincronizar === false) {
-  //     dispatch(getAllProductsCart(1));
-  //     dispatch(sync(true));
-  //   }
-  // }, [AllProductsCart, sincronizar, dispatch]);
-
-  
   useEffect(() => {
-    console.log('LOGIN PRIMERO', login)
     setSubTotal(total(AllProductsCart));
     if (sincronizar === false) {
-      setLogin(false);
-      console.log('LOGIN', login)
       dispatch(getAllProductsCart(1));
       dispatch(sync(true));
     }
-  }, [])
+  }, [AllProductsCart, sincronizar, dispatch]);
 
- 
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {
       return (
