@@ -12,21 +12,20 @@ import {
 import {
   getAllProductsCart,
   sync,
+  cartGuest,
   postProductToCart,
   deleteAllProductsFromCart,
   deleteSingleProdFromCart,
 } from '../../slices/productsCartSlice';
-import { total, isLogged } from '../utils/index';
 import CartItem from './CartItem/CartItem';
-
+import { total, isLogged } from '../../Components/utils/index.js';
 
 function Cart() {
-  var l = null;
-   // console.log('PROPS CART',props)
   const dispatch = useDispatch();
   const AllProductsCart = useSelector(allProductsCartSelector);  // tiene los prods del cart
   const sincronizar = useSelector(allProductsCartSyncSelector);
   const status = useSelector(allProductsCartStatusSelector);
+  const statusUser = useSelector(userStatusSelector);
   const [subTotal, setSubTotal] = useState(0);
   const [login, setLogin] = useState(false);
 
@@ -103,29 +102,31 @@ function Cart() {
     decrementHandler,
   };
 
-
-  // useEffect(() => {
-   
-  //   setSubTotal(total(AllProductsCart));
-  //   if (sincronizar === false) {
-  //     dispatch(getAllProductsCart(1));
-  //     dispatch(sync(true));
-  //   }
-  // }, [AllProductsCart, sincronizar, dispatch]);
-
-  
   useEffect(() => {
-    console.log('LOGIN PRIMERO', login)
-    setSubTotal(total(AllProductsCart));
-    if (sincronizar === false) {
-      setLogin(false);
-      console.log('LOGIN', login)
-      dispatch(getAllProductsCart(1));
-      dispatch(sync(true));
-    }
-  }, [])
+    let logged = isLogged();
 
- 
+    if(!logged) {
+      setLogin(false);
+      // info de localStorage
+      let guest = localStorage.getItem('cart');
+      let guestParse = JSON.parse(guest);
+      cartGuest(guestParse); //[{}, {}]
+    }
+    if(logged) {
+      setLogin(true);
+      // info de DB
+      //console.log('PRODUCTOS 1', AllProductsCart)
+      setSubTotal(total(AllProductsCart));
+      if (sincronizar === false) {
+        //console.log('PRODUCTOS 2', AllProductsCart)
+        dispatch(getAllProductsCart(1));
+        dispatch(sync(true));
+      }
+    }
+    //setLogin(true);
+    console.log('LOGIN', login);
+  }, [AllProductsCart, sincronizar, dispatch, login]); // Dependencia login en evaluación
+
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {
       return (
@@ -134,7 +135,7 @@ function Cart() {
             <div className="products">
               <h2 className="titleCart">Carrito de compras</h2>
               <hr className="line" />
-              <ul>
+               <ul>
                 {AllProductsCart.map((product) => {
                   return <CartItem  key={product.id} prod={product} handlers={handlers} />;
                 })}

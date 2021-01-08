@@ -74,6 +74,9 @@ const productsCartSlice = createSlice({
     sync(state, action) {
       state.allProductsCart.sync = action.payload;
     },
+    cartGuest(state, action) {                      // Pisa el estado con lo que está en el localStorage
+      state.allProductsCart.list = action.payload;
+    }
   },
   extraReducers: {
     [getAllProductsCart.pending]: (state, action) => {
@@ -170,6 +173,7 @@ export const {
   subtractToCart,
   deleteFromCart,
   deleteCart,
+  cartGuest,
 } = productsCartSlice.actions;
 
 export default productsCartSlice;
