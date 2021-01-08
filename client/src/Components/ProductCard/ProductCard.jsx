@@ -5,15 +5,17 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
 import './ProductCard.modules.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { wineDetails } from '../../slices/productDetailSlice';
 import {
   postProductToCart,
 } from '../../slices/productsCartSlice';
 import { useHistory } from 'react-router-dom';
+import { userSelector } from "../../selectors"
 
 function ProductCard(props) {
   const dispatch = useDispatch();
+  const user = useSelector(userSelector);
   const { image, name, price, id, stock } = props.data;
   const history = useHistory();
 
@@ -62,7 +64,7 @@ function ProductCard(props) {
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  handlerProductToCart(1, id);
+                  handlerProductToCart(user.id, id);
                 }}
               >
                 Comprar

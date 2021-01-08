@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   userOrdersStatusSelector,
   userOrdersSelector,
+  userSelector,
 } from "../../selectors/index.js";
 import { userOrders } from "../../slices/userSlice";
 import { userReviews } from "../../slices/reviewSlice";
@@ -12,13 +13,14 @@ import OrderDetail from "../OrderTable/OrderDetail";
 import UserReview from '../../Components/Review/UserReview'
 function Profile() {
   const dispatch = useDispatch();
+  const user = useSelector(userSelector);
   const orders = useSelector(userOrdersSelector);
   const status = useSelector(userOrdersStatusSelector);
   let allUserOrders;
 
   useEffect(() => {
-    dispatch(userOrders(1));
-    dispatch(userReviews(1));
+    dispatch(userOrders(user.id));
+    dispatch(userReviews(user.id));
   }, [dispatch]);
 
   console.log("ORDERS USER AFUERA", orders);

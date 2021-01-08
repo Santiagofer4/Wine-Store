@@ -50,8 +50,8 @@ export const userLogout = createAsyncThunk('user/logout', async (payload, thunkA
       tokenManager.ereaseToken();
      
     }
-    const state = thunkApi.getState();
-    state.user = initialState_user;
+//    const state = thunkApi.getState(); //Consultar con Flavio estas dos líneas y lo que agregamos de 117 a 120
+//    state.user = initialState_user;
    return;
 });
 
@@ -114,7 +114,10 @@ const userSlice = createSlice({
       state.user.error = action.error;
     },
     [userLogout.fulfilled]: (state, action) => {
-      
+      state.user.info = {};
+      state.user.orders = [];
+      state.user.status = "idle";
+      state.user.error = null;
     }
   },
 });

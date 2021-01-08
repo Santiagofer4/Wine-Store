@@ -74,6 +74,15 @@ const productsCartSlice = createSlice({
     sync(state, action) {
       state.allProductsCart.sync = action.payload;
     },
+    refresh(state, action) {
+      console.log ("Carlos");
+      state.allProductsCart.list = [];
+      state.allProductsCart.userId = 0;
+      state.allProductsCart.orderId = null;
+      state.allProductsCart.status = "idle";
+      state.allProductsCart.sync = false;
+      state.allProductsCart.error = null;
+    }
   },
   extraReducers: {
     [getAllProductsCart.pending]: (state, action) => {
@@ -167,6 +176,7 @@ const productsCartSlice = createSlice({
 export const {
   addToCart,
   sync,
+  refresh,
   subtractToCart,
   deleteFromCart,
   deleteCart,

@@ -7,6 +7,8 @@ import {
   allProductsCartSelector,
   allProductsCartSyncSelector,
   allProductsCartStatusSelector,
+  userSelector,
+  userStatusSelector,
 } from '../../selectors';
 import {
   getAllProductsCart,
@@ -23,10 +25,11 @@ function Cart() {
   const AllProductsCart = useSelector(allProductsCartSelector);  // tiene los prods del cart
   const sincronizar = useSelector(allProductsCartSyncSelector);
   const status = useSelector(allProductsCartStatusSelector);
+  const userStatus = useSelector(userStatusSelector);
+  const user = useSelector(userSelector);
   const [subTotal, setSubTotal] = useState(0);
-
   const handleDelete = () => {
-    dispatch(deleteAllProductsFromCart({ userId: 1 }));
+    dispatch(deleteAllProductsFromCart({ userId: user.id }));
   };
 
 // Mismo proceso que con el increment, pero a diferencia de tener en cuenta el stock ahora reviza
@@ -39,7 +42,7 @@ function Cart() {
       id,
       price,
       quantity,
-      userId: 1,
+      userId: user.id,
       increment: false,                                     // cuando true aumenta la cantidad
     };                                                      // en BD y en el store
     if (quantity > 1) {
@@ -72,7 +75,7 @@ function Cart() {
       price,
       quantity,
       stock,
-      userId: 1,
+      userId: user.id,
       increment: true,                                       // cuando true aumenta la cantidad 
     };                                                       // en BD y en el store
     if (valueInput < stock) {       
@@ -99,11 +102,16 @@ function Cart() {
   };
   useEffect(() => {
     setSubTotal(total(AllProductsCart));
-    if (sincronizar === false) {
-      dispatch(getAllProductsCart(1));
-      dispatch(sync(true));
+    console.log("Marcos", user.id);
+    if (userStatus === "succeded"){
+      console.log("Santi", user.id)
+      if (sincronizar === false) {
+        console.log("Tano", user.id)
+        dispatch(getAllProductsCart(user.id));
+        dispatch(sync(true));
+      }
     }
-  }, [AllProductsCart, sincronizar, dispatch]);
+  }, [AllProductsCart, userStatus, user, sincronizar, dispatch]);
 
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {

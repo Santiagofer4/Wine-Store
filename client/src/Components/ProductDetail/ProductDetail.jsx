@@ -16,7 +16,7 @@ import {
   postProductToCart,
 } from '../../slices/productsCartSlice';
 import { productReviews } from "../../slices/reviewSlice";
-import { productDetailSelector, reviewsListSelector, reviewsListStatusSelector } from '../../selectors/index';
+import { productDetailSelector, reviewsListSelector, reviewsListStatusSelector, userSelector } from '../../selectors/index';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
 import ReviewCard from '../Review/ReviewCard';
@@ -41,6 +41,7 @@ const useStyles = makeStyles({
 
 function ProductDetail() {
   const dispatch = useDispatch();
+  const user = useSelector(userSelector);
   const productDetail = useSelector(productDetailSelector);
   const reviews = useSelector(reviewsListSelector);
   const status = useSelector(reviewsListStatusSelector);
@@ -166,7 +167,7 @@ function ProductDetail() {
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  handlerProductToCart(1);
+                  handlerProductToCart(user.id);
                 }}
               >
                 Comprar
