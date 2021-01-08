@@ -13,7 +13,7 @@ import tokenManager from '../Components/utils/tokenManager';
 const initialState_user = {
   user: {
     info: {},
-    orders: {},
+    orders: [],
     status: 'idle',
     error: null,
   },
