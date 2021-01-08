@@ -85,3 +85,5 @@ export const userOrdersStatusSelector = (state) => state.user.user.status;
 export const userOrdersErrorSelector = (state) => state.user.user.error;
 
 export const reviewsListSelector = (state) => state.reviews.reviews.info;
+
+export const reviewsListStatusSelector = (state) => state.reviews.reviews.status;

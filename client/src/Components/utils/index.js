@@ -115,3 +115,10 @@ export const search = (id, array) => {
 export const isLogged = () => {
   return tokenManager.getToken();
 };
+
+export const average = (array) => {
+    for(let i = 0, total = 0; i <= array.length; i++) {
+      total = total + array[i].points;
+      return total/array.length;
+  }
+}

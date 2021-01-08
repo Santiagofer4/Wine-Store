@@ -16,10 +16,11 @@ import {
   postProductToCart,
 } from '../../slices/productsCartSlice';
 import { productReviews } from "../../slices/reviewSlice";
-import { productDetailSelector, reviewsListSelector } from '../../selectors/index';
+import { productDetailSelector, reviewsListSelector, reviewsListStatusSelector } from '../../selectors/index';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
 import ReviewCard from '../Review/ReviewCard';
+import { average } from "../utils/index"
 
 const useStyles = makeStyles({
   root: {
@@ -42,7 +43,7 @@ function ProductDetail() {
   const dispatch = useDispatch();
   const productDetail = useSelector(productDetailSelector);
   const reviews = useSelector(reviewsListSelector);
-
+  const status = useSelector(reviewsListStatusSelector);
   const history = useHistory();
   const classes = useStyles();
 
@@ -61,9 +62,12 @@ function ProductDetail() {
 
   useEffect(() => {
     dispatch(productReviews(id));
+    if (status === "succeded") {
+      setValue(average(reviews));
+    }
   }, []);
   //* EDITHANDLER, redirect a form para editar producto
-  const editHandler = () => {
+  const editHandler = () => {  
     // dispatch(wineDetails(productDetail));
     // props.setProductDetail(wineDetail); //necesario en caso que ingrese al product detail sin pasar por catalogue.
     //Actualmente no es posible, pero podria ser una opcion en el futuro
@@ -128,7 +132,7 @@ function ProductDetail() {
               {description}
             </Typography>
             <Box component="fieldset" mt={3} borderColor="transparent">
-        <Rating value={value} readOnly />
+        <Rating value={value} readOnly /> <div>{reviews.length} reviews</div>
       </Box>
           </CardContent>
 
