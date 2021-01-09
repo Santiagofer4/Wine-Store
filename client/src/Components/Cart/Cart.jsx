@@ -65,6 +65,7 @@ function Cart() {
         userId: 1,
       };   
       if (quantity > 1) {       
+        dispatch(sync(false))
         let valueInput = document.getElementById(id).value;
         if (valueInput > 1){
           functionCartGuest(payload, true)
@@ -117,6 +118,7 @@ function Cart() {
        };   
       if (valueInput < stock) {       
        functionCartGuest(payload)
+       dispatch(sync(false))
       }       
     }
   };
@@ -134,7 +136,7 @@ function Cart() {
     if (!login){
       const payload = id;                                          
        functionCartGuest(payload, null, true)                                             
-      
+       dispatch(sync(false))
     }
   };
 
@@ -157,6 +159,9 @@ function Cart() {
       let guest = localStorage.getItem('cart');
       let guestParse = JSON.parse(guest);
       dispatch(cartGuest(guestParse));
+      if ( sincronizar === false){
+        dispatch(sync(true))
+      }
     }
     if(logged) {
       setLogin(true);
@@ -171,7 +176,7 @@ function Cart() {
     }
     //setLogin(true);
     console.log('LOGIN', login);
-  }, []);
+  }, [status,sincronizar]);
 
   if (status === 'succeded') {
     console.log(AllProductsCart)

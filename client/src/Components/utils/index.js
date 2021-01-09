@@ -133,7 +133,7 @@ export const functionCartGuest = (payload, decrement, erase) => {
 
     if(decrement) {   // decrement es true cuando se envía desde el botón (-)
       console.log('ENTRÉ A DECREMENT',storage[index].quantity )
-      storage[index].quantity = 1;
+      storage[index].quantity--;
     } else if (!erase){
             if (index === -1) {   // para aumentar o agregar
             storage.push(payload);
