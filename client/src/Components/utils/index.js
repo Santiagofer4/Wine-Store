@@ -124,6 +124,7 @@ export const average = (array) => {
 }
 
 export const functionCartGuest = (payload, decrement, erase) => {
+  console.log('DECREMENT', decrement)
   let storageSTRG = localStorage.getItem('cart');
   if (storageSTRG) {
     let storage = JSON.parse(storageSTRG);
@@ -131,18 +132,19 @@ export const functionCartGuest = (payload, decrement, erase) => {
     let index = storage.findIndex(product => product.id === payload.id);
 
     if(decrement) {   // decrement es true cuando se envía desde el botón (-)
-      storage[index].quantity--
+      console.log('ENTRÉ A DECREMENT',storage[index].quantity )
+      storage[index].quantity = 1;
+    } else if (!erase){
+            if (index === -1) {   // para aumentar o agregar
+            storage.push(payload);
+          } else {
+            storage[index].quantity++
+          }
+    } else if(erase) {   // Elimino el producto. MANDAR SOLO EL ID por payload
+      storage = storage.filter(product => product.id !== payload);
+      localStorage.removeItem('cart')
+      localStorage.setItem('cart', JSON.stringify(storage))
     };
-
-    if(erase) {   // Elimino el producto. MANDAR SOLO EL ID por payload
-      storage.filter(product => product.id !== payload);
-    };
-
-    if (index === -1) {   // para aumentar o agregar
-      storage.push(payload);
-    } else {
-      storage[index].quantity++
-    }
     localStorage.setItem('cart', JSON.stringify(storage));
   } else {
     localStorage.setItem('cart', JSON.stringify([payload]));

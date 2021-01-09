@@ -18,7 +18,7 @@ import {
   deleteSingleProdFromCart,
 } from '../../slices/productsCartSlice';
 import CartItem from './CartItem/CartItem';
-import { total, isLogged } from '../../Components/utils/index.js';
+import { total, isLogged, functionCartGuest} from '../../Components/utils/index.js';
 
 function Cart() {
   const dispatch = useDispatch();
@@ -38,19 +38,38 @@ function Cart() {
 // store se procede a reducir la cantidad, siempre comprobando que sea >= a 1 
 
   const decrementHandler = (event, price, quantity) => {
-    let id = event.target.name * 1;
-    const payload = {                                       // orderline que se envia por post
-      id,
-      price,
-      quantity,
-      userId: 1,
-      increment: false,                                     // cuando true aumenta la cantidad
-    };                                                      // en BD y en el store
-    if (quantity > 1) {
-      let valueInput = document.getElementById(id).value;   // cantidad de productos a comprar
-      if (valueInput > 1) {
-        dispatch(postProductToCart(payload));               // action con post a la db 
-      }                                                     // productCartSlice
+    if (login){
+
+      let id = event.target.name * 1;
+      const payload = {                                       // orderline que se envia por post
+        id,
+        price,
+        quantity,
+        userId: 1,
+        increment: false,                                     // cuando true aumenta la cantidad
+      };                                                      // en BD y en el store
+      if (quantity > 1) {
+        let valueInput = document.getElementById(id).value;   // cantidad de productos a comprar
+        if (valueInput > 1) {
+          dispatch(postProductToCart(payload));               // action con post a la db 
+        }                                                     // productCartSlice
+      }
+    }
+
+    if (!login){ //funciona pero no renderiza.
+      let id = event.target.name * 1;
+      const payload = {                                        
+        id,
+        price,
+        quantity,
+        userId: 1,
+      };   
+      if (quantity > 1) {       
+        let valueInput = document.getElementById(id).value;
+        if (valueInput > 1){
+          functionCartGuest(payload, true)
+        }
+      }       
     }
   };
 
@@ -69,27 +88,54 @@ function Cart() {
 // cambiando la cantidad en el Imput del Item
 
   const incrementHandler = (event, price, quantity, stock) => {
-    let id = event.target.name * 1;
-    let valueInput = document.getElementById(id).value;      // cantidad de productos a comprar
-    const payload = {                                        // orderline que se envia por post
-      id,
-      price,
-      quantity,
-      stock,
-      userId: 1,
-      increment: true,                                       // cuando true aumenta la cantidad 
-    };                                                       // en BD y en el store
-    if (valueInput < stock) {       
-      dispatch(postProductToCart(payload));                  // action con post a la db 
-    }                                                        // productCartSlice
+    if (login) {
+
+      let id = event.target.name * 1;
+      let valueInput = document.getElementById(id).value;      // cantidad de productos a comprar
+      const payload = {                                        // orderline que se envia por post
+        id,
+        price,
+        quantity,
+        stock,
+        userId: 1,
+        increment: true,                                       // cuando true aumenta la cantidad 
+      };                                                       // en BD y en el store
+      if (valueInput < stock) {       
+        dispatch(postProductToCart(payload));                  // action con post a la db 
+      }                                                        // productCartSlice
+    }
+
+    if (!login){ //funciona pero no renderiza.
+      let id = event.target.name * 1;
+      let valueInput = document.getElementById(id).value;
+      const payload = {                                        
+        id,
+        price,
+        quantity,
+        stock,
+        userId: 1,
+       };   
+      if (valueInput < stock) {       
+       functionCartGuest(payload)
+      }       
+    }
   };
 
   const deleteItemHandler = ({ id, userId }) => {
-    const payload = {                                          
-      productId: id,                                         // id del producto a eliminar
-      userId,                                                // id del usuario para saber de que 
-    };                                                       // carrito eliminar el prod
-    dispatch(deleteSingleProdFromCart(payload));    
+    if (login){
+      const payload = {                                          
+        productId: id,                                         // id del producto a eliminar
+        userId,                                                // id del usuario para saber de que 
+      };                                                       // carrito eliminar el prod
+      dispatch(deleteSingleProdFromCart(payload));    
+
+    }
+
+    if (!login){
+      const payload = id;                                          
+       functionCartGuest(payload, null, true)                                             
+      
+    }
   };
 
   const handleConfirm = () => {
