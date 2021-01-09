@@ -18,6 +18,7 @@ import {
   productDetailSelector,
   reviewsListSelector,
   reviewsListStatusSelector,
+  userSelector,
 } from "../../selectors/index";
 import Rating from "@material-ui/lab/Rating";
 import Box from "@material-ui/core/Box";
@@ -48,6 +49,7 @@ function ProductDetail() {
   const status = useSelector(reviewsListStatusSelector);
   const history = useHistory();
   const classes = useStyles();
+  const user = useSelector(userSelector);
   let logged = isLogged();
 
   const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
@@ -170,6 +172,9 @@ function ProductDetail() {
               ></img>
               VOLVER
             </Button>
+            {user.isAdmin ? (
+                              <>
+                             
             <Button size="small" onClick={editHandler}>
               {" "}
               <img
@@ -180,6 +185,8 @@ function ProductDetail() {
               {/* <i class="fa fa-pencil-square-o" aria-hidden="true"></i> */}
               EDITAR
             </Button>
+                              </>
+                            ) : null}
             {stock === 0 ? (
               <h3>No hay STOCK</h3>
             ) : (
