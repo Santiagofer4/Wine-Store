@@ -168,7 +168,7 @@ server.post('/', (req, res) => {
 
 server.post('/:userId/cart', async (req, res) => {
   let { userId } = req.params;
-  let { id, price, quantity, increment } = req.body;
+  let { id, price, quantity, increment , cartGuest} = req.body;
 
   if (!id || !userId)
     return res.status(400).send('Id de usuario o producto faltante');
@@ -191,9 +191,10 @@ server.post('/:userId/cart', async (req, res) => {
       },
       defaults: {
         productId: id,
-        quantity: increment ? quantity++ : quantity--,
+        quantity: !cartGuest && increment ? quantity++  : !cartGuest && !increment ? quantity-- : quantity,
         price,
       },
+    
     });
 
     if (!newOrderLineCreated) {

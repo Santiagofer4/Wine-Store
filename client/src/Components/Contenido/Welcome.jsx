@@ -20,6 +20,7 @@ function Welcome() {
            id: product.id,
            productId: product.id,
            detail: product,
+           cartGuest: true,
            increment:true         
 //se podria enviar otra propiedad para validar desde la api si la info es del guest y
 // sumar la cantidad del guest mas la de la db   
