@@ -21,7 +21,11 @@ export const getAllProductsCart = createAsyncThunk(
   'product/getAllProductsCart',
   async (id) => {
     const resp = await axios.get(getAllProductsCartEnpoint + id + '/cart');
-    return resp;
+    let cart_response = {
+      resp,
+      id
+    }
+    return cart_response;
   }
 );
 
@@ -85,9 +89,10 @@ const productsCartSlice = createSlice({
       state.allProductsCart.status = status.loading;
     },
     [getAllProductsCart.fulfilled]: (state, { payload }) => {
+      console.log('Payload',payload)
       state.allProductsCart.status = status.succeded;
-      payload.data[0] &&
-        payload.data[0].orderLines.map((e, i) => {
+      payload.resp.data[0] &&
+        payload.resp.data[0].orderLines.map((e, i) => {
           state.allProductsCart.list.push({
             id: e.product.id,
             quantity: e.quantity,
@@ -96,8 +101,10 @@ const productsCartSlice = createSlice({
             name: e.product.name,
             stock: e.product.stock,
             image: e.product.image,
+
           });
         });
+        state.allProductsCart.userId = payload.id
     },
     [getAllProductsCart.rejected]: (state, action) => {
       state.allProductsCart.status = status.failed;
