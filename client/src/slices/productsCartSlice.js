@@ -32,7 +32,7 @@ export const getAllProductsCart = createAsyncThunk(
 export const postProductToCart = createAsyncThunk(
   'cart/postProductToCart',
   async (payload, thunkApi) => {
-    console.log('PAYLOAD', payload)
+    // console.log('PAYLOAD', payload)
     const { userId, detail, increment } = payload;
     const cart_item = await axios.post(
       usersEndpoint + userId + '/cart',
@@ -96,6 +96,14 @@ const productsCartSlice = createSlice({
     },
     login(state,action){
       state.allProductsCart.userId = action.payload;
+    },
+
+    resetState(state,action){
+      state.allProductsCart.list = [];
+      state.allProductsCart.orderId= null;
+      state.allProductsCart.status= 'idle';
+      state.allProductsCart.sync= false;
+      state.allProductsCart.error= null;
     }
 
   },
@@ -104,7 +112,8 @@ const productsCartSlice = createSlice({
       state.allProductsCart.status = status.loading;
     },
     [getAllProductsCart.fulfilled]: (state, { payload }) => {
-      console.log('Payload',payload)
+      state.allProductsCart.list = [];
+      console.log('DATOS ORDERLINE',  payload.resp.data[0].orderLines)
       state.allProductsCart.status = status.succeded;
       payload.resp.data[0] &&
         payload.resp.data[0].orderLines.map((e, i) => {
@@ -116,6 +125,7 @@ const productsCartSlice = createSlice({
             name: e.product.name,
             stock: e.product.stock,
             image: e.product.image,
+            productId:e.productId,
 
           });
         });
@@ -158,20 +168,24 @@ const productsCartSlice = createSlice({
     [postProductToCart.fulfilled]: (state, { payload }) => {
       const { order, orderLine, detail, increment } = payload;
       let idx;
+      // console.log('PAYLOAD', payload)
       state.allProductsCart.status = status.succeded;
-      state.allProductsCart.sync = true;
+      // state.allProductsCart.sync = true;
       state.allProductsCart.userId = order.userId;
+      // console.log( 'ORDERLINE PRODUCTID',orderLine.productId)
       const cartItem = state.allProductsCart.list.find(
         ({ productId }) => productId === orderLine.productId
-      );
-      if (cartItem) {
-        idx = state.allProductsCart.list.findIndex(
-          ({ productId }) => productId === orderLine.productId
         );
-      }
-      if (increment) {
-        if (!cartItem) {
-          state.allProductsCart.list.push({ ...orderLine, ...detail });
+        if (cartItem) {
+          idx = state.allProductsCart.list.findIndex(
+            ({ productId }) => productId === orderLine.productId
+            );
+          }
+          if (increment) {
+            // console.log('CARTITEM', cartItem)
+            if (!cartItem) {
+              console.log('DETALLE', orderLine)
+              state.allProductsCart.list.push({ ...orderLine, ...detail });
         } else {
           if (
             state.allProductsCart.list[idx].stock >
@@ -197,6 +211,7 @@ export const {
   refresh,
   logout,
   login,
+  resetState,
   subtractToCart,
   deleteFromCart,
   deleteCart,

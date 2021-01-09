@@ -4,28 +4,30 @@ import './Welcome-Failure.modules.css';
 import { Link } from 'react-router-dom';
 import { userSelector } from '../../selectors/index';
 import { useSelector, useDispatch } from 'react-redux';
-import {postProductToCart, login} from '../../slices/productsCartSlice.js'
+import {postProductToCart, login, resetState} from '../../slices/productsCartSlice.js';
 function Welcome() {
   const user = useSelector(userSelector);
   const dispatch = useDispatch();
   useEffect(()=>{
+    dispatch(resetState())
   dispatch(login(user.id))
-  // const { userId, detail, increment } = payload;
-
         let storage =  JSON.parse(localStorage.getItem('cart'));
-        console.log( 'datos storage',storage)
          storage &&  storage.map( product  => {
            let obj = {
            userId: user.id,
            quantity: product.quantity,
            price: product.price,
            id: product.id,
+           productId: product.id,
            detail: product,
-           increment:true            
+           increment:true         
+//se podria enviar otra propiedad para validar desde la api si la info es del guest y
+// sumar la cantidad del guest mas la de la db   
           }
            dispatch(postProductToCart(obj))           
         })
           localStorage.removeItem('cart')
+
 },[])
 
 

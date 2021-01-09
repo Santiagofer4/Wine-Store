@@ -37,7 +37,7 @@ function CartItem(props) {
             <Button
               name={id}
               className="button"
-              onClick={(e) => decrementHandler(e, price, quantity)}
+              onClick={(e) => decrementHandler(e, props.prod)}
             >
               -
             </Button>
@@ -45,7 +45,7 @@ function CartItem(props) {
             <Button
               name={id}
               className="button"
-              onClick={(e) => incrementHandler(e, price, quantity, stock)}
+              onClick={(e) => incrementHandler(e,props.prod)}
             >
               +
             </Button>
