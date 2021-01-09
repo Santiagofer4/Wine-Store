@@ -22,7 +22,7 @@ import {
 import Rating from "@material-ui/lab/Rating";
 import Box from "@material-ui/core/Box";
 import ReviewCard from "../Review/ReviewCard";
-import { average } from "../utils/index";
+import { average, functionCartGuest, isLogged } from "../utils/index";
 
 const useStyles = makeStyles({
   root: {
@@ -48,6 +48,7 @@ function ProductDetail() {
   const status = useSelector(reviewsListStatusSelector);
   const history = useHistory();
   const classes = useStyles();
+  let logged = isLogged();
 
   const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
 
@@ -64,7 +65,7 @@ function ProductDetail() {
 
   useEffect(() => {
     dispatch(productReviews(id));
-    if (status === "succeded") {
+    if (status === "succeded" && reviews.length !== 0) {  // Revisar que haya reviews para que no romper
       setValue(average(reviews));
     }
   }, []);
@@ -102,6 +103,22 @@ function ProductDetail() {
     };
     dispatch(postProductToCart(payload));
   }
+
+  function handlerProductToCartGuest(id) {      // Carrito de guest en el local storage
+    const payload = {
+      id,
+      price,
+      name: productDetail.name,
+      description: productDetail.description,
+      stock: productDetail.stock,
+      yearHarvest: productDetail.yearHarvest,
+      image: productDetail.image,
+      strainId: productDetail.strainId,
+      quantity: 1,
+    };
+
+    functionCartGuest(payload, null, null);
+  };
 
   return (
     <Container id="pageContainer" className="ProductDetail__Container">
@@ -169,7 +186,7 @@ function ProductDetail() {
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  handlerProductToCart(1);
+                  logged ? handlerProductToCart(1, id) : handlerProductToCartGuest(id);
                 }}
               >
                 Comprar

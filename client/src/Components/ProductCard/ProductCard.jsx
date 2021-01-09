@@ -11,7 +11,7 @@ import {
   postProductToCart,
 } from '../../slices/productsCartSlice';
 import { useHistory } from 'react-router-dom';
-import { isLogged } from '../../Components/utils/index.js';
+import { isLogged, functionCartGuest } from '../../Components/utils/index.js';
 
 function ProductCard(props) {
   const dispatch = useDispatch();
@@ -39,32 +39,20 @@ function ProductCard(props) {
 
   function handlerProductToCartGuest(id) {      // Carrito de guest en el local storage
     const { price: _price, ...detail } = props.data;
+
     const payload = {
       id,
       price,
-      detail,
+      name: detail.name,
+      description: detail.description,
+      stock: detail.stock,
+      yearHarvest: detail.yearHarvest,
+      image: detail.image,
+      strainId: detail.strainId,
       quantity: 1,
     };
-    let storageSTRG = localStorage.getItem('cart');
-    if (storageSTRG) {
-      let storage = JSON.parse(storageSTRG);
-      
-      console.log('STORAGE', storage);
-      let index = storage.findIndex(product => product.id === id);
-      console.log('QUANTITY', storage[0].quantity)
-      console.log('PRODUCT ID', storage[1].detail.id)
-      console.log('ID', id)
-
-      if (index === -1) {
-        console.log('INDEX', index)
-        storage.push(payload);
-      } else {
-        storage[index].quantity++
-      }
-      localStorage.setItem('cart', JSON.stringify(storage));
-    } else {
-      localStorage.setItem('cart', JSON.stringify([payload]));
-    }
+    
+    functionCartGuest(payload, null, null);
   };
 
   return (

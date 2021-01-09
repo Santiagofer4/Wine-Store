@@ -74,7 +74,9 @@ const productsCartSlice = createSlice({
     sync(state, action) {
       state.allProductsCart.sync = action.payload;
     },
-    cartGuest(state, action) {                      // Pisa el estado con lo que está en el localStorage
+    cartGuest(state, action) {    // Pisa el estado con lo que está en el localStorage
+      console.log('ACTION', action)
+      state.allProductsCart.status = "succeded";
       state.allProductsCart.list = action.payload;
     }
   },

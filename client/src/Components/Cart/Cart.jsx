@@ -110,7 +110,7 @@ function Cart() {
       // info de localStorage
       let guest = localStorage.getItem('cart');
       let guestParse = JSON.parse(guest);
-      cartGuest(guestParse); //[{}, {}]
+      dispatch(cartGuest(guestParse));
     }
     if(logged) {
       setLogin(true);
@@ -125,7 +125,7 @@ function Cart() {
     }
     //setLogin(true);
     console.log('LOGIN', login);
-  }, [AllProductsCart, sincronizar, dispatch, login]); // Dependencia login en evaluación
+  }, []);
 
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {
