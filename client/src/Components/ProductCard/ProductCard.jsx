@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { wineDetails } from '../../slices/productDetailSlice';
 import {
   postProductToCart,
+  sync,
 } from '../../slices/productsCartSlice';
 import { useHistory } from 'react-router-dom';
 import { isLogged, functionCartGuest } from '../../Components/utils/index.js';
@@ -55,6 +56,7 @@ function ProductCard(props) {
     };
     
     functionCartGuest(payload, null, null);
+    dispatch(sync(false))
   };
 
   return (

@@ -12,7 +12,7 @@ import "./ProductDetail.modules.css";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
-import { postProductToCart } from "../../slices/productsCartSlice";
+import { postProductToCart, sync } from "../../slices/productsCartSlice";
 import { productReviews } from "../../slices/reviewSlice";
 import {
   productDetailSelector,
@@ -120,6 +120,8 @@ function ProductDetail() {
     };
 
     functionCartGuest(payload, null, null);
+    dispatch(sync(false))
+
   };
 
   return (

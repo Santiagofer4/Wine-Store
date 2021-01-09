@@ -33,6 +33,7 @@ function Cart() {
 
   const handleDelete = () => {
     dispatch(deleteAllProductsFromCart({ userId: user.id }));
+    
   };
 
 // Mismo proceso que con el increment, pero a diferencia de tener en cuenta el stock ahora reviza
@@ -161,6 +162,8 @@ function Cart() {
       // info de localStorage
       let guest = localStorage.getItem('cart');
       let guestParse = JSON.parse(guest);
+      setSubTotal(total(AllProductsCart));
+      console.log('ti vieja',subTotal);
       dispatch(cartGuest(guestParse));
       if ( sincronizar === false){
         dispatch(sync(true))

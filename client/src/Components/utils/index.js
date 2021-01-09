@@ -1,5 +1,4 @@
 import tokenManager from './tokenManager';
-
 function THROW(msg) {
   throw new Error(msg);
 }
