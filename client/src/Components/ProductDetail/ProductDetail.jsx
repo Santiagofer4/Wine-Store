@@ -193,7 +193,7 @@ function ProductDetail() {
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  logged ? handlerProductToCart(1, id) : handlerProductToCartGuest(id);
+                  logged ? handlerProductToCart(user.id) : handlerProductToCartGuest(id);
                 }}
               >
                 Comprar

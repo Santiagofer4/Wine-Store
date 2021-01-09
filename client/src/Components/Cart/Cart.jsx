@@ -8,6 +8,7 @@ import {
   allProductsCartSyncSelector,
   allProductsCartStatusSelector,
   userStatusSelector,
+  userSelector,
 } from '../../selectors';
 import {
   getAllProductsCart,
@@ -25,12 +26,13 @@ function Cart() {
   const AllProductsCart = useSelector(allProductsCartSelector);  // tiene los prods del cart
   const sincronizar = useSelector(allProductsCartSyncSelector);
   const status = useSelector(allProductsCartStatusSelector);
+  const user = useSelector(userSelector);
   const statusUser = useSelector(userStatusSelector);
   const [subTotal, setSubTotal] = useState(0);
   const [login, setLogin] = useState(false);
 
   const handleDelete = () => {
-    dispatch(deleteAllProductsFromCart({ userId: 1 }));
+    dispatch(deleteAllProductsFromCart({ userId: user.id }));
   };
 
 // Mismo proceso que con el increment, pero a diferencia de tener en cuenta el stock ahora reviza
@@ -45,7 +47,7 @@ function Cart() {
         id,
         price,
         quantity,
-        userId: 1,
+        userId: user.id,
         increment: false,                                     // cuando true aumenta la cantidad
       };                                                      // en BD y en el store
       if (quantity > 1) {
@@ -62,7 +64,7 @@ function Cart() {
         id,
         price,
         quantity,
-        userId: 1,
+        userId: user.id,
       };   
       if (quantity > 1) {       
         dispatch(sync(false))
@@ -98,7 +100,7 @@ function Cart() {
         price,
         quantity,
         stock,
-        userId: 1,
+        userId: user.id,
         increment: true,                                       // cuando true aumenta la cantidad 
       };                                                       // en BD y en el store
       if (valueInput < stock) {       
@@ -114,7 +116,7 @@ function Cart() {
         price,
         quantity,
         stock,
-        userId: 1,
+        userId: user.id,
        };   
       if (valueInput < stock) {       
        functionCartGuest(payload)
@@ -170,7 +172,7 @@ function Cart() {
       setSubTotal(total(AllProductsCart));
       if (sincronizar === false) {
         //console.log('PRODUCTOS 2', AllProductsCart)
-        dispatch(getAllProductsCart(1));
+        dispatch(getAllProductsCart(user.id));
         dispatch(sync(true));
       }
     }

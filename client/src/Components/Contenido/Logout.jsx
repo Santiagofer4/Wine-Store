@@ -17,7 +17,7 @@ function Logout() {
   //   };
   //   useEffect(logout(), []);
   useEffect(() => {
-    let logged = isLogged();
+    // let logged = isLogged();
 
     
   }, []);

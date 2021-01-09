@@ -26,7 +26,7 @@ function ProductCard(props) {
     history.push(`/product/${id}`);
   };
 
-  function handlerProductToCart(userId, id) {
+  function handlerProductToCart(userId,id) {
     const { price: _price, ...detail } = props.data;
     const payload = {
       id,
@@ -84,7 +84,7 @@ function ProductCard(props) {
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  logged ? handlerProductToCart(1, id) : handlerProductToCartGuest(id);
+                  logged ? handlerProductToCart(user.id,id) : handlerProductToCartGuest(id);
                 }}
               >
                 Comprar
