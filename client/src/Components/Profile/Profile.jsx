@@ -10,7 +10,7 @@ import {
 import { userOrders } from "../../slices/userSlice";
 import { userReviews } from "../../slices/reviewSlice";
 import OrderDetail from "../OrderTable/OrderDetail";
-import UserReview from '../../Components/Review/UserReview'
+
 function Profile() {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
@@ -22,8 +22,6 @@ function Profile() {
     dispatch(userOrders(user.id));
     dispatch(userReviews(user.id));
   }, [dispatch]);
-
-  console.log("ORDERS USER AFUERA", orders);
 
   if (orders.length === 0) {
     allUserOrders = (
@@ -40,7 +38,6 @@ function Profile() {
         </>
       );
     } else if (status === "succeded") {
-      console.log("ORDERS USER MAP", orders);
       allUserOrders = orders.map((order) => {
         return (
           <>
@@ -61,7 +58,7 @@ function Profile() {
                 </Button>
               </div>
             </li>
-            <OrderDetail id={order.id} data={order.orderLines} review={<UserReview data={order} />}></OrderDetail>
+            <OrderDetail id={order.id} data={order.orderLines} review={order.status === 'completed' ? true : false}></OrderDetail>
           </>
         );
       });
@@ -77,10 +74,14 @@ function Profile() {
   return (
     <Paper className="profile">
       {" "}
-      <div className="bar">
-        <Link className="link">Mis compras</Link>
-        <Link className="link">Mi información</Link>
+        <h4 className="title">Mi información</h4>
+      <div className="info">
+        <p className="data">Nombre {user.firstName + ' ' + user.lastName}</p>
+        <p className="data">email {user.email}</p>
+        <p className="data">Fecha de nacimiento {user.birthdate}</p>
+        <p className="data">Télefono/celular {user.cellphone}</p>
       </div>
+        <h4 className="title">Mis compras</h4>
       <div className="orders">
         <div className="orderTitle">Código compra</div>
         <div className="orderTitle">Total</div>

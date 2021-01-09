@@ -116,7 +116,7 @@ server.post("/", (req, res) => {
 
       //Ruta para modificar una orden
 
-server.put("/:id", (req, res) => {
+/* server.put("/:id", (req, res) => {
   const { id } = req.params;
   const { total, status } = req.body;
 
@@ -124,13 +124,14 @@ server.put("/:id", (req, res) => {
     .then(() => {
       res.status(201).send("orden actualizada");
     })
-  });
+  }); */
 
   //Editar una Órden
 
-  server.put('/:id',(req,res)=>{
+  server.put('/:id', (req,res) => {
     const {id}= req.params;
     const {total, status} = req.body;
+
     Order.update({ status,total }, {where:{id}})
     .then((respuesta)=>{
       res.status(201).send('orden actualizada')
@@ -138,10 +139,6 @@ server.put("/:id", (req, res) => {
     .catch(err=>{
       console.log(err)
       res.status(400)
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(400);
     });
 });
 
