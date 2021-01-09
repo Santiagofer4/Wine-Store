@@ -3,10 +3,10 @@ const { extractDigitsFromString } = require('../utils/index.js');
 const { Product } = require('../db.js');
 const { Sequelize, Op } = require('sequelize');
 
-server.get('/search', (req, res) => {
+server.get('/', (req, res) => {
   let { word } = req.query;
   let search = extractDigitsFromString(word); //func para extraer numeros de string de busqueda
-  // console.log('SEARCH', search);
+  //  console.log('SEARCH', search);
   let conditions = [];
 
   //* Si `search.words` pusheamos al array de condiciones de busqueda (name & description)
