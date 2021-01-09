@@ -95,7 +95,7 @@ function NavBar() {
             </Link>
           </li>
           <li className="Nav__li">
-            <Button
+            {/* <Button
               className="Nav__Link"
               onClick={() => {
                 let config = {
@@ -110,7 +110,7 @@ function NavBar() {
               }}
             >
               HEADERS
-            </Button>
+            </Button> */}
           </li>
           {/* <li className="Nav__li">
             {' '}
@@ -222,6 +222,22 @@ function NavBar() {
                 alt="Carrito"
               />
             </Link>
+            {/* {isLogged() ? (
+            )
+            : (
+              <Link id="cartGuest" to="/cartGuest" className="Nav__Link">
+              <img
+                id="imgCart"
+                src="https://i.ibb.co/FsngVZ5/carrito1.png"
+                alt="CarritoI"
+              />
+            </Link> 
+            )
+            }
+            */}
+
+            
+            
           </div>
         </div>
       </nav>

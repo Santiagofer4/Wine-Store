@@ -7,27 +7,23 @@ import {
   allProductsCartSelector,
   allProductsCartSyncSelector,
   allProductsCartStatusSelector,
-  userStatusSelector,
 } from '../../selectors';
 import {
   getAllProductsCart,
   sync,
-  cartGuest,
   postProductToCart,
   deleteAllProductsFromCart,
   deleteSingleProdFromCart,
 } from '../../slices/productsCartSlice';
+import { total } from '../../Components/utils';
 import CartItem from './CartItem/CartItem';
-import { total, isLogged } from '../../Components/utils/index.js';
 
 function Cart() {
   const dispatch = useDispatch();
   const AllProductsCart = useSelector(allProductsCartSelector);  // tiene los prods del cart
   const sincronizar = useSelector(allProductsCartSyncSelector);
   const status = useSelector(allProductsCartStatusSelector);
-  const statusUser = useSelector(userStatusSelector);
   const [subTotal, setSubTotal] = useState(0);
-  const [login, setLogin] = useState(false);
 
   const handleDelete = () => {
     dispatch(deleteAllProductsFromCart({ userId: 1 }));
@@ -101,31 +97,13 @@ function Cart() {
     incrementHandler,
     decrementHandler,
   };
-
   useEffect(() => {
-    let logged = isLogged();
-
-    if(!logged) {
-      setLogin(false);
-      // info de localStorage
-      let guest = localStorage.getItem('cart');
-      let guestParse = JSON.parse(guest);
-      dispatch(cartGuest(guestParse));
+    setSubTotal(total(AllProductsCart));
+    if (sincronizar === false) {
+      dispatch(getAllProductsCart(1));
+      dispatch(sync(true));
     }
-    if(logged) {
-      setLogin(true);
-      // info de DB
-      //console.log('PRODUCTOS 1', AllProductsCart)
-      setSubTotal(total(AllProductsCart));
-      if (sincronizar === false) {
-        //console.log('PRODUCTOS 2', AllProductsCart)
-        dispatch(getAllProductsCart(1));
-        dispatch(sync(true));
-      }
-    }
-    //setLogin(true);
-    console.log('LOGIN', login);
-  }, []);
+  }, [AllProductsCart, sincronizar, dispatch]);
 
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {
@@ -135,7 +113,7 @@ function Cart() {
             <div className="products">
               <h2 className="titleCart">Carrito de compras</h2>
               <hr className="line" />
-               <ul>
+              <ul>
                 {AllProductsCart.map((product) => {
                   return <CartItem  key={product.id} prod={product} handlers={handlers} />;
                 })}

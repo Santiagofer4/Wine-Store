@@ -11,13 +11,18 @@ import {
   postProductToCart,
 } from '../../slices/productsCartSlice';
 import { useHistory } from 'react-router-dom';
+<<<<<<< HEAD
 import { userSelector } from "../../selectors"
+=======
+import { isLogged, functionCartGuest } from '../../Components/utils/index.js';
+>>>>>>> 960d5d7aaa8836dc846efa08a02b8c73b1efbc35
 
 function ProductCard(props) {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
   const { image, name, price, id, stock } = props.data;
   const history = useHistory();
+  let logged = isLogged();
 
   const detailClickHandler = () => {
     dispatch(wineDetails(props.data));
@@ -36,6 +41,24 @@ function ProductCard(props) {
     };
     dispatch(postProductToCart(payload));
   }
+
+  function handlerProductToCartGuest(id) {      // Carrito de guest en el local storage
+    const { price: _price, ...detail } = props.data;
+
+    const payload = {
+      id,
+      price,
+      name: detail.name,
+      description: detail.description,
+      stock: detail.stock,
+      yearHarvest: detail.yearHarvest,
+      image: detail.image,
+      strainId: detail.strainId,
+      quantity: 1,
+    };
+    
+    functionCartGuest(payload, null, null);
+  };
 
   return (
     <Card className="ProCards_Card">
@@ -64,7 +87,7 @@ function ProductCard(props) {
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  handlerProductToCart(user.id, id);
+                  logged ? handlerProductToCart(1, id) : handlerProductToCartGuest(id);
                 }}
               >
                 Comprar

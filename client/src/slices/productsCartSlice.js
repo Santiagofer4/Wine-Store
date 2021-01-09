@@ -74,14 +74,10 @@ const productsCartSlice = createSlice({
     sync(state, action) {
       state.allProductsCart.sync = action.payload;
     },
-    refresh(state, action) {
-      console.log ("Carlos");
-      state.allProductsCart.list = [];
-      state.allProductsCart.userId = 0;
-      state.allProductsCart.orderId = null;
-      state.allProductsCart.status = "idle";
-      state.allProductsCart.sync = false;
-      state.allProductsCart.error = null;
+    cartGuest(state, action) {    // Pisa el estado con lo que está en el localStorage
+      console.log('ACTION', action)
+      state.allProductsCart.status = "succeded";
+      state.allProductsCart.list = action.payload;
     }
   },
   extraReducers: {
@@ -180,6 +176,7 @@ export const {
   subtractToCart,
   deleteFromCart,
   deleteCart,
+  cartGuest,
 } = productsCartSlice.actions;
 
 export default productsCartSlice;
