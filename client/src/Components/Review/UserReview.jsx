@@ -11,8 +11,9 @@ import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createReview, postReview } from "../../slices/reviewSlice";
+import { userSelector } from "../../selectors";
 
 const styles = (theme) => ({
   root: {
@@ -70,7 +71,7 @@ function UserReview(props) {
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
-
+  const user = useSelector(userSelector);
   const { product } = props.data;
 
   const handleClickOpen = () => {
@@ -84,8 +85,8 @@ function UserReview(props) {
 
   const handleSave = () => {
     let description = document.getElementById("outlined-multiline-static").value;
-    dispatch(createReview({ productId: product.id, userId: 1, points: value, description }));
-    dispatch(postReview({ productId: product.id, userId: 1, points: value, description }));
+    dispatch(createReview({ productId: product.id, userId: user.id, points: value, description }));
+    dispatch(postReview({ productId: product.id, userId: user.id, points: value, description }));
     handleClose();
   };
 

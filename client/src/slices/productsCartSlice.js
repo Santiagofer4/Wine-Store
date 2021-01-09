@@ -77,7 +77,7 @@ const productsCartSlice = createSlice({
     cartGuest(state, action) {    // Pisa el estado con lo que está en el localStorage
       console.log('ACTION', action)
       state.allProductsCart.status = "succeded";
-      state.allProductsCart.list = action.payload;
+      state.allProductsCart.list = action.payload ? action.payload : [];
     }
   },
   extraReducers: {
@@ -172,6 +172,7 @@ const productsCartSlice = createSlice({
 export const {
   addToCart,
   sync,
+  refresh,
   subtractToCart,
   deleteFromCart,
   deleteCart,

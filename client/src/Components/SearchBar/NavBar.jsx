@@ -22,6 +22,7 @@ import tokenManager from '../utils/tokenManager';
 import { isLogged } from '../utils/index';
 import store from '../../store';
 import { userLogout } from '../../slices/userSlice.js';
+import { refresh } from "../../slices/productsCartSlice.js"
 
 function NavBar() {
   const dispatch = useDispatch();
@@ -51,6 +52,7 @@ function NavBar() {
     }
   }
   const handleLogout = () => {
+    dispatch(refresh());
     dispatch(userLogout());
     // if (status === 'idle') {
     //   history.push('/logout')

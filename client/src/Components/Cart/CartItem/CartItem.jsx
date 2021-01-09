@@ -1,7 +1,10 @@
 import React from 'react';
 import { Button, Container } from '@material-ui/core';
+import { userSelector } from "../../../selectors";
+import { useDispatch, useSelector } from 'react-redux';
 
 function CartItem(props) {
+  const user = useSelector(userSelector);
   const { id, image, name, price, quantity, stock } = props.prod;
   const {
     deleteItemHandler,
@@ -28,7 +31,7 @@ function CartItem(props) {
             <a href="#" className="Cart__DeleteProduct">
               <i
                 class="fas fa-trash-alt"
-                onClick={(e) => deleteItemHandler({ id, userId: 1 })}
+                onClick={(e) => deleteItemHandler({ id, userId: user.id })}
               ></i>
             </a>
             <Button

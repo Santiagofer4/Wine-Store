@@ -44,6 +44,7 @@ const useStyles = makeStyles({
 
 function ProductDetail() {
   const dispatch = useDispatch();
+  const user = useSelector(userSelector);
   const productDetail = useSelector(productDetailSelector);
   const reviews = useSelector(reviewsListSelector);
   const status = useSelector(reviewsListStatusSelector);
