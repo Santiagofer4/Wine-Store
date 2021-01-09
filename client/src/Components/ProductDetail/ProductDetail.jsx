@@ -50,7 +50,6 @@ function ProductDetail() {
   const status = useSelector(reviewsListStatusSelector);
   const history = useHistory();
   const classes = useStyles();
-  const user = useSelector(userSelector);
   let logged = isLogged();
 
   const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
