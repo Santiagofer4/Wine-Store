@@ -11,11 +11,8 @@ import {
   postProductToCart,
 } from '../../slices/productsCartSlice';
 import { useHistory } from 'react-router-dom';
-<<<<<<< HEAD
-import { userSelector } from "../../selectors"
-=======
 import { isLogged, functionCartGuest } from '../../Components/utils/index.js';
->>>>>>> 960d5d7aaa8836dc846efa08a02b8c73b1efbc35
+import {userSelector} from '../../selectors/index'
 
 function ProductCard(props) {
   const dispatch = useDispatch();

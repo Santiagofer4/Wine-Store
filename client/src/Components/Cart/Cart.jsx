@@ -128,6 +128,7 @@ function Cart() {
   }, []);
 
   if (status === 'succeded') {
+    console.log(AllProductsCart)
     if (AllProductsCart.length > 0) {
       return (
         <div className="ShoppingCartBackImg">

@@ -18,6 +18,7 @@ import {
   productDetailSelector,
   reviewsListSelector,
   reviewsListStatusSelector,
+  userSelector,
 } from "../../selectors/index";
 import Rating from "@material-ui/lab/Rating";
 import Box from "@material-ui/core/Box";
