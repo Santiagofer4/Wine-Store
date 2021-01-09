@@ -91,6 +91,7 @@ const userSlice = createSlice({
       state.user.status = status.loading;
     },
     [postUserLogin.fulfilled]: (state, { payload }) => {
+      console.log('slice', payload)
       const { userLogin_response, formik } = payload;
       state.user.status = status.succeded;
       state.user.info = userLogin_response.user;

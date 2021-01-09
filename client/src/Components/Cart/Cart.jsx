@@ -171,7 +171,7 @@ function Cart() {
       //console.log('PRODUCTOS 1', AllProductsCart)
       setSubTotal(total(AllProductsCart));
       if (sincronizar === false) {
-        //console.log('PRODUCTOS 2', AllProductsCart)
+        console.log('PRODUCTOS 2', user)
         dispatch(getAllProductsCart(user.id));
         dispatch(sync(true));
       }

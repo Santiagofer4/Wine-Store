@@ -9,20 +9,26 @@ import {
 import FormField from '../../FormComponents/FormField';
 import './UserForm.modules.css';
 //import { validationSchemaUserRegister } from './userValidations';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { postUserLogin } from '../../../slices/userSlice.js';
-
+import {postProductToCart, login} from '../../../slices/productsCartSlice.js'
+import { userSelector, userStatusSelector} from '../../../selectors';
 function UserLogin() {
   const dispatch = useDispatch();
+  const user = useSelector(userSelector)
+  const userStatus = useSelector(userStatusSelector);
   const history = useHistory();
   const [viewPassword, setViewPassword] = useState(false);
   const emptyValues = {
     email: '',
     password: '',
   };
+
+  console.log('AFUERA', userStatus)
   const handleSubmit = (values, formik) => {
+    console.log( 'primero',userStatus)
     const payload = {
       user: {
         email: values.email,
@@ -30,14 +36,39 @@ function UserLogin() {
       },
       formik,
     };
-    dispatch(postUserLogin(payload)).then((payload) => {
-      if (payload.type === 'user/login/fulfilled') {
-        history.push('/welcome');
-      } else {
-        history.push('/failure');
-      }
-    });
+    dispatch(postUserLogin(payload))
+    // dispatch(postUserLogin(payload)).then((payload) => {
+    //   console.log( 'segundo ',userStatus)
+    //   if (payload.type === 'user/login/fulfilled') {
+    //     // if (userStatus === 'succeded'){
+    //       dispatch(login(user.id))
+    //       console.log( 'tercero ',userStatus)
+    //       let storage = JSON.parse(localStorage.getItem('cart'));
+    //       storage.map( product  => {
+    //          let obj = {
+    //          userId: user.id,
+    //          detail: product,
+    //          increment:true            
+    //         }
+    //          dispatch(postProductToCart(obj))           
+    //       })
+    //       // localStorage.removeItem('cart')
+    //     // }
+         
+    //     history.push('/welcome');
+    //   } else {
+    //     history.push('/failure');
+    //   }
+    // });
   };
+  if(userStatus === 'succeded'){
+    history.push('/welcome');
+  }
+
+  if( userStatus === 'failed'){
+    history.push('/failure');
+  }
+
 
   const handleReset = (formik) => {
     //func para resetear el form

@@ -32,6 +32,7 @@ export const getAllProductsCart = createAsyncThunk(
 export const postProductToCart = createAsyncThunk(
   'cart/postProductToCart',
   async (payload, thunkApi) => {
+    console.log('PAYLOAD', payload)
     const { userId, detail, increment } = payload;
     const cart_item = await axios.post(
       usersEndpoint + userId + '/cart',
@@ -92,7 +93,11 @@ const productsCartSlice = createSlice({
      state.allProductsCart.sync= false;
      state.allProductsCart.error= null;
 
+    },
+    login(state,action){
+      state.allProductsCart.userId = action.payload;
     }
+
   },
   extraReducers: {
     [getAllProductsCart.pending]: (state, action) => {
@@ -191,6 +196,7 @@ export const {
   sync,
   refresh,
   logout,
+  login,
   subtractToCart,
   deleteFromCart,
   deleteCart,
