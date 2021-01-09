@@ -82,6 +82,16 @@ const productsCartSlice = createSlice({
       console.log('ACTION', action)
       state.allProductsCart.status = "succeded";
       state.allProductsCart.list = action.payload ? action.payload : [];
+    },
+    logout(state,action){
+
+     state.allProductsCart.list = [];
+     state.allProductsCart.userId = 0;
+     state.allProductsCart.orderId= null;
+     state.allProductsCart.status= 'idle';
+     state.allProductsCart.sync= false;
+     state.allProductsCart.error= null;
+
     }
   },
   extraReducers: {
@@ -180,6 +190,7 @@ export const {
   addToCart,
   sync,
   refresh,
+  logout,
   subtractToCart,
   deleteFromCart,
   deleteCart,
