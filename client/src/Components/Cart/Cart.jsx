@@ -32,8 +32,17 @@ function Cart() {
   const [login, setLogin] = useState(false);
 
   const handleDelete = () => {
-    dispatch(deleteAllProductsFromCart({ userId: user.id }));
-    
+    if(login){
+
+      dispatch(deleteAllProductsFromCart({ userId: user.id }));
+    }
+    if(!login){
+
+      let storage = []
+        localStorage.removeItem('cart');
+        localStorage.setItem('cart', JSON.stringify(storage));
+        dispatch(sync(false))
+    }
   };
 
 // Mismo proceso que con el increment, pero a diferencia de tener en cuenta el stock ahora reviza
@@ -162,12 +171,12 @@ function Cart() {
       // info de localStorage
       let guest = localStorage.getItem('cart');
       let guestParse = JSON.parse(guest);
-      setSubTotal(total(AllProductsCart));
       console.log('ti vieja',subTotal);
       dispatch(cartGuest(guestParse));
       if ( sincronizar === false){
         dispatch(sync(true))
       }
+      setSubTotal(total(AllProductsCart));
     }
     if(logged) {
       setLogin(true);
@@ -202,7 +211,7 @@ function Cart() {
               <hr className="line" />
                <ul>
                 {AllProductsCart.map((product) => {
-                  return <CartItem  key={product.id} prod={product} handlers={handlers} />;
+                  return <CartItem  key={ product && product.id} prod={product} handlers={handlers} />;
                 })}
               </ul>
             </div>
