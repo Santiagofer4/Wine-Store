@@ -4,6 +4,7 @@ import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 
 function InputField({ name, label, disabled, minWidth, ...props }) {
+  if (typeof label === 'undefined') label = name;
   const useStyles = makeStyles((theme) => ({
     formControl: {
       margin: theme.spacing(1),

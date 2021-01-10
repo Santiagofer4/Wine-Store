@@ -21,6 +21,7 @@ import axios from 'axios';
 import ProtectRoute from './Components/ProtectRoute/ProtectRoute';
 import Logout from './Components/Contenido/Logout';
 import { isLogged } from './Components/utils/index';
+import Checkout from './Components/Checkout/Checkout';
 function App() {
   // //!SOLUCION CAVERNICOLA!
   // axios.defaults.headers.common['Authorization'] = localStorage.getItem(
@@ -60,6 +61,7 @@ function App() {
         />
         {/* <Route path="/user/profile" component={Profile} /> */}
         <Route path="/404" component={notFound} />
+        <Route path="/checkout" component={Checkout} />
         <Redirect to="/404" />
       </Switch>
     </div>
