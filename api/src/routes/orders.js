@@ -1,9 +1,12 @@
 const server = require("express").Router();
 const { Order, OrderLine, Product } = require("../db.js");
+const { checkAdmin } = require('../utils/authTools.js');
+const passport = require('passport');
 
 // Devuelve todas las ordenes
 
-server.get("/", (req, res, next) => {
+server.get("/",passport.authenticate('jwt', { session: false }),
+checkAdmin, (req, res, next) => {
   const { status } = req.query;
 
   if (!status) {
@@ -30,7 +33,8 @@ server.get("/", (req, res, next) => {
 
 //Ruta que retorna una orden en particular
 
-server.get("/:id", (req, res) => {
+server.get("/:id",passport.authenticate('jwt', { session: false }),
+checkAdmin, (req, res) => {
   const { id } = req.params;
 
   if(!id) return res.status(400).send('No existe la orden seleccionada')
