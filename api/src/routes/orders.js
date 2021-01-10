@@ -74,13 +74,13 @@ server.get("/total/:id", (req, res) => {
 
 //Crear un carrito o agregar una orden si el carrito ya existe
 
-  server.post('/',(req,res)=>{
+/*   server.post('/',(req,res)=>{
     const{status, total, userId}=req.body;
     Order.findOrCreate({
       where: {status: "cart", userId: userId},
       defaults: { status, total},
     })
-  });
+  }); */
 
 
 //Ruta para crear una orden
@@ -130,14 +130,14 @@ server.post("/", (req, res) => {
     })
   }); */
 
-  //Editar una Órden
+  //Editar una orden
 
   server.put('/:id', (req,res) => {
     const {id}= req.params;
     const {total, status} = req.body;
 
     Order.update({ status,total }, {where:{id}})
-    .then((respuesta)=>{
+    .then(()=>{
       res.status(201).send('orden actualizada')
     })
     .catch(err=>{

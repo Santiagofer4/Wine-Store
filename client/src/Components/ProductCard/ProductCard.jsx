@@ -11,9 +11,10 @@ import {
   postProductToCart,
   sync,
 } from '../../slices/productsCartSlice';
+import { productReviews } from "../../slices/reviewSlice";
 import { useHistory } from 'react-router-dom';
 import { isLogged, functionCartGuest } from '../../Components/utils/index.js';
-import {userSelector} from '../../selectors/index'
+import { userSelector } from '../../selectors/index'
 
 function ProductCard(props) {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ function ProductCard(props) {
 
   const detailClickHandler = () => {
     dispatch(wineDetails(props.data));
+    dispatch(productReviews(id));
     history.push(`/product/${id}`);
   };
 
