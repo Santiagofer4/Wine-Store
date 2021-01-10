@@ -12,7 +12,6 @@ const tokenManager = () => {
 
   const setLogoutEventName = (name) => (logoutEventName = name);
 
-  // This listener allows to disconnect another session of react-admin started in another tab
   window.addEventListener('storage', (event) => {
     if (event.key === logoutEventName) {
       inMemoryJWT = null;
