@@ -21,8 +21,8 @@ server.get('/me', async (req, res, next) => {
 
 server.get('/logout', (req, res) => {
   req.logout();
-  res.clearCookie('jwt');
-  res.clearCookie('refreshtoken');
+  // res.clearCookie('jwt');
+  res.clearCookie('refreshToken');
   res.status(200).send('Cerrar sesión');
   // res.redirect('/');
 });

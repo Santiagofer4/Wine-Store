@@ -2,7 +2,6 @@ import axios from 'axios';
 import { baseEndpoint } from '../../constants/endpoints';
 
 const tokenManager = () => {
-  console.log('TOKEN MANAGER');
   let logoutEventName = 'logout';
   let refreshEndpoint = 'http://localhost:3000/auth/refresh';
   let inMemoryJWT = null;

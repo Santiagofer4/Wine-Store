@@ -120,7 +120,6 @@ export const isLogged = () => {
   if (!token) {
     const persistLogin = async () => {
       refresh_token = await tokenManager.getRefreshedToken();
-      console.log('PERSISTING', refresh_token);
       const { user } = refresh_token;
       store.dispatch(persistUserLogin(user));
     };

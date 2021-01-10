@@ -86,25 +86,25 @@ const productsCartSlice = createSlice({
       state.allProductsCart.list = action.payload ? action.payload : [];
     },
     logout(state, action) {
-      // state.allProductsCart.list = [];
-      // state.allProductsCart.userId = 0;
-      // state.allProductsCart.orderId = null;
-      // state.allProductsCart.status = 'idle';
-      // state.allProductsCart.sync = false;
-      // state.allProductsCart.error = null;
-      state.allProductsCart = initialState_product;
+      state.allProductsCart.list = [];
+      state.allProductsCart.userId = 0;
+      state.allProductsCart.orderId = null;
+      state.allProductsCart.status = 'idle';
+      state.allProductsCart.sync = false;
+      state.allProductsCart.error = null;
+      // state.allProductsCart = initialState_product;
     },
     login(state, action) {
       state.allProductsCart.userId = action.payload;
     },
 
     resetState(state, action) {
-      // state.allProductsCart.list = [];
-      // state.allProductsCart.orderId = null;
-      // state.allProductsCart.status = 'idle';
-      // state.allProductsCart.sync = false;
-      // state.allProductsCart.error = null;
-      state.allProductsCart = initialState_product;
+      state.allProductsCart.list = [];
+      state.allProductsCart.orderId = null;
+      state.allProductsCart.status = 'idle';
+      state.allProductsCart.sync = false;
+      state.allProductsCart.error = null;
+      // state.allProductsCart = initialState_product;
     },
   },
   extraReducers: {
