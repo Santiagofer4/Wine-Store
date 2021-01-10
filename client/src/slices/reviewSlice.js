@@ -9,7 +9,7 @@ import { status } from '../constants/helpers';
 
 const initialState_review = {
     reviews: {
-      info: [], // [{id, points, description, productId}, {id, points, description, productId}]
+      info: [], // [{id, points, description, productId, createdAt}, {id, points, description, productId, createdAt}]
       status: 'idle',
       error: null,
     },

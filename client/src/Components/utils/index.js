@@ -115,19 +115,20 @@ export const search = (id, array) => {
 };
 
 export const isLogged = () => {
-  return tokenManager.getToken();
-  //let token = tokenManager.getToken();
-  // let refresh_token;
-  // if (!token) {
-  //   const persistLogin = async () => {
-  //     refresh_token = await tokenManager.getRefreshedToken();
-  //     const { user } = refresh_token;
-  //     store.dispatch(persistUserLogin(user));
-  //   };
-  //   persistLogin();
-  //   return refresh_token ? true : false;
-  // }
-  // return token;
+  //return tokenManager.getToken();
+
+  let token = tokenManager.getToken();
+   let refresh_token;
+   if (!token) {
+     const persistLogin = async () => {
+       refresh_token = await tokenManager.getRefreshedToken();
+       const { user } = refresh_token;
+       store.dispatch(persistUserLogin(user));
+     };
+     persistLogin();
+     return refresh_token ? true : false;
+   }
+   return token;
 };
 
 export const average = (array) => {
