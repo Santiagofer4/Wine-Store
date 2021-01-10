@@ -9,6 +9,7 @@ import {
   allProductsCartStatusSelector,
   userStatusSelector,
   userSelector,
+  myCartSelector,
 } from '../../selectors';
 import {
   getAllProductsCart,
@@ -20,6 +21,7 @@ import {
 } from '../../slices/productsCartSlice';
 import CartItem from './CartItem/CartItem';
 import { total, isLogged, functionCartGuest} from '../../Components/utils/index.js';
+import axios from 'axios';
 
 function Cart() {
   const dispatch = useDispatch();
@@ -27,10 +29,12 @@ function Cart() {
   const sincronizar = useSelector(allProductsCartSyncSelector);
   const status = useSelector(allProductsCartStatusSelector);
   const user = useSelector(userSelector);
+  const myCart = useSelector(myCartSelector);
   const statusUser = useSelector(userStatusSelector);
   const [subTotal, setSubTotal] = useState(0);
   const [login, setLogin] = useState(false);
   let logged = isLogged();
+  
 
   const handleDelete = () => {
     if(login){
@@ -60,6 +64,7 @@ function Cart() {
         quantity:detail.quantity,
         detail,
         userId: user.id,
+        orderId: detail.orderId,
         increment: false,                                       // cuando true aumenta la cantidad 
       };                                                         // en BD y en el store
       if (detail.quantity > 1) {
@@ -76,6 +81,7 @@ function Cart() {
         id : detail.id,
         price:detail.price,
         quantity: detail.quantity,
+        orderId: detail.orderId,
       //  userId: user.id,
       };   
       if (detail.quantity > 1) {       
@@ -156,7 +162,10 @@ function Cart() {
   };
 
   const handleConfirm = () => {
-    //agregar total para guardar
+   // console.log('ORDER NRO?', myCart)
+   let total = Math.ceil((subTotal * 121) / 100);
+    axios.put(`http://localhost:3000/orders/${myCart}`, {total, status: 'completed'} );
+   //agregar total para guardar
   };
 
   const handlers = {

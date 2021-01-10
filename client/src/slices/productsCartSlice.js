@@ -113,10 +113,12 @@ const productsCartSlice = createSlice({
     },
     [getAllProductsCart.fulfilled]: (state, { payload }) => {
       state.allProductsCart.list = [];
-      //console.log('DATOS ORDERLINE', payload.resp.data[0].orderLines);
+     // console.log('DATOS ORDERLINE', payload.resp.data[0].orderLines);
       state.allProductsCart.status = status.succeded;
       payload.resp.data[0] &&
         payload.resp.data[0].orderLines.map((e, i) => {
+          //console.log('DATOS ORDERLINE NRO ORDEN??', e.orderId);
+          state.allProductsCart.orderId = e.orderId;
           state.allProductsCart.list.push({
             id: e.product.id,
             quantity: e.quantity,
