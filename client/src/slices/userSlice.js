@@ -22,8 +22,8 @@ const initialState_user = {
 export const createUser = createAsyncThunk('user/register', async (payload) => {
   const { user, formik } = payload;
   const user_response = await axios.post(addUserEndpoint, user);
-  const { refresh_token } = user_response.data;
-  tokenManager.setToken(refresh_token.token, refresh_token.expires);
+  const { token } = user_response.data;
+  tokenManager.setToken(token.token, token.expires);
   const resPayload = {
     userRegister_response: user_response.data,
     formik,
@@ -34,8 +34,8 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
 export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   const { user, formik } = payload;
   const userLogin_response = await axios.post(authLoginEndpoint, user);
-  const { refresh_token } = userLogin_response.data;
-  tokenManager.setToken(refresh_token.token, refresh_token.expires);
+  const { token } = userLogin_response.data;
+  tokenManager.setToken(token.token, token.expires);
   const resPayload = {
     userLogin_response: userLogin_response.data,
     formik,
@@ -43,17 +43,19 @@ export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   return resPayload;
 });
 
-export const userLogout = createAsyncThunk('user/logout', async (payload, thunkApi) => {
-  const userLogout_response = await axios.get(userLogoutEndpoint);
-  console.log('LOGGIN OUT');
-  if (userLogout_response.status === 200) {
+export const userLogout = createAsyncThunk(
+  'user/logout',
+  async (payload, thunkApi) => {
+    const userLogout_response = await axios.get(userLogoutEndpoint);
+    console.log('LOGGIN OUT');
+    if (userLogout_response.status === 200) {
       tokenManager.ereaseToken();
-     
     }
-//    const state = thunkApi.getState(); //Consultar con Flavio estas dos líneas y lo que agregamos de 117 a 120
-//    state.user = initialState_user;
-   return;
-});
+    //    const state = thunkApi.getState(); //Consultar con Flavio estas dos líneas y lo que agregamos de 117 a 120
+    //    state.user = initialState_user;
+    return;
+  }
+);
 
 export const userOrders = createAsyncThunk('user/getUserOrders', async (id) => {
   const resp = await axios.get(userOrdersEndpoint + id + '/orders');
@@ -63,7 +65,12 @@ export const userOrders = createAsyncThunk('user/getUserOrders', async (id) => {
 const userSlice = createSlice({
   name: 'user',
   initialState: initialState_user,
-  reducers: { },
+  reducers: {
+    persistUserLogin: (state, { payload }) => {
+      const token = tokenManager.getToken();
+      state.user.info = payload;
+    },
+  },
   extraReducers: {
     [createUser.pending]: (state, action) => {
       state.user.status = status.loading;
@@ -91,7 +98,7 @@ const userSlice = createSlice({
       state.user.status = status.loading;
     },
     [postUserLogin.fulfilled]: (state, { payload }) => {
-      console.log('slice', payload)
+      console.log('slice', payload);
       const { userLogin_response, formik } = payload;
       state.user.status = status.succeded;
       state.user.info = userLogin_response.user;
@@ -117,10 +124,11 @@ const userSlice = createSlice({
     [userLogout.fulfilled]: (state, action) => {
       state.user.info = {};
       state.user.orders = [];
-      state.user.status = "idle";
+      state.user.status = 'idle';
       state.user.error = null;
-    }
+    },
   },
 });
+export const { persistUserLogin } = userSlice.actions;
 
 export default userSlice;

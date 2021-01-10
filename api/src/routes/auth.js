@@ -35,12 +35,12 @@ server.post(
     try {
       const token = makeJWT(req.user, refreshTime);
       const refresh_token = makeJWT(req.user);
-      cookieMaker('jwt', token, res);
+      // cookieMaker('jwt', token, res);
       cookieMaker('refreshToken', refresh_token, res);
       return res.send({
         message: 'Registro exitoso',
         token,
-        refresh_token,
+        // refresh_token,
         user: req.user,
       });
     } catch (error) {
@@ -55,17 +55,17 @@ server.post(
   passport.authenticate('local-login', { session: false }),
   async (req, res) => {
     try {
-    const token = makeJWT(req.user, refreshTime); // guardar los tiempos de refresh en variable y aplicarselo a ambas
-    const refresh_token = makeJWT(req.user);
-    cookieMaker('jwt', token, res);
-    cookieMaker('refreshToken', refresh_token, res);
-    return res.send({
-      message: 'Login exitoso',
-      token,
-      refresh_token,
-      user: req.user,
-    });
-  }catch (error) {
+      const token = makeJWT(req.user, refreshTime); // guardar los tiempos de refresh en variable y aplicarselo a ambas
+      const refresh_token = makeJWT(req.user);
+      // cookieMaker('jwt', token, res);
+      cookieMaker('refreshToken', refresh_token, res);
+      return res.send({
+        message: 'Login exitoso',
+        token,
+        // refresh_token,
+        user: req.user,
+      });
+    } catch (error) {
       console.error(`CATCH LOGIN`, error);
     }
   }
@@ -78,12 +78,12 @@ server.get(
     // console.log('REFRESHING', req.user);
     const token = makeJWT(req.user, refreshTime);
     const refresh_token = makeJWT(req.user);
-    cookieMaker('jwt', token, res);
+    // cookieMaker('jwt', token, res);
     cookieMaker('refreshToken', refresh_token, res);
     return res.send({
       message: 'Refresh exitoso',
       token,
-      refresh_token,
+      // refresh_token,
       user: req.user,
     });
   }
