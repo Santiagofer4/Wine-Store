@@ -60,7 +60,6 @@ function UserForm() {
       history.push('/welcome');
     }
     if (status === 'failed') {
-      console.log('INFO', info);
       error.message.includes('409') ? emailTaken() : history.push('/failure');
     }
   }, [status]);
