@@ -6,12 +6,17 @@ import { Route } from 'react-router-dom';
 import AdminStrain from './LoadCategory/AdminStrain';
 import AdminCategory from './LoadCategory/AdminCategory';
 import AdminProduct from './LoadProduct/AdminProduct';
+import { useSelector } from "react-redux";
+import { userSelector } from "../../selectors/index";
 
 const AdminPanel = () => {
+  const user = useSelector(userSelector);
  
   return (
     <Container className="AdminPanel">
+      {user.isAdmin ? (
       <Paper id="backgroundPaper" className="AdminPanel__Panel">
+        
         <h1 className="AdminPanel__Title">ADMIN PANEL</h1>
         <img
           className="imgAdmin"
@@ -42,6 +47,8 @@ const AdminPanel = () => {
           </li>
         </ul>
       </Paper>
+        ) :
+      null}
       <br></br>
       <h1 className="Admin__H1">Formularios del Administrador</h1>
       <br></br>

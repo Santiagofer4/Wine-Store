@@ -44,7 +44,8 @@ server.get('/productsByCategory/:category', (req, res) => {
 
 //Modificar Producto
 
-server.put('/:id', async (req, res) => {
+server.put('/:id', passport.authenticate('jwt', { session: false }),
+checkAdmin, async (req, res) => {
   let { id } = req.params;
   let {
     name,
