@@ -166,42 +166,34 @@ function Cart() {
   };
 
   useEffect(() => {
-    let logged = isLogged();
-    console.log('Está logueado? 1', logged)
-    if(!logged) {
-      setLogin(false);
-      // info de localStorage
-      let guest = localStorage.getItem('cart');
-      let guestParse = JSON.parse(guest);
-      setSubTotal(total(AllProductsCart));
-      dispatch(cartGuest(guestParse));
-      if ( sincronizar === false){
-        dispatch(sync(true))
+    logged = isLogged();
+
+    if(user) {
+      if(logged) {
+        setLogin(true);
+        // info de DB
+        setSubTotal(total(AllProductsCart));
+        if (sincronizar === false) {
+         
+          dispatch(getAllProductsCart(user.id));
+          dispatch(sync(true));
+        }
       }
-      setSubTotal(total(AllProductsCart));
-    }
-    if(logged) {
-      setLogin(true);
-      // info de DB
-      //console.log('PRODUCTOS 1', AllProductsCart)
-      setSubTotal(total(AllProductsCart));
-      if (sincronizar === false) {
-       
-        dispatch(getAllProductsCart(user.id));
-        dispatch(sync(true));
+    } else {
+      if(!logged) {
+        setLogin(false);
+        // info de localStorage
+        let guest = localStorage.getItem('cart');
+        let guestParse = JSON.parse(guest);
+        setSubTotal(total(AllProductsCart));
+        dispatch(cartGuest(guestParse));
+        if ( sincronizar === false){
+          dispatch(sync(true))
+        }
+        setSubTotal(total(AllProductsCart));
       }
     }
-    //setLogin(true);
-  }, [status,sincronizar]);
-
-  // useEffect(()=>{
-  //   let logged = isLogged();
-
-  //   if(logged) {
-  //       dispatch(getAllProductsCart(user.id));
-  //   }
-
-  // },[])
+  }, [status, sincronizar, user]);
 
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {

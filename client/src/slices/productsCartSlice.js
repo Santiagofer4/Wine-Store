@@ -113,7 +113,7 @@ const productsCartSlice = createSlice({
     },
     [getAllProductsCart.fulfilled]: (state, { payload }) => {
       state.allProductsCart.list = [];
-      console.log('DATOS ORDERLINE', payload.resp.data[0].orderLines);
+      //console.log('DATOS ORDERLINE', payload.resp.data[0].orderLines);
       state.allProductsCart.status = status.succeded;
       payload.resp.data[0] &&
         payload.resp.data[0].orderLines.map((e, i) => {
