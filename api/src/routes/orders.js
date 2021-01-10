@@ -5,7 +5,7 @@ const passport = require('passport');
 
 // Devuelve todas las ordenes
 
-server.get("/",passport.authenticate('jwt', { session: false }),
+server.get("/", passport.authenticate('jwt', { session: false }),
 checkAdmin, (req, res, next) => {
   const { status } = req.query;
 
