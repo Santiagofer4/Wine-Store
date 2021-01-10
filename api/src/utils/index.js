@@ -55,11 +55,7 @@ const makeJWT = (user, expiresIn, prefix) => {
 
   const signedToken = jwt.sign(payload, SECRET_KEY, options);
 
-  //? solo para probar, comentar o borrar luego---->
-  // const token = jwt.verify(signedToken, SECRET_KEY);
-  // console.log('TOKEN VERIFICADO', token); //deberia devoler la misma info que la cargada como payload
-  //?<-----------------
-  if (typeof prefix !== 'undefined') {
+   if (typeof prefix !== 'undefined') {
     return {
       token: prefix + ' ' + signedToken,
       expires: options.expiresIn,
