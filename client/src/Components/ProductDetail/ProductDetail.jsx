@@ -51,6 +51,7 @@ function ProductDetail() {
   const history = useHistory();
   const classes = useStyles();
   let logged = isLogged();
+  console.log("LOGGED", logged)
 
   const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
 
@@ -66,6 +67,10 @@ function ProductDetail() {
   } = productDetail;
 
   useEffect(() => {
+    // if (!logged){
+
+    // }
+    console.log("LOGGED", isLogged())
     dispatch(productReviews(id));
     if (status === "succeded" && reviews.length !== 0) {  // Revisar que haya reviews para que no romper
       setValue(average(reviews));
@@ -174,7 +179,7 @@ function ProductDetail() {
               ></img>
               VOLVER
             </Button>
-            {user.isAdmin ? (
+            {user && user.isAdmin ? (
                               <>
                              
             <Button size="small" onClick={editHandler}>
