@@ -22,7 +22,7 @@ import tokenManager from '../utils/tokenManager';
 import { isLogged } from '../utils/index';
 import store from '../../store';
 import { userLogout } from '../../slices/userSlice.js';
-import {logout} from '../../slices/productsCartSlice';
+import {logout, getAllProductsCart} from '../../slices/productsCartSlice';
 //import { refresh } from "../../slices/productsCartSlice.js" // no existe esa función
 
 function NavBar() {
@@ -218,7 +218,10 @@ function NavBar() {
             </Popper>
           </Grid>
           <div id="cartDiv">
-            <Link id="cart" to="/cart" className="Nav__Link">
+            <Link id="cart" to="/cart" className="Nav__Link"
+
+            >
+          
               <img
                 id="imgCart"
                 src="https://i.ibb.co/FsngVZ5/carrito1.png"

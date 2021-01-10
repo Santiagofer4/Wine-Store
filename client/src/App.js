@@ -21,11 +21,13 @@ import axios from 'axios';
 import ProtectRoute from './Components/ProtectRoute/ProtectRoute';
 import Logout from './Components/Contenido/Logout';
 import { isLogged } from './Components/utils/index';
+import tokenManager from './Components/utils/tokenManager';
+
 function App() {
   // //!SOLUCION CAVERNICOLA!
-  // axios.defaults.headers.common['Authorization'] = localStorage.getItem(
-  //   'token'
-  // );
+  if (isLogged()) {
+    axios.defaults.headers.common['Authorization'] = tokenManager.getToken();
+  }
   axios.defaults.withCredentials = true;
   // //!<-----------------
 
@@ -46,7 +48,7 @@ function App() {
         <Route path="/admin/form-product" component={ProductForm} />
         <Route path="/form/test" component={TestForm} />
         <Route path="/admin" component={AdminPanel} />
-        <Route path="/cart" component={Cart}/>
+        <Route path="/cart" component={Cart} />
         {/* <Route path="/cart" render={() => isLogged() ? <Cart logueado={true}/> : (<Cart logueado={true}/> )} /> */}
         <Route path="/order-table" component={OrderTable} />
         <Route path="/form/user/login" component={UserLogin} />

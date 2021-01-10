@@ -23,8 +23,8 @@ export const getAllProductsCart = createAsyncThunk(
     const resp = await axios.get(getAllProductsCartEnpoint + id + '/cart');
     let cart_response = {
       resp,
-      id
-    }
+      id,
+    };
     return cart_response;
   }
 );
@@ -32,7 +32,7 @@ export const getAllProductsCart = createAsyncThunk(
 export const postProductToCart = createAsyncThunk(
   'cart/postProductToCart',
   async (payload, thunkApi) => {
-    console.log('PAYLOAD', payload)
+    // console.log('PAYLOAD', payload)
     const { userId, detail, increment } = payload;
     const cart_item = await axios.post(
       usersEndpoint + userId + '/cart',
@@ -79,32 +79,41 @@ const productsCartSlice = createSlice({
     sync(state, action) {
       state.allProductsCart.sync = action.payload;
     },
-    cartGuest(state, action) {    // Pisa el estado con lo que está en el localStorage
-      console.log('ACTION', action)
-      state.allProductsCart.status = "succeded";
+    cartGuest(state, action) {
+      // Pisa el estado con lo que está en el localStorage
+      console.log('ACTION', action);
+      state.allProductsCart.status = 'succeded';
       state.allProductsCart.list = action.payload ? action.payload : [];
     },
-    logout(state,action){
-
-     state.allProductsCart.list = [];
-     state.allProductsCart.userId = 0;
-     state.allProductsCart.orderId= null;
-     state.allProductsCart.status= 'idle';
-     state.allProductsCart.sync= false;
-     state.allProductsCart.error= null;
-
+    logout(state, action) {
+      state.allProductsCart.list = [];
+      state.allProductsCart.userId = 0;
+      state.allProductsCart.orderId = null;
+      state.allProductsCart.status = 'idle';
+      state.allProductsCart.sync = false;
+      state.allProductsCart.error = null;
+      // state.allProductsCart = initialState_product;
     },
-    login(state,action){
+    login(state, action) {
       state.allProductsCart.userId = action.payload;
-    }
+    },
 
+    resetState(state, action) {
+      state.allProductsCart.list = [];
+      state.allProductsCart.orderId = null;
+      state.allProductsCart.status = 'idle';
+      state.allProductsCart.sync = false;
+      state.allProductsCart.error = null;
+      // state.allProductsCart = initialState_product;
+    },
   },
   extraReducers: {
     [getAllProductsCart.pending]: (state, action) => {
       state.allProductsCart.status = status.loading;
     },
     [getAllProductsCart.fulfilled]: (state, { payload }) => {
-      console.log('Payload',payload)
+      state.allProductsCart.list = [];
+      console.log('DATOS ORDERLINE', payload.resp.data[0].orderLines);
       state.allProductsCart.status = status.succeded;
       payload.resp.data[0] &&
         payload.resp.data[0].orderLines.map((e, i) => {
@@ -116,10 +125,10 @@ const productsCartSlice = createSlice({
             name: e.product.name,
             stock: e.product.stock,
             image: e.product.image,
-
+            productId: e.productId,
           });
         });
-        state.allProductsCart.userId = payload.id
+      state.allProductsCart.userId = payload.id;
     },
     [getAllProductsCart.rejected]: (state, action) => {
       state.allProductsCart.status = status.failed;
@@ -158,9 +167,11 @@ const productsCartSlice = createSlice({
     [postProductToCart.fulfilled]: (state, { payload }) => {
       const { order, orderLine, detail, increment } = payload;
       let idx;
+      // console.log('PAYLOAD', payload)
       state.allProductsCart.status = status.succeded;
-      state.allProductsCart.sync = true;
+      // state.allProductsCart.sync = true;
       state.allProductsCart.userId = order.userId;
+      // console.log( 'ORDERLINE PRODUCTID',orderLine.productId)
       const cartItem = state.allProductsCart.list.find(
         ({ productId }) => productId === orderLine.productId
       );
@@ -170,7 +181,9 @@ const productsCartSlice = createSlice({
         );
       }
       if (increment) {
+        // console.log('CARTITEM', cartItem)
         if (!cartItem) {
+          console.log('DETALLE', orderLine);
           state.allProductsCart.list.push({ ...orderLine, ...detail });
         } else {
           if (
@@ -197,6 +210,7 @@ export const {
   refresh,
   logout,
   login,
+  resetState,
   subtractToCart,
   deleteFromCart,
   deleteCart,

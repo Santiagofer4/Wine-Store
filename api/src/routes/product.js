@@ -2,13 +2,15 @@ const server = require('express').Router();
 const { Sequelize } = require('sequelize');
 const { Product, Category } = require('../db.js');
 const categoryRouter = require('./category.js');
+const { checkAdmin } = require('../utils/authTools.js');
+const passport = require('passport');
 
 server.use('/category', categoryRouter);
 
 //Listado de todos los Productos
 
 server.get('/', (req, res, next) => {
-   Product.findAll()
+  Product.findAll()
     .then((products) => {
       res.send(products);
     })
@@ -19,7 +21,7 @@ server.get('/', (req, res, next) => {
 
 server.get('/:id', (req, res) => {
   let { id } = req.params;
-   if (!id) return res.status(404).send('No existe el producto');
+  if (!id) return res.status(404).send('No existe el producto');
   Product.findByPk(id).then((product) => {
     return res.status(200).send(product);
   });
@@ -89,29 +91,34 @@ server.put('/:id', async (req, res) => {
 
 //Eliminar un Producto
 
-server.delete('/:id', async (req, res) => {
-  let { id } = req.params;
-  let wine;
-  let categories;
+server.delete(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  checkAdmin,
+  async (req, res) => {
+    let { id } = req.params;
+    let wine;
+    let categories;
 
-  if (!id) return res.status(400).send('No se recibio ID');
-  try {
-    //* Instanciamos el prod a borrar y las categorias correspondientes a ese prod
-    wine = await Product.findOne({ where: { id } });
-    categories = await Category.findAll({
-      include: { model: Product, where: { id } },
-    });
-    const payload = {
-      wine,
-      categories,
-    };
-    await wine.destroy();
-    return res.status(200).send(payload); //? devolvemos el producto borrado con sus categorias correspondientes
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send('No se pudo borrar el producto');
+    if (!id) return res.status(400).send('No se recibio ID');
+    try {
+      //* Instanciamos el prod a borrar y las categorias correspondientes a ese prod
+      wine = await Product.findOne({ where: { id } });
+      categories = await Category.findAll({
+        include: { model: Product, where: { id } },
+      });
+      const payload = {
+        wine,
+        categories,
+      };
+      await wine.destroy();
+      return res.status(200).send(payload); //? devolvemos el producto borrado con sus categorias correspondientes
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send('No se pudo borrar el producto');
+    }
   }
-});
+);
 
 //Borrar categoría de un producto
 

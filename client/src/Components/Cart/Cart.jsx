@@ -33,24 +33,26 @@ function Cart() {
 
   const handleDelete = () => {
     dispatch(deleteAllProductsFromCart({ userId: user.id }));
+    
   };
 
 // Mismo proceso que con el increment, pero a diferencia de tener en cuenta el stock ahora reviza
 // que la cantidad nunca sea inferior a 1, el increment esta en false, por lo que en la BD y en el
 // store se procede a reducir la cantidad, siempre comprobando que sea >= a 1 
 
-  const decrementHandler = (event, price, quantity) => {
+  const decrementHandler = (event, detail) => {
     if (login){
 
       let id = event.target.name * 1;
-      const payload = {                                       // orderline que se envia por post
-        id,
-        price,
-        quantity,
+      const payload = {                                        // orderline que se envia por post
+        id: detail.id,
+        price: detail.price,
+        quantity:detail.quantity,
+        detail,
         userId: user.id,
-        increment: false,                                     // cuando true aumenta la cantidad
-      };                                                      // en BD y en el store
-      if (quantity > 1) {
+        increment: false,                                       // cuando true aumenta la cantidad 
+      };                                                         // en BD y en el store
+      if (detail.quantity > 1) {
         let valueInput = document.getElementById(id).value;   // cantidad de productos a comprar
         if (valueInput > 1) {
           dispatch(postProductToCart(payload));               // action con post a la db 
@@ -61,12 +63,12 @@ function Cart() {
     if (!login){ //funciona pero no renderiza.
       let id = event.target.name * 1;
       const payload = {                                        
-        id,
-        price,
-        quantity,
+        id : detail.id,
+        price:detail.price,
+        quantity: detail.quantity,
         userId: user.id,
       };   
-      if (quantity > 1) {       
+      if (detail.quantity > 1) {       
         dispatch(sync(false))
         let valueInput = document.getElementById(id).value;
         if (valueInput > 1){
@@ -90,20 +92,20 @@ function Cart() {
 // esta en el store y luego se hace lo mismo que en la ruta, cambiando la cantidad en el store y
 // cambiando la cantidad en el Imput del Item
 
-  const incrementHandler = (event, price, quantity, stock) => {
+  const incrementHandler = (event, detail) => {
     if (login) {
 
       let id = event.target.name * 1;
       let valueInput = document.getElementById(id).value;      // cantidad de productos a comprar
       const payload = {                                        // orderline que se envia por post
-        id,
-        price,
-        quantity,
-        stock,
+        id: detail.id,
+        price: detail.price,
+        quantity:detail.quantity,
+         detail,
         userId: user.id,
         increment: true,                                       // cuando true aumenta la cantidad 
       };                                                       // en BD y en el store
-      if (valueInput < stock) {       
+      if (valueInput <  detail.stock) {       
         dispatch(postProductToCart(payload));                  // action con post a la db 
       }                                                        // productCartSlice
     }
@@ -112,13 +114,13 @@ function Cart() {
       let id = event.target.name * 1;
       let valueInput = document.getElementById(id).value;
       const payload = {                                        
-        id,
-        price,
-        quantity,
-        stock,
+        id: detail.id,
+        price: detail.price,
+        quantity: detail.quantity,
+        stock: detail.stock,
         userId: user.id,
        };   
-      if (valueInput < stock) {       
+      if (valueInput < detail.stock) {       
        functionCartGuest(payload)
        dispatch(sync(false))
       }       
@@ -160,6 +162,8 @@ function Cart() {
       // info de localStorage
       let guest = localStorage.getItem('cart');
       let guestParse = JSON.parse(guest);
+      setSubTotal(total(AllProductsCart));
+      console.log('ti vieja',subTotal);
       dispatch(cartGuest(guestParse));
       if ( sincronizar === false){
         dispatch(sync(true))
@@ -171,17 +175,24 @@ function Cart() {
       //console.log('PRODUCTOS 1', AllProductsCart)
       setSubTotal(total(AllProductsCart));
       if (sincronizar === false) {
-        console.log('PRODUCTOS 2', user)
+       
         dispatch(getAllProductsCart(user.id));
         dispatch(sync(true));
       }
     }
     //setLogin(true);
-    console.log('LOGIN', login);
   }, [status,sincronizar]);
 
+  // useEffect(()=>{
+  //   let logged = isLogged();
+
+  //   if(logged) {
+  //       dispatch(getAllProductsCart(user.id));
+  //   }
+
+  // },[])
+
   if (status === 'succeded') {
-    console.log(AllProductsCart)
     if (AllProductsCart.length > 0) {
       return (
         <div className="ShoppingCartBackImg">

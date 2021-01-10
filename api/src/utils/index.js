@@ -35,7 +35,7 @@ const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
-const makeJWT = (user, expiresIn) => {
+const makeJWT = (user, expiresIn, prefix) => {
   /**
    * func para crear un jw token
    * recibe user y devuelve un token con la info del user
@@ -59,15 +59,17 @@ const makeJWT = (user, expiresIn) => {
   // const token = jwt.verify(signedToken, SECRET_KEY);
   // console.log('TOKEN VERIFICADO', token); //deberia devoler la misma info que la cargada como payload
   //?<-----------------
-
-  // return {
-  //   token: 'Bearer ' + signedToken,
-  //   expires: options.expiresIn,
-  // };
-  return {
-    token: signedToken,
-    expires: options.expiresIn,
-  };
+  if (typeof prefix !== 'undefined') {
+    return {
+      token: prefix + ' ' + signedToken,
+      expires: options.expiresIn,
+    };
+  } else {
+    return {
+      token: signedToken,
+      expires: options.expiresIn,
+    };
+  }
 };
 
 const cookieMaker = (name, token, res) => {
@@ -81,8 +83,8 @@ const cookieMaker = (name, token, res) => {
 };
 
 const refreshTime = () => {
-  60 * 5 * 1000
-}
+  60 * 5 * 1000;
+};
 
 exports.extractDigitsFromString = extractDigitsFromString;
 exports.capitalize = capitalize;

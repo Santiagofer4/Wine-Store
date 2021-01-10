@@ -111,7 +111,7 @@ module.exports = function (passport) {
 
   const cookieExtractor = (req) => {
     let token = null;
-    if (req && req.signedCookies) token = req.signedCookies.jwt.token;
+    if (req && req.signedCookies) token = req.signedCookies.refreshToken.token;
     return token;
   };
 
@@ -139,7 +139,7 @@ module.exports = function (passport) {
         console.log('RETURN JWT', user_obj);
         return done(null, user_obj, { message: 'Token Autorizado' });
       } catch (error) {
-        return done(error);
+        return done('CATCHING', error);
       }
     })
   );
@@ -155,7 +155,7 @@ module.exports = function (passport) {
     new JWTstrategy(jwt_options, async (jwt_payload, done) => {
       try {
         const user = await User.findOne({
-          where: { email: jwt_payload.sub },
+          where: { email: jwt_payload.user.email },
         });
         if (!user) {
           return done(null, false, { message: 'No se encontro el usuario' });
