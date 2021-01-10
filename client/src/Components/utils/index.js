@@ -138,10 +138,12 @@ export const average = (array) => {
 };
 
 export const functionCartGuest = (payload, decrement, erase) => {
-  console.log('DECREMENT', decrement);
   let storageSTRG = localStorage.getItem('cart');
+  console.log('STORAGESTRG', storageSTRG);
+
   if (storageSTRG) {
     let storage = JSON.parse(storageSTRG);
+    console.log('STORAGE', storage);
 
     let index = storage.findIndex((product) => product.id === payload.id);
 
