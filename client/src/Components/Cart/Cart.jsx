@@ -30,10 +30,20 @@ function Cart() {
   const statusUser = useSelector(userStatusSelector);
   const [subTotal, setSubTotal] = useState(0);
   const [login, setLogin] = useState(false);
+  let logged = isLogged();
 
   const handleDelete = () => {
-    dispatch(deleteAllProductsFromCart({ userId: user.id }));
-    
+    if(login){
+
+      dispatch(deleteAllProductsFromCart({ userId: user.id }));
+    }
+    if(!login){
+
+      let storage = []
+        localStorage.removeItem('cart');
+        localStorage.setItem('cart', JSON.stringify(storage));
+        dispatch(sync(false))
+    }
   };
 
 // Mismo proceso que con el increment, pero a diferencia de tener en cuenta el stock ahora reviza
@@ -41,7 +51,7 @@ function Cart() {
 // store se procede a reducir la cantidad, siempre comprobando que sea >= a 1 
 
   const decrementHandler = (event, detail) => {
-    if (login){
+    if (logged){
 
       let id = event.target.name * 1;
       const payload = {                                        // orderline que se envia por post
@@ -60,13 +70,13 @@ function Cart() {
       }
     }
 
-    if (!login){ //funciona pero no renderiza.
+    if (!logged){ //funciona pero no renderiza.
       let id = event.target.name * 1;
       const payload = {                                        
         id : detail.id,
         price:detail.price,
         quantity: detail.quantity,
-        userId: user.id,
+      //  userId: user.id,
       };   
       if (detail.quantity > 1) {       
         dispatch(sync(false))
@@ -93,8 +103,8 @@ function Cart() {
 // cambiando la cantidad en el Imput del Item
 
   const incrementHandler = (event, detail) => {
-    if (login) {
-
+    if (logged) {
+      console.log('Está logueado? dentro increment handler con log', logged)
       let id = event.target.name * 1;
       let valueInput = document.getElementById(id).value;      // cantidad de productos a comprar
       const payload = {                                        // orderline que se envia por post
@@ -110,7 +120,8 @@ function Cart() {
       }                                                        // productCartSlice
     }
 
-    if (!login){ //funciona pero no renderiza.
+    if (!logged){ //funciona pero no renderiza.
+      console.log('Está logueado? dentro increment handler sin log', logged)
       let id = event.target.name * 1;
       let valueInput = document.getElementById(id).value;
       const payload = {                                        
@@ -118,7 +129,7 @@ function Cart() {
         price: detail.price,
         quantity: detail.quantity,
         stock: detail.stock,
-        userId: user.id,
+        //userId: user.id,
        };   
       if (valueInput < detail.stock) {       
        functionCartGuest(payload)
@@ -128,7 +139,7 @@ function Cart() {
   };
 
   const deleteItemHandler = ({ id, userId }) => {
-    if (login){
+    if (logged){
       const payload = {                                          
         productId: id,                                         // id del producto a eliminar
         userId,                                                // id del usuario para saber de que 
@@ -137,7 +148,7 @@ function Cart() {
 
     }
 
-    if (!login){
+    if (!logged){
       const payload = id;                                          
        functionCartGuest(payload, null, true)                                             
        dispatch(sync(false))
@@ -156,18 +167,18 @@ function Cart() {
 
   useEffect(() => {
     let logged = isLogged();
-
+    console.log('Está logueado? 1', logged)
     if(!logged) {
       setLogin(false);
       // info de localStorage
       let guest = localStorage.getItem('cart');
       let guestParse = JSON.parse(guest);
       setSubTotal(total(AllProductsCart));
-      console.log('ti vieja',subTotal);
       dispatch(cartGuest(guestParse));
       if ( sincronizar === false){
         dispatch(sync(true))
       }
+      setSubTotal(total(AllProductsCart));
     }
     if(logged) {
       setLogin(true);
@@ -202,7 +213,7 @@ function Cart() {
               <hr className="line" />
                <ul>
                 {AllProductsCart.map((product) => {
-                  return <CartItem  key={product.id} prod={product} handlers={handlers} />;
+                  return <CartItem  key={ product && product.id} prod={product} handlers={handlers} />;
                 })}
               </ul>
             </div>

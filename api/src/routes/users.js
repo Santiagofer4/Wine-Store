@@ -1,12 +1,16 @@
 const server = require('express').Router();
 const { User, Order, Product, OrderLine, Review } = require('../db.js');
+const { checkAdmin } = require('../utils/authTools.js');
+const passport = require('passport');
+
 //const cartRouter = require('./cart.js');
 
 //server.use('/:id/cart', cartRouter);
 
 //Borrar un USER by ID
 
-server.delete('/:id', (req, res) => {
+server.delete('/:id', passport.authenticate('jwt', { session: false }),
+checkAdmin, (req, res) => {
   let { id } = req.params;
 
   if (!id) return res.status(400).send('No se encontró el usuario a eliminar');
@@ -93,7 +97,8 @@ server.delete('/:idUser/cart/:productId', (req, res) => {
 
 // Listar todos los USERS
 
-server.get('/', (req, res, next) => {
+server.get('/', passport.authenticate('jwt', { session: false }),
+checkAdmin, (req, res, next) => {
   User.findAll()
     .then((user) => {
       return res.status(200).send(user);

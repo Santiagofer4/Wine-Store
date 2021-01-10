@@ -2,9 +2,11 @@ import React from 'react';
 import { Button, Container } from '@material-ui/core';
 import { userSelector } from "../../../selectors";
 import { useSelector } from 'react-redux';
+import { isLogged } from "../../utils/index";
 
 function CartItem(props) {
   const user = useSelector(userSelector);
+  let logged = isLogged();
   const { id, image, name, price, quantity, stock } = props.prod;
   const {
     deleteItemHandler,
@@ -31,7 +33,7 @@ function CartItem(props) {
             <a href="#" className="Cart__DeleteProduct">
               <i
                 class="fas fa-trash-alt"
-                onClick={(e) => deleteItemHandler({ id, userId: user.id })}
+                onClick={ logged ? ((e) => deleteItemHandler({ id, userId: user.id })) : ((e) => deleteItemHandler({ id }))}
               ></i>
             </a>
             <Button

@@ -115,20 +115,19 @@ export const search = (id, array) => {
 };
 
 export const isLogged = () => {
-  //return tokenManager.getToken();
-
+ // return tokenManager.getToken();
   let token = tokenManager.getToken();
-   let refresh_token;
-   if (!token) {
-     const persistLogin = async () => {
-       refresh_token = await tokenManager.getRefreshedToken();
-       const { user } = refresh_token;
-       store.dispatch(persistUserLogin(user));
-     };
-     persistLogin();
-     return refresh_token ? true : false;
-   }
-   return token;
+  let refresh_token;
+  if (!token) {
+    const persistLogin = async () => {
+      refresh_token = await tokenManager.getRefreshedToken();
+      const { user } = refresh_token;
+      store.dispatch(persistUserLogin(user));
+    };
+    persistLogin();
+    return refresh_token ? true : false;
+  }
+  return token;
 };
 
 export const average = (array) => {
@@ -139,10 +138,12 @@ export const average = (array) => {
 };
 
 export const functionCartGuest = (payload, decrement, erase) => {
-  console.log('DECREMENT', decrement);
   let storageSTRG = localStorage.getItem('cart');
+  console.log('STORAGESTRG', storageSTRG);
+
   if (storageSTRG) {
     let storage = JSON.parse(storageSTRG);
+    console.log('STORAGE', storage);
 
     let index = storage.findIndex((product) => product.id === payload.id);
 

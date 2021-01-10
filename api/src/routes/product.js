@@ -123,7 +123,8 @@ server.delete(
 
 //Borrar categoría de un producto
 
-server.delete('/:idProduct/category/:idCategory', (req, res) => {
+server.delete('/:idProduct/category/:idCategory',passport.authenticate('jwt', { session: false }),
+checkAdmin, (req, res) => {
   const { idProduct, idCategory } = req.params;
 
   if (!idProduct || idCategory)
@@ -141,7 +142,8 @@ server.delete('/:idProduct/category/:idCategory', (req, res) => {
 
 //Crear un nuevo Producto
 
-server.post('/', async (req, res) => {
+server.post('/',passport.authenticate('jwt', { session: false }),
+checkAdmin, async (req, res) => {
   let {
     name,
     price,
@@ -181,7 +183,8 @@ server.post('/', async (req, res) => {
 
 //Agregar categoría a un Producto
 
-server.post('/:idProduct/category', (req, res) => {
+server.post('/:idProduct/category',passport.authenticate('jwt', { session: false }),
+checkAdmin, (req, res) => {
   let { idProduct } = req.params;
   let { Category } = req.body;
 
