@@ -168,10 +168,10 @@ function Cart() {
     }
   };
 
-  const handleConfirm = async () => {
+  const handleConfirm = () => {
    if(login) {
      let total = Math.ceil((subTotal * 121) / 100);
-     await dispatch(modificateOrder({ myCart, total, status: 'completed' }));
+     dispatch(modificateOrder({ myCart, total, status: 'completed' }));
      //axios.put(`http://localhost:3000/orders/${myCart}`, { total, status: 'completed' });
    }
    if(!login) {
@@ -219,6 +219,10 @@ function Cart() {
     }
   }, [sincronizar, user]);
 
+  useEffect(() => {
+    setSubTotal(total(AllProductsCart));
+  }, [status, dispatch]);
+  
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {
       return (

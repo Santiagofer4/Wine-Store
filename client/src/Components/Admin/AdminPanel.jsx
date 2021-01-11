@@ -1,4 +1,4 @@
-import React from 'react';
+import React,  { useEffect } from 'react';
 import { Paper, Container } from '@material-ui/core';
 import './AdminPanel.modules.css';
 import { Link } from 'react-router-dom';
@@ -6,11 +6,26 @@ import { Route } from 'react-router-dom';
 import AdminStrain from './LoadCategory/AdminStrain';
 import AdminCategory from './LoadCategory/AdminCategory';
 import AdminProduct from './LoadProduct/AdminProduct';
-import { useSelector } from 'react-redux';
-import { userSelector } from '../../selectors/index';
+import { useDispatch, useSelector } from 'react-redux';
+import { userSelector, userStatusSelector } from '../../selectors/index';
+import { userPromote } from '../../slices/userSlice';
 
 const AdminPanel = () => {
+  const dispatch = useDispatch();
   const user = useSelector(userSelector);
+  const userStatus = useSelector(userStatusSelector);
+
+  const handlePromote = () => {
+    let id = document.getElementById('user').value;
+    //axios.put(`http://localhost:3000/auth/${user}`)
+    dispatch(userPromote(id));
+  }
+
+  useEffect(() => {
+    if(userStatus === 'succeded') {
+      alert('El usuario ha sido promovido a Admin')
+    }
+  }, [userStatus]);
 
   return (
     <Container className="AdminPanel">
@@ -42,6 +57,16 @@ const AdminPanel = () => {
             <li>
               <Link className="links" to="/order-table">
                 Ver Órdenes
+              </Link>
+            </li>
+            <li>
+              <input
+                id="user"
+                className="inputUserPromote"
+                placeholder="Usuario a promover"
+              />
+              <Link className="links" onClick={handlePromote}>
+                Promover usuario a Admin
               </Link>
             </li>
           </ul>

@@ -6,6 +6,7 @@ import {
   addUserEndpoint,
   authLoginEndpoint,
   userOrdersEndpoint,
+  userPromoteEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 import tokenManager from '../Components/utils/tokenManager';
@@ -60,6 +61,11 @@ export const userLogout = createAsyncThunk(
 
 export const userOrders = createAsyncThunk('user/getUserOrders', async (id) => {
   const resp = await axios.get(userOrdersEndpoint + id + '/orders');
+  return resp;
+});
+
+export const userPromote = createAsyncThunk('user/promote', async (id) => {
+  const resp = await axios.put(userPromoteEndpoint + id);
   return resp;
 });
 
@@ -128,6 +134,16 @@ const userSlice = createSlice({
       state.user.orders = [];
       state.user.status = 'idle';
       state.user.error = null;
+    },
+    [userPromote.pending]: (state, action) => {
+      state.user.status = status.loading;
+    },
+    [userPromote.fulfilled]: (state, { payload }) => {
+      state.user.status = status.succeded;
+    },
+    [userPromote.rejected]: (state, action) => {
+      state.user.status = status.failed;
+      state.user.error = action.error;
     },
   },
 });
