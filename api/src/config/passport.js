@@ -8,11 +8,6 @@ const makeJWT = require('../utils');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = require('./jwt').SECRET_KEY;
 
-/**
- * CONFIGURACION DE PASSPORT
- * TODO: hacer mas modular dividiendo cada `opcion` y `estrategia` en su propia variable, luego llamarlas en el use y exportarlas
- */
-
 const isLogged = (req, res, next) => {
   if (req.isLogged()) {
     return next();
@@ -22,7 +17,6 @@ const isLogged = (req, res, next) => {
 };
 
 const isAdmin = () => {
-  //será necesario pasarle "false" por defecto? Evitaría algún problema?
   return function (req, res, next) {
     if (!req.user || (req.user.isAdmin = false)) {
       return response.sendStatus(401);
@@ -92,6 +86,7 @@ module.exports = function (passport) {
         try {
           const user = await User.findOne({ where: { email } });
           if (!user) {
+            console.log('NO SUCH USER');
             return done(null, false, { message: 'No se encontro el usuario' });
           }
           const validate = await user.compare(password);
@@ -111,7 +106,8 @@ module.exports = function (passport) {
 
   const cookieExtractor = (req) => {
     let token = null;
-    if (req && req.signedCookies) token = req.signedCookies.refreshToken.token;
+    if (req.signedCookies && req.signedCookies.refreshToken)
+      token = req.signedCookies.refreshToken.token;
     return token;
   };
 
