@@ -35,6 +35,7 @@ function ProductCard(props) {
       userId,
       quantity: 1,
       increment: true,
+      name: detail.name,
     };
     dispatch(postProductToCart(payload));
   }
