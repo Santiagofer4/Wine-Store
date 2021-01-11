@@ -78,11 +78,12 @@ export const deleteSingleProdFromCart = createAsyncThunk(
 );
 
 export const modificateOrder = createAsyncThunk(
-  'cart/deleteSingleProdFromCart',
+  'cart/modifyStatusCart',
   async (payload) => {
     const { myCart, total, status } = payload;
     const modificatedOrder = await axios.put(
-      getOrderTableEndpoint + myCart, payload
+      getOrderTableEndpoint + myCart,
+      payload
     );
     return modificatedOrder;
   }

@@ -36,6 +36,7 @@ export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   const { user, formik } = payload;
   const userLogin_response = await axios.post(authLoginEndpoint, user);
   const { token } = userLogin_response.data;
+  console.log('TOken recibido', token);
   tokenManager.setToken(token.token, token.expires);
   const resPayload = {
     userLogin_response: userLogin_response.data,
@@ -76,6 +77,9 @@ const userSlice = createSlice({
       const token = tokenManager.getToken();
       state.user.info = payload;
     },
+    resetStatus: (state, action) => {
+      state.user.status = status.idle;
+    },
   },
   extraReducers: {
     [createUser.pending]: (state, action) => {
@@ -104,7 +108,6 @@ const userSlice = createSlice({
       state.user.status = status.loading;
     },
     [postUserLogin.fulfilled]: (state, { payload }) => {
-      console.log('slice', payload);
       const { userLogin_response, formik } = payload;
       state.user.status = status.succeded;
       state.user.info = userLogin_response.user;
@@ -121,7 +124,6 @@ const userSlice = createSlice({
     [userOrders.fulfilled]: (state, { payload }) => {
       state.user.status = status.succeded;
       state.user.orders = payload.data;
-      console.log('PAYLOAD.DATA USER ORDERS', payload.data);
     },
     [userOrders.rejected]: (state, action) => {
       state.user.status = status.failed;
@@ -145,6 +147,6 @@ const userSlice = createSlice({
     },
   },
 });
-export const { persistUserLogin } = userSlice.actions;
+export const { persistUserLogin, resetStatus } = userSlice.actions;
 
 export default userSlice;

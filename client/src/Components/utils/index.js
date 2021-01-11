@@ -140,7 +140,6 @@ export const isAdmin = async () => {
   if (!is_logged) return false;
   const state = store.getState();
   let user = state.user.user.info;
-  console.log('ADMIN?', user.isAdmin);
   return user.isAdmin ? true : false;
 };
 
@@ -148,7 +147,6 @@ export const average = (array) => {
   let total = 0;
   for (let i = 0; i < array.length; i++) {
     total = total + array[i].points;
-    //console.log('Prueba promedio',total,array.length)
   }
   return total / array.length;
 };
@@ -156,20 +154,17 @@ export const average = (array) => {
 export const functionCartGuest = (payload, decrement, erase) => {
   const dispatch = store.dispatch;
   let storageSTRG = localStorage.getItem('cart');
-  // console.log('STORAGESTRG', storageSTRG);
   if (!storageSTRG) {
     localStorage.setItem('cart', JSON.stringify([payload]));
     return;
   }
 
   let storage = JSON.parse(storageSTRG);
-  // console.log('STORAGE', storage);
 
   let index = storage.findIndex((product) => product.id === payload.id);
 
   if (decrement) {
     // decrement es true cuando se envía desde el botón (-)
-    // console.log('ENTRÉ A DECREMENT', storage[index].quantity);
     dispatch(RemoveProductFromCart(payload));
     storage[index].quantity--;
   } else if (!erase) {

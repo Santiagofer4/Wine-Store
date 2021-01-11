@@ -42,7 +42,6 @@ function Notifier() {
           },
           onExited: (event, myKey) => {
             // remove this snackbar from redux store
-            console.log('MYKEY', myKey);
             dispatch(removeSnackbar(myKey));
             removeDisplayed(myKey);
           },
