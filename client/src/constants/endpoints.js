@@ -29,6 +29,8 @@ export const UserLoginEndpoint = baseEndpoint + 'auth/login';
 
 export const userLogoutEndpoint = baseEndpoint + 'auth/logout';
 
+export const userPromoteEndpoint = baseEndpoint + 'auth/'; //%{userId}
+
 export const userOrdersEndpoint = baseEndpoint + 'users/'; // ${id}/orders
 
 export const addUserReviewEndpoint = baseEndpoint + 'review/'; //${productId}

@@ -90,7 +90,6 @@ export const reviewsListSelector = (state) => state.reviews.reviews.info;
 export const reviewsListStatusSelector = (state) =>
   state.reviews.reviews.status;
 
-export const myCartSelector = (state) =>
-  state.productsCart.allProductsCart.orderId;
+export const myCartSelector = (state) => state.productsCart.allProductsCart.orderId;
 
 export const notificationListSelector = (state) => state.notifications.list;

@@ -187,7 +187,7 @@ server.post('/:userId/cart', async (req, res) => {
 
     if (!newOrderLineCreated) {
       await newOrderLine.update({
-        quantity
+        quantity: increment ? quantity + 1 : quantity - 1;
       }, { where: { productId: id } });
     }
 
