@@ -48,7 +48,6 @@ export const deleteProduct = createAsyncThunk(
 export const getProductSearch = createAsyncThunk(
   'product/getProductSearch',
   async (inputSearch) => {
-    //console.log('INPUT SEARCH', inputSearch);
     console.log('ENDPOINT', searchProductEndpoint + `${inputSearch}`);
     const resp = await axios.get(searchProductEndpoint + `${inputSearch}`);
     return resp;

@@ -26,9 +26,7 @@ function UserLogin() {
     password: '',
   };
 
-  console.log('AFUERA', userStatus);
   const handleSubmit = (values, formik) => {
-    console.log('primero', userStatus);
     const payload = {
       user: {
         email: values.email,

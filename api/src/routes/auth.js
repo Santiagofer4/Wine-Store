@@ -57,7 +57,6 @@ server.post(
     session: false,
   }),
   async (req, res) => {
-    console.log('LOGIN RE', req.authInfo, req.isAuthenticated(), req.info);
     try {
       const token = makeJWT(req.user, refreshTime, 'Bearer'); // guardar los tiempos de refresh en variable y aplicarselo a ambas
       const refresh_token = makeJWT(req.user);
