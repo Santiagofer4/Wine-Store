@@ -35,6 +35,7 @@ export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   const { user, formik } = payload;
   const userLogin_response = await axios.post(authLoginEndpoint, user);
   const { token } = userLogin_response.data;
+  console.log('TOken recibido', token);
   tokenManager.setToken(token.token, token.expires);
   const resPayload = {
     userLogin_response: userLogin_response.data,
