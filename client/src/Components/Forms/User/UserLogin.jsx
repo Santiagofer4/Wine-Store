@@ -12,12 +12,12 @@ import './UserForm.modules.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
-import { postUserLogin } from '../../../slices/userSlice.js';
-import {postProductToCart, login} from '../../../slices/productsCartSlice.js'
-import { userSelector, userStatusSelector} from '../../../selectors';
+import { postUserLogin, resetStatus } from '../../../slices/userSlice.js';
+import { postProductToCart, login } from '../../../slices/productsCartSlice.js';
+import { userSelector, userStatusSelector } from '../../../selectors';
 function UserLogin() {
   const dispatch = useDispatch();
-  const user = useSelector(userSelector)
+  const user = useSelector(userSelector);
   const userStatus = useSelector(userStatusSelector);
   const history = useHistory();
   const [viewPassword, setViewPassword] = useState(false);
@@ -26,9 +26,9 @@ function UserLogin() {
     password: '',
   };
 
-  console.log('AFUERA', userStatus)
+  console.log('AFUERA', userStatus);
   const handleSubmit = (values, formik) => {
-    console.log( 'primero',userStatus)
+    console.log('primero', userStatus);
     const payload = {
       user: {
         email: values.email,
@@ -36,39 +36,16 @@ function UserLogin() {
       },
       formik,
     };
-    dispatch(postUserLogin(payload))
-    // dispatch(postUserLogin(payload)).then((payload) => {
-    //   console.log( 'segundo ',userStatus)
-    //   if (payload.type === 'user/login/fulfilled') {
-    //     // if (userStatus === 'succeded'){
-    //       dispatch(login(user.id))
-    //       console.log( 'tercero ',userStatus)
-    //       let storage = JSON.parse(localStorage.getItem('cart'));
-    //       storage.map( product  => {
-    //          let obj = {
-    //          userId: user.id,
-    //          detail: product,
-    //          increment:true            
-    //         }
-    //          dispatch(postProductToCart(obj))           
-    //       })
-    //       // localStorage.removeItem('cart')
-    //     // }
-         
-    //     history.push('/welcome');
-    //   } else {
-    //     history.push('/failure');
-    //   }
-    // });
+    dispatch(postUserLogin(payload));
   };
-  if(userStatus === 'succeded'){
+  if (userStatus === 'succeded') {
     history.push('/welcome');
   }
 
-  if( userStatus === 'failed'){
+  if (userStatus === 'failed') {
     history.push('/failure');
+    dispatch(resetStatus());
   }
-
 
   const handleReset = (formik) => {
     //func para resetear el form
