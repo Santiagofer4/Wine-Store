@@ -98,16 +98,8 @@ const productsCartSlice = createSlice({
     cartGuest(state, action) {
       // Pisa el estado con lo que está en el localStorage
       state.allProductsCart.status = 'succeded';
-<<<<<<< HEAD
-<<<<<<< HEAD
       state.allProductsCart.list = action.payload  !== null ? action.payload : [];
-=======
-      state.allProductsCart.list =  action.payload !== null ? action.payload : [];
->>>>>>> 7ba7dad4d6857670442fd939b2e73540b7a2b6d8
-=======
-      state.allProductsCart.list =
-        action.payload !== null ? action.payload : [];
->>>>>>> b7bfb9033387a9c49073beebbc902b8ae3aae4cc
+
     },
     logout(state, action) {
       state.allProductsCart.list = [];
