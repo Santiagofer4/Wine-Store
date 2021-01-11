@@ -22,7 +22,7 @@ import tokenManager from '../utils/tokenManager';
 import { isLogged } from '../utils/index';
 import store from '../../store';
 import { userLogout } from '../../slices/userSlice.js';
-import {logout, getAllProductsCart} from '../../slices/productsCartSlice';
+import { logout, getAllProductsCart } from '../../slices/productsCartSlice';
 //import { refresh } from "../../slices/productsCartSlice.js" // no existe esa función
 
 function NavBar() {
@@ -56,7 +56,7 @@ function NavBar() {
     dispatch(userLogout());
     dispatch(logout());
     localStorage.removeItem('token');
-    history.push('/logout')
+    history.push('/logout');
     // if (status === 'idle') {
     //   history.push('/logout')
     // }
@@ -97,30 +97,6 @@ function NavBar() {
               Catalogo
             </Link>
           </li>
-          <li className="Nav__li">
-            {/* <Button
-              className="Nav__Link"
-              onClick={() => {
-                let config = {
-                  headers: {
-                    Authorization: localStorage.getItem('token'),
-                  },
-                };
-                axios
-                  .get('http://localhost:3000/auth/test')
-                  .then((x) => console.log('XXX', x))
-                  .catch((err) => console.error(err));
-              }}
-            >
-              HEADERS
-            </Button> */}
-          </li>
-          {/* <li className="Nav__li">
-            {' '}
-            <Link to="/admin" className="Nav__Link" id="invisible">
-              Admin
-            </Link>
-          </li> */}
         </ul>
         <div id="search-cart">
           <div>
@@ -177,18 +153,18 @@ function NavBar() {
                             <hr className="line"></hr>
                             {user.isAdmin ? (
                               <>
-                                <MenuItem onClick={handleClose}>
-                                  <Link to="/admin" className="menu">
+                                <Link to="/admin" className="menu">
+                                  <MenuItem onClick={handleClose}>
                                     Panel admin
-                                  </Link>
-                                </MenuItem>
+                                  </MenuItem>
+                                </Link>
                               </>
                             ) : null}
-                            <MenuItem onClick={handleClose}>
-                              <Link to="/user/profile" className="menu">
+                            <Link to="/user/profile" className="menu">
+                              <MenuItem onClick={handleClose}>
                                 Mi cuenta
-                              </Link>
-                            </MenuItem>
+                              </MenuItem>
+                            </Link>
                             <MenuItem onClick={handleClose}>
                               <Button className="menu" onClick={handleLogout}>
                                 Cerrar sesión
@@ -198,16 +174,16 @@ function NavBar() {
                         ) : (
                           <>
                             {' '}
-                            <MenuItem onClick={handleClose}>
-                              <Link to="/form/user/login" className="menu">
+                            <Link to="/form/user/login" className="menu">
+                              <MenuItem onClick={handleClose}>
                                 Ingresar
-                              </Link>
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                              <Link to="/form/user" className="menu">
+                              </MenuItem>
+                            </Link>
+                            <Link to="/form/user" className="menu">
+                              <MenuItem onClick={handleClose}>
                                 Regístrate
-                              </Link>
-                            </MenuItem>{' '}
+                              </MenuItem>
+                            </Link>{' '}
                           </>
                         )}
                       </MenuList>
@@ -218,10 +194,7 @@ function NavBar() {
             </Popper>
           </Grid>
           <div id="cartDiv">
-            <Link id="cart" to="/cart" className="Nav__Link"
-
-            >
-          
+            <Link id="cart" to="/cart" className="Nav__Link">
               <img
                 id="imgCart"
                 src="https://i.ibb.co/FsngVZ5/carrito1.png"
@@ -241,9 +214,6 @@ function NavBar() {
             )
             }
             */}
-
-            
-            
           </div>
         </div>
       </nav>
