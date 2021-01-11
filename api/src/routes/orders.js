@@ -68,23 +68,12 @@ server.get('/total/:id', (req, res) => {
     var sumaTotal = 0;
     orderLine.forEach((t) => {
       sumaTotal += parseInt(t.quantity) * parseInt(t.price);
-
-      console.log('Suma Total', sumaTotal);
     });
     sumaTotal = Math.ceil(sumaTotal * 1.21);
     return res.status(200).json(sumaTotal);
   });
 });
 
-//Crear un carrito o agregar una orden si el carrito ya existe
-
-/*   server.post('/',(req,res)=>{
-    const{status, total, userId}=req.body;
-    Order.findOrCreate({
-      where: {status: "cart", userId: userId},
-      defaults: { status, total},
-    })
-  }); */
 
 //Ruta para crear una orden
 
@@ -119,18 +108,6 @@ server.get('/:id', (req, res) => {
     res.send(order);
   });
 });
-
-//Ruta para modificar una orden
-
-/* server.put("/:id", (req, res) => {
-  const { id } = req.params;
-  const { total, status } = req.body;
-
-  Order.update({ status, total }, { where: { id } })
-    .then(() => {
-      res.status(201).send("orden actualizada");
-    })
-  }); */
 
 //Editar una orden
 

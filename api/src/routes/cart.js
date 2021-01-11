@@ -30,7 +30,6 @@ server.post('/', (req, res) => {
       const [instance, wasCreated] = result;
     });
   });
-  //con esta orden ir a buscar el orderId
   res.status(200).send('Entré a agregar item al carrito');
 });
 

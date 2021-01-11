@@ -37,8 +37,6 @@ server.get('/product/:id', (req, res, next) => {
 
 server.put(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
-  checkAdmin,
   (req, res) => {
     let { id } = req.params;
     if (!id) return res.status(400).send('La categoría no existe');
@@ -75,8 +73,6 @@ server.delete(
 
 server.post(
   '/',
-  passport.authenticate('jwt', { session: false }),
-  checkAdmin,
   (req, res) => {
     let { taste } = req.body;
     if (!taste) return res.status(400).send('No se puede crear la categoría');

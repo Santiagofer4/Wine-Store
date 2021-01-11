@@ -7,11 +7,8 @@ server.post('/:idProduct/', (req, res) => {
   let { idProduct } = req.params;
   let { points, description, userId } = req.body;
   
-  //console.log('Creo Review - POST a /review/:idProduct/');
-
   if (!idProduct || !points || !userId)
     return res.status(400).send('No se puede agregar la Review');
-
   User.findByPk(userId)
     .then(() => {
       Review.create({
@@ -32,8 +29,7 @@ server.post('/:idProduct/', (req, res) => {
 server.put('/:id', (req, res) => {
   let { points, description } = req.body;
   let { id } = req.params;
-  console.log('Edito Review - PUT a /product/:id/review/:idReview');
-
+  
   if (!id) return res.status(400).send('La Review no se encuentra');
   Review.update({ points, description }, { where: { id } }).then(() => {
     return res.status(200).send('Se ha modificado la categoría');
@@ -44,9 +40,7 @@ server.put('/:id', (req, res) => {
 
 server.delete('/:id', (req, res) => {
   let { id } = req.params;
-  console.log('Borro Review - delete a /product/:id/review/:idReview');
-
-  if (!id) return res.status(400).send('No existe la Review');
+   if (!id) return res.status(400).send('No existe la Review');
 
   Review.destroy({
     where: {
@@ -61,9 +55,7 @@ server.delete('/:id', (req, res) => {
 
 server.get('/:productId', (req, res, next) => {
   let { productId } = req.params;
-  console.log('Ver Reviews de un producto - GET a /review/:id');
-
-  if (!productId) return res.status(404).send('No existen reviews para ese producto');
+   if (!productId) return res.status(404).send('No existen reviews para ese producto');
 
   Review.findAll({
     where: {
@@ -87,8 +79,6 @@ server.get('/:productId', (req, res, next) => {
 
 server.get('/user/:userId', (req, res, next) => {
   let { userId } = req.params;
-  console.log('Ver Reviews de un usuario - GET a /review/user/:id');
-
   if (!userId) return res.status(404).send('No existen reviews de ese usuario');
 
   Review.findAll({
