@@ -81,7 +81,7 @@ const productsCartSlice = createSlice({
     },
     cartGuest(state, action) {
       // Pisa el estado con lo que está en el localStorage
-      console.log('ACTION', action);
+      // console.log('ACTION', action);
       state.allProductsCart.status = 'succeded';
       state.allProductsCart.list =
         action.payload !== null ? action.payload : [];
@@ -107,6 +107,15 @@ const productsCartSlice = createSlice({
       state.allProductsCart.error = null;
       // state.allProductsCart = initialState_product;
     },
+    guestAddProductToCart: (state, { payload }) => {
+      console.log('add to guest cart', payload);
+    },
+    guestRemoveProductFromCart: (state, { payload }) => {
+      console.log('remove from guest cart', payload);
+    },
+    guestDeleteProductFromCart: (state, { payload }) => {
+      console.log('delete from guest cart', payload);
+    },
   },
   extraReducers: {
     [getAllProductsCart.pending]: (state, action) => {
@@ -114,7 +123,7 @@ const productsCartSlice = createSlice({
     },
     [getAllProductsCart.fulfilled]: (state, { payload }) => {
       state.allProductsCart.list = [];
-     // console.log('DATOS ORDERLINE', payload.resp.data[0].orderLines);
+      // console.log('DATOS ORDERLINE', payload.resp.data[0].orderLines);
       state.allProductsCart.status = status.succeded;
       payload.resp.data[0] &&
         payload.resp.data[0].orderLines.map((e, i) => {
@@ -218,6 +227,9 @@ export const {
   deleteFromCart,
   deleteCart,
   cartGuest,
+  guestAddProductToCart,
+  guestRemoveProductFromCart,
+  guestDeleteProductFromCart,
 } = productsCartSlice.actions;
 
 export default productsCartSlice;

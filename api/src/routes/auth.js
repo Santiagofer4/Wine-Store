@@ -52,8 +52,12 @@ server.post(
 //Ruta para Loguearse
 server.post(
   '/login',
-  passport.authenticate('local-login', { session: false }),
+  passport.authenticate('local-login', {
+    failWithError: false,
+    session: false,
+  }),
   async (req, res) => {
+    console.log('LOGIN RE', req.authInfo, req.isAuthenticated(), req.info);
     try {
       const token = makeJWT(req.user, refreshTime, 'Bearer'); // guardar los tiempos de refresh en variable y aplicarselo a ambas
       const refresh_token = makeJWT(req.user);
@@ -89,7 +93,6 @@ server.get(
   }
 );
 
-
 //*ruta para probar la validacion con el JWT
 server.get(
   '/test',
@@ -100,7 +103,6 @@ server.get(
     // return res.send(req.user);
   }
 );
-
 
 // Hacer admin a un user (promote User)
 
