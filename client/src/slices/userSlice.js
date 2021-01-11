@@ -70,6 +70,9 @@ const userSlice = createSlice({
       const token = tokenManager.getToken();
       state.user.info = payload;
     },
+    resetStatus: (state, action) => {
+      state.user.status = status.idle;
+    },
   },
   extraReducers: {
     [createUser.pending]: (state, action) => {
@@ -127,6 +130,6 @@ const userSlice = createSlice({
     },
   },
 });
-export const { persistUserLogin } = userSlice.actions;
+export const { persistUserLogin, resetStatus } = userSlice.actions;
 
 export default userSlice;
