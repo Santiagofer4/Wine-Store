@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
   getAllProductsCartEnpoint,
+  getOrderTableEndpoint,
   usersEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
@@ -69,6 +70,17 @@ export const deleteSingleProdFromCart = createAsyncThunk(
       productId,
     };
     return resPayload;
+  }
+);
+
+export const modificateOrder = createAsyncThunk(
+  'cart/deleteSingleProdFromCart',
+  async (payload, thunkApi) => {
+    const { myCart, total, status } = payload;
+    const modificatedOrder = await axios.put(
+      getOrderTableEndpoint + myCart, payload
+    );
+    return modificatedOrder;
   }
 );
 
@@ -210,6 +222,16 @@ const productsCartSlice = createSlice({
       }
     },
     [postProductToCart.rejected]: (state, action) => {
+      state.allProductsCart.status = status.failed;
+      state.allProductsCart.error = action.error;
+    },
+    [modificateOrder.pending]: (state, action) => {
+      state.allProductsCart.status = status.loading;
+    },
+    [modificateOrder.fulfilled]: (state, action) => {
+      state.allProductsCart.status = status.succeded;
+    },
+    [modificateOrder.rejected]: (state, action) => {
       state.allProductsCart.status = status.failed;
       state.allProductsCart.error = action.error;
     },

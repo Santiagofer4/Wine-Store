@@ -8,6 +8,7 @@ import {
   allProductsCartSelector,
   allProductsCartSyncSelector,
   allProductsCartStatusSelector,
+  allOrderStatusSelector,
   userStatusSelector,
   userSelector,
   myCartSelector,
@@ -17,8 +18,10 @@ import {
   sync,
   cartGuest,
   postProductToCart,
+  modificateOrder,
   deleteAllProductsFromCart,
   deleteSingleProdFromCart,
+  resetState,
 } from '../../slices/productsCartSlice';
 import CartItem from './CartItem/CartItem';
 import {
@@ -30,43 +33,28 @@ import axios from 'axios';
 
 function Cart() {
   const dispatch = useDispatch();
-<<<<<<< HEAD
   const history = useHistory();
   const AllProductsCart = useSelector(allProductsCartSelector);  // tiene los prods del cart
-=======
-  const AllProductsCart = useSelector(allProductsCartSelector); // tiene los prods del cart
->>>>>>> b7bfb9033387a9c49073beebbc902b8ae3aae4cc
   const sincronizar = useSelector(allProductsCartSyncSelector);
   const status = useSelector(allProductsCartStatusSelector);
   const user = useSelector(userSelector);
   const myCart = useSelector(myCartSelector);
   const statusUser = useSelector(userStatusSelector);
+  const statusOrder = useSelector(allOrderStatusSelector);
   const [subTotal, setSubTotal] = useState(0);
   const [login, setLogin] = useState(false);
   let logged = isLogged();
 
   const handleDelete = () => {
-<<<<<<< HEAD
-    if(login){
-=======
     if (login) {
->>>>>>> b7bfb9033387a9c49073beebbc902b8ae3aae4cc
       dispatch(deleteAllProductsFromCart({ userId: user.id }));
       dispatch(sync(false));
     }
-<<<<<<< HEAD
-    if(!login){
-      let storage = [];
-        localStorage.removeItem('cart');
-        localStorage.setItem('cart', JSON.stringify(storage));
-        dispatch(sync(false));
-=======
     if (!login) {
       let storage = [];
       localStorage.removeItem('cart');
       localStorage.setItem('cart', JSON.stringify(storage));
       dispatch(sync(false));
->>>>>>> b7bfb9033387a9c49073beebbc902b8ae3aae4cc
     }
   };
 
@@ -132,7 +120,6 @@ function Cart() {
 
   const incrementHandler = (event, detail) => {
     if (logged) {
-      console.log('Está logueado? dentro increment handler con log', logged);
       let id = event.target.name * 1;
       let valueInput = document.getElementById(id).value; // cantidad de productos a comprar
       const payload = {
@@ -150,8 +137,6 @@ function Cart() {
     }
 
     if (!logged) {
-      //funciona pero no renderiza.
-      console.log('Está logueado? dentro increment handler sin log', logged);
       let id = event.target.name * 1;
       let valueInput = document.getElementById(id).value;
       const payload = {
@@ -160,7 +145,6 @@ function Cart() {
         quantity: detail.quantity,
         stock: detail.stock,
         name: detail.name,
-        //userId: user.id,
       };
       if (valueInput < detail.stock) {
         functionCartGuest(payload);
@@ -184,28 +168,14 @@ function Cart() {
     }
   };
 
-/*   const handleDelete = () => {
-    if(login){
-      dispatch(deleteAllProductsFromCart({ userId: user.id }));
-      dispatch(sync(false));
-    }
-    if(!login) {
-      let storage = [];
-        localStorage.removeItem('cart');
-        localStorage.setItem('cart', JSON.stringify(storage));
-        dispatch(sync(false));
-    }
-  }; */
-
   const handleConfirm = async () => {
-   // console.log('ORDER NRO?', myCart)
    if(login) {
      let total = Math.ceil((subTotal * 121) / 100);
-     axios.put(`http://localhost:3000/orders/${myCart}`, { total, status: 'completed' });
-     dispatch(sync(false));
+     await dispatch(modificateOrder({ myCart, total, status: 'completed' }));
+     //axios.put(`http://localhost:3000/orders/${myCart}`, { total, status: 'completed' });
    }
    if(!login) {
-    history.push('/login');
+    history.push('/form/user/login');
    }
     //agregar total para guardar
   };
@@ -227,7 +197,14 @@ function Cart() {
         // info de DB
         setSubTotal(total(AllProductsCart));
         if (sincronizar === false) {
+          console.log('STATUS ORDER', statusOrder)
+           if(statusOrder === 'succeded') {
+            console.log('STATUS ORDER', statusOrder)
+            dispatch(resetState());
+            dispatch(sync(true));
+          }
           dispatch(getAllProductsCart(user.id));
+          console.log('STATUS ORDER 3', statusOrder)
           dispatch(sync(true));
           console.log('SINCRONIZAR 3', sincronizar)
         }
@@ -241,20 +218,15 @@ function Cart() {
         let guestParse = JSON.parse(guest);
         setSubTotal(total(AllProductsCart));
         dispatch(cartGuest(guestParse));
-<<<<<<< HEAD
-        if (sincronizar === false){
+        if (sincronizar === false) {
           dispatch(sync(true))
           console.log('SINCRONIZAR 5', sincronizar)
-=======
-        if (sincronizar === false) {
-          dispatch(sync(true));
->>>>>>> b7bfb9033387a9c49073beebbc902b8ae3aae4cc
         }
         setSubTotal(total(AllProductsCart));
       }
     }
     console.log('SINCRONIZAR 6', sincronizar)
-  }, [status, sincronizar, user, AllProductsCart.orderId]);
+  }, [sincronizar, user]);
 
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {

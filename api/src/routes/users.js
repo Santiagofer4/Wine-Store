@@ -180,14 +180,15 @@ server.post('/:userId/cart', async (req, res) => {
       },
       defaults: {
         productId: id,
-        quantity: !cartGuest && increment ? quantity++  : !cartGuest && !increment ? quantity-- : quantity,
+        quantity: 1, // !cartGuest && increment ? quantity++  : !cartGuest && !increment ? quantity-- : quantity,
         price,
       },
-    
     });
 
     if (!newOrderLineCreated) {
-      await newOrderLine.update({ quantity }, { where: { productId: id } });
+      await newOrderLine.update({
+        quantity
+      }, { where: { productId: id } });
     }
 
     await newOrderLine.setProduct(id);
