@@ -133,8 +133,8 @@ export const isLogged = () => {
 export const average = (array) => {
   for (let i = 0, total = 0; i <= array.length; i++) {
     total = total + array[i].points;
-    return total / array.length;
   }
+  return total / array.length;
 };
 
 export const functionCartGuest = (payload, decrement, erase) => {

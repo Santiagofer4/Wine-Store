@@ -65,7 +65,7 @@ checkAdmin, (req, res) => {
 
 //Crear o modificar Categoría
 
-server.post('/',passport.authenticate('jwt', { session: false }),
+server.post('/', passport.authenticate('jwt', { session: false }),
 checkAdmin, (req, res) => {
   let { taste } = req.body;
   if (!taste) return res.status(400).send('No se puede crear la categoría');

@@ -3,6 +3,7 @@ import './Cart.modules.css';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 import {
   allProductsCartSelector,
   allProductsCartSyncSelector,
@@ -25,6 +26,7 @@ import axios from 'axios';
 
 function Cart() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const AllProductsCart = useSelector(allProductsCartSelector);  // tiene los prods del cart
   const sincronizar = useSelector(allProductsCartSyncSelector);
   const status = useSelector(allProductsCartStatusSelector);
@@ -38,15 +40,14 @@ function Cart() {
 
   const handleDelete = () => {
     if(login){
-
       dispatch(deleteAllProductsFromCart({ userId: user.id }));
+      dispatch(sync(false));
     }
     if(!login){
-
-      let storage = []
+      let storage = [];
         localStorage.removeItem('cart');
         localStorage.setItem('cart', JSON.stringify(storage));
-        dispatch(sync(false))
+        dispatch(sync(false));
     }
   };
 
@@ -151,9 +152,7 @@ function Cart() {
         userId,                                                // id del usuario para saber de que 
       };                                                       // carrito eliminar el prod
       dispatch(deleteSingleProdFromCart(payload));    
-
     }
-
     if (!logged){
       const payload = id;                                          
        functionCartGuest(payload, null, true)                                             
@@ -161,11 +160,30 @@ function Cart() {
     }
   };
 
-  const handleConfirm = () => {
+/*   const handleDelete = () => {
+    if(login){
+      dispatch(deleteAllProductsFromCart({ userId: user.id }));
+      dispatch(sync(false));
+    }
+    if(!login) {
+      let storage = [];
+        localStorage.removeItem('cart');
+        localStorage.setItem('cart', JSON.stringify(storage));
+        dispatch(sync(false));
+    }
+  }; */
+
+  const handleConfirm = async () => {
    // console.log('ORDER NRO?', myCart)
-   let total = Math.ceil((subTotal * 121) / 100);
-    axios.put(`http://localhost:3000/orders/${myCart}`, {total, status: 'completed'} );
-   //agregar total para guardar
+   if(login) {
+     let total = Math.ceil((subTotal * 121) / 100);
+     axios.put(`http://localhost:3000/orders/${myCart}`, { total, status: 'completed' });
+     dispatch(sync(false));
+   }
+   if(!login) {
+    history.push('/login');
+   }
+    //agregar total para guardar
   };
 
   const handlers = {
@@ -176,33 +194,38 @@ function Cart() {
 
   useEffect(() => {
     logged = isLogged();
+    console.log('SINCRONIZAR 1', sincronizar)
 
     if(user) {
       if(logged) {
         setLogin(true);
+        console.log('SINCRONIZAR 2', sincronizar)
         // info de DB
         setSubTotal(total(AllProductsCart));
         if (sincronizar === false) {
-         
           dispatch(getAllProductsCart(user.id));
           dispatch(sync(true));
+          console.log('SINCRONIZAR 3', sincronizar)
         }
       }
     } else {
       if(!logged) {
         setLogin(false);
+        console.log('SINCRONIZAR 4', sincronizar)
         // info de localStorage
         let guest = localStorage.getItem('cart');
         let guestParse = JSON.parse(guest);
         setSubTotal(total(AllProductsCart));
         dispatch(cartGuest(guestParse));
-        if ( sincronizar === false){
+        if (sincronizar === false){
           dispatch(sync(true))
+          console.log('SINCRONIZAR 5', sincronizar)
         }
         setSubTotal(total(AllProductsCart));
       }
     }
-  }, [status, sincronizar, user]);
+    console.log('SINCRONIZAR 6', sincronizar)
+  }, [status, sincronizar, user, AllProductsCart.orderId]);
 
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {

@@ -56,7 +56,6 @@ function ProductCard(props) {
       strainId: detail.strainId,
       quantity: 1,
     };
-    
     functionCartGuest(payload, null, null);
     dispatch(sync(false))
   };
@@ -88,7 +87,7 @@ function ProductCard(props) {
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  logged ? handlerProductToCart(user.id,id) : handlerProductToCartGuest(id);
+                  logged ? handlerProductToCart(user.id, id) : handlerProductToCartGuest(id);
                 }}
               >
                 Comprar

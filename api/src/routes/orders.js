@@ -133,10 +133,10 @@ server.post("/", (req, res) => {
   //Editar una orden
 
   server.put('/:id', (req,res) => {
-    const {id}= req.params;
-    const {total, status} = req.body;
+    const { id }= req.params;
+    const { total, status } = req.body;
 
-    Order.update({ status,total }, {where:{id}})
+    Order.update({ status, total }, {where:{id}})
     .then(()=>{
       res.status(201).send('orden actualizada')
     })

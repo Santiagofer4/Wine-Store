@@ -72,7 +72,6 @@ function ProductDetail() {
     if (reviewStatus === "succeded" && reviews.length !== 0) {
       let rs = average(reviews);
       setValue(rs);
-      console.log("RS", rs);
     }
   }, [reviewStatus]);
 

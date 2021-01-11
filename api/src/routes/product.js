@@ -142,7 +142,7 @@ checkAdmin, (req, res) => {
 
 //Crear un nuevo Producto
 
-server.post('/',passport.authenticate('jwt', { session: false }),
+server.post('/', passport.authenticate('jwt', { session: false }),
 checkAdmin, async (req, res) => {
   let {
     name,
