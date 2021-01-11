@@ -18,7 +18,7 @@ const initialState_product = {
 };
 
 export const getAllProductsCart = createAsyncThunk(
-  'product/getAllProductsCart',
+  'cart/getAllProductsCart',
   async (id) => {
     const resp = await axios.get(getAllProductsCartEnpoint + id + '/cart');
     let cart_response = {
@@ -49,7 +49,7 @@ export const postProductToCart = createAsyncThunk(
 );
 
 export const deleteAllProductsFromCart = createAsyncThunk(
-  'productsCart/deleteProductFromCart',
+  'cart/deleteProductFromCart',
   async (payload, thunkApi) => {
     const { userId } = payload;
     const deleted_cart = await axios.delete(usersEndpoint + userId + '/cart');
@@ -58,7 +58,7 @@ export const deleteAllProductsFromCart = createAsyncThunk(
 );
 
 export const deleteSingleProdFromCart = createAsyncThunk(
-  'productsCart/deleteSingleProdFromCart',
+  'cart/deleteSingleProdFromCart',
   async (payload, thunkApi) => {
     const { productId, userId } = payload;
     const deleted_item = await axios.delete(
@@ -73,7 +73,7 @@ export const deleteSingleProdFromCart = createAsyncThunk(
 );
 
 const productsCartSlice = createSlice({
-  name: 'productsCart',
+  name: 'cart',
   initialState: initialState_product,
   reducers: {
     sync(state, action) {
@@ -83,7 +83,8 @@ const productsCartSlice = createSlice({
       // Pisa el estado con lo que está en el localStorage
       console.log('ACTION', action);
       state.allProductsCart.status = 'succeded';
-      state.allProductsCart.list =  action.payload !== null ? action.payload : [];
+      state.allProductsCart.list =
+        action.payload !== null ? action.payload : [];
     },
     logout(state, action) {
       state.allProductsCart.list = [];

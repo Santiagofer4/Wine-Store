@@ -115,7 +115,7 @@ export const search = (id, array) => {
 };
 
 export const isLogged = () => {
- // return tokenManager.getToken();
+  // return tokenManager.getToken();
   let token = tokenManager.getToken();
   let refresh_token;
   if (!token) {

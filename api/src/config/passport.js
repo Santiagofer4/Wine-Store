@@ -111,7 +111,8 @@ module.exports = function (passport) {
 
   const cookieExtractor = (req) => {
     let token = null;
-    if (req && req.signedCookies) token = req.signedCookies.refreshToken.token;
+    if (req.signedCookies && req.signedCookies.refreshToken)
+      token = req.signedCookies.refreshToken.token;
     return token;
   };
 
