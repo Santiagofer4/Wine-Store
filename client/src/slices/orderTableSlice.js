@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import tokenManager from '../Components/utils/tokenManager';
 import { getOrderTableEndpoint } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 
@@ -16,7 +17,7 @@ const initialState_orders = {
   export const getOrderTable = createAsyncThunk(
     'orders/getOrderTable',
     async () => {
-      const resp = await axios.get(getOrderTableEndpoint);
+      const resp = await axios.get(getOrderTableEndpoint, {headers: {"Authorization": tokenManager.getToken()}});
       return resp;
     }
   );

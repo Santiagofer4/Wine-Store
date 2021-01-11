@@ -2,17 +2,6 @@
     padding: 10rem;
 }
 
-.link {
-    padding: 0.8rem 2rem !important;
-    color: black !important;
-}
-
-.bar {
-    display: flex;
-    flex-direction: column;
-    background-color: gray;
-}
-
 .orders {
     display: flex;
     flex-direction: row;

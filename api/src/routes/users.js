@@ -1,24 +1,33 @@
 const server = require('express').Router();
 const { User, Order, Product, OrderLine, Review } = require('../db.js');
+const { checkAdmin } = require('../utils/authTools.js');
+const passport = require('passport');
+
 //const cartRouter = require('./cart.js');
 
 //server.use('/:id/cart', cartRouter);
 
 //Borrar un USER by ID
 
-server.delete('/:id', (req, res) => {
-  let { id } = req.params;
+server.delete(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  checkAdmin,
+  (req, res) => {
+    let { id } = req.params;
 
-  if (!id) return res.status(400).send('No se encontró el usuario a eliminar');
+    if (!id)
+      return res.status(400).send('No se encontró el usuario a eliminar');
 
-  User.destroy({
-    where: {
-      id,
-    },
-  }).then(() => {
-    return res.status(200).send(`Usuario ${id} borrado`);
-  });
-});
+    User.destroy({
+      where: {
+        id,
+      },
+    }).then(() => {
+      return res.status(200).send(`Usuario ${id} borrado`);
+    });
+  }
+);
 
 //Vaciar carrito
 
@@ -48,22 +57,6 @@ server.delete('/:userId/cart', async (req, res) => {
     console.error(error);
     return res.status(500).send(error);
   }
-
-  // Order.findOne({
-  //   where: {
-  //     status: 'cart',
-  //     userId: userId,
-  //   },
-  // }).then((orders) => {
-  //   let id = orders.id;
-  //   OrderLine.destroy({
-  //     where: {
-  //       orderId: id,
-  //     },
-  //   }).then(() => {
-  //     return res.send(200, 'El carrito del usuario se ha borrado');
-  //   });
-  // });
 });
 
 // Borrar producto del carrito
@@ -93,13 +86,18 @@ server.delete('/:idUser/cart/:productId', (req, res) => {
 
 // Listar todos los USERS
 
-server.get('/', (req, res, next) => {
-  User.findAll()
-    .then((user) => {
-      return res.status(200).send(user);
-    })
-    .catch(next);
-});
+server.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  checkAdmin,
+  (req, res, next) => {
+    User.findAll()
+      .then((user) => {
+        return res.status(200).send(user);
+      })
+      .catch(next);
+  }
+);
 
 // Ruta que retorna todos los items del carrito - GET a /users/:id/cart
 
@@ -120,7 +118,10 @@ server.get('/:id/orders', (req, res) => {
   id = id * 1;
   Order.findAll({
     where: { userId: id },
-    include: { model: OrderLine, include: [{ model: Product, include: [{ model: Review }] }]},
+    include: {
+      model: OrderLine,
+      include: [{ model: Product, include: [{ model: Review }] }],
+    },
   })
     .then((list) => {
       res.json(list);
@@ -133,7 +134,15 @@ server.get('/:id/orders', (req, res) => {
 //Agregar un USER
 
 server.post('/', (req, res) => {
-  let { firstName, lastName, email, birthdate, cellphone, password, isAdmin } = req.body;
+  let {
+    firstName,
+    lastName,
+    email,
+    birthdate,
+    cellphone,
+    password,
+    isAdmin,
+  } = req.body;
 
   if (!email) return res.status(400).send('Debe ingresar un email');
 
@@ -168,8 +177,7 @@ server.post('/', (req, res) => {
 
 server.post('/:userId/cart', async (req, res) => {
   let { userId } = req.params;
-  let { id, price, quantity, increment } = req.body;
-
+  let { id, price, quantity, increment, cartGuest } = req.body;
   if (!id || !userId)
     return res.status(400).send('Id de usuario o producto faltante');
 
@@ -191,13 +199,23 @@ server.post('/:userId/cart', async (req, res) => {
       },
       defaults: {
         productId: id,
-        quantity: increment ? quantity++ : quantity--,
+        quantity: 1,
         price,
       },
     });
 
     if (!newOrderLineCreated) {
-      await newOrderLine.update({ quantity }, { where: { productId: id } });
+      await newOrderLine.update(
+        {
+          quantity:
+            !cartGuest && increment
+              ? quantity + 1
+              : !cartGuest && !increment
+              ? quantity - 1
+              : quantity,
+        },
+        { where: { productId: id } }
+      );
     }
 
     await newOrderLine.setProduct(id);
@@ -208,39 +226,6 @@ server.post('/:userId/cart', async (req, res) => {
     console.error(error);
     return res.status(500).send(error);
   }
-
-  // let instacia;
-  // Order.findOrCreate({
-  //   where: {
-  //     userId,
-  //     status: 'cart',
-  //   },
-  //   defaults: {
-  //     total: 0,
-  //     status: 'cart',
-  //   },
-  // }).then((order) => {
-  //   const [instance, wasCreated] = order; // si crea el dato wasCreated = true sino false
-  //   instacia = instance;
-  //   orderLine = OrderLine.findOrCreate({
-  //     where: {
-  //       productId: id,
-  //     },
-  //     defaults: {
-  //       productId: id,
-  //       quantity,
-  //       price,
-  //     },
-  //   }).then((orderLine) => {
-  //     const [instance, wasCreated] = orderLine;
-  //     if (!wasCreated) {
-  //       OrderLine.update({ quantity }, { where: { productId: id } });
-  //     }
-  //     instance.setProduct(id);
-  //     instance.setOrder(instacia.id);
-  //   });
-  // });
-  // res.status(200).send('Entré a agregar item al carrito');
 });
 
 //Editar un USER by ID

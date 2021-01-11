@@ -9,19 +9,23 @@ import {
 import FormField from '../../FormComponents/FormField';
 import './UserForm.modules.css';
 //import { validationSchemaUserRegister } from './userValidations';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
-import { postUserLogin } from '../../../slices/userSlice.js';
-
+import { postUserLogin, resetStatus } from '../../../slices/userSlice.js';
+import { postProductToCart, login } from '../../../slices/productsCartSlice.js';
+import { userSelector, userStatusSelector } from '../../../selectors';
 function UserLogin() {
   const dispatch = useDispatch();
+  const user = useSelector(userSelector);
+  const userStatus = useSelector(userStatusSelector);
   const history = useHistory();
   const [viewPassword, setViewPassword] = useState(false);
   const emptyValues = {
     email: '',
     password: '',
   };
+
   const handleSubmit = (values, formik) => {
     const payload = {
       user: {
@@ -30,14 +34,16 @@ function UserLogin() {
       },
       formik,
     };
-    dispatch(postUserLogin(payload)).then((payload) => {
-      if (payload.type === 'user/login/fulfilled') {
-        history.push('/welcome');
-      } else {
-        history.push('/failure');
-      }
-    });
+    dispatch(postUserLogin(payload));
   };
+  if (userStatus === 'succeded') {
+    history.push('/welcome');
+  }
+
+  if (userStatus === 'failed') {
+    history.push('/failure');
+    dispatch(resetStatus());
+  }
 
   const handleReset = (formik) => {
     //func para resetear el form

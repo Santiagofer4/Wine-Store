@@ -14,9 +14,11 @@ function OrderTable() {
   const dispatch = useDispatch();
   const orderTable = useSelector(allOrderSelector);
   const status = useSelector(allOrderStatusSelector);
+
   let content;
   useEffect(() => {
     dispatch(getOrderTable());
+
   }, [dispatch]);
 
   const handleRetry = () => {

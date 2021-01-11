@@ -20,13 +20,15 @@ import Profile from './Components/Profile/Profile';
 import axios from 'axios';
 import ProtectRoute from './Components/ProtectRoute/ProtectRoute';
 import Logout from './Components/Contenido/Logout';
-import { isLogged } from './Components/utils/index';
-import Checkout from './Components/Checkout/Checkout';
+import { isLogged, isAdmin } from './Components/utils/index';
+import tokenManager from './Components/utils/tokenManager';
+import Notifier from './Components/Notifier/Notifier';
+
 function App() {
   // //!SOLUCION CAVERNICOLA!
-  // axios.defaults.headers.common['Authorization'] = localStorage.getItem(
-  //   'token'
-  // );
+  if (isLogged()) {
+    axios.defaults.headers.common['Authorization'] = tokenManager.getToken();
+  }
   axios.defaults.withCredentials = true;
   // //!<-----------------
 
@@ -39,6 +41,7 @@ function App() {
         crossOrigin="anonymous"
       />
       <NavBar></NavBar>
+      <Notifier />
       <Switch>
         <Route exact path="/" component={Inicio}></Route>
         <Route exact path="/catalogue" component={Catalogue}></Route>
@@ -46,8 +49,10 @@ function App() {
         <Route path="/product/:id" render={() => <ProductDetail />} />
         <Route path="/admin/form-product" component={ProductForm} />
         <Route path="/form/test" component={TestForm} />
+        {/* <ProtectRoute path="/admin" component={AdminPanel} isLogged={isAdmin} /> */}
         <Route path="/admin" component={AdminPanel} />
         <Route path="/cart" component={Cart} />
+        {/* <Route path="/cart" render={() => isLogged() ? <Cart logueado={true}/> : (<Cart logueado={true}/> )} /> */}
         <Route path="/order-table" component={OrderTable} />
         <Route path="/form/user/login" component={UserLogin} />
         <Route path="/form/user" component={UserForm} />

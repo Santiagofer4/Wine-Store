@@ -6,6 +6,7 @@ import {
   addUserEndpoint,
   authLoginEndpoint,
   userOrdersEndpoint,
+  userPromoteEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 import tokenManager from '../Components/utils/tokenManager';
@@ -22,8 +23,8 @@ const initialState_user = {
 export const createUser = createAsyncThunk('user/register', async (payload) => {
   const { user, formik } = payload;
   const user_response = await axios.post(addUserEndpoint, user);
-  const { refresh_token } = user_response.data;
-  tokenManager.setToken(refresh_token.token, refresh_token.expires);
+  const { token } = user_response.data;
+  tokenManager.setToken(token.token, token.expires);
   const resPayload = {
     userRegister_response: user_response.data,
     formik,
@@ -34,8 +35,9 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
 export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   const { user, formik } = payload;
   const userLogin_response = await axios.post(authLoginEndpoint, user);
-  const { refresh_token } = userLogin_response.data;
-  tokenManager.setToken(refresh_token.token, refresh_token.expires);
+  const { token } = userLogin_response.data;
+  console.log('TOken recibido', token);
+  tokenManager.setToken(token.token, token.expires);
   const resPayload = {
     userLogin_response: userLogin_response.data,
     formik,
@@ -43,27 +45,42 @@ export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   return resPayload;
 });
 
-export const userLogout = createAsyncThunk('user/logout', async (payload, thunkApi) => {
-  const userLogout_response = await axios.get(userLogoutEndpoint);
-  console.log('LOGGIN OUT');
-  if (userLogout_response.status === 200) {
+export const userLogout = createAsyncThunk(
+  'user/logout',
+  async (payload, thunkApi) => {
+    const userLogout_response = await axios.get(userLogoutEndpoint);
+    console.log('LOGGIN OUT');
+    if (userLogout_response.status === 200) {
       tokenManager.ereaseToken();
-     
     }
-//    const state = thunkApi.getState(); //Consultar con Flavio estas dos líneas y lo que agregamos de 117 a 120
-//    state.user = initialState_user;
-   return;
-});
+    //    const state = thunkApi.getState(); //Consultar con Flavio estas dos líneas y lo que agregamos de 117 a 120
+    //    state.user = initialState_user;
+    return;
+  }
+);
 
 export const userOrders = createAsyncThunk('user/getUserOrders', async (id) => {
   const resp = await axios.get(userOrdersEndpoint + id + '/orders');
   return resp;
 });
 
+export const userPromote = createAsyncThunk('user/promote', async (id) => {
+  const resp = await axios.put(userPromoteEndpoint + id);
+  return resp;
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState: initialState_user,
-  reducers: { },
+  reducers: {
+    persistUserLogin: (state, { payload }) => {
+      const token = tokenManager.getToken();
+      state.user.info = payload;
+    },
+    resetStatus: (state, action) => {
+      state.user.status = status.idle;
+    },
+  },
   extraReducers: {
     [createUser.pending]: (state, action) => {
       state.user.status = status.loading;
@@ -107,7 +124,6 @@ const userSlice = createSlice({
     [userOrders.fulfilled]: (state, { payload }) => {
       state.user.status = status.succeded;
       state.user.orders = payload.data;
-      console.log('PAYLOAD.DATA USER ORDERS', payload.data);
     },
     [userOrders.rejected]: (state, action) => {
       state.user.status = status.failed;
@@ -116,10 +132,21 @@ const userSlice = createSlice({
     [userLogout.fulfilled]: (state, action) => {
       state.user.info = {};
       state.user.orders = [];
-      state.user.status = "idle";
+      state.user.status = 'idle';
       state.user.error = null;
-    }
+    },
+    [userPromote.pending]: (state, action) => {
+      state.user.status = status.loading;
+    },
+    [userPromote.fulfilled]: (state, { payload }) => {
+      state.user.status = status.succeded;
+    },
+    [userPromote.rejected]: (state, action) => {
+      state.user.status = status.failed;
+      state.user.error = action.error;
+    },
   },
 });
+export const { persistUserLogin, resetStatus } = userSlice.actions;
 
 export default userSlice;

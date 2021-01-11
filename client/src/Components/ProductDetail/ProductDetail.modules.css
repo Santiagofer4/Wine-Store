@@ -1,6 +1,17 @@
 .ProductDetail__Container {
   padding-top: 10rem;
 }
+
+.ProductDetail__containerCargando {
+  margin: 0px;
+  padding-top: 200px;
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  background-color: black;
+  color: white;
+}
+
 .ProductDetail__Paper {
   display: flex;
   flex-direction: row;

@@ -1,4 +1,11 @@
 import tokenManager from './tokenManager';
+import { persistUserLogin } from '../../slices/userSlice';
+import store from '../../store';
+import {
+  AddProductToCart,
+  RemoveProductFromCart,
+  DeleteProductFromCart,
+} from '../../slices/productsCartSlice.js';
 
 function THROW(msg) {
   throw new Error(msg);
@@ -97,7 +104,7 @@ export const formatArrayToOption = (array, propName) => {
 
 export function sliceTime(str) {
   return str.slice(8, 10) + '/' + str.slice(5, 7) + '/' + str.slice(0, 4);
-};
+}
 
 export const total = (arr) => {
   let x = 0;
@@ -108,17 +115,73 @@ export const total = (arr) => {
 };
 
 export const search = (id, array) => {
-  let index = array.findIndex(e => id === e.productId);
+  let index = array.findIndex((e) => id === e.productId);
   return index === -1 ? true : false;
 };
 
 export const isLogged = () => {
-  return tokenManager.getToken();
+  // return tokenManager.getToken();
+  let token = tokenManager.getToken();
+  let refresh_token;
+  if (!token) {
+    const persistLogin = async () => {
+      refresh_token = await tokenManager.getRefreshedToken();
+      const { user } = refresh_token;
+      store.dispatch(persistUserLogin(user));
+    };
+    persistLogin();
+    return refresh_token ? true : false;
+  }
+  return token;
+};
+
+export const isAdmin = async () => {
+  const is_logged = await isLogged();
+  if (!is_logged) return false;
+  const state = store.getState();
+  let user = state.user.user.info;
+  return user.isAdmin ? true : false;
 };
 
 export const average = (array) => {
-    for(let i = 0, total = 0; i <= array.length; i++) {
-      total = total + array[i].points;
-      return total/array.length;
+  let total = 0;
+  for (let i = 0; i < array.length; i++) {
+    total = total + array[i].points;
   }
-}
+  return total / array.length;
+};
+
+export const functionCartGuest = (payload, decrement, erase) => {
+  const dispatch = store.dispatch;
+  let storageSTRG = localStorage.getItem('cart');
+  if (!storageSTRG) {
+    localStorage.setItem('cart', JSON.stringify([payload]));
+    return;
+  }
+
+  let storage = JSON.parse(storageSTRG);
+
+  let index = storage.findIndex((product) => product.id === payload.id);
+
+  if (decrement) {
+    // decrement es true cuando se envía desde el botón (-)
+    dispatch(RemoveProductFromCart(payload));
+    storage[index].quantity--;
+  } else if (!erase) {
+    if (index === -1) {
+      // para aumentar o agregar
+      dispatch(AddProductToCart(payload));
+      storage.push(payload);
+    } else {
+      dispatch(AddProductToCart(payload));
+      storage[index].quantity++;
+    }
+  } else if (erase) {
+    // Elimino el producto. MANDAR SOLO EL ID por payload
+    storage = storage.filter((product) => product.id !== payload.id);
+    dispatch(DeleteProductFromCart(payload));
+    localStorage.removeItem('cart');
+    localStorage.setItem('cart', JSON.stringify(storage));
+  }
+  localStorage.setItem('cart', JSON.stringify(storage));
+};

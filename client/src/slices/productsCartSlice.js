@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
   getAllProductsCartEnpoint,
+  getOrderTableEndpoint,
   usersEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
@@ -18,10 +19,14 @@ const initialState_product = {
 };
 
 export const getAllProductsCart = createAsyncThunk(
-  'product/getAllProductsCart',
+  'cart/getAllProductsCart',
   async (id) => {
     const resp = await axios.get(getAllProductsCartEnpoint + id + '/cart');
-    return resp;
+    let cart_response = {
+      resp,
+      id,
+    };
+    return cart_response;
   }
 );
 
@@ -33,6 +38,10 @@ export const postProductToCart = createAsyncThunk(
       usersEndpoint + userId + '/cart',
       payload
     );
+    increment
+      ? thunkApi.dispatch(AddProductToCart({ name: detail.name }))
+      : thunkApi.dispatch(RemoveProductFromCart({ name: detail.name }));
+
     const resPayload = {
       increment,
       detail,
@@ -44,8 +53,8 @@ export const postProductToCart = createAsyncThunk(
 );
 
 export const deleteAllProductsFromCart = createAsyncThunk(
-  'productsCart/deleteProductFromCart',
-  async (payload, thunkApi) => {
+  'cart/deleteProductFromCart',
+  async (payload) => {
     const { userId } = payload;
     const deleted_cart = await axios.delete(usersEndpoint + userId + '/cart');
     return deleted_cart;
@@ -53,12 +62,13 @@ export const deleteAllProductsFromCart = createAsyncThunk(
 );
 
 export const deleteSingleProdFromCart = createAsyncThunk(
-  'productsCart/deleteSingleProdFromCart',
+  'cart/deleteSingleProdFromCart',
   async (payload, thunkApi) => {
     const { productId, userId } = payload;
     const deleted_item = await axios.delete(
       usersEndpoint + userId + '/cart/' + productId
     );
+    thunkApi.dispatch(DeleteProductFromCart({ name: payload.name }));
     const resPayload = {
       deleted_item,
       productId,
@@ -67,31 +77,70 @@ export const deleteSingleProdFromCart = createAsyncThunk(
   }
 );
 
+export const modificateOrder = createAsyncThunk(
+  'cart/modifyStatusCart',
+  async (payload) => {
+    const { myCart, total, status } = payload;
+    const modificatedOrder = await axios.put(
+      getOrderTableEndpoint + myCart,
+      payload
+    );
+    return modificatedOrder;
+  }
+);
+
 const productsCartSlice = createSlice({
-  name: 'productsCart',
+  name: 'cart',
   initialState: initialState_product,
   reducers: {
     sync(state, action) {
       state.allProductsCart.sync = action.payload;
     },
-    refresh(state, action) {
-      console.log ("Carlos");
+    cartGuest(state, action) {
+      // Pisa el estado con lo que está en el localStorage
+      state.allProductsCart.status = 'succeded';
+      state.allProductsCart.list =
+        action.payload !== null ? action.payload : [];
+    },
+    logout(state, action) {
       state.allProductsCart.list = [];
       state.allProductsCart.userId = 0;
       state.allProductsCart.orderId = null;
-      state.allProductsCart.status = "idle";
+      state.allProductsCart.status = 'idle';
       state.allProductsCart.sync = false;
       state.allProductsCart.error = null;
-    }
+    },
+    login(state, action) {
+      state.allProductsCart.userId = action.payload;
+    },
+
+    resetState(state, action) {
+      state.allProductsCart.list = [];
+      state.allProductsCart.orderId = null;
+      state.allProductsCart.status = 'idle';
+      state.allProductsCart.sync = false;
+      state.allProductsCart.error = null;
+    },
+    AddProductToCart: (state, { payload }) => {
+      return;
+    },
+    RemoveProductFromCart: (state, { payload }) => {
+      return;
+    },
+    DeleteProductFromCart: (state, { payload }) => {
+      return;
+    },
   },
   extraReducers: {
     [getAllProductsCart.pending]: (state, action) => {
       state.allProductsCart.status = status.loading;
     },
     [getAllProductsCart.fulfilled]: (state, { payload }) => {
+      state.allProductsCart.list = [];
       state.allProductsCart.status = status.succeded;
-      payload.data[0] &&
-        payload.data[0].orderLines.map((e, i) => {
+      payload.resp.data[0] &&
+        payload.resp.data[0].orderLines.map((e, i) => {
+          state.allProductsCart.orderId = e.orderId;
           state.allProductsCart.list.push({
             id: e.product.id,
             quantity: e.quantity,
@@ -100,8 +149,10 @@ const productsCartSlice = createSlice({
             name: e.product.name,
             stock: e.product.stock,
             image: e.product.image,
+            productId: e.productId,
           });
         });
+      state.allProductsCart.userId = payload.id;
     },
     [getAllProductsCart.rejected]: (state, action) => {
       state.allProductsCart.status = status.failed;
@@ -141,8 +192,8 @@ const productsCartSlice = createSlice({
       const { order, orderLine, detail, increment } = payload;
       let idx;
       state.allProductsCart.status = status.succeded;
-      state.allProductsCart.sync = true;
       state.allProductsCart.userId = order.userId;
+      state.allProductsCart.orderId = order.id;
       const cartItem = state.allProductsCart.list.find(
         ({ productId }) => productId === orderLine.productId
       );
@@ -170,6 +221,16 @@ const productsCartSlice = createSlice({
       state.allProductsCart.status = status.failed;
       state.allProductsCart.error = action.error;
     },
+    [modificateOrder.pending]: (state, action) => {
+      state.allProductsCart.status = status.loading;
+    },
+    [modificateOrder.fulfilled]: (state, action) => {
+      state.allProductsCart.status = status.succeded;
+    },
+    [modificateOrder.rejected]: (state, action) => {
+      state.allProductsCart.status = status.failed;
+      state.allProductsCart.error = action.error;
+    },
   },
 });
 
@@ -177,9 +238,16 @@ export const {
   addToCart,
   sync,
   refresh,
+  logout,
+  login,
+  resetState,
   subtractToCart,
   deleteFromCart,
   deleteCart,
+  cartGuest,
+  AddProductToCart,
+  RemoveProductFromCart,
+  DeleteProductFromCart,
 } = productsCartSlice.actions;
 
 export default productsCartSlice;

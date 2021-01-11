@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Paper,
@@ -7,29 +7,33 @@ import {
   Card,
   Typography,
   Button,
-} from '@material-ui/core';
-import './ProductDetail.modules.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
+  CircularProgress,
+} from "@material-ui/core";
+import "./ProductDetail.modules.css";
+import { useDispatch, useSelector } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
+import { postProductToCart, sync } from "../../slices/productsCartSlice";
 import {
-  postProductToCart,
-} from '../../slices/productsCartSlice';
-import { productReviews } from "../../slices/reviewSlice";
-import { productDetailSelector, reviewsListSelector, reviewsListStatusSelector, userSelector } from '../../selectors/index';
-import Rating from '@material-ui/lab/Rating';
-import Box from '@material-ui/core/Box';
-import ReviewCard from '../Review/ReviewCard';
-import { average } from "../utils/index"
+  productDetailSelector,
+  productDetailStatusSelector,
+  reviewsListSelector,
+  reviewsListStatusSelector,
+  userSelector,
+} from "../../selectors/index";
+import Rating from "@material-ui/lab/Rating";
+import Box from "@material-ui/core/Box";
+import ReviewCard from "../Review/ReviewCard";
+import { average, functionCartGuest, isLogged } from "../utils/index";
 
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
   },
   bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)",
   },
   title: {
     fontSize: 14,
@@ -43,13 +47,16 @@ function ProductDetail() {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
   const productDetail = useSelector(productDetailSelector);
+  const statusProductDetail = useSelector(productDetailStatusSelector);
   const reviews = useSelector(reviewsListSelector);
-  const status = useSelector(reviewsListStatusSelector);
+  const reviewStatus = useSelector(reviewsListStatusSelector);
   const history = useHistory();
   const classes = useStyles();
+  let logged = isLogged();
+  //let value;
 
   const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
-  
+
   const {
     id,
     name,
@@ -62,13 +69,14 @@ function ProductDetail() {
   } = productDetail;
 
   useEffect(() => {
-    dispatch(productReviews(id));
-    if (status === "succeded") {
-      setValue(average(reviews));
+    if (reviewStatus === "succeded" && reviews.length !== 0) {
+      let rs = average(reviews);
+      setValue(rs);
     }
-  }, []);
+  }, [reviewStatus]);
+
   //* EDITHANDLER, redirect a form para editar producto
-  const editHandler = () => {  
+  const editHandler = () => {
     // dispatch(wineDetails(productDetail));
     // props.setProductDetail(wineDetail); //necesario en caso que ingrese al product detail sin pasar por catalogue.
     //Actualmente no es posible, pero podria ser una opcion en el futuro
@@ -82,7 +90,7 @@ function ProductDetail() {
             },
           }
         : {
-            pathname: '/catalogue',
+            pathname: "/catalogue",
             state: {
               edit: false,
             },
@@ -100,6 +108,33 @@ function ProductDetail() {
       increment: true,
     };
     dispatch(postProductToCart(payload));
+  }
+
+  function handlerProductToCartGuest(id) {
+    // Carrito de guest en el local storage
+    const payload = {
+      id,
+      price,
+      name: productDetail.name,
+      description: productDetail.description,
+      stock: productDetail.stock,
+      yearHarvest: productDetail.yearHarvest,
+      image: productDetail.image,
+      strainId: productDetail.strainId,
+      quantity: 1,
+    };
+
+    functionCartGuest(payload, null, null);
+    dispatch(sync(false));
+  }
+
+  if (reviewStatus === "loading") {
+    return (
+      <div className="ProductDetail__containerCargando">
+          <h3>Cargando....</h3>
+          <CircularProgress />
+      </div>
+    );
   }
 
   return (
@@ -133,8 +168,9 @@ function ProductDetail() {
               {description}
             </Typography>
             <Box component="fieldset" mt={3} borderColor="transparent">
-        <Rating value={value} readOnly /> <div>{reviews.length} reviews</div>
-      </Box>
+              <Rating value={value} readOnly />{" "}
+              <div>{reviews.length} reviews</div>
+            </Box>
           </CardContent>
 
           <CardActions id="buttons">
@@ -143,7 +179,7 @@ function ProductDetail() {
               size="small"
               onClick={() => history.goBack()}
             >
-              {' '}
+              {" "}
               <img
                 id="backButtonImage"
                 src="https://static.thenounproject.com/png/251451-200.png"
@@ -151,32 +187,39 @@ function ProductDetail() {
               ></img>
               VOLVER
             </Button>
-            <Button size="small" onClick={editHandler}>
-              {' '}
-              <img
-                id="editImage"
-                src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"
-                alt="editBtn"
-              ></img>
-              {/* <i class="fa fa-pencil-square-o" aria-hidden="true"></i> */}
-              EDITAR
-            </Button>
+            {user && user.isAdmin ? (
+              <>
+                <Button size="small" onClick={editHandler}>
+                  {" "}
+                  <img
+                    id="editImage"
+                    src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"
+                    alt="editBtn"
+                  ></img>
+                  {/* <i class="fa fa-pencil-square-o" aria-hidden="true"></i> */}
+                  EDITAR
+                </Button>
+              </>
+            ) : null}
             {stock === 0 ? (
               <h3>No hay STOCK</h3>
             ) : (
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  handlerProductToCart(user.id);
+                  logged
+                    ? handlerProductToCart(user.id)
+                    : handlerProductToCartGuest(id);
                 }}
               >
                 Comprar
               </Button>
             )}
           </CardActions>
-          {(reviews.length > 0) && reviews.map(review => {
-            return <ReviewCard data={review}/>
-          })}
+          {reviews.length > 0 &&
+            reviews.map((review) => {
+              return <ReviewCard data={review} />;
+            })}
         </Card>
       </Paper>
     </Container>

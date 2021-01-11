@@ -75,7 +75,7 @@ server.get('/:productId', (req, res, next) => {
     .then((revs) => {
       res.json(
         revs.map((r) => {
-          return { id: r.id, points: r.points, description: r.description, productId, firstName: r.user.firstName, lastName: r.user.lastName };
+          return { id: r.id, points: r.points, description: r.description, productId, createdAt: r.createdAt, firstName: r.user.firstName, lastName: r.user.lastName };
         })
       );
     })

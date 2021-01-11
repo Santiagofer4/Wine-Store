@@ -2,7 +2,6 @@ import axios from 'axios';
 import { baseEndpoint } from '../../constants/endpoints';
 
 const tokenManager = () => {
-  console.log('TOKEN MANAGER');
   let logoutEventName = 'logout';
   let refreshEndpoint = 'http://localhost:3000/auth/refresh';
   let inMemoryJWT = null;
@@ -13,7 +12,6 @@ const tokenManager = () => {
 
   const setLogoutEventName = (name) => (logoutEventName = name);
 
-  // This listener allows to disconnect another session of react-admin started in another tab
   window.addEventListener('storage', (event) => {
     if (event.key === logoutEventName) {
       inMemoryJWT = null;
@@ -37,52 +35,26 @@ const tokenManager = () => {
         withCredentials: true,
       });
       if (refreshed_token.status !== 200) {
+        console.log('NOT 200 STATUS');
         ereaseToken();
         global.console.log('Token renewal failure');
-        return { token: null };
+        return false;
       }
-      let newToken = refreshed_token.data && refreshed_token.data.refresh_token;
+      let newToken = refreshed_token.data && refreshed_token.data.token;
+      let user = refreshed_token.data && refreshed_token.data.user;
       if (newToken) {
         setToken(newToken.token, newToken.expires);
-        return true;
+        return { user, newToken };
       } else {
+        console.log('NO NEWTOKEN RECEIVED');
         ereaseToken();
         return false;
       }
-
-      console.log('RESPONSE', refreshed_token);
     } catch (error) {
       console.error(error);
       return error;
     }
-    // const request = new Request(refreshEndpoint, {
-    //   method: 'GET',
-    //   headers: new Headers({ 'Content-Type': 'application/json' }),
-    //   credentials: 'include',
-    // });
-
-    // isRefreshing = fetch(request)
-    //   .then((response) => {
-    //     if (response.status !== 200) {
-    //       ereaseToken();
-    //       global.console.log('Token renewal failure');
-    //       return { token: null };
-    //     }
-    //     return response.json();
-    //   })
-    //   .then(({ token, tokenExpiry }) => {
-    //     if (token) {
-    //       setToken(token, tokenExpiry);
-    //       return true;
-    //     }
-    //     ereaseToken();
-    //     return false;
-    //   });
-
-    // return isRefreshing;
   };
-  // This countdown feature is used to renew the JWT in a way that is transparent to the user.
-  // before it's no longer valid
   const refreshToken = (expires) => {
     console.log('SETTING REFRESH TIMEOUT');
     let delay = expires - 5000;
@@ -120,6 +92,7 @@ const tokenManager = () => {
     setLogoutEventName,
     setRefreshTokenEndpoint,
     setToken,
+    getRefreshedToken,
   };
 };
 
