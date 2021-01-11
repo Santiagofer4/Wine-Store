@@ -191,7 +191,8 @@ const productsCartSlice = createSlice({
       state.allProductsCart.status = status.succeded;
       // state.allProductsCart.sync = true;
       state.allProductsCart.userId = order.userId;
-      // console.log( 'ORDERLINE PRODUCTID',orderLine.productId)
+      state.allProductsCart.orderId = order.id;
+       console.log( 'ORDERLINE PRODUCTID',order)
       const cartItem = state.allProductsCart.list.find(
         ({ productId }) => productId === orderLine.productId
       );
