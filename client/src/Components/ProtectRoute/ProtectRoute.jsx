@@ -14,7 +14,6 @@ function ProtectRoute(props) {
 
 function AuthComponent({ component: Component, isLogged, ...rest }) {
   const authStatus = isLogged();
-  console.log('AUTH STATUS', authStatus);
   return (
     <Route
       {...rest}

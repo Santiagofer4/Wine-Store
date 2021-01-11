@@ -18,7 +18,6 @@ const initialState_orders = {
     'orders/getOrderTable',
     async () => {
       const resp = await axios.get(getOrderTableEndpoint, {headers: {"Authorization": tokenManager.getToken()}});
-      //console.log("Hola", tokenManager.getToken());
       return resp;
     }
   );

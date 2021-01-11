@@ -81,8 +81,6 @@ function UserReview(props) {
     setOpen(false);
   };
 
-  console.log('PROPS', props);
-
   const handleSave = () => {
     let description = document.getElementById("outlined-multiline-static").value;
     dispatch(createReview({ productId: product.id, userId: user.id, points: value, description }));
