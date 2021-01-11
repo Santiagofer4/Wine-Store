@@ -131,10 +131,12 @@ export const isLogged = () => {
 };
 
 export const average = (array) => {
-  for (let i = 0, total = 0; i <= array.length; i++) {
+  let total = 0;
+  for (let i = 0; i < array.length; i++) {
     total = total + array[i].points;
-    return total / array.length;
+    console.log('Prueba promedio',total,array.length)
   }
+  return total / array.length;
 };
 
 export const functionCartGuest = (payload, decrement, erase) => {
