@@ -188,31 +188,24 @@ function Cart() {
 
   useEffect(() => {
     logged = isLogged();
-    console.log('SINCRONIZAR 1', sincronizar)
 
     if (user) {
       if (logged) {
         setLogin(true);
-        console.log('SINCRONIZAR 2', sincronizar)
         // info de DB
         setSubTotal(total(AllProductsCart));
         if (sincronizar === false) {
-          console.log('STATUS ORDER', statusOrder)
            if(statusOrder === 'succeded') {
-            console.log('STATUS ORDER', statusOrder)
             dispatch(resetState());
             dispatch(sync(true));
           }
           dispatch(getAllProductsCart(user.id));
-          console.log('STATUS ORDER 3', statusOrder)
           dispatch(sync(true));
-          console.log('SINCRONIZAR 3', sincronizar)
         }
       }
     } else {
       if (!logged) {
         setLogin(false);
-        console.log('SINCRONIZAR 4', sincronizar)
         // info de localStorage
         let guest = localStorage.getItem('cart');
         let guestParse = JSON.parse(guest);
@@ -220,12 +213,10 @@ function Cart() {
         dispatch(cartGuest(guestParse));
         if (sincronizar === false) {
           dispatch(sync(true))
-          console.log('SINCRONIZAR 5', sincronizar)
         }
         setSubTotal(total(AllProductsCart));
       }
     }
-    console.log('SINCRONIZAR 6', sincronizar)
   }, [sincronizar, user]);
 
   if (status === 'succeded') {

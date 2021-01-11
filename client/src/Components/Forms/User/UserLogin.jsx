@@ -26,9 +26,7 @@ function UserLogin() {
     password: '',
   };
 
-  console.log('AFUERA', userStatus)
   const handleSubmit = (values, formik) => {
-    console.log( 'primero',userStatus)
     const payload = {
       user: {
         email: values.email,
@@ -38,11 +36,9 @@ function UserLogin() {
     };
     dispatch(postUserLogin(payload))
     // dispatch(postUserLogin(payload)).then((payload) => {
-    //   console.log( 'segundo ',userStatus)
     //   if (payload.type === 'user/login/fulfilled') {
     //     // if (userStatus === 'succeded'){
     //       dispatch(login(user.id))
-    //       console.log( 'tercero ',userStatus)
     //       let storage = JSON.parse(localStorage.getItem('cart'));
     //       storage.map( product  => {
     //          let obj = {

@@ -20,13 +20,11 @@ export const LoadProduct = () => {
         'http://localhost:3000/products/brand',
         brand
       );
-      // console.log('POST', resp);
     } catch (error) {
       console.error(error);
     }
   };
   const handleSubmit = (values, onSubmitProps) => {
-    // console.log('VALUES', values);
     postNewBrand(values);
     // onSubmitProps.resetForm();
   };

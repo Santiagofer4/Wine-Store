@@ -4,7 +4,6 @@ import Box from "@material-ui/core/Box";
 import './ReviewCard.modules.css';
 
 function ReviewCard(props) {
-  console.log(props)
   return (
     <>
     <Box component="fieldset" mt={3} borderColor="transparent">

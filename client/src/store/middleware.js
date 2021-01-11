@@ -20,7 +20,6 @@ export const notificationMiddleware = (store) => (next) => (action) => {
     // deleteSingleProdFromCart.fulfilled.type,
     // deleteAllProductsFromCart.fulfilled.type,
   ];
-  // console.log('LISTEN ARRAY', listenArray, postProductToCart.fulfilled.type);
   const snackbarContent = {
     message: '',
     options: {

@@ -52,9 +52,7 @@ const strains = [
 
 function Test() {
   const handleSubmit = (values, onSubmitProps) => {
-    console.log('<----- SUBMITING FORM ----->');
     setTimeout(() => {
-      console.log('VALORES SUBMITEADOS', values);
       onSubmitProps.resetForm();
     }, 2000);
   };
