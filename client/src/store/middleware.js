@@ -2,9 +2,9 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 import { enqueueSnackbar, closeSnackbar } from '../slices/notificationSlice';
 import {
-  guestAddProductToCart,
-  guestRemoveProductFromCart,
-  guestDeleteProductFromCart,
+  AddProductToCart,
+  RemoveProductFromCart,
+  DeleteProductFromCart,
   postProductToCart,
   deleteSingleProdFromCart,
   deleteAllProductsFromCart,
@@ -12,15 +12,15 @@ import {
 
 export const notificationMiddleware = (store) => (next) => (action) => {
   const dispatch = store.dispatch;
-  const [SLICE, ACTION] = action.type.split('/');
   const listenArray = [
-    guestAddProductToCart.type,
-    guestRemoveProductFromCart.type,
-    guestDeleteProductFromCart.type,
-    postProductToCart.typePrefix,
-    deleteSingleProdFromCart.typePrefix,
-    deleteAllProductsFromCart.typePrefix,
+    AddProductToCart.type,
+    RemoveProductFromCart.type,
+    DeleteProductFromCart.type,
+    // postProductToCart.fulfilled.type,
+    // deleteSingleProdFromCart.fulfilled.type,
+    // deleteAllProductsFromCart.fulfilled.type,
   ];
+  // console.log('LISTEN ARRAY', listenArray, postProductToCart.fulfilled.type);
   const snackbarContent = {
     message: '',
     options: {
@@ -38,23 +38,17 @@ export const notificationMiddleware = (store) => (next) => (action) => {
   };
   if (listenArray.includes(action.type)) {
     //cuando agrego producto al carrito
-    if (action.type.includes('Add') || action.type.includes('post')) {
+    if (action.type.includes('Add')) {
       snackbarContent.message = `Se agrego ${action.payload.name} al carrito`;
       snackbarContent.options.variant = 'success';
     }
     //cuando ELIMINO un producto con todas las unidades del carrito
-    else if (
-      action.type.includes('deleteProduct') ||
-      action.type.includes('guestDelete')
-    ) {
+    else if (action.type.includes('Delete')) {
       snackbarContent.message = `Se elimino ${action.payload.name} del carrito`;
       snackbarContent.options.variant = 'error';
     }
     //cuando saco UNA UNIDAD de un producto del carrito
-    else if (
-      action.type.includes('Remove') ||
-      action.type.includes('deleteSingle')
-    ) {
+    else if (action.type.includes('Remove')) {
       snackbarContent.message = `Se quito (un) ${action.payload.name} del carrito`;
       snackbarContent.options.variant = 'warning';
     }

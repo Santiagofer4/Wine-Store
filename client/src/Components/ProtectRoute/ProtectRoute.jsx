@@ -1,15 +1,26 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { AdminStrain } from '../Admin/LoadCategory/AdminStrain';
+import { useEffect } from 'react';
+import { CircularProgress } from '@material-ui/core';
 
-function ProtectRoute({ component: Component, isLogged, ...rest }) {
-  console.log('PROTECT', isLogged());
+function ProtectRoute(props) {
+  return (
+    <Suspense fallback={<CircularProgress />}>
+      <AuthComponent {...props} />
+    </Suspense>
+  );
+}
+
+function AuthComponent({ component: Component, isLogged, ...rest }) {
+  const authStatus = isLogged();
+  console.log('AUTH STATUS', authStatus);
   return (
     <Route
       {...rest}
-      render={(props) =>
-        isLogged() ? (
-          <Component {...props} />
+      render={(_props) =>
+        authStatus ? (
+          <Component {..._props} />
         ) : (
           <Redirect to="/form/user/login" />
         )

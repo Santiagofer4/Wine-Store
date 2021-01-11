@@ -46,7 +46,8 @@ const {
   Cellar,
   Order,
   OrderLine,
-  Review
+  Review,
+  RefreshToken,
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -78,6 +79,9 @@ Review.belongsTo(Product);
 
 User.hasMany(Review);
 Review.belongsTo(User);
+
+// User.hasMany(RefreshToken);
+// RefreshToken.belongsTo(User);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

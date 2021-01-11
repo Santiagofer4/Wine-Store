@@ -39,6 +39,10 @@ export const postProductToCart = createAsyncThunk(
       usersEndpoint + userId + '/cart',
       payload
     );
+    increment
+      ? thunkApi.dispatch(AddProductToCart({ name: detail.name }))
+      : thunkApi.dispatch(RemoveProductFromCart({ name: detail.name }));
+
     const resPayload = {
       increment,
       detail,
@@ -65,6 +69,7 @@ export const deleteSingleProdFromCart = createAsyncThunk(
     const deleted_item = await axios.delete(
       usersEndpoint + userId + '/cart/' + productId
     );
+    thunkApi.dispatch(DeleteProductFromCart({ name: payload.name }));
     const resPayload = {
       deleted_item,
       productId,
@@ -119,14 +124,17 @@ const productsCartSlice = createSlice({
       state.allProductsCart.error = null;
       // state.allProductsCart = initialState_product;
     },
-    guestAddProductToCart: (state, { payload }) => {
-      console.log('add to guest cart', payload);
+    AddProductToCart: (state, { payload }) => {
+      // console.log('add to guest cart', payload);
+      return;
     },
-    guestRemoveProductFromCart: (state, { payload }) => {
-      console.log('remove from guest cart', payload);
+    RemoveProductFromCart: (state, { payload }) => {
+      // console.log('remove from guest cart', payload);
+      return;
     },
-    guestDeleteProductFromCart: (state, { payload }) => {
-      console.log('delete from guest cart', payload);
+    DeleteProductFromCart: (state, { payload }) => {
+      // console.log('delete from guest cart', payload);
+      return;
     },
   },
   extraReducers: {
@@ -195,7 +203,8 @@ const productsCartSlice = createSlice({
       state.allProductsCart.status = status.succeded;
       // state.allProductsCart.sync = true;
       state.allProductsCart.userId = order.userId;
-      // console.log( 'ORDERLINE PRODUCTID',orderLine.productId)
+      state.allProductsCart.orderId = order.id;
+       console.log( 'ORDERLINE PRODUCTID',order)
       const cartItem = state.allProductsCart.list.find(
         ({ productId }) => productId === orderLine.productId
       );
@@ -249,9 +258,9 @@ export const {
   deleteFromCart,
   deleteCart,
   cartGuest,
-  guestAddProductToCart,
-  guestRemoveProductFromCart,
-  guestDeleteProductFromCart,
+  AddProductToCart,
+  RemoveProductFromCart,
+  DeleteProductFromCart,
 } = productsCartSlice.actions;
 
 export default productsCartSlice;

@@ -54,31 +54,6 @@ const tokenManager = () => {
       console.error(error);
       return error;
     }
-    // const request = new Request(refreshEndpoint, {
-    //   method: 'GET',
-    //   headers: new Headers({ 'Content-Type': 'application/json' }),
-    //   credentials: 'include',
-    // });
-
-    // isRefreshing = fetch(request)
-    //   .then((response) => {
-    //     if (response.status !== 200) {
-    //       ereaseToken();
-    //       global.console.log('Token renewal failure');
-    //       return { token: null };
-    //     }
-    //     return response.json();
-    //   })
-    //   .then(({ token, tokenExpiry }) => {
-    //     if (token) {
-    //       setToken(token, tokenExpiry);
-    //       return true;
-    //     }
-    //     ereaseToken();
-    //     return false;
-    //   });
-
-    // return isRefreshing;
   };
   const refreshToken = (expires) => {
     console.log('SETTING REFRESH TIMEOUT');
