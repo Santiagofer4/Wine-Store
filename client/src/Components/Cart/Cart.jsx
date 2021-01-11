@@ -219,6 +219,10 @@ function Cart() {
     }
   }, [sincronizar, user]);
 
+  useEffect(() => {
+    setSubTotal(total(AllProductsCart));
+  }, [status, dispatch]);
+  
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {
       return (
