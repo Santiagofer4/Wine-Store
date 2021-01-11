@@ -8,10 +8,6 @@ const makeJWT = require('../utils');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = require('./jwt').SECRET_KEY;
 
-/**
- * CONFIGURACION DE PASSPORT
- * TODO: hacer mas modular dividiendo cada `opcion` y `estrategia` en su propia variable, luego llamarlas en el use y exportarlas
- */
 
 const isLogged = (req, res, next) => {
   if (req.isLogged()) {
@@ -22,8 +18,7 @@ const isLogged = (req, res, next) => {
 };
 
 const isAdmin = () => {
-  //será necesario pasarle "false" por defecto? Evitaría algún problema?
-  return function (req, res, next) {
+   return function (req, res, next) {
     if (!req.user || (req.user.isAdmin = false)) {
       return response.sendStatus(401);
     }

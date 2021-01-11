@@ -3,9 +3,6 @@ const { User, Order, Product, OrderLine, Review } = require('../db.js');
 const { checkAdmin } = require('../utils/authTools.js');
 const passport = require('passport');
 
-//const cartRouter = require('./cart.js');
-
-//server.use('/:id/cart', cartRouter);
 
 //Borrar un USER by ID
 
@@ -53,21 +50,6 @@ server.delete('/:userId/cart', async (req, res) => {
     return res.status(500).send(error);
   }
 
-  // Order.findOne({
-  //   where: {
-  //     status: 'cart',
-  //     userId: userId,
-  //   },
-  // }).then((orders) => {
-  //   let id = orders.id;
-  //   OrderLine.destroy({
-  //     where: {
-  //       orderId: id,
-  //     },
-  //   }).then(() => {
-  //     return res.send(200, 'El carrito del usuario se ha borrado');
-  //   });
-  // });
 });
 
 // Borrar producto del carrito
@@ -214,39 +196,6 @@ server.post('/:userId/cart', async (req, res) => {
     console.error(error);
     return res.status(500).send(error);
   }
-
-  // let instacia;
-  // Order.findOrCreate({
-  //   where: {
-  //     userId,
-  //     status: 'cart',
-  //   },
-  //   defaults: {
-  //     total: 0,
-  //     status: 'cart',
-  //   },
-  // }).then((order) => {
-  //   const [instance, wasCreated] = order; // si crea el dato wasCreated = true sino false
-  //   instacia = instance;
-  //   orderLine = OrderLine.findOrCreate({
-  //     where: {
-  //       productId: id,
-  //     },
-  //     defaults: {
-  //       productId: id,
-  //       quantity,
-  //       price,
-  //     },
-  //   }).then((orderLine) => {
-  //     const [instance, wasCreated] = orderLine;
-  //     if (!wasCreated) {
-  //       OrderLine.update({ quantity }, { where: { productId: id } });
-  //     }
-  //     instance.setProduct(id);
-  //     instance.setOrder(instacia.id);
-  //   });
-  // });
-  // res.status(200).send('Entré a agregar item al carrito');
 });
 
 //Editar un USER by ID

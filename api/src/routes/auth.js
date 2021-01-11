@@ -89,30 +89,9 @@ server.get(
   }
 );
 
-// , function (err, user) {
-//   // console.log('LOGIN', user);
-//   if (err) return next(err);
-//   else if (!user) res.status(401);
-//   else {
-//     cookieMaker('jwt', token, res);
-//     return res.json({
-//       message: 'Registro exitoso',
-//       token: makeJWT(user),
-//       user,
-//     });
-//   }
-// })(req, res, next);
 
 //*ruta para probar la validacion con el JWT
 server.get(
-  /**
-   * Para probar con postman las rutas protegidas:
-   * 1. verificar que la ruta y el metodo sea el correcto
-   * 2. en caso que sea necesario, enviar la informacion por body en el formato correcta
-   * 3. Enviar en `headers` la 'key'=>`Authorization` con la string del JWT
-   * el formato es: "Bearer `aca viene el choclo de string ilegible`" (sin ninguna comilla, solo la string)
-   *
-   */
   '/test',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
@@ -122,36 +101,6 @@ server.get(
   }
 );
 
-// server.post('/login', (req, res) => {
-//   console.log('req', req.body);
-// });
-
-// server.post('/login', async function (req, res, next) {
-//   const { password, email } = req.body;
-//   if (!password || !email) {
-//     res.sendStatus(400).send('Tienes que ingresar Email y Password');
-//   }
-//   try {
-//     User.findOne({
-//       where: { email },
-//     }).then((correctUser) => {
-//       const prueba = correctUser.compare(password);
-//       // console.log(prueba)
-//       if (correctUser.compare(password)) {
-//         res.send({
-//           firstName: correctUser.firstName,
-//           lastName: correctUser.lastName,
-//           id: correctUser.id,
-//           email: correctUser.email,
-//         }); // en el front, si recibe 200, guardar el user en el Store.
-//       } else {
-//         res.sendStatus(401); // si recibe 401, rechazar la conexión???
-//       }
-//     });
-//   } catch (error) {
-//     res.send(error);
-//   }
-// });
 
 // Hacer admin a un user (promote User)
 

@@ -7,15 +7,16 @@ import {
   Card,
   Typography,
   Button,
+  CircularProgress,
 } from "@material-ui/core";
 import "./ProductDetail.modules.css";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { postProductToCart, sync } from "../../slices/productsCartSlice";
-import { productReviews } from "../../slices/reviewSlice";
 import {
   productDetailSelector,
+  productDetailStatusSelector,
   reviewsListSelector,
   reviewsListStatusSelector,
   userSelector,
@@ -46,12 +47,13 @@ function ProductDetail() {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
   const productDetail = useSelector(productDetailSelector);
+  const statusProductDetail = useSelector(productDetailStatusSelector);
   const reviews = useSelector(reviewsListSelector);
-  const status = useSelector(reviewsListStatusSelector);
+  const reviewStatus = useSelector(reviewsListStatusSelector);
   const history = useHistory();
   const classes = useStyles();
   let logged = isLogged();
-  console.log("LOGGED", logged)
+  //let value;
 
   const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
 
@@ -67,15 +69,13 @@ function ProductDetail() {
   } = productDetail;
 
   useEffect(() => {
-    // if (!logged){
-
-    // }
-    console.log("LOGGED", isLogged())
-    dispatch(productReviews(id));
-    if (status === "succeded" && reviews.length !== 0) {  // Revisar que haya reviews para que no romper
-      setValue(average(reviews));
+    if (reviewStatus === "succeded" && reviews.length !== 0) {
+      let rs = average(reviews);
+      setValue(rs);
+      console.log("RS", rs);
     }
-  }, []);
+  }, [reviewStatus]);
+
   //* EDITHANDLER, redirect a form para editar producto
   const editHandler = () => {
     // dispatch(wineDetails(productDetail));
@@ -111,7 +111,8 @@ function ProductDetail() {
     dispatch(postProductToCart(payload));
   }
 
-  function handlerProductToCartGuest(id) {      // Carrito de guest en el local storage
+  function handlerProductToCartGuest(id) {
+    // Carrito de guest en el local storage
     const payload = {
       id,
       price,
@@ -125,9 +126,17 @@ function ProductDetail() {
     };
 
     functionCartGuest(payload, null, null);
-    dispatch(sync(false))
+    dispatch(sync(false));
+  }
 
-  };
+  if (reviewStatus === "loading") {
+    return (
+      <div className="ProductDetail__containerCargando">
+          <h3>Cargando....</h3>
+          <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <Container id="pageContainer" className="ProductDetail__Container">
@@ -180,27 +189,28 @@ function ProductDetail() {
               VOLVER
             </Button>
             {user && user.isAdmin ? (
-                              <>
-                             
-            <Button size="small" onClick={editHandler}>
-              {" "}
-              <img
-                id="editImage"
-                src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"
-                alt="editBtn"
-              ></img>
-              {/* <i class="fa fa-pencil-square-o" aria-hidden="true"></i> */}
-              EDITAR
-            </Button>
-                              </>
-                            ) : null}
+              <>
+                <Button size="small" onClick={editHandler}>
+                  {" "}
+                  <img
+                    id="editImage"
+                    src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"
+                    alt="editBtn"
+                  ></img>
+                  {/* <i class="fa fa-pencil-square-o" aria-hidden="true"></i> */}
+                  EDITAR
+                </Button>
+              </>
+            ) : null}
             {stock === 0 ? (
               <h3>No hay STOCK</h3>
             ) : (
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  logged ? handlerProductToCart(user.id) : handlerProductToCartGuest(id);
+                  logged
+                    ? handlerProductToCart(user.id)
+                    : handlerProductToCartGuest(id);
                 }}
               >
                 Comprar
