@@ -2,9 +2,9 @@ import tokenManager from './tokenManager';
 import { persistUserLogin } from '../../slices/userSlice';
 import store from '../../store';
 import {
-  guestAddProductToCart,
-  guestRemoveProductFromCart,
-  guestDeleteProductFromCart,
+  AddProductToCart,
+  RemoveProductFromCart,
+  DeleteProductFromCart,
 } from '../../slices/productsCartSlice.js';
 
 function THROW(msg) {
@@ -135,11 +135,20 @@ export const isLogged = () => {
   return token;
 };
 
+export const isAdmin = async () => {
+  const is_logged = await isLogged();
+  if (!is_logged) return false;
+  const state = store.getState();
+  let user = state.user.user.info;
+  console.log('ADMIN?', user.isAdmin);
+  return user.isAdmin ? true : false;
+};
+
 export const average = (array) => {
   let total = 0;
   for (let i = 0; i < array.length; i++) {
     total = total + array[i].points;
-    console.log('Prueba promedio',total,array.length)
+    //console.log('Prueba promedio',total,array.length)
   }
   return total / array.length;
 };
@@ -161,22 +170,21 @@ export const functionCartGuest = (payload, decrement, erase) => {
   if (decrement) {
     // decrement es true cuando se envía desde el botón (-)
     // console.log('ENTRÉ A DECREMENT', storage[index].quantity);
-    console.log('asdasda', payload);
-    dispatch(guestRemoveProductFromCart(payload));
+    dispatch(RemoveProductFromCart(payload));
     storage[index].quantity--;
   } else if (!erase) {
     if (index === -1) {
       // para aumentar o agregar
-      dispatch(guestAddProductToCart(payload));
+      dispatch(AddProductToCart(payload));
       storage.push(payload);
     } else {
-      dispatch(guestAddProductToCart(payload));
+      dispatch(AddProductToCart(payload));
       storage[index].quantity++;
     }
   } else if (erase) {
     // Elimino el producto. MANDAR SOLO EL ID por payload
     storage = storage.filter((product) => product.id !== payload.id);
-    dispatch(guestDeleteProductFromCart(payload));
+    dispatch(DeleteProductFromCart(payload));
     localStorage.removeItem('cart');
     localStorage.setItem('cart', JSON.stringify(storage));
   }

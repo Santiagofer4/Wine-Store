@@ -35,6 +35,7 @@ function ProductCard(props) {
       userId,
       quantity: 1,
       increment: true,
+      name: detail.name,
     };
     dispatch(postProductToCart(payload));
   }
@@ -86,9 +87,7 @@ function ProductCard(props) {
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  logged
-                    ? handlerProductToCart(user.id, id)
-                    : handlerProductToCartGuest(id);
+                  logged ? handlerProductToCart(user.id, id) : handlerProductToCartGuest(id);
                 }}
               >
                 Comprar

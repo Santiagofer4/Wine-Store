@@ -3,10 +3,12 @@ import './Cart.modules.css';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 import {
   allProductsCartSelector,
   allProductsCartSyncSelector,
   allProductsCartStatusSelector,
+  allOrderStatusSelector,
   userStatusSelector,
   userSelector,
   myCartSelector,
@@ -16,8 +18,10 @@ import {
   sync,
   cartGuest,
   postProductToCart,
+  modificateOrder,
   deleteAllProductsFromCart,
   deleteSingleProdFromCart,
+  resetState,
 } from '../../slices/productsCartSlice';
 import CartItem from './CartItem/CartItem';
 import {
@@ -29,12 +33,14 @@ import axios from 'axios';
 
 function Cart() {
   const dispatch = useDispatch();
-  const AllProductsCart = useSelector(allProductsCartSelector); // tiene los prods del cart
+  const history = useHistory();
+  const AllProductsCart = useSelector(allProductsCartSelector);  // tiene los prods del cart
   const sincronizar = useSelector(allProductsCartSyncSelector);
   const status = useSelector(allProductsCartStatusSelector);
   const user = useSelector(userSelector);
   const myCart = useSelector(myCartSelector);
   const statusUser = useSelector(userStatusSelector);
+  const statusOrder = useSelector(allOrderStatusSelector);
   const [subTotal, setSubTotal] = useState(0);
   const [login, setLogin] = useState(false);
   let logged = isLogged();
@@ -42,6 +48,7 @@ function Cart() {
   const handleDelete = () => {
     if (login) {
       dispatch(deleteAllProductsFromCart({ userId: user.id }));
+      dispatch(sync(false));
     }
     if (!login) {
       let storage = [];
@@ -113,7 +120,6 @@ function Cart() {
 
   const incrementHandler = (event, detail) => {
     if (logged) {
-      console.log('Está logueado? dentro increment handler con log', logged);
       let id = event.target.name * 1;
       let valueInput = document.getElementById(id).value; // cantidad de productos a comprar
       const payload = {
@@ -131,8 +137,6 @@ function Cart() {
     }
 
     if (!logged) {
-      //funciona pero no renderiza.
-      console.log('Está logueado? dentro increment handler sin log', logged);
       let id = event.target.name * 1;
       let valueInput = document.getElementById(id).value;
       const payload = {
@@ -141,7 +145,6 @@ function Cart() {
         quantity: detail.quantity,
         stock: detail.stock,
         name: detail.name,
-        //userId: user.id,
       };
       if (valueInput < detail.stock) {
         functionCartGuest(payload);
@@ -150,30 +153,30 @@ function Cart() {
     }
   };
 
-  const deleteItemHandler = ({ id, userId, name }) => {
-    if (logged) {
-      const payload = {
-        productId: id, // id del producto a eliminar
-        userId, // id del usuario para saber de que
-        name,
-      }; // carrito eliminar el prod
-      dispatch(deleteSingleProdFromCart(payload));
+  const deleteItemHandler = ({ id, userId }) => {
+    if (logged){
+      const payload = {                                          
+        productId: id,                                         // id del producto a eliminar
+        userId,                                                // id del usuario para saber de que 
+      };                                                       // carrito eliminar el prod
+      dispatch(deleteSingleProdFromCart(payload));    
     }
-
-    if (!logged) {
-      const payload = { id, name };
-      functionCartGuest(payload, null, true);
-      dispatch(sync(false));
+    if (!logged){
+      const payload = id;                                          
+       functionCartGuest(payload, null, true)                                             
+       dispatch(sync(false))
     }
   };
 
-  const handleConfirm = () => {
-    // console.log('ORDER NRO?', myCart)
-    let total = Math.ceil((subTotal * 121) / 100);
-    axios.put(`http://localhost:3000/orders/${myCart}`, {
-      total,
-      status: 'completed',
-    });
+  const handleConfirm = async () => {
+   if(login) {
+     let total = Math.ceil((subTotal * 121) / 100);
+     await dispatch(modificateOrder({ myCart, total, status: 'completed' }));
+     //axios.put(`http://localhost:3000/orders/${myCart}`, { total, status: 'completed' });
+   }
+   if(!login) {
+    history.push('/form/user/login');
+   }
     //agregar total para guardar
   };
 
@@ -185,32 +188,45 @@ function Cart() {
 
   useEffect(() => {
     logged = isLogged();
+    console.log('SINCRONIZAR 1', sincronizar)
 
     if (user) {
       if (logged) {
         setLogin(true);
+        console.log('SINCRONIZAR 2', sincronizar)
         // info de DB
         setSubTotal(total(AllProductsCart));
         if (sincronizar === false) {
+          console.log('STATUS ORDER', statusOrder)
+           if(statusOrder === 'succeded') {
+            console.log('STATUS ORDER', statusOrder)
+            dispatch(resetState());
+            dispatch(sync(true));
+          }
           dispatch(getAllProductsCart(user.id));
+          console.log('STATUS ORDER 3', statusOrder)
           dispatch(sync(true));
+          console.log('SINCRONIZAR 3', sincronizar)
         }
       }
     } else {
       if (!logged) {
         setLogin(false);
+        console.log('SINCRONIZAR 4', sincronizar)
         // info de localStorage
         let guest = localStorage.getItem('cart');
         let guestParse = JSON.parse(guest);
         setSubTotal(total(AllProductsCart));
         dispatch(cartGuest(guestParse));
         if (sincronizar === false) {
-          dispatch(sync(true));
+          dispatch(sync(true))
+          console.log('SINCRONIZAR 5', sincronizar)
         }
         setSubTotal(total(AllProductsCart));
       }
     }
-  }, [status, sincronizar, user]);
+    console.log('SINCRONIZAR 6', sincronizar)
+  }, [sincronizar, user]);
 
   if (status === 'succeded') {
     if (AllProductsCart.length > 0) {
