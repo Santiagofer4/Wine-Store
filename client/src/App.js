@@ -22,6 +22,7 @@ import ProtectRoute from './Components/ProtectRoute/ProtectRoute';
 import Logout from './Components/Contenido/Logout';
 import { isLogged } from './Components/utils/index';
 import tokenManager from './Components/utils/tokenManager';
+import Notifier from './Components/Notifier/Notifier';
 
 function App() {
   // //!SOLUCION CAVERNICOLA!
@@ -40,6 +41,7 @@ function App() {
         crossOrigin="anonymous"
       />
       <NavBar></NavBar>
+      <Notifier />
       <Switch>
         <Route exact path="/" component={Inicio}></Route>
         <Route exact path="/catalogue" component={Catalogue}></Route>

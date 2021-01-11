@@ -1,6 +1,11 @@
 import tokenManager from './tokenManager';
 import { persistUserLogin } from '../../slices/userSlice';
 import store from '../../store';
+import {
+  guestAddProductToCart,
+  guestRemoveProductFromCart,
+  guestDeleteProductFromCart,
+} from '../../slices/productsCartSlice.js';
 
 function THROW(msg) {
   throw new Error(msg);
@@ -115,7 +120,7 @@ export const search = (id, array) => {
 };
 
 export const isLogged = () => {
- // return tokenManager.getToken();
+  // return tokenManager.getToken();
   let token = tokenManager.getToken();
   let refresh_token;
   if (!token) {
@@ -131,41 +136,49 @@ export const isLogged = () => {
 };
 
 export const average = (array) => {
-  for (let i = 0, total = 0; i <= array.length; i++) {
+  let total = 0;
+  for (let i = 0; i < array.length; i++) {
     total = total + array[i].points;
-    return total / array.length;
+    console.log('Prueba promedio',total,array.length)
   }
+  return total / array.length;
 };
 
 export const functionCartGuest = (payload, decrement, erase) => {
+  const dispatch = store.dispatch;
   let storageSTRG = localStorage.getItem('cart');
-  console.log('STORAGESTRG', storageSTRG);
-
-  if (storageSTRG) {
-    let storage = JSON.parse(storageSTRG);
-    console.log('STORAGE', storage);
-
-    let index = storage.findIndex((product) => product.id === payload.id);
-
-    if (decrement) {
-      // decrement es true cuando se envía desde el botón (-)
-      console.log('ENTRÉ A DECREMENT', storage[index].quantity);
-      storage[index].quantity--;
-    } else if (!erase) {
-      if (index === -1) {
-        // para aumentar o agregar
-        storage.push(payload);
-      } else {
-        storage[index].quantity++;
-      }
-    } else if (erase) {
-      // Elimino el producto. MANDAR SOLO EL ID por payload
-      storage = storage.filter((product) => product.id !== payload);
-      localStorage.removeItem('cart');
-      localStorage.setItem('cart', JSON.stringify(storage));
-    }
-    localStorage.setItem('cart', JSON.stringify(storage));
-  } else {
+  // console.log('STORAGESTRG', storageSTRG);
+  if (!storageSTRG) {
     localStorage.setItem('cart', JSON.stringify([payload]));
+    return;
   }
+
+  let storage = JSON.parse(storageSTRG);
+  // console.log('STORAGE', storage);
+
+  let index = storage.findIndex((product) => product.id === payload.id);
+
+  if (decrement) {
+    // decrement es true cuando se envía desde el botón (-)
+    // console.log('ENTRÉ A DECREMENT', storage[index].quantity);
+    console.log('asdasda', payload);
+    dispatch(guestRemoveProductFromCart(payload));
+    storage[index].quantity--;
+  } else if (!erase) {
+    if (index === -1) {
+      // para aumentar o agregar
+      dispatch(guestAddProductToCart(payload));
+      storage.push(payload);
+    } else {
+      dispatch(guestAddProductToCart(payload));
+      storage[index].quantity++;
+    }
+  } else if (erase) {
+    // Elimino el producto. MANDAR SOLO EL ID por payload
+    storage = storage.filter((product) => product.id !== payload.id);
+    dispatch(guestDeleteProductFromCart(payload));
+    localStorage.removeItem('cart');
+    localStorage.setItem('cart', JSON.stringify(storage));
+  }
+  localStorage.setItem('cart', JSON.stringify(storage));
 };

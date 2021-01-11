@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Container } from '@material-ui/core';
-import { userSelector } from "../../../selectors";
+import { userSelector } from '../../../selectors';
 import { useSelector } from 'react-redux';
-import { isLogged } from "../../utils/index";
+import { isLogged } from '../../utils/index';
 
 function CartItem(props) {
   const user = useSelector(userSelector);
@@ -33,7 +33,11 @@ function CartItem(props) {
             <a href="#" className="Cart__DeleteProduct">
               <i
                 class="fas fa-trash-alt"
-                onClick={ logged ? ((e) => deleteItemHandler({ id, userId: user.id })) : ((e) => deleteItemHandler({ id }))}
+                onClick={
+                  logged
+                    ? (e) => deleteItemHandler({ id, userId: user.id, name })
+                    : (e) => deleteItemHandler({ id, name })
+                }
               ></i>
             </a>
             <Button
@@ -47,7 +51,7 @@ function CartItem(props) {
             <Button
               name={id}
               className="button"
-              onClick={(e) => incrementHandler(e,props.prod)}
+              onClick={(e) => incrementHandler(e, props.prod)}
             >
               +
             </Button>

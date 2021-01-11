@@ -70,7 +70,8 @@ export const strainsErrorSelector = (state) => state.strains.error;
 
 export const allOrderSelector = (state) => state.orderTable.orderTable.orders;
 
-export const allOrderStatusSelector = (state) => state.orderTable.orderTable.status;
+export const allOrderStatusSelector = (state) =>
+  state.orderTable.orderTable.status;
 
 export const userSelector = (state) => state.user.user.info;
 
@@ -86,6 +87,10 @@ export const userOrdersErrorSelector = (state) => state.user.user.error;
 
 export const reviewsListSelector = (state) => state.reviews.reviews.info;
 
-export const reviewsListStatusSelector = (state) => state.reviews.reviews.status;
+export const reviewsListStatusSelector = (state) =>
+  state.reviews.reviews.status;
 
-export const myCartSelector = (state) =>  state.productsCart.allProductsCart.orderId;
+export const myCartSelector = (state) =>
+  state.productsCart.allProductsCart.orderId;
+
+export const notificationListSelector = (state) => state.notifications.list;

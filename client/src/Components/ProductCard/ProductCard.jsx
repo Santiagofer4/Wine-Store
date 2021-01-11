@@ -7,14 +7,11 @@ import CardActions from '@material-ui/core/CardActions';
 import './ProductCard.modules.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { wineDetails } from '../../slices/productDetailSlice';
-import {
-  postProductToCart,
-  sync,
-} from '../../slices/productsCartSlice';
-import { productReviews } from "../../slices/reviewSlice";
+import { postProductToCart, sync } from '../../slices/productsCartSlice';
+import { productReviews } from '../../slices/reviewSlice';
 import { useHistory } from 'react-router-dom';
 import { isLogged, functionCartGuest } from '../../Components/utils/index.js';
-import { userSelector } from '../../selectors/index'
+import { userSelector } from '../../selectors/index';
 
 function ProductCard(props) {
   const dispatch = useDispatch();
@@ -29,7 +26,7 @@ function ProductCard(props) {
     history.push(`/product/${id}`);
   };
 
-  function handlerProductToCart(userId,id) {
+  function handlerProductToCart(userId, id) {
     const { price: _price, ...detail } = props.data;
     const payload = {
       id,
@@ -42,7 +39,8 @@ function ProductCard(props) {
     dispatch(postProductToCart(payload));
   }
 
-  function handlerProductToCartGuest(id) {      // Carrito de guest en el local storage
+  function handlerProductToCartGuest(id) {
+    // Carrito de guest en el local storage
     const { price: _price, ...detail } = props.data;
 
     const payload = {
@@ -56,10 +54,10 @@ function ProductCard(props) {
       strainId: detail.strainId,
       quantity: 1,
     };
-    
+
     functionCartGuest(payload, null, null);
-    dispatch(sync(false))
-  };
+    dispatch(sync(false));
+  }
 
   return (
     <Card className="ProCards_Card">
@@ -88,7 +86,9 @@ function ProductCard(props) {
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  logged ? handlerProductToCart(user.id,id) : handlerProductToCartGuest(id);
+                  logged
+                    ? handlerProductToCart(user.id, id)
+                    : handlerProductToCartGuest(id);
                 }}
               >
                 Comprar
