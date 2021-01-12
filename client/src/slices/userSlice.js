@@ -17,6 +17,7 @@ const initialState_user = {
   user: {
     info: {},
     orders: [],
+    usersList: [],
     status: 'idle',
     error: null,
   },
@@ -77,7 +78,7 @@ export const getUsers = createAsyncThunk('users/getUsers', async () => {
 });
 
 export const sendEmail = createAsyncThunk('user/sendMail', async (payload) => {
-  const resp = await axios.get(mailsEndpoint, payload);
+  const resp = await axios.post(mailsEndpoint, payload);
   return resp;
 });
 
@@ -173,7 +174,6 @@ const userSlice = createSlice({
     },
     [sendEmail.fulfilled]: (state, { payload }) => {
       state.user.status = status.succeded;
-      state.user.info = payload.data;
     },
     [sendEmail.rejected]: (state, action) => {
       state.user.status = status.failed;

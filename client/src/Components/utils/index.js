@@ -178,7 +178,7 @@ export const functionCartGuest = (payload, decrement, erase) => {
     }
   } else if (erase) {
     // Elimino el producto. MANDAR SOLO EL ID por payload
-    storage = storage.filter((product) => product.id !== payload.id);
+    storage = storage.filter((product) => product.id !== payload);
     dispatch(DeleteProductFromCart(payload));
     localStorage.removeItem('cart');
     localStorage.setItem('cart', JSON.stringify(storage));

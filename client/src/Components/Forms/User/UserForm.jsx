@@ -11,7 +11,7 @@ import './UserForm.modules.css';
 import { validationSchemaUserRegister } from './userValidations';
 import { useDispatch, useSelector } from 'react-redux';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { createUser } from '../../../slices/userSlice';
+import { createUser, sendEmail } from '../../../slices/userSlice';
 import { useHistory } from 'react-router-dom';
 import {
   userErrorSelector,
@@ -58,6 +58,7 @@ function UserForm() {
   useEffect(() => {
     if (status === 'succeded') {
       history.push('/welcome');
+      dispatch(sendEmail({ name: info.firstName, email: info.email, type: 'Welcome'}))
     }
     if (status === 'failed') {
       error.message.includes('409') ? emailTaken() : history.push('/failure');
