@@ -67,7 +67,7 @@ function App() {
         />
         {/* <Route path="/user/profile" component={Profile} /> */}
         <Route path="/404" component={notFound} />
-        <Route path="/checkout" component={Checkout} />
+        {/* <Route path="/checkout" component={Checkout} /> */}
         <Redirect to="/404" />
       </Switch>
     </div>
