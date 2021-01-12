@@ -16,6 +16,9 @@ import { createReview, postReview } from "../../slices/reviewSlice";
 import { userSelector , myCartSelector} from "../../selectors";
 import {modificateOrder } from '../../slices/productsCartSlice'
 import { useHistory } from 'react-router-dom';
+
+import axios from 'axios';
+
 const styles = (theme) => ({
   root: {
     margin: 0,
@@ -93,7 +96,10 @@ function Checkout(props) {
     // dispatch(postReview({ productId: product.id, userId: user.id, points: value, description }));
     let total = props.total;
     dispatch(modificateOrder({ myCart, total, status: 'completed' }));
-    history.push('/user/profile')
+    history.push('/user/profile');
+    ////////
+    axios.post('http://localhost:3000/mails', { email: "winestorehenry@gmail.com"})
+    ////////
     handleClose();
   };
 
