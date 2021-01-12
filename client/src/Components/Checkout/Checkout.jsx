@@ -13,19 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
+import { useDispatch, useSelector } from 'react-redux';
+import { checkoutInfoSelector } from '../../selectors/index';
+import { addressInfoAction, paymentInfoAction } from '../../slices/checkoutSlice';
+import { saveAddressInfo, savePaymentInfo } from '../../Components/utils/index';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -67,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = ['Direccion de envio', 'Detalles de pago', 'Verificar la orden'];
 
+
 function getStepContent(step) {
   switch (step) {
     case 0:
@@ -81,11 +74,21 @@ function getStepContent(step) {
 }
 
 export default function Checkout() {
+
+
+  // window.addEventListener('beforeunload', (event) => {
+  //   console.log('acá guardo los datos')
+  // });
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
+ // const dispatch = useDispatch();
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
+    console.log('active step', activeStep)
+    console.log('address info', saveAddressInfo())
+  //  saveAddressInfo()
+   // savePaymentInfo()
   };
 
   const handleBack = () => {
@@ -94,6 +97,7 @@ export default function Checkout() {
 
   return (
     <React.Fragment>
+      
       {/* <CssBaseline /> */}
       {/* <AppBar position="absolute" color="default" className={classes.appBar}>
         <Toolbar>

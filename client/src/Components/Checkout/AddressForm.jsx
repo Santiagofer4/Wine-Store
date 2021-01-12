@@ -6,8 +6,46 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormField from '../FormComponents/FormField';
 
+
 export default function AddressForm() {
-  return (
+
+ 
+let addressInfoStorage = JSON.parse(localStorage.getItem('addressInfo'));
+const [addressInfo, setAddressInfo] = React.useState({  
+            firstName: addressInfoStorage.firstName,
+            lastName: addressInfoStorage.lastName,
+            address1: addressInfoStorage.address1,
+            address2: addressInfoStorage.address2,
+            city: addressInfoStorage.city,
+            stateAddress: addressInfoStorage.stateAddress,
+            zip: addressInfoStorage.zip,
+            country: addressInfoStorage.country,
+  });
+
+  window.addEventListener('beforeunload', (event) => {
+    setAddressInfo({
+    firstName: document.getElementById('firstName'),
+    lastName: document.getElementById('lastName'),
+    address1: document.getElementById('address1Name'),
+    address2: document.getElementById('address2Name'),
+    city: document.getElementById('firstName'),
+    stateAddress: document.getElementById('firstName'),
+    zip: document.getElementById('firstName'),
+    country: document.getElementById('firstName'),
+     });
+    localStorage.setItem('addressInfo', JSON.stringify(addressInfo))
+   
+  });
+
+  const handleInputChange = function(e) {
+    setAddressInfo({
+       ...addressInfo, 
+       [e.target.name]: e.target.value 
+     });
+   }
+
+
+   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Direccion de envio
@@ -18,7 +56,9 @@ export default function AddressForm() {
             required
             id="firstName"
             name="firstName"
-            label="First name"
+            label="Nombre"
+            defaultValue={addressInfoStorage.firstName}
+            onChange={handleInputChange}
             fullWidth
             autoComplete="given-name"
           />
@@ -28,7 +68,9 @@ export default function AddressForm() {
             required
             id="lastName"
             name="lastName"
-            label="Last name"
+            label="Apellido"
+            defaultValue={addressInfoStorage.lastName}
+            onChange={handleInputChange}
             fullWidth
             autoComplete="family-name"
           />
@@ -38,7 +80,9 @@ export default function AddressForm() {
             required
             id="address1"
             name="address1"
-            label="Address line 1"
+            label="Dirección (línea 1)"
+            defaultValue={addressInfoStorage.address1}
+            onChange={handleInputChange}
             fullWidth
             autoComplete="shipping address-line1"
           />
@@ -47,7 +91,9 @@ export default function AddressForm() {
           <TextField
             id="address2"
             name="address2"
-            label="Address line 2"
+            label="Dirección (línea 2)"
+            defaultValue={addressInfoStorage.address2}
+            onChange={handleInputChange}
             fullWidth
             autoComplete="shipping address-line2"
           />
@@ -57,7 +103,9 @@ export default function AddressForm() {
             required
             id="city"
             name="city"
-            label="City"
+            label="Ciudad"
+            defaultValue={addressInfoStorage.city}
+            onChange={handleInputChange}
             fullWidth
             autoComplete="shipping address-level2"
           />
@@ -66,7 +114,9 @@ export default function AddressForm() {
           <TextField
             id="state"
             name="state"
-            label="State/Province/Region"
+            label="Provincia"
+            defaultValue={addressInfoStorage.state}
+            onChange={handleInputChange}
             fullWidth
           />
         </Grid>
@@ -75,7 +125,9 @@ export default function AddressForm() {
             required
             id="zip"
             name="zip"
-            label="Zip / Postal code"
+            label="Código Postal"
+            defaultValue={addressInfoStorage.zip}
+            onChange={handleInputChange}
             fullWidth
             autoComplete="shipping postal-code"
           />
@@ -85,7 +137,9 @@ export default function AddressForm() {
             required
             id="country"
             name="country"
-            label="Country"
+            label="País"
+            defaultValue={addressInfoStorage.country}
+            onChange={handleInputChange}
             fullWidth
             autoComplete="shipping country"
           />
@@ -95,10 +149,10 @@ export default function AddressForm() {
             control={
               <Checkbox color="secondary" name="saveAddress" value="yes" />
             }
-            label="Use this address for payment details"
+            label="Usar ésta dirección para los detalles de pago"
           />
         </Grid>
       </Grid>
-    </React.Fragment>
+     </React.Fragment>
   );
 }
