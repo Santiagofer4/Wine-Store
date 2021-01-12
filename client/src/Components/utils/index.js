@@ -185,3 +185,54 @@ export const functionCartGuest = (payload, decrement, erase) => {
   }
   localStorage.setItem('cart', JSON.stringify(storage));
 };
+
+
+export const deleteAddressInfo = () => {
+  let info = {
+    firstName: '',
+    lastName: '',
+    address1: '',
+    address2: '',
+    city: '',
+    stateAddress: '',
+    zip: '',
+    country: '',
+     };
+    localStorage.setItem('addressInfo', JSON.stringify(info))
+};
+
+export const deletePaymentInfo = () => {
+  let info = {
+    cardName: '',
+    cardNumber: '',
+    expDate: '',
+    cvv: '',
+   
+     };
+    localStorage.setItem('paymentInfo', JSON.stringify(info))
+};
+
+export const saveAddressInfo = () => {
+  let info = ({
+    firstName: document.getElementById('firstName'),
+    lastName: document.getElementById('lastName'),
+    address1: document.getElementById('address1Name'),
+    address2: document.getElementById('address2Name'),
+    city: document.getElementById('firstName'),
+    stateAddress: document.getElementById('firstName'),
+    zip: document.getElementById('firstName'),
+    country: document.getElementById('firstName'),
+     });
+    localStorage.setItem('addressInfo', JSON.stringify(info))
+};
+
+export const savePaymentInfo = () => {
+  let info = {
+    cardName: document.getElementById('cardName'),
+    cardNumber: document.getElementById('cardNumber'),
+    expDate: document.getElementById('expDate'),
+    cvv: document.getElementById('cvv'),
+   
+     };
+    localStorage.setItem('paymentInfo', JSON.stringify(info))
+};

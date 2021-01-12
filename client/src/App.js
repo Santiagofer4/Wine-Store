@@ -23,6 +23,7 @@ import Logout from './Components/Contenido/Logout';
 import { isLogged, isAdmin } from './Components/utils/index';
 import tokenManager from './Components/utils/tokenManager';
 import Notifier from './Components/Notifier/Notifier';
+import Checkout from './Components/Checkout/Checkout';
 
 function App() {
   // //!SOLUCION CAVERNICOLA!
