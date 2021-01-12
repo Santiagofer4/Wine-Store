@@ -99,8 +99,8 @@ const productsCartSlice = createSlice({
     cartGuest(state, action) {
       // Pisa el estado con lo que está en el localStorage
       state.allProductsCart.status = 'succeded';
-      state.allProductsCart.list =
-        action.payload !== null ? action.payload : [];
+      state.allProductsCart.list = action.payload  !== null ? action.payload : [];
+
     },
     logout(state, action) {
       state.allProductsCart.list = [];
@@ -130,6 +130,13 @@ const productsCartSlice = createSlice({
     DeleteProductFromCart: (state, { payload }) => {
       return;
     },
+    // RemoveCarGuest(state,action){
+    //   let storage=[]
+    //   localStorage.removeItem('cart');
+    //   localStorage.setItem('cart', JSON.stringify(storage));
+    //   return storage
+
+    // }
   },
   extraReducers: {
     [getAllProductsCart.pending]: (state, action) => {
@@ -248,6 +255,7 @@ export const {
   AddProductToCart,
   RemoveProductFromCart,
   DeleteProductFromCart,
+  // RemoveCarGuest,
 } = productsCartSlice.actions;
 
 export default productsCartSlice;

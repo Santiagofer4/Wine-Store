@@ -9,6 +9,7 @@ import {
   deleteSingleProdFromCart,
   deleteAllProductsFromCart,
 } from '../slices/productsCartSlice';
+import { userPromote } from '../slices/userSlice';
 
 export const notificationMiddleware = (store) => (next) => (action) => {
   const dispatch = store.dispatch;
@@ -16,6 +17,7 @@ export const notificationMiddleware = (store) => (next) => (action) => {
     AddProductToCart.type,
     RemoveProductFromCart.type,
     DeleteProductFromCart.type,
+    userPromote.fulfilled.type,
     // postProductToCart.fulfilled.type,
     // deleteSingleProdFromCart.fulfilled.type,
     // deleteAllProductsFromCart.fulfilled.type,
@@ -50,6 +52,9 @@ export const notificationMiddleware = (store) => (next) => (action) => {
     else if (action.type.includes('Remove')) {
       snackbarContent.message = `Se quito (un) ${action.payload.name} del carrito`;
       snackbarContent.options.variant = 'warning';
+    } else if (action.type.includes('user')) {
+      snackbarContent.message = `Se promovio el usuario a ADMIN`;
+      snackbarContent.options.variant = 'success';
     }
     store.dispatch(enqueueSnackbar(snackbarContent));
   }

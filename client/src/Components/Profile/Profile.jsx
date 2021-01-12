@@ -48,13 +48,12 @@ function Profile() {
               <div className="order">
                 {" "}
                 <Button
-                  variant="outlined"
-                  color="primary"
+                  color="primary" disableElevation={true} fullWidth={true}
                   onClick={() => {
                     hide(order.id);
                   }}
                 >
-                  Detalle
+                  D
                 </Button>
               </div>
             </li>
@@ -80,9 +79,11 @@ function Profile() {
         <p className="data">email {user.email}</p>
         <p className="data">Fecha de nacimiento {user.birthdate}</p>
         <p className="data">Télefono/celular {user.cellphone}</p>
+        <hr></hr>
       </div>
         <h4 className="title">Mis compras</h4>
-      <div className="orders">
+      <div className="orders__Container">
+        <li className="order__li"></li>
         <div className="orderTitle">Código compra</div>
         <div className="orderTitle">Total</div>
         <div className="orderTitle">Status</div>
