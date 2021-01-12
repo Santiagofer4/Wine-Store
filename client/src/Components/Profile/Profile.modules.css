@@ -2,9 +2,40 @@
     padding: 10rem;
 }
 
-.orders {
+.orders__Container {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-}
+    border: none;
+    border-bottom: 0.1rem, solid, black;
 
+}
+.orderTitle{
+    margin: 0rem;
+    color: rgb(12, 12, 12);
+    list-style: none;
+    width: 20%;
+    font-weight: bold;
+    padding: 1rem 0rem;
+    border-bottom: 0.1rem solid rgb(27, 27, 27);
+    border-top: 0.1rem solid rgb(10, 10, 10);
+    display: inline}
+.order__li{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 0.5rem;
+}
+.orders{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 0.5rem;
+}
+.order{
+    margin: 0rem;
+color: rgb(15, 15, 15);
+list-style: none;
+width: 20%;
+display: inline
+}

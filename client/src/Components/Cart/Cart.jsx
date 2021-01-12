@@ -22,6 +22,7 @@ import {
   deleteAllProductsFromCart,
   deleteSingleProdFromCart,
   resetState,
+  // RemoveCarGuest,
 } from '../../slices/productsCartSlice';
 import CartItem from './CartItem/CartItem';
 import {
@@ -54,6 +55,7 @@ function Cart() {
       let storage = [];
       localStorage.removeItem('cart');
       localStorage.setItem('cart', JSON.stringify(storage));
+      // dispatch(RemoveCarGuest())
       dispatch(sync(false));
     }
   };
