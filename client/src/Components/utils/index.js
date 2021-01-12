@@ -154,12 +154,13 @@ export const average = (array) => {
 export const functionCartGuest = (payload, decrement, erase) => {
   const dispatch = store.dispatch;
   let storageSTRG = localStorage.getItem('cart');
+  let storage = JSON.parse(storageSTRG);
+
   if (!storageSTRG) {
     localStorage.setItem('cart', JSON.stringify([payload]));
     return;
   }
 
-  let storage = JSON.parse(storageSTRG);
 
   let index = storage.findIndex((product) => product.id === payload.id);
 
@@ -178,7 +179,7 @@ export const functionCartGuest = (payload, decrement, erase) => {
     }
   } else if (erase) {
     // Elimino el producto. MANDAR SOLO EL ID por payload
-    storage = storage.filter((product) => product.id !== payload.id);
+    storage = storage.filter((product) => product.id !== payload);
     dispatch(DeleteProductFromCart(payload));
     localStorage.removeItem('cart');
     localStorage.setItem('cart', JSON.stringify(storage));
