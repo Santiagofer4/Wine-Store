@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { total } from '../utils/index'
 
 
-
+//falta renderizar el carrito desde la DB, para evitar que se borre al recargar
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
