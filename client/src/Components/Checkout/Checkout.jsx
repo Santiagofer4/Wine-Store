@@ -86,7 +86,7 @@ export default function Checkout() {
   const handleNext = () => {
     setActiveStep(activeStep + 1);
     console.log('active step', activeStep)
-    console.log('address info', saveAddressInfo())
+    //console.log('address info', saveAddressInfo())
   //  saveAddressInfo()
    // savePaymentInfo()
   };

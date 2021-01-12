@@ -8,6 +8,7 @@ import {
   userOrdersEndpoint,
   userPromoteEndpoint,
   usersEndpoint,
+  mailsEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 import tokenManager from '../Components/utils/tokenManager';
@@ -75,7 +76,10 @@ export const getUsers = createAsyncThunk('users/getUsers', async () => {
   return resp;
 });
 
-export const sendEmail = createAsyncThunk('user/sendMail', async () =>)
+export const sendEmail = createAsyncThunk('user/sendMail', async (payload) => {
+  const resp = await axios.get(mailsEndpoint, payload);
+  return resp;
+});
 
 const userSlice = createSlice({
   name: 'user',
@@ -161,6 +165,17 @@ const userSlice = createSlice({
       state.user.info = payload.data;
     },
     [getUsers.rejected]: (state, action) => {
+      state.user.status = status.failed;
+      state.user.error = action.error;
+    },
+    [sendEmail.pending]: (state, action) => {
+      state.user.status = status.loading;
+    },
+    [sendEmail.fulfilled]: (state, { payload }) => {
+      state.user.status = status.succeded;
+      state.user.info = payload.data;
+    },
+    [sendEmail.rejected]: (state, action) => {
       state.user.status = status.failed;
       state.user.error = action.error;
     },
