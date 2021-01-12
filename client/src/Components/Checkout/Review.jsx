@@ -5,9 +5,11 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
-import { myCartSelector, allProductsCartSelector } from '../../selectors';
-import { useSelector } from 'react-redux';
-import { total } from '../utils/index'
+import { myCartSelector, allProductsCartSelector, userSelector, } from '../../selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { total } from '../utils/index';
+import { getAllProductsCart } from '../../slices/productsCartSlice';
+import axios from 'axios';
 
 
 //falta renderizar el carrito desde la DB, para evitar que se borre al recargar
@@ -25,6 +27,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Review() {
+  const user = useSelector(userSelector);
+  const dispatch = useDispatch();
+ 
+
+
   let addressInfoStorage = JSON.parse(localStorage.getItem('addressInfo'));
 const [addressInfo, setAddressInfo] = React.useState({  
             firstName: addressInfoStorage.firstName,
@@ -58,10 +65,25 @@ const [addressInfo, setAddressInfo] = React.useState({
  // const name = document.getElementById('firstName').value;
   const classes = useStyles();
   const AllProductsCart = useSelector(allProductsCartSelector);
+  const myCart = useSelector(myCartSelector);
   const [subTotal, setSubTotal] = useState(0);
+  //var total = 0;
+
+
+  
   
   useEffect(() => {
-     setSubTotal(total(AllProductsCart))
+    // console.log('ID cart', myCart.orderId)
+    // axios.get(`http://localhost:3000/orders/total/${myCart.orderId}`)
+    // .then(response => {
+    //  let total = response.data;
+    //   console.log('TOTAL', total)
+    // })
+    // .catch(e => {
+    //     // Podemos mostrar los errores en la consola
+    //     console.log(e);
+    // })
+    // console.log('TOTAL 2', total)
   }, []);
   return (
     <React.Fragment>
@@ -79,14 +101,14 @@ const [addressInfo, setAddressInfo] = React.useState({
              <ListItem className={classes.listItem}>
           <ListItemText secondary="SubTotal" />
                <Typography variant="body2">
-        {subTotal}
+        { total(AllProductsCart)}
         
           </Typography>
         </ListItem>
         <ListItem className={classes.listItem}>
           <ListItemText primary="Total" />
                <Typography variant="subtitle1" className={classes.total}>
-        {Math.ceil((subTotal * 121) / 100)}
+        { Math.ceil((total(AllProductsCart) * 121) / 100)}
                  </Typography>
         </ListItem>
        
