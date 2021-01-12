@@ -2,28 +2,16 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
+const GitHubStrategy = require('passport-github2').Strategy;
 const { User } = require('../db.js');
 const { capitalize } = require('../utils');
 const makeJWT = require('../utils');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = require('./jwt').SECRET_KEY;
 
-const isLogged = (req, res, next) => {
-  if (req.isLogged()) {
-    return next();
-  }
-
-  return res.sendStatus(401);
-};
-
-const isAdmin = () => {
-  return function (req, res, next) {
-    if (!req.user || (req.user.isAdmin = false)) {
-      return response.sendStatus(401);
-    }
-    return next();
-  };
-};
+const BASE_URL = process.env.BASE_URL;
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 
 module.exports = function (passport) {
   //*Estrategia para registro de un nuevo usuario
@@ -188,5 +176,18 @@ module.exports = function (passport) {
         return done(error);
       }
     })
+  );
+  passport.use(
+    'github',
+    new GitHubStrategy(
+      {
+        clientID: GITHUB_CLIENT_ID,
+        clientSecret: GITHUB_CLIENT_SECRET,
+        callbackURL: BASE_URL + 'auth/github/callback',
+      },
+      (accessToken, refreshToken, profile, done) => {
+        console.log('github user', profile);
+      }
+    )
   );
 };

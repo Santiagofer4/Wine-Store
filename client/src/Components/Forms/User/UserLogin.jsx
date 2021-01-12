@@ -6,6 +6,7 @@ import {
   InputAdornment,
   IconButton,
 } from '@material-ui/core';
+import GitHubIcon from '@material-ui/icons/GitHub';
 import FormField from '../../FormComponents/FormField';
 import './UserForm.modules.css';
 //import { validationSchemaUserRegister } from './userValidations';
@@ -15,6 +16,8 @@ import { useHistory } from 'react-router-dom';
 import { postUserLogin, resetStatus } from '../../../slices/userSlice.js';
 import { postProductToCart, login } from '../../../slices/productsCartSlice.js';
 import { userSelector, userStatusSelector } from '../../../selectors';
+import axios from 'axios';
+
 function UserLogin() {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
@@ -55,6 +58,10 @@ function UserLogin() {
 
   const handleClickShowPassword = () => {
     setViewPassword(!viewPassword);
+  };
+
+  const githubLoginHandler = () => {
+    axios.get('localhost:3000/github');
   };
 
   return (
@@ -108,6 +115,12 @@ function UserLogin() {
                 >
                   RESET
                 </Button>
+                <hr></hr>
+                <br></br>
+                <Button onClick={githubLoginHandler}>
+                  <GitHubIcon />
+                </Button>
+                <br></br>
               </Container>
             </Form>
           </Container>

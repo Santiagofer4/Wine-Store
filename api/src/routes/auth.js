@@ -133,4 +133,14 @@ server.put('/pass/:id', (req, res) => {
     });
 });
 
+server.get(
+  '/github',
+  passport.authenticate('github', { scope: ['user:email'] }),
+  (req, res) => {}
+);
+
+server.get('/github/callback', passport.authenticate('github'), (req, res) => {
+  res.redirect('/login');
+});
+
 module.exports = server;
