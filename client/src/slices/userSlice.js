@@ -75,6 +75,8 @@ export const getUsers = createAsyncThunk('users/getUsers', async () => {
   return resp;
 });
 
+export const sendEmail = createAsyncThunk('user/sendMail', async () =>)
+
 const userSlice = createSlice({
   name: 'user',
   initialState: initialState_user,

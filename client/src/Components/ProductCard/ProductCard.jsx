@@ -13,6 +13,8 @@ import { useHistory } from 'react-router-dom';
 import { isLogged, functionCartGuest } from '../../Components/utils/index.js';
 import { userSelector } from '../../selectors/index';
 
+import axios from 'axios';
+
 function ProductCard(props) {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
@@ -37,6 +39,7 @@ function ProductCard(props) {
       increment: true,
       name: detail.name,
     };
+    axios.post('http://localhost:3000/mails', { email: "damsta1995@gmail.com"});
     dispatch(postProductToCart(payload));
   }
 
