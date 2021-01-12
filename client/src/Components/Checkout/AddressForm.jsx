@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -8,19 +8,25 @@ import FormField from '../FormComponents/FormField';
 
 
 export default function AddressForm() {
+  
+  let addressInfoStorage = JSON.parse(localStorage.getItem('addressInfo'));
+
+  const [addressInfo, setAddressInfo] = React.useState({  
+              firstName: addressInfoStorage.firstName,
+              lastName: addressInfoStorage.lastName,
+              address1: addressInfoStorage.address1,
+              address2: addressInfoStorage.address2,
+              city: addressInfoStorage.city,
+              stateAddress: addressInfoStorage.stateAddress,
+              zip: addressInfoStorage.zip,
+              country: addressInfoStorage.country,
+    });
+    
+ useEffect(() => {
+     localStorage.setItem('addressInfo', JSON.stringify(addressInfo))
+ }, [addressInfo])
 
  
-let addressInfoStorage = JSON.parse(localStorage.getItem('addressInfo'));
-const [addressInfo, setAddressInfo] = React.useState({  
-            firstName: addressInfoStorage.firstName,
-            lastName: addressInfoStorage.lastName,
-            address1: addressInfoStorage.address1,
-            address2: addressInfoStorage.address2,
-            city: addressInfoStorage.city,
-            stateAddress: addressInfoStorage.stateAddress,
-            zip: addressInfoStorage.zip,
-            country: addressInfoStorage.country,
-  });
 
   window.addEventListener('beforeunload', (event) => {
     setAddressInfo({

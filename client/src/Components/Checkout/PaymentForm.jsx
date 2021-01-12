@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -15,6 +15,11 @@ export default function PaymentForm() {
               cvv: paymentInfoStorage.cvv,
             
     });
+    
+    useEffect(() => {
+      localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo))
+    }, [paymentInfo])
+    
     window.addEventListener('beforeunload', (event) => {
       setPaymentInfo({
         cardName: document.getElementById('cardName'),
@@ -26,7 +31,7 @@ export default function PaymentForm() {
       localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo))
      
     });
-  
+
     const handleInputChange = function(e) {
       setPaymentInfo({
          ...paymentInfo, 
