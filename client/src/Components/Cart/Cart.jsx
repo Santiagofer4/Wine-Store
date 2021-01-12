@@ -30,6 +30,7 @@ import {
   isLogged,
   functionCartGuest,
 } from '../../Components/utils/index.js';
+import Checkout from '../Checkout/Checkout.jsx'
 import axios from 'axios';
 
 function Cart() {
@@ -255,13 +256,14 @@ function Cart() {
                 <p id="total">TOTAL $ {Math.ceil((subTotal * 121) / 100)}</p>
               </div>
               <div>
-                <Button
+                {/* <Button
                   id="confirmBtn"
                   className="buttonCart"
                   onClick={handleConfirm}
                 >
                   Confirmar
-                </Button>
+                </Button> */}
+                <Checkout total={Math.ceil((subTotal * 121) / 100)}></Checkout>
                 <Button
                   id="cancelBtn"
                   className="buttonCart"

@@ -13,8 +13,9 @@ import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { createReview, postReview } from "../../slices/reviewSlice";
-import { userSelector } from "../../selectors";
-
+import { userSelector , myCartSelector} from "../../selectors";
+import {modificateOrder } from '../../slices/productsCartSlice'
+import { useHistory } from 'react-router-dom';
 const styles = (theme) => ({
   root: {
     margin: 0,
@@ -67,16 +68,19 @@ const DialogActions = withStyles((theme) => ({
 //
 
 
-function UserReview(props) {
+function Checkout(props) {
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const user = useSelector(userSelector);
-  const [subTotal, setSubTotal] = useState(0);
+  const myCart = useSelector(myCartSelector);
+  const history = useHistory();
 
-  const { product } = props.data;
+
+  // const { product } = props.data;
 
   const handleClickOpen = () => {
+
     setOpen(true);
   };
   const handleClose = () => {
@@ -84,16 +88,19 @@ function UserReview(props) {
   };
 
   const handleSave = () => {
-    let description = document.getElementById("outlined-multiline-static").value;
-    dispatch(createReview({ productId: product.id, userId: user.id, points: value, description }));
-    dispatch(postReview({ productId: product.id, userId: user.id, points: value, description }));
+    // let description = document.getElementById("outlined-multiline-static").value;
+    // dispatch(createReview({ productId: product.id, userId: user.id, points: value, description }));
+    // dispatch(postReview({ productId: product.id, userId: user.id, points: value, description }));
+    let total = props.total;
+    dispatch(modificateOrder({ myCart, total, status: 'completed' }));
+    history.push('/user/profile')
     handleClose();
   };
 
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Dejar review
+        Confirmar
       </Button>
       <Dialog
         onClose={handleClose}
@@ -101,7 +108,7 @@ function UserReview(props) {
         open={open}
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          {props ? product.name : 'Producto'}
+          INGRESAR DATOS DE FACTURACION
         </DialogTitle>
         <DialogContent dividers>
           <Box component="fieldset" mb={3} borderColor="transparent">
@@ -127,7 +134,7 @@ function UserReview(props) {
             onClick={handleSave}
             color="primary"
           >
-            Guardar
+            ENVIAR
           </Button>
         </DialogActions>
       </Dialog>
@@ -135,4 +142,4 @@ function UserReview(props) {
   );
 }
 
-export default UserReview;
+export default Checkout;
