@@ -37,16 +37,13 @@ server.post('/', (req, res) => {
 
 server.delete('/:id', (req, res) => {
   let { id } = req.params;
-
   if (!id) return res.status(400).send('No se puede eliminar la cepa');
-
   Strain.destroy({
     where: {
       id,
     },
   }).then((strain) => {
-    console.log('200 OK - DELETED');
-    return res.sendStatus(200).send(strain);
+   return res.sendStatus(200).send(strain);
   });
 });
 

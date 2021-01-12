@@ -31,9 +31,7 @@ server.get('/:id', (req, res) => {
 
 server.get('/productsByCategory/:category', (req, res) => {
   let { category } = req.params;
-
   if (!category) return res.status(404).send('Se necesita categoría');
-
   Category.findAll({
     where: { taste: category },
     include: { model: Product },
@@ -46,8 +44,7 @@ server.get('/productsByCategory/:category', (req, res) => {
 
 server.put(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
-  checkAdmin,
+
   async (req, res) => {
     let { id } = req.params;
     let {
@@ -62,7 +59,7 @@ server.put(
     } = req.body;
     if (!id) return res.status(400).send('El producto no existe');
     try {
-      const wineToUpdate = await Product.findByPk(id); //? Instanciamos el producto a ser modificado
+      const wineToUpdate = await Product.findByPk(id); // Instanciamos el producto a ser modificado
 
       const updatedWine = await wineToUpdate.update(
         {
@@ -88,7 +85,6 @@ server.put(
       }
       return res.status(200).send(updatedWine); //* Devuelve objeto actualizado
     } catch (error) {
-      console.error(error);
       return res.status(500).send(error);
     }
   }
@@ -119,7 +115,6 @@ server.delete(
       await wine.destroy();
       return res.status(200).send(payload); //? devolvemos el producto borrado con sus categorias correspondientes
     } catch (error) {
-      console.error(error);
       return res.status(500).send('No se pudo borrar el producto');
     }
   }
@@ -133,10 +128,8 @@ server.delete(
   checkAdmin,
   (req, res) => {
     const { idProduct, idCategory } = req.params;
-
     if (!idProduct || idCategory)
       return res.status(400).send('No existe el producto o la categoría');
-
     Product.findOne({
       where: { id: idProduct },
     })
@@ -152,8 +145,7 @@ server.delete(
 
 server.post(
   '/',
-  passport.authenticate('jwt', { session: false }),
-  checkAdmin,
+
   async (req, res) => {
     let {
       name,
@@ -165,8 +157,7 @@ server.post(
       categories,
       strain,
     } = req.body;
-    // console.log('STRAIN', strain);
-    try {
+     try {
       //* Instanciamos el producto a crear
       let product = await Product.create({
         name,
@@ -187,7 +178,6 @@ server.post(
       });
       return res.status(200).send(product); //? devuelve el producto creado
     } catch (error) {
-      console.error(error);
       return res.status(500).send(error);
     }
   }
@@ -197,15 +187,13 @@ server.post(
 
 server.post(
   '/:idProduct/category',
-  passport.authenticate('jwt', { session: false }),
-  checkAdmin,
+
   (req, res) => {
     let { idProduct } = req.params;
     let { Category } = req.body;
 
     if (!idProduct || Category)
       return res.status(400).send('No se puede agregar la categoría');
-
     Product.findByPk(idProduct).then((product) => {
       product.addCategory(Category);
       return res.send('Se agregó la categoría');

@@ -3,10 +3,6 @@ const { User, Order, Product, OrderLine, Review } = require('../db.js');
 const { checkAdmin } = require('../utils/authTools.js');
 const passport = require('passport');
 
-//const cartRouter = require('./cart.js');
-
-//server.use('/:id/cart', cartRouter);
-
 //Borrar un USER by ID
 
 server.delete(
@@ -15,10 +11,8 @@ server.delete(
   checkAdmin,
   (req, res) => {
     let { id } = req.params;
-
     if (!id)
       return res.status(400).send('No se encontró el usuario a eliminar');
-
     User.destroy({
       where: {
         id,
@@ -33,9 +27,7 @@ server.delete(
 
 server.delete('/:userId/cart', async (req, res) => {
   let { userId } = req.params;
-
   if (!userId) return res.send(400, 'No hay carrito asociado al usuario');
-
   try {
     let cartFromUser = await Order.findOne({
       where: {
@@ -54,7 +46,6 @@ server.delete('/:userId/cart', async (req, res) => {
       return res.status(400).send('el usuario no tiene carrito');
     }
   } catch (error) {
-    console.error(error);
     return res.status(500).send(error);
   }
 });
@@ -63,9 +54,7 @@ server.delete('/:userId/cart', async (req, res) => {
 
 server.delete('/:idUser/cart/:productId', (req, res) => {
   let { idUser, productId } = req.params;
-
   if (!idUser) return res.send(400, 'No hay carrito asociado al usuario');
-
   Order.findOne({
     where: {
       status: 'cart',
@@ -133,45 +122,45 @@ server.get('/:id/orders', (req, res) => {
 
 //Agregar un USER
 
-server.post('/', (req, res) => {
-  let {
-    firstName,
-    lastName,
-    email,
-    birthdate,
-    cellphone,
-    password,
-    isAdmin,
-  } = req.body;
+// server.post('/', (req, res) => {
+//   let {
+//     firstName,
+//     lastName,
+//     email,
+//     birthdate,
+//     cellphone,
+//     password,
+//     isAdmin,
+//   } = req.body;
 
-  if (!email) return res.status(400).send('Debe ingresar un email');
+//   if (!email) return res.status(400).send('Debe ingresar un email');
 
-  User.findOrCreate({
-    where: {
-      email,
-    },
-    defaults: {
-      firstName,
-      lastName,
-      email,
-      birthdate,
-      cellphone,
-      isAdmin: false,
-      password,
-    },
-  })
-    .then((user) => {
-      const [instance, wasCreated] = user;
-      if (wasCreated) {
-        return res.status(200).send(user);
-      } else {
-        return res.status(409).send(user);
-      }
-    })
-    .catch((err) => {
-      return res.status(400).send(err.message);
-    });
-});
+//   User.findOrCreate({
+//     where: {
+//       email,
+//     },
+//     defaults: {
+//       firstName,
+//       lastName,
+//       email,
+//       birthdate,
+//       cellphone,
+//       isAdmin: false,
+//       password,
+//     },
+//   })
+//     .then((user) => {
+//       const [instance, wasCreated] = user;
+//       if (wasCreated) {
+//         return res.status(200).send(user);
+//       } else {
+//         return res.status(409).send(user);
+//       }
+//     })
+//     .catch((err) => {
+//       return res.status(400).send(err.message);
+//     });
+// });
 
 // Agregar elemento al carrito
 
@@ -180,7 +169,6 @@ server.post('/:userId/cart', async (req, res) => {
   let { id, price, quantity, increment, cartGuest } = req.body;
   if (!id || !userId)
     return res.status(400).send('Id de usuario o producto faltante');
-
   try {
     const [newOrder, newOrderCreated] = await Order.findOrCreate({
       where: {
@@ -223,7 +211,6 @@ server.post('/:userId/cart', async (req, res) => {
 
     return res.status(200).send({ newOrder, newOrderLine });
   } catch (error) {
-    console.error(error);
     return res.status(500).send(error);
   }
 });
