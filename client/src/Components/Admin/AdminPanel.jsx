@@ -6,26 +6,13 @@ import { Route } from 'react-router-dom';
 import AdminStrain from './LoadCategory/AdminStrain';
 import AdminCategory from './LoadCategory/AdminCategory';
 import AdminProduct from './LoadProduct/AdminProduct';
-import { useDispatch, useSelector } from 'react-redux';
-import { userSelector, userStatusSelector } from '../../selectors/index';
-import { userPromote } from '../../slices/userSlice';
+
+import AdminPromoteUser from './PromoteUser/PromoteUser';
+import { useSelector } from "react-redux";
+import { userSelector } from "../../selectors/index";
 
 const AdminPanel = () => {
-  const dispatch = useDispatch();
   const user = useSelector(userSelector);
-  const userStatus = useSelector(userStatusSelector);
-
-  const handlePromote = () => {
-    let id = document.getElementById('user').value;
-    //axios.put(`http://localhost:3000/auth/${user}`)
-    dispatch(userPromote(id));
-  }
-
-  useEffect(() => {
-    if(userStatus === 'succeded') {
-      alert('El usuario ha sido promovido a Admin')
-    }
-  }, [userStatus]);
 
   return (
     <Container className="AdminPanel">
@@ -60,12 +47,7 @@ const AdminPanel = () => {
               </Link>
             </li>
             <li>
-              <input
-                id="user"
-                className="inputUserPromote"
-                placeholder="Usuario a promover"
-              />
-              <Link className="links" onClick={handlePromote}>
+              <Link className="links" to="/admin/promoteuser">
                 Promover usuario a Admin
               </Link>
             </li>
@@ -80,6 +62,7 @@ const AdminPanel = () => {
         <Route path="/admin/loadcategory" component={AdminCategory} />
         <Route path="/admin/loadstrain" component={AdminStrain} />
         <Route path="/admin/edit/:id" component={AdminProduct} />
+        <Route path="/admin/promoteuser" component={AdminPromoteUser} />
       </Container>
     </Container>
   );

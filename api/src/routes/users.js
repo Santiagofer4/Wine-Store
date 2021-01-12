@@ -88,8 +88,8 @@ server.delete('/:idUser/cart/:productId', (req, res) => {
 
 server.get(
   '/',
-  passport.authenticate('jwt', { session: false }),
-  checkAdmin,
+  /*passport.authenticate('jwt', { session: false }),
+  checkAdmin,*/
   (req, res, next) => {
     User.findAll()
       .then((user) => {

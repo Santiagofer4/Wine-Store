@@ -24,6 +24,7 @@ function DeleteCategory() {
   let content;
 
   useEffect(() => {
+    console.log('allCats', allCats)
     if (allCatStatus === 'succeded') {
       setCategoryOption(formatArrayToOption(allCats, 'taste'));
     }
