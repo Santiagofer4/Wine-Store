@@ -77,6 +77,11 @@ export const getUsers = createAsyncThunk('users/getUsers', async () => {
   return resp;
 });
 
+export const allUsers = createAsyncThunk('users/getAllUsers', async() => {
+  const resp = await axios.get(usersEndpoint, {headers: {"Authorization": tokenManager.getToken()}});
+  return resp;
+});
+
 export const sendEmail = createAsyncThunk('user/sendMail', async (payload) => {
   const resp = await axios.post(mailsEndpoint, payload);
   return resp;
@@ -176,6 +181,17 @@ const userSlice = createSlice({
       state.user.status = status.succeded;
     },
     [sendEmail.rejected]: (state, action) => {
+      state.user.status = status.failed;
+      state.user.error = action.error;
+    },
+    [allUsers.pending]: (state, action) => {
+      state.user.status = status.loading;
+    },
+    [allUsers.fulfilled]: (state, { payload }) => {
+      state.user.status = status.succeded;
+      state.user.usersList = payload.data;
+    },
+    [allUsers.rejected]: (state, action) => {
       state.user.status = status.failed;
       state.user.error = action.error;
     },

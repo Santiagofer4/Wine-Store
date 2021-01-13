@@ -15,7 +15,7 @@ const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export const formatArrayToOption = (array, propName) => {
+export const formatArrayToOption = (array, property) => {
   //*func que devuelve un array preparado para ser usado como `options` de un select/radio field
   //* => [{label:`propName|PROP_CHECK`,value:`ID`},...]
   //* recibe 2 parametros, siendo el segundo opcional:
@@ -32,6 +32,8 @@ export const formatArrayToOption = (array, propName) => {
   const TYPE = typeof array[0];
   let arrayKeys = [];
   let arrayIdProp = false;
+
+  let propName = property.toLowerCase();  // En el caso de tener una propiedad con mayúsculas es necesario hacer este paso previo para que la comparación en el includes (linea 60)
 
   //*si recibe un objeto armamos un array con todas las propiedades propias del obj,
   //* y verificamos si existe una con nombre `id`
@@ -58,7 +60,6 @@ export const formatArrayToOption = (array, propName) => {
   if (!arrayKeys.includes(propName)) {
     return EMPTY_OPTION;
   }
-
   try {
     //* segun de que este compuesto el array:
     switch (TYPE) {
@@ -69,19 +70,19 @@ export const formatArrayToOption = (array, propName) => {
             value: element,
           };
         });
-      case 'object':
-        if (!!arrayIdProp) {
+        case 'object':
+          if (!!arrayIdProp) {
           return array.map((element) => {
             return {
-              label: capitalize(element[propName]),
+              label: capitalize(element[property]),   // Busco con el nombre real de la property (con mayús)
               value: element[arrayIdProp] || THROW('Objetos NO equivalentes'),
             };
           });
         } else {
           return array.map((element) => {
             return {
-              label: capitalize(element[propName]),
-              value: element[propName],
+              label: capitalize(element[property]), // Busco con el nombre real de la property (con mayús)
+              value: element[property],
             };
           });
         }

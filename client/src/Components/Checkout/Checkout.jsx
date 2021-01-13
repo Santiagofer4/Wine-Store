@@ -88,7 +88,6 @@ export default function Checkout() {
   const handleNext = (e) => {
     setActiveStep(activeStep + 1);
     if(e.target.innerText === 'COMPRAR') {
-      console.log('entre', user)
       dispatch(sendEmail({ name: user.firstName, email: user.email, type: 'Order', orderCod: order.orderId}));
     }
     //console.log('address info', saveAddressInfo())

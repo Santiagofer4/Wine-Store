@@ -34,6 +34,9 @@ sendMailRouter.post("/", (req, res) => {
   } else if(type === 'Order') {
       subject = `Confirmación de compra N°${orderCod}`
       text = `Te informamos que tu orden N°${orderCod} ya fue confirmada. Muchas gracias por tu compra.`
+  } else if(type === 'Promote') {
+    subject = `${name} has sido promovido a Administrador`
+    text = 'Te damos la bienvenida al equipo de WineStore!'
   }
 
   let mail = {
