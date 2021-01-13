@@ -41,10 +41,7 @@ export default function PaymentForm() {
        });
      }
 
-     const handleInputFocus = (e) => {
-      this.setState({ focus: e.target.name });
-    }
-
+  
 
   return (
     <React.Fragment>
@@ -101,18 +98,17 @@ export default function PaymentForm() {
             autoComplete="cc-csc"
           />
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox color="secondary" name="saveCard" value="yes" />}
             label="Recordar los datos de la tarjeta de crédito"
           />
-        </Grid>
+        </Grid> */}
       </Grid>
       <div id="PaymentForm">
         <Cards
           cvc={paymentInfoStorage.cvc}
           expiry={paymentInfoStorage.expDate}
-         // focused={this.state.focus}
           name={paymentInfoStorage.cardName}
           number={paymentInfoStorage.cardNumber}
         />

@@ -150,14 +150,14 @@ export default function AddressForm() {
             autoComplete="shipping country"
           />
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <FormControlLabel
             control={
               <Checkbox color="secondary" name="saveAddress" value="yes" />
             }
             label="Usar ésta dirección para los detalles de pago"
           />
-        </Grid>
+        </Grid> */}
       </Grid>
      </React.Fragment>
   );
