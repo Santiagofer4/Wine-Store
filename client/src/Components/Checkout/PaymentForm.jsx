@@ -4,6 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Cards from 'react-credit-cards';
+import 'react-credit-cards/es/styles-compiled.css';
 
 export default function PaymentForm() {
 
@@ -38,6 +40,10 @@ export default function PaymentForm() {
          [e.target.name]: e.target.value 
        });
      }
+
+     const handleInputFocus = (e) => {
+      this.setState({ focus: e.target.name });
+    }
 
 
   return (
@@ -102,6 +108,16 @@ export default function PaymentForm() {
           />
         </Grid>
       </Grid>
+      <div id="PaymentForm">
+        <Cards
+          cvc={paymentInfoStorage.cvc}
+          expiry={paymentInfoStorage.expDate}
+         // focused={this.state.focus}
+          name={paymentInfoStorage.cardName}
+          number={paymentInfoStorage.cardNumber}
+        />
+       
+      </div>
     </React.Fragment>
   );
 }
