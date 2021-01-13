@@ -9,10 +9,6 @@ import { myCartSelector, allProductsCartSelector, userSelector, } from '../../se
 import { useDispatch, useSelector } from 'react-redux';
 import { total } from '../utils/index';
 import { getAllProductsCart } from '../../slices/productsCartSlice';
-import axios from 'axios';
-
-
-//falta renderizar el carrito desde la DB, para evitar que se borre al recargar
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -52,9 +48,7 @@ const [addressInfo, setAddressInfo] = React.useState({
               cvv: paymentInfoStorage.cvv,
             
     });
-    const addresses = [
-      //Info del formulario anterior
-    ];
+
     const payments = [
       //Info del formulario anterior
       { name: 'Tarjeta', detail: 'VISA' },
@@ -62,28 +56,15 @@ const [addressInfo, setAddressInfo] = React.useState({
       { name: 'Número de Tarjeta', detail: paymentInfo.cardNumber },
       { name: 'Válida hasta:', detail: paymentInfo.cvv },
     ];
- // const name = document.getElementById('firstName').value;
+ 
   const classes = useStyles();
   const AllProductsCart = useSelector(allProductsCartSelector);
   const myCart = useSelector(myCartSelector);
   const [subTotal, setSubTotal] = useState(0);
-  //var total = 0;
 
-
-  
   
   useEffect(() => {
-    // console.log('ID cart', myCart.orderId)
-    // axios.get(`http://localhost:3000/orders/total/${myCart.orderId}`)
-    // .then(response => {
-    //  let total = response.data;
-    //   console.log('TOTAL', total)
-    // })
-    // .catch(e => {
-    //     // Podemos mostrar los errores en la consola
-    //     console.log(e);
-    // })
-    // console.log('TOTAL 2', total)
+    dispatch(getAllProductsCart(user.id));
   }, []);
   return (
     <React.Fragment>
@@ -106,6 +87,13 @@ const [addressInfo, setAddressInfo] = React.useState({
           </Typography>
         </ListItem>
         <ListItem className={classes.listItem}>
+          <ListItemText secondary="IVA" />
+               <Typography variant="body2">
+               {Math.ceil((total(AllProductsCart) * 21) / 100)}
+        
+          </Typography>
+        </ListItem>
+        <ListItem className={classes.listItem}>
           <ListItemText primary="Total" />
                <Typography variant="subtitle1" className={classes.total}>
         { Math.ceil((total(AllProductsCart) * 121) / 100)}
@@ -120,8 +108,7 @@ const [addressInfo, setAddressInfo] = React.useState({
           </Typography>
           <Typography gutterBottom>{addressInfo.firstName + ' ' + addressInfo.lastName}</Typography>
           <Typography gutterBottom>{addressInfo.address1 + ' ' + addressInfo.address2 + ', ' + addressInfo.city
-          + ', ' + addressInfo.stateAddress + ', ' + addressInfo.country + '. CP: ' + addressInfo.zip
-          
+          + ', ' + addressInfo.country + '. CP: ' + addressInfo.zip
           }</Typography>
           </Grid>
         <Grid item container direction="column" xs={12} sm={6}>
