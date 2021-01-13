@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './Sidebar.modules.css';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllProducts } from '../../slices/productSlice';
+import { getAllProducts, productPriceLess,productPriceMore, productPriceBetween } from '../../slices/productSlice';
 import {
   getAllCategories,
   getAllProdsByCategory,
@@ -31,6 +31,25 @@ function Sidebar() {
     dispatch(getAllProdsByCategory(taste));
   };
 
+  const priceLessHandler = (e,f,g) => {
+    dispatch(getAllProducts()).then(() => {
+      dispatch(productPriceLess(e));
+    })
+  };
+  const priceBetweenHandler = (e,f,g) => {
+    dispatch(getAllProducts()).then(() => {
+      dispatch(productPriceBetween({e , f}));
+    })
+  };
+  const priceMoreHandler = (e) => {
+    dispatch(getAllProducts()).then(() => {
+      dispatch(productPriceMore(e));
+    })
+  };
+
+
+
+
   let content;
   if (allCatsStatus === 'loading') {
     content = (
@@ -50,7 +69,6 @@ function Sidebar() {
         <Button
           variant="text"
           className="Sidebar__Text"
-          color="inherit"
           key={idx}
           name={category.taste}
           onClick={(e) => categoryClickHandler(e)}
@@ -78,6 +96,10 @@ function Sidebar() {
             {' '}
             Ver Todos
           </Button>
+          <p className="Sidebar__CategoryName">Precio</p>
+            <Button className="Sidebar__Text" onClick={() => priceLessHandler(350)}>Hasta $350</Button>
+            <Button className="Sidebar__Text" onClick={() => priceBetweenHandler(350,600)}>$300 a $600</Button>
+            <Button className="Sidebar__Text" onClick={() => priceMoreHandler(600)}>Más de $600</Button>
           <p className="Sidebar__CategoryName">Sabores</p>
           </>
         )  : (
