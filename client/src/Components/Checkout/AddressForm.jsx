@@ -2,13 +2,14 @@ import React, {useEffect} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormField from '../FormComponents/FormField';
-
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import FormField from '../FormComponents/FormField';
 
 export default function AddressForm() {
   
+  // Traemos la info de la dirección de facturación del local storage
+
   let addressInfoStorage = JSON.parse(localStorage.getItem('addressInfo'));
 
   const [addressInfo, setAddressInfo] = React.useState({  
@@ -23,10 +24,12 @@ export default function AddressForm() {
     });
     
  useEffect(() => {
+   //guardamos la info de la dirección de facturación en el local storage
      localStorage.setItem('addressInfo', JSON.stringify(addressInfo))
  }, [addressInfo])
 
  
+// Antes de refrescar, guardamos la info en el localstorage, para evitar que tenga que volver a cargar los datos
 
   window.addEventListener('beforeunload', (event) => {
     setAddressInfo({
