@@ -121,26 +121,29 @@ export const search = (id, array) => {
 
 export const isLogged = () => {
   // return tokenManager.getToken();
-  let token = tokenManager.getToken();
-  let refresh_token;
-  if (!token) {
-    const persistLogin = async () => {
-      refresh_token = await tokenManager.getRefreshedToken();
-      const { user } = refresh_token;
-      store.dispatch(persistUserLogin(user));
-    };
-    persistLogin();
-    return refresh_token ? true : false;
-  }
-  return token;
+  // let token = tokenManager.getToken();
+  // let refresh_token;
+  // if (!token) {
+  //   tokenManager.handleRefresh();
+  //   // const persistLogin = async () => {
+  //   //   refresh_token = await tokenManager.getRefreshedToken();
+  //   //   const { user } = refresh_token;
+  //   //   store.dispatch(persistUserLogin(user));
+  //   // };
+  //   // persistLogin();
+  //   // return refresh_token ? true : false;
+  // }
+  // return token;
+  return false;
 };
 
 export const isAdmin = async () => {
-  const is_logged = await isLogged();
-  if (!is_logged) return false;
-  const state = store.getState();
-  let user = state.user.user.info;
-  return user.isAdmin ? true : false;
+  // const is_logged = await isLogged();
+  // if (!is_logged) return false;
+  // const state = store.getState();
+  // let user = state.user.user.info;
+  // return user.isAdmin ? true : false;
+  return false;
 };
 
 export const average = (array) => {

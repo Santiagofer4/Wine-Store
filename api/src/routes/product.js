@@ -157,7 +157,7 @@ server.post(
       categories,
       strain,
     } = req.body;
-     try {
+    try {
       //* Instanciamos el producto a crear
       let product = await Product.create({
         name,

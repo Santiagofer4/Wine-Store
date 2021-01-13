@@ -37,9 +37,9 @@ export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   const userLogin_response = await axios.post(authLoginEndpoint, user);
   const { token } = userLogin_response.data;
   console.log('TOken recibido', token);
-  tokenManager.setToken(token.token, token.expires);
   const resPayload = {
     userLogin_response: userLogin_response.data,
+    token,
     formik,
   };
   return resPayload;
@@ -108,11 +108,12 @@ const userSlice = createSlice({
       state.user.status = status.loading;
     },
     [postUserLogin.fulfilled]: (state, { payload }) => {
-      const { userLogin_response, formik } = payload;
+      const { userLogin_response, formik, token } = payload;
       state.user.status = status.succeded;
       state.user.info = userLogin_response.user;
       localStorage.setItem('token', userLogin_response.token.token);
       formik.resetForm();
+      // tokenManager.setToken(token);
     },
     [postUserLogin.rejected]: (state, action) => {
       state.user.status = status.failed;

@@ -7,6 +7,7 @@ import strainSlice from '../slices/strainSlice';
 import userSlice from './userSlice';
 import reviewSlice from './reviewSlice';
 import notificationSlice from './notificationSlice';
+import tokenSlice from './tokenSlice';
 
 const rootReducer = {
   products: productSlice.reducer,
@@ -18,6 +19,7 @@ const rootReducer = {
   user: userSlice.reducer,
   reviews: reviewSlice.reducer,
   notifications: notificationSlice.reducer,
+  token: tokenSlice.reducer,
 };
 
 export default rootReducer;

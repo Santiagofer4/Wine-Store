@@ -1,25 +1,16 @@
 import React, { Suspense } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { AdminStrain } from '../Admin/LoadCategory/AdminStrain';
-import { useEffect } from 'react';
-import { CircularProgress } from '@material-ui/core';
 
-function ProtectRoute(props) {
-  return (
-    <Suspense fallback={<CircularProgress />}>
-      <AuthComponent {...props} />
-    </Suspense>
-  );
-}
+import { useAuthContext } from './authContext';
 
-function AuthComponent({ component: Component, isLogged, ...rest }) {
-  const authStatus = isLogged();
+function ProtectRoute({ component: Component, ...rest }) {
+  const authStatus = useAuthContext();
   return (
     <Route
       {...rest}
-      render={(_props) =>
+      render={(props) =>
         authStatus ? (
-          <Component {..._props} />
+          <Component {...props} />
         ) : (
           <Redirect to="/form/user/login" />
         )
@@ -29,15 +20,3 @@ function AuthComponent({ component: Component, isLogged, ...rest }) {
 }
 
 export default ProtectRoute;
-/**
- * TODO: funciones userIsLogged & AdminIsLogged
- *
- *
- * ?Protejo ruta de `usuario comun`, y le paso func que devuelve true|false si el usuario esta logeado
- * @param{userIsLogged}
- * <ProtectRoute Component={Profile} path="xxxx" isLogged={userIsLogged} />;
- *
- * ?Protejo ruta de `admin`, y le paso una func que devuelve true|false si el usuario esta logeado Y es admin
- * @param{AdminIsLogged}
- * <ProtectRoute Component={AdminPanel} path="xxxx" isLogged={AdminIsLogged} />;
- */

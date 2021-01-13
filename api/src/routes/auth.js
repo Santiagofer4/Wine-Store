@@ -23,7 +23,6 @@ server.get('/logout', (req, res) => {
   req.logout();
   res.clearCookie('refreshToken');
   res.status(200).send('Cerrar sesión');
-  
 });
 
 //Ruta para Registrarse
@@ -78,7 +77,7 @@ server.get(
     cookieMaker('refreshToken', refresh_token, res);
     return res.send({
       message: 'Refresh exitoso',
-      token,
+      newToken,
       user: req.user,
     });
   }

@@ -1,138 +1,156 @@
-import axios from 'axios';
-import { baseEndpoint } from '../../constants/endpoints';
+import store from '../../store';
+import {
+  setTokenRedux,
+  eraseToken,
+  getRefreshedToken,
+} from '../../slices/tokenSlice';
 
 const tokenManager = () => {
-  let logoutEventName = 'logout';
-  let refreshEndpoint = 'http://localhost:3000/auth/refresh';
-  let inMemoryJWT = null;
-  let refreshTimeOutId;
-  let isRefreshing = null;
-
-  const setRefreshTokenEndpoint = (endpoint) => (refreshEndpoint = endpoint);
-
-  const setLogoutEventName = (name) => (logoutEventName = name);
+  const dispatch = store.dispatch;
+  console.log('DOIS', dispatch);
+  let refreshTimeout = null;
+  let refreshBefore = 5000;
+  let logoutEventName = '_logout_';
 
   window.addEventListener('storage', (event) => {
     if (event.key === logoutEventName) {
-      inMemoryJWT = null;
+      removeToken();
     }
   });
 
-  const waitForTokenRefresh = () => {
-    if (!isRefreshing) {
-      return Promise.resolve();
-    }
-    return isRefreshing.then(() => {
-      isRefreshing = null;
-      return true;
-    });
+  const setToken = (token) => {
+    console.log('SETTING TOKEN TOKENMANAGER');
+    dispatch(setTokenRedux(token));
+    refreshToken(token.expires);
+    return true;
   };
 
-  const getRefreshedToken = async () => {
-    console.log('GETTING REFRESHED TOKEN');
-    try {
-      const refreshed_token = await axios.get(refreshEndpoint, {
-        withCredentials: true,
-      });
-      if (refreshed_token.status !== 200) {
-        console.log('NOT 200 STATUS');
-        ereaseToken();
-        global.console.log('Token renewal failure');
-        return false;
-      }
-      let newToken = refreshed_token.data && refreshed_token.data.token;
-      let user = refreshed_token.data && refreshed_token.data.user;
-      if (newToken) {
-        setToken(newToken.token, newToken.expires);
-        return { user, newToken };
-      } else {
-        console.log('NO NEWTOKEN RECEIVED');
-        ereaseToken();
-        return false;
-      }
-    } catch (error) {
-      console.error(error);
-      return error;
-    }
-  };
   const refreshToken = (expires) => {
-    console.log('SETTING REFRESH TIMEOUT');
-    let delay = expires - 5000;
-    refreshTimeOutId = window.setTimeout(getRefreshedToken, delay);
+    console.log('SETTING REFRESH TOKENMANAGER');
+    let delay = expires - refreshBefore;
+    refreshTimeout = window.setTimeout(
+      store.dispatch(getRefreshedToken),
+      expires
+    );
   };
 
-  const abordRefreshToken = () => {
-    if (refreshTimeOutId) {
-      window.clearTimeout(refreshTimeOutId);
+  const clearRefreshToken = () => {
+    if (!!refreshTimeout) {
+      window.clearTimeout(refreshTimeout);
     }
+    return;
+  };
+  const removeToken = () => {
+    store.dispatch(eraseToken());
+    clearRefreshToken();
+    return;
   };
 
-  const getToken = () => inMemoryJWT;
-
-  const setToken = (token, expires) => {
-    console.log('SETTING TOKEN', token, expires);
-    inMemoryJWT = token;
-    refreshToken(expires);
-    return true;
+  const setRefreshBefore = (delta) => {
+    refreshBefore = delta;
+    return;
   };
 
-  const logout = () => ereaseToken;
+  const setLogoutEventName = (name) => {
+    logoutEventName = name;
+    return;
+  };
 
-  const ereaseToken = () => {
-    console.log('ERASING TOKEN');
-    inMemoryJWT = null;
-    abordRefreshToken();
-    window.localStorage.setItem(logoutEventName, Date.now());
-    return true;
+  const tryToRestoreToken = () => {
+    store.dispatch(getRefreshedToken());
   };
 
   return {
-    ereaseToken,
-    getToken,
-    setLogoutEventName,
-    setRefreshTokenEndpoint,
+    removeToken,
     setToken,
-    getRefreshedToken,
+    setRefreshBefore,
+    tryToRestoreToken,
+    refreshToken,
   };
 };
 
 export default tokenManager();
 
-/**
- *   logout: () => {
-        inMemoryJWT.ereaseToken();
-        return Promise.resolve();
-    },
+// const tokenManager = () => {
+//   let logoutEventName = 'logout';
+//   let refreshEndpoint = 'http://localhost:3000/auth/refresh';
+//   let inMemoryJWT = null;
+//   let refreshTimeOut;
+//   let isRefreshing = null;
 
-      checkAuth: () => {
-        console.log('checkAuth');
-        if (!inMemoryJWT.getToken()) {
-            inMemoryJWT.setRefreshTokenEndpoint('http://localhost:8001/refresh-token');
-            return inMemoryJWT.getRefreshedToken().then(tokenHasBeenRefreshed => {
-                return tokenHasBeenRefreshed ? Promise.resolve() : Promise.reject();
-            });
-        } else {
-            return Promise.resolve();
-        }
-    },
+//   const handleRefresh = () => {
+//     if (isRefreshing) return;
+//     else getRefreshedToken();
+//   };
 
-Solving O
+//   const getRefreshedToken = async () => {
+//     console.log('GETTING REFRESHED TOKEN');
+//     try {
+//       isRefreshing = true;
+//       const refreshed_token = await axios.get(refreshEndpoint, {
+//         withCredentials: true,
+//       });
+//       if (refreshed_token.status !== 200) {
+//         console.log('NOT 200 STATUS');
+//         ereaseToken();
+//         global.console.log('Token renewal failure');
+//         return false;
+//       }
+//       let newToken = refreshed_token.data && refreshed_token.data.token;
+//       let user = refreshed_token.data && refreshed_token.data.user;
+//       if (newToken) {
+//         setToken(newToken.token, newToken.expires);
+//         return { user, newToken };
+//       } else {
+//         console.log('NO NEWTOKEN RECEIVED');
+//         ereaseToken();
+//         return false;
+//       }
+//     } catch (error) {
+//       console.error(error);
+//       return error;
+//     } finally {
+//       isRefreshing = null;
+//     }
+//   };
+//   const refreshToken = (expires) => {
+//     console.log('SETTING REFRESH TIMEOUT');
+//     let delay = expires - 5000;
+//     refreshTimeOut = window.setTimeout(getRefreshedToken, delay);
+//   };
 
-      login: ({ username, password }) => {
-        const request = new Request('http://localhost:8001/authenticate', {
-            method: 'POST',
-            body: JSON.stringify({ username, password }),
-            headers: new Headers({ 'Content-Type': 'application/json' }),
-            credentials: 'include',
-        });
-        inMemoryJWT.setRefreshTokenEndpoint('http://localhost:8001/refresh-token');
-        return fetch(request)
-            .then((response) => {
-                if (response.status < 200 || response.status >= 300) {
-                    throw new Error(response.statusText);
-                }
-                return response.json();
-            })
-            .then(({ token, tokenExpiry }) => inMemoryJWT.setToken(token, tokenExpiry));
-    },
- */
+//   const clearRefreshTokenTimeout = () => {
+//     if (refreshTimeOut) {
+//       window.clearTimeout(refreshTimeOut);
+//     }
+//   };
+
+//   const getToken = () => inMemoryJWT;
+
+//   const setToken = (token, expires) => {
+//     console.log('SETTING TOKEN');
+//     inMemoryJWT = token;
+//     refreshToken(expires);
+//     return true;
+//   };
+
+//   const logout = () => ereaseToken;
+
+//   const ereaseToken = () => {
+//     console.log('ERASING TOKEN');
+//     inMemoryJWT = null;
+//     clearRefreshTokenTimeout();
+//     window.localStorage.setItem(logoutEventName, Date.now());
+//     return true;
+//   };
+
+//   return {
+//     ereaseToken,
+//     getToken,
+//     setLogoutEventName,
+//     setRefreshTokenEndpoint,
+//     setToken,
+//     getRefreshedToken,
+//     handleRefresh,
+//   };
+// };
