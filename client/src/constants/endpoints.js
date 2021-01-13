@@ -40,3 +40,4 @@ export const getUserReviewsEndpoint = baseEndpoint + 'review/user/'; // ${userId
 export const getProductReviews = baseEndpoint + 'review/'; // ${productId}
 
 export const refreshEndpoint = baseEndpoint + 'auth/refresh/';
+export const mailsEndpoint = baseEndpoint + 'mails/';

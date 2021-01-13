@@ -1,22 +1,62 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Checkbox from '@material-ui/core/Checkbox';
+import Cards from 'react-credit-cards';
+import 'react-credit-cards/es/styles-compiled.css';
 
 export default function PaymentForm() {
+
+  let paymentInfoStorage = JSON.parse(localStorage.getItem('paymentInfo'));
+  const [paymentInfo, setPaymentInfo] = React.useState({  
+              cardName: paymentInfoStorage.cardName,
+              cardNumber: paymentInfoStorage.cardNumber,
+              expDate: paymentInfoStorage.expDate,
+              cvv: paymentInfoStorage.cvv,
+            
+    });
+    
+    useEffect(() => {
+      localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo))
+    }, [paymentInfo])
+    
+    window.addEventListener('beforeunload', (event) => {
+      setPaymentInfo({
+        cardName: document.getElementById('cardName'),
+        cardNumber: document.getElementById('cardNumber'),
+        expDate: document.getElementById('expDate'),
+        cvv: document.getElementById('cvv'),
+     
+       });
+      localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo))
+     
+    });
+
+    const handleInputChange = function(e) {
+      setPaymentInfo({
+         ...paymentInfo, 
+         [e.target.name]: e.target.value 
+       });
+     }
+
+  
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Payment method
+        Método de Pago
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <TextField
             required
             id="cardName"
-            label="Name on card"
+            name="cardName"
+            label="Nombre en la Tarjeta"
+            onChange={handleInputChange}
+            defaultValue={paymentInfoStorage.cardName}
             fullWidth
             autoComplete="cc-name"
           />
@@ -25,7 +65,10 @@ export default function PaymentForm() {
           <TextField
             required
             id="cardNumber"
-            label="Card number"
+            name="cardNumber"
+            label="Número de Tarjeta"
+            onChange={handleInputChange}
+            defaultValue={paymentInfoStorage.cardNumber}
             fullWidth
             autoComplete="cc-number"
           />
@@ -34,7 +77,10 @@ export default function PaymentForm() {
           <TextField
             required
             id="expDate"
-            label="Expiry date"
+            name="expDate"
+            label="Válida hasta:"
+            onChange={handleInputChange}
+            defaultValue={paymentInfoStorage.expDate}
             fullWidth
             autoComplete="cc-exp"
           />
@@ -43,19 +89,31 @@ export default function PaymentForm() {
           <TextField
             required
             id="cvv"
+            name="cvv"
             label="CVV"
-            helperText="Last three digits on signature strip"
+            helperText="Código de seguridad"
+            defaultValue={paymentInfoStorage.cvv}
+            onChange={handleInputChange}
             fullWidth
             autoComplete="cc-csc"
           />
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox color="secondary" name="saveCard" value="yes" />}
-            label="Remember credit card details for next time"
+            label="Recordar los datos de la tarjeta de crédito"
           />
-        </Grid>
+        </Grid> */}
       </Grid>
+      <div id="PaymentForm">
+        <Cards
+          cvc={paymentInfoStorage.cvc}
+          expiry={paymentInfoStorage.expDate}
+          name={paymentInfoStorage.cardName}
+          number={paymentInfoStorage.cardNumber}
+        />
+       
+      </div>
     </React.Fragment>
   );
 }

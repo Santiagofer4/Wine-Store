@@ -75,6 +75,8 @@ export const allOrderStatusSelector = (state) =>
 
 export const userSelector = (state) => state.user.user.info;
 
+export const usersListSelector = (state) => state.user.user.usersList;
+
 export const userStatusSelector = (state) => state.user.user.status;
 
 export const userErrorSelector = (state) => state.user.user.error;
@@ -96,3 +98,5 @@ export const myCartSelector = (state) =>
 export const notificationListSelector = (state) => state.notifications.list;
 
 export const tokenSelector = (state) => state.token;
+
+export const checkoutInfoSelector = (state) => state.checkout.checkout;

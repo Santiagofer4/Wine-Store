@@ -1,41 +1,30 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
+import { useDispatch, useSelector } from 'react-redux';
+import { allProductsCartSelector, userSelector, myCartSelector } from '../../selectors/index';
+import { modificateOrder } from '../../slices/productsCartSlice';
+import { deleteAddressInfo, deletePaymentInfo} from '../../Components/utils/index';
+import { sendEmail } from '../../slices/userSlice';
+import { total } from '../utils/index';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+
+
+// Estilos de los "steps" del checkout
 
 const useStyles = makeStyles((theme) => ({
   layout: {
     width: 'auto',
-    // position: 'absolute',
-    // top: theme.spacing(10),
-    // left: theme.spacing(50),
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
-    marginTop: theme.spacing(5),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
       width: 600,
       marginLeft: 'auto',
@@ -43,11 +32,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   paper: {
-    marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
     padding: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-      marginTop: theme.spacing(6),
       marginBottom: theme.spacing(6),
       padding: theme.spacing(3),
     },
@@ -67,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = ['Direccion de envio', 'Detalles de pago', 'Verificar la orden'];
 
+
 function getStepContent(step) {
   switch (step) {
     case 0:
@@ -81,11 +69,26 @@ function getStepContent(step) {
 }
 
 export default function Checkout() {
+  const dispatch = useDispatch();
+  const user = useSelector(userSelector);
+  const order = useSelector(myCartSelector);
+  const AllProductsCart = useSelector(allProductsCartSelector);
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
+  const myCart = useSelector(myCartSelector);
+ // const [subTotal, setSubTotal] = useState(0);
+  let suma = Math.ceil((total(AllProductsCart) * 121) / 100)
 
-  const handleNext = () => {
+  const handleNext = (e) => {
     setActiveStep(activeStep + 1);
+    if(e.target.innerText === 'COMPRAR') {
+      dispatch(sendEmail({ name: user.firstName, email: user.email, type: 'Order', orderCod: order.orderId}));
+    }
+    if (activeStep === 2){
+      dispatch(modificateOrder({ myCart: myCart.orderId, total: suma, status: 'completed'}));
+      deleteAddressInfo();
+      deletePaymentInfo();
+      }
   };
 
   const handleBack = () => {
@@ -94,15 +97,7 @@ export default function Checkout() {
 
   return (
     <React.Fragment>
-      {/* <CssBaseline /> */}
-      {/* <AppBar position="absolute" color="default" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Company name
-          </Typography>
-        </Toolbar>
-      </AppBar> */}
-      <main className={classes.layout}>
+       <main className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h4" align="center">
             Checkout
@@ -121,7 +116,7 @@ export default function Checkout() {
                   Muchas gracias por su orden!
                 </Typography>
                 <Typography variant="subtitle1">
-                  Su nro de orden es #`agregar dinamicamente nro aca`
+                  Su número de orden es {order.orderId}
                 </Typography>
               </React.Fragment>
             ) : (
@@ -134,9 +129,10 @@ export default function Checkout() {
                     </Button>
                   )}
                   <Button
+                    id="button"
                     variant="contained"
                     color="primary"
-                    onClick={handleNext}
+                    onClick={(e) => handleNext(e)}
                     className={classes.button}
                   >
                     {activeStep === steps.length - 1

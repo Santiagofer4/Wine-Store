@@ -25,7 +25,7 @@ const notificationSlice = createSlice({
     },
     clearSnackbar: (state, { payload }) => {
       state.list = state.list.forEach(
-        ((notification) => notification.dismissed: true)
+        ((notification) => notification.dismissed = true)
       );
     },
     removeSnackbar: (state, { payload }) => {

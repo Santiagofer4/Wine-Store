@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
-import { sliceTime, total } from '../utils';
-import OrderDetail from './OrderDetail';
-import './OrderTable.modules.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { getOrderTable } from '../../slices/orderTableSlice';
-import { allOrderSelector, allOrderStatusSelector } from '../../selectors';
-import { CircularProgress, Button } from '@material-ui/core';
+import React, { useEffect } from "react";
+import { sliceTime, total } from "../utils";
+import OrderDetail from "./OrderDetail";
+import "./OrderTable.modules.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getOrderTable } from "../../slices/orderTableSlice";
+import { modificateOrder } from "../../slices/productsCartSlice";
+import { allOrderSelector, allOrderStatusSelector } from "../../selectors";
+import { CircularProgress, Button } from "@material-ui/core";
+
+import DoneIcon from "@material-ui/icons/Done";
 
 // Esta tabla es para el admin.
 // Tiene que mostrar todas las ordenes de todos los usuarios.
@@ -15,10 +18,12 @@ function OrderTable() {
   const orderTable = useSelector(allOrderSelector);
   const status = useSelector(allOrderStatusSelector);
 
+  const orderStatus = ["created", "canceled", "pending", "completed", "cart"];
+
   let content;
+
   useEffect(() => {
     dispatch(getOrderTable());
-
   }, [dispatch]);
 
   const handleRetry = () => {
@@ -28,14 +33,19 @@ function OrderTable() {
     return false;
   };
 
-  if (status === 'loading') {
+  const handleClick = (id) => {
+    let element = document.getElementById("option" + id).value;
+    dispatch(modificateOrder({ myCart: id, status: element }));
+  };
+
+  if (status === "loading") {
     content = (
       <>
         <h2>Cargando...</h2>
         <CircularProgress />
       </>
     );
-  } else if (status === 'succeded') {
+  } else if (status === "succeded") {
     content = orderTable.map((order) => {
       return (
         <>
@@ -44,11 +54,26 @@ function OrderTable() {
             <div className="OrderTable__Text">
               {Math.ceil((total(order.orderLines) * 121) / 100)}
             </div>
-            <div className="OrderTable__Text">{order.status}</div>
+            {/* <div className="OrderTable__Text">{order.status}</div> */}
+            <select id={"option" + order.id}>
+              {orderStatus.map((status) => {
+                return (
+                  <option
+                    value={status}
+                    selected={status === order.status ? true : false}
+                  >
+                    {status}
+                  </option>
+                );
+              })}
+            </select>
+            <Button className="doneButton" onClick={() => handleClick(order.id)}>
+              <DoneIcon className="done"></DoneIcon>
+            </Button>
             <div className="OrderTable__Text">{order.userId}</div>
             <div className="OrderTable__Text">{sliceTime(order.updatedAt)}</div>
             <div className="OrderTable__Text">
-              {' '}
+              {" "}
               <button
                 onClick={() => {
                   hide(order.id);
@@ -62,7 +87,7 @@ function OrderTable() {
         </>
       );
     });
-  } else if (status === 'failed') {
+  } else if (status === "failed") {
     content = (
       <>
         <h3>Ha ocurrido un error</h3>
@@ -89,10 +114,10 @@ function OrderTable() {
 function hide(id) {
   //*funcion para mostrar||ocultar el detalle de la orden
   let OrderDetail = document.getElementById(id).style.display;
-  if (OrderDetail !== 'inline') {
-    document.getElementById(id).style.display = 'inline';
+  if (OrderDetail !== "inline") {
+    document.getElementById(id).style.display = "inline";
   } else {
-    document.getElementById(id).style.display = 'none';
+    document.getElementById(id).style.display = "none";
   }
 }
 

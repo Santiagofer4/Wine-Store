@@ -24,6 +24,7 @@ import { isLogged, isAdmin } from './Components/utils/index';
 import tokenManager from './Components/utils/tokenManager';
 import Notifier from './Components/Notifier/Notifier';
 import AuthProvider from './Components/ProtectRoute/AuthProvider';
+import Checkout from './Components/Checkout/Checkout';
 
 function App() {
   // //!SOLUCION CAVERNICOLA!
