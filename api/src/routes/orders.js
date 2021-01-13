@@ -7,8 +7,8 @@ const passport = require('passport');
 
 server.get(
   '/',
-  passport.authenticate('jwt', { session: false }),
-  checkAdmin,
+  /*passport.authenticate('jwt', { session: false }),
+  checkAdmin,*/
   (req, res, next) => {
     const { status } = req.query;
 
