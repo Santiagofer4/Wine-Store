@@ -38,3 +38,5 @@ export const addUserReviewEndpoint = baseEndpoint + 'review/'; //${productId}
 export const getUserReviewsEndpoint = baseEndpoint + 'review/user/'; // ${userId}
 
 export const getProductReviews = baseEndpoint + 'review/'; // ${productId}
+
+export const mailsEndpoint = baseEndpoint + 'mails/';

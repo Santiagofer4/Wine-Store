@@ -14,9 +14,10 @@ import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkoutInfoSelector } from '../../selectors/index';
+import { checkoutInfoSelector, userStatusSelector, userSelector, myCartSelector } from '../../selectors/index';
 import { addressInfoAction, paymentInfoAction } from '../../slices/checkoutSlice';
 import { saveAddressInfo, savePaymentInfo } from '../../Components/utils/index';
+import { sendEmail } from '../../slices/userSlice';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -74,8 +75,9 @@ function getStepContent(step) {
 }
 
 export default function Checkout() {
-
-
+  const dispatch = useDispatch();
+  const user = useSelector(userSelector);
+  const order = useSelector(myCartSelector);
   // window.addEventListener('beforeunload', (event) => {
   //   console.log('acá guardo los datos')
   // });
@@ -83,12 +85,14 @@ export default function Checkout() {
   const [activeStep, setActiveStep] = useState(0);
  // const dispatch = useDispatch();
 
-  const handleNext = () => {
+  const handleNext = (e) => {
     setActiveStep(activeStep + 1);
-    console.log('active step', activeStep)
-   // console.log('address info', saveAddressInfo())
-  //  saveAddressInfo()
-   // savePaymentInfo()
+    if(e.target.innerText === 'COMPRAR') {
+      dispatch(sendEmail({ name: user.firstName, email: user.email, type: 'Order', orderCod: order.orderId}));
+    }
+    //console.log('address info', saveAddressInfo())
+    // saveAddressInfo()
+    // savePaymentInfo()
   };
 
   const handleBack = () => {
@@ -125,7 +129,7 @@ export default function Checkout() {
                   Muchas gracias por su orden!
                 </Typography>
                 <Typography variant="subtitle1">
-                  Su nro de orden es #`agregar dinamicamente nro aca`
+                  Su número de orden es {order.orderId}
                 </Typography>
               </React.Fragment>
             ) : (
@@ -138,9 +142,10 @@ export default function Checkout() {
                     </Button>
                   )}
                   <Button
+                    id="button"
                     variant="contained"
                     color="primary"
-                    onClick={handleNext}
+                    onClick={(e) => handleNext(e)}
                     className={classes.button}
                   >
                     {activeStep === steps.length - 1

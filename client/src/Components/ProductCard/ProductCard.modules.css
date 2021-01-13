@@ -1,3 +1,4 @@
+
 .ProCard__img {
   width: 100%;
   background-color: rgb(17, 16, 16);
@@ -9,7 +10,8 @@
   width: 18rem !important;
   background: #f7f8ffa8 !important;
   padding-top: 1rem;
-
+  border: solid black;
+  display: inline-block;
 }
 .ProCards_Card:hover {
   margin: 2rem 1rem 2rem 1rem;
@@ -18,6 +20,7 @@
   opacity: 80%;
   transition: all 550ms ease-in-out;
 }
+
 .ProCard__Container {
   height: 3.5rem;
   
@@ -37,7 +40,7 @@
   background-color: #be9063 !important;
   height: 40px;
   width: 100px;
-  
+
 }
 
 #Button__Buy:hover {
@@ -66,4 +69,9 @@
 
 h4 {
   font-size: 1.2rem !important;
+  font-weight: 700 !important;
+}
+
+.ProCard__opacidad {
+  padding: 16px 70px 5px 70px !important;
 }
