@@ -120,53 +120,12 @@ server.get('/:id/orders', (req, res) => {
     });
 });
 
-//Agregar un USER
-
-// server.post('/', (req, res) => {
-//   let {
-//     firstName,
-//     lastName,
-//     email,
-//     birthdate,
-//     cellphone,
-//     password,
-//     isAdmin,
-//   } = req.body;
-
-//   if (!email) return res.status(400).send('Debe ingresar un email');
-
-//   User.findOrCreate({
-//     where: {
-//       email,
-//     },
-//     defaults: {
-//       firstName,
-//       lastName,
-//       email,
-//       birthdate,
-//       cellphone,
-//       isAdmin: false,
-//       password,
-//     },
-//   })
-//     .then((user) => {
-//       const [instance, wasCreated] = user;
-//       if (wasCreated) {
-//         return res.status(200).send(user);
-//       } else {
-//         return res.status(409).send(user);
-//       }
-//     })
-//     .catch((err) => {
-//       return res.status(400).send(err.message);
-//     });
-// });
-
 // Agregar elemento al carrito
 
 server.post('/:userId/cart', async (req, res) => {
   let { userId } = req.params;
   let { id, price, quantity, increment, cartGuest } = req.body;
+ 
   if (!id || !userId)
     return res.status(400).send('Id de usuario o producto faltante');
   try {
@@ -177,18 +136,18 @@ server.post('/:userId/cart', async (req, res) => {
       },
       defaults: {
         total: 0,
-        status: 'cart',
-      },
+       },
     });
-
     const [newOrderLine, newOrderLineCreated] = await OrderLine.findOrCreate({
       where: {
         productId: id,
+        orderId: newOrder.dataValues.id
       },
       defaults: {
         productId: id,
         quantity: 1,
         price,
+        orderId: newOrder.dataValues.id
       },
     });
 
@@ -197,20 +156,18 @@ server.post('/:userId/cart', async (req, res) => {
         {
           quantity:
             !cartGuest && increment
-              ? quantity + 1
+              ? newOrderLine.dataValues.quantity + 1
               : !cartGuest && !increment
-              ? quantity - 1
+              ? newOrderLine.dataValues.quantity - 1
               : quantity,
         },
-        { where: { productId: id } }
+        { where: { productId: id, orderId: newOrder.dataValues.id } }
       );
     }
 
-    await newOrderLine.setProduct(id);
-    await newOrderLine.setOrder(newOrder.dataValues.id);
-
     return res.status(200).send({ newOrder, newOrderLine });
   } catch (error) {
+    console.log(error)
     return res.status(500).send(error);
   }
 });

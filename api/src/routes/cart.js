@@ -26,7 +26,6 @@ server.post('/', (req, res) => {
         orderId: order.id,
       },
     }).then((result) => {
-      console.log('RESULT', result);
       const [instance, wasCreated] = result;
     });
   });
