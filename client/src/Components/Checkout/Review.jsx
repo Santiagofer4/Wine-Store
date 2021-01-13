@@ -106,6 +106,13 @@ const [addressInfo, setAddressInfo] = React.useState({
           </Typography>
         </ListItem>
         <ListItem className={classes.listItem}>
+          <ListItemText secondary="IVA" />
+               <Typography variant="body2">
+               {Math.ceil((total(AllProductsCart) * 21) / 100)}
+        
+          </Typography>
+        </ListItem>
+        <ListItem className={classes.listItem}>
           <ListItemText primary="Total" />
                <Typography variant="subtitle1" className={classes.total}>
         { Math.ceil((total(AllProductsCart) * 121) / 100)}
