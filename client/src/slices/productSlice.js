@@ -85,6 +85,21 @@ const productsSlice = createSlice({
         state.vinoEncontrado = vinoEncontrado;
       }
     },
+    productPriceLess: (state, action) => {
+      state.allProducts.list = state.allProducts.list.filter((product) => {
+        return product.price <= action.payload
+      })
+    },
+    productPriceBetween : (state, action) => {
+      state.allProducts.list = state.allProducts.list.filter((product) => {
+        return product.price > action.payload.e && product.price < action.payload.f
+      })
+    },
+    productPriceMore: (state, action) => {
+      state.allProducts.list = state.allProducts.list.filter((product) => {
+        return product.price >= action.payload
+      })
+    },
   },
   extraReducers: {
     [getAllProducts.pending]: (state, action) => {
@@ -172,6 +187,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const { findWine, addWine } = productsSlice.actions;
+export const { findWine, addWine, productPriceLess, productPriceBetween, productPriceMore } = productsSlice.actions;
 
 export default productsSlice;
