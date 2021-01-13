@@ -4,6 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Cards from 'react-credit-cards';
+import 'react-credit-cards/es/styles-compiled.css';
 
 export default function PaymentForm() {
 
@@ -39,6 +41,7 @@ export default function PaymentForm() {
        });
      }
 
+  
 
   return (
     <React.Fragment>
@@ -95,13 +98,22 @@ export default function PaymentForm() {
             autoComplete="cc-csc"
           />
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox color="secondary" name="saveCard" value="yes" />}
             label="Recordar los datos de la tarjeta de crédito"
           />
-        </Grid>
+        </Grid> */}
       </Grid>
+      <div id="PaymentForm">
+        <Cards
+          cvc={paymentInfoStorage.cvc}
+          expiry={paymentInfoStorage.expDate}
+          name={paymentInfoStorage.cardName}
+          number={paymentInfoStorage.cardNumber}
+        />
+       
+      </div>
     </React.Fragment>
   );
 }
