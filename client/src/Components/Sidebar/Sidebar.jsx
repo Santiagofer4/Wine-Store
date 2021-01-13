@@ -98,7 +98,7 @@ function Sidebar() {
           </Button>
           <p className="Sidebar__CategoryName">Precio</p>
             <Button className="Sidebar__Text" onClick={() => priceLessHandler(350)}>Hasta $350</Button>
-            <Button className="Sidebar__Text" onClick={() => priceBetweenHandler(350,600)}>$300 a $600</Button>
+            <Button className="Sidebar__Text" onClick={() => priceBetweenHandler(350,600)}>$350 a $600</Button>
             <Button className="Sidebar__Text" onClick={() => priceMoreHandler(600)}>Más de $600</Button>
           <p className="Sidebar__CategoryName">Sabores</p>
           </>

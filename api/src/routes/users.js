@@ -120,48 +120,6 @@ server.get('/:id/orders', (req, res) => {
     });
 });
 
-//Agregar un USER
-
-// server.post('/', (req, res) => {
-//   let {
-//     firstName,
-//     lastName,
-//     email,
-//     birthdate,
-//     cellphone,
-//     password,
-//     isAdmin,
-//   } = req.body;
-
-//   if (!email) return res.status(400).send('Debe ingresar un email');
-
-//   User.findOrCreate({
-//     where: {
-//       email,
-//     },
-//     defaults: {
-//       firstName,
-//       lastName,
-//       email,
-//       birthdate,
-//       cellphone,
-//       isAdmin: false,
-//       password,
-//     },
-//   })
-//     .then((user) => {
-//       const [instance, wasCreated] = user;
-//       if (wasCreated) {
-//         return res.status(200).send(user);
-//       } else {
-//         return res.status(409).send(user);
-//       }
-//     })
-//     .catch((err) => {
-//       return res.status(400).send(err.message);
-//     });
-// });
-
 // Agregar elemento al carrito
 
 server.post('/:userId/cart', async (req, res) => {
@@ -206,9 +164,6 @@ server.post('/:userId/cart', async (req, res) => {
         { where: { productId: id, orderId: newOrder.dataValues.id } }
       );
     }
-
-   // await newOrderLine.setProduct(id);
-   // await newOrderLine.setOrder(newOrder.dataValues.id);
 
     return res.status(200).send({ newOrder, newOrderLine });
   } catch (error) {

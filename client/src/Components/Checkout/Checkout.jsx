@@ -81,13 +81,13 @@ export default function Checkout() {
 
   const handleNext = (e) => {
     setActiveStep(activeStep + 1);
-    if(e.target.innerText === 'COMPRAR') {
-      dispatch(sendEmail({ name: user.firstName, email: user.email, type: 'Order', orderCod: order.orderId}));
-    }
+    // if(e.target.innerText === 'COMPRAR') {
+    // }
     if (activeStep === 2){
       dispatch(modificateOrder({ myCart: myCart.orderId, total: suma, status: 'completed'}));
       deleteAddressInfo();
       deletePaymentInfo();
+      dispatch(sendEmail({ name: user.firstName, email: user.email, type: 'Order', orderCod: order.orderId}));
       }
   };
 

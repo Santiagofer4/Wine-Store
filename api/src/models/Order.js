@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
         'completed',
         'cart',
       ]),
-      defaultValue: 'pending',
+      defaultValue: 'cart',
     },
   });
 };
