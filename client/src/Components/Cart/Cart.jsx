@@ -173,9 +173,9 @@ function Cart() {
   const handleConfirm = () => {
    if(login) {
      let total = Math.ceil((subTotal * 121) / 100);
-    // dispatch(modificateOrder({ myCart: myCart.orderId, total, status: 'completed' }));
+     axios.put(`http://localhost:3000/orders/${myCart.orderId}`, { total, status: 'cart' });
+     //dispatch(modificateOrder({ myCart: myCart.orderId, total, status: 'completed'}));
      history.push('/checkout')
-     //axios.put(`http://localhost:3000/orders/${myCart}`, { total, status: 'completed' });
    }
    if(!login) {
     history.push('/form/user/login');

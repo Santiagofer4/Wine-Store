@@ -51,7 +51,6 @@ function Sidebar() {
           variant="text"
           className="Sidebar__Text"
           color="inherit"
-          fullWidth
           key={idx}
           name={category.taste}
           onClick={(e) => categoryClickHandler(e)}
@@ -65,12 +64,12 @@ function Sidebar() {
     <div className="Sidebar__container">
       <div className="Sidebar__lista">
         {allProducts.length > 0 ? (
+          <>
           <Button
-            color="primary"
             variant="text"
-            className="Sidebar__Text"
+            className=""
             id="verTodos"
-            fullWidth
+
             onClick={() => {
               history.push(`/catalogue`);
               dispatch(getAllProducts());
@@ -79,7 +78,9 @@ function Sidebar() {
             {' '}
             Ver Todos
           </Button>
-        ) : (
+          <p className="Sidebar__CategoryName">Sabores</p>
+          </>
+        )  : (
           <p>No hay productos</p>
         )}{' '}
         {content}
