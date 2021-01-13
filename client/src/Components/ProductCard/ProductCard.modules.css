@@ -3,6 +3,7 @@
   width: 100%;
   background-color: rgb(17, 16, 16);
   border-radius: 47%;
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .ProCards_Card {
