@@ -9,7 +9,14 @@ import {
   deleteSingleProdFromCart,
   deleteAllProductsFromCart,
 } from '../slices/productsCartSlice';
-import { userPromote } from '../slices/userSlice';
+import { persistUserLogin, userPromote } from '../slices/userSlice';
+import {
+  setRefreshTokenTimeout,
+  setToken,
+  getRefreshedToken,
+  eraseToken,
+  setRefreshQueue,
+} from '../slices/tokenSlice';
 
 export const notificationMiddleware = (store) => (next) => (action) => {
   const dispatch = store.dispatch;
@@ -59,5 +66,38 @@ export const notificationMiddleware = (store) => (next) => (action) => {
     store.dispatch(enqueueSnackbar(snackbarContent));
   }
 
+  return next(action);
+};
+
+export const tokenMiddleware = (store) => (next) => (action) => {
+  const { dispatch } = store;
+  let ACTION_TYPE = action.type;
+  switch (ACTION_TYPE) {
+    case 'user/login/fulfilled': {
+      const { token } = action.payload;
+      dispatch(setToken(token));
+      dispatch(setRefreshTokenTimeout());
+      break;
+    }
+    case 'user/register/fulfilled': {
+      const { token } = action.payload;
+      dispatch(setToken(token));
+      dispatch(setRefreshTokenTimeout());
+      break;
+    }
+    case 'token/refreshTimeout/fulfilled':
+      dispatch(setRefreshQueue(false));
+      dispatch(getRefreshedToken());
+      break;
+    case 'token/getRefreshedToken/fulfilled':
+      dispatch(persistUserLogin(action.payload));
+      dispatch(setRefreshTokenTimeout());
+      break;
+    case 'user/logout':
+      dispatch(eraseToken());
+      break;
+    default:
+      break;
+  }
   return next(action);
 };

@@ -1,6 +1,8 @@
 const SECRET_KEY = require('../config/jwt.js').SECRET_KEY;
 const jwt = require('jsonwebtoken');
 
+const refreshTime = 60 * 5 * 1000;
+
 const extractDigitsFromString = (str) => {
   //* func que recibe la string del search input y devuelve un objeto
   //* que contiene un array de palabras y un array de numeros
@@ -43,7 +45,7 @@ const makeJWT = (user, expiresIn, prefix) => {
   const { id } = user;
 
   const options = {
-    expiresIn: 60 * 5 * 1000 || expiresIn, //5 min
+    expiresIn: expiresIn || refreshTime,
   };
   const payload = {
     id,
@@ -55,7 +57,7 @@ const makeJWT = (user, expiresIn, prefix) => {
 
   const signedToken = jwt.sign(payload, SECRET_KEY, options);
 
-   if (typeof prefix !== 'undefined') {
+  if (typeof prefix !== 'undefined') {
     return {
       token: prefix + ' ' + signedToken,
       expires: options.expiresIn,
@@ -76,10 +78,6 @@ const cookieMaker = (name, token, res) => {
     secure: true,
   };
   return res.cookie(name, token, cookieOptions);
-};
-
-const refreshTime = () => {
-  60 * 5 * 1000;
 };
 
 exports.extractDigitsFromString = extractDigitsFromString;

@@ -27,7 +27,6 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
   const { user, formik } = payload;
   const user_response = await axios.post(addUserEndpoint, user);
   const { token } = user_response.data;
-  tokenManager.setToken(token.token, token.expires);
   const resPayload = {
     userRegister_response: user_response.data,
     formik,
@@ -53,11 +52,7 @@ export const userLogout = createAsyncThunk(
   async (payload, thunkApi) => {
     const userLogout_response = await axios.get(userLogoutEndpoint);
     console.log('LOGGIN OUT');
-    if (userLogout_response.status === 200) {
-      tokenManager.ereaseToken();
-    }
-    //    const state = thunkApi.getState(); //Consultar con Flavio estas dos líneas y lo que agregamos de 117 a 120
-    //    state.user = initialState_user;
+    return userLogout_response;
     return;
   }
 );
@@ -77,8 +72,10 @@ export const getUsers = createAsyncThunk('users/getUsers', async () => {
   return resp;
 });
 
-export const allUsers = createAsyncThunk('users/getAllUsers', async() => {
-  const resp = await axios.get(usersEndpoint, {headers: {"Authorization": tokenManager.getToken()}});
+export const allUsers = createAsyncThunk('users/getAllUsers', async () => {
+  const resp = await axios.get(usersEndpoint, {
+    headers: { Authorization: tokenManager.getToken() },
+  });
   return resp;
 });
 
@@ -92,8 +89,8 @@ const userSlice = createSlice({
   initialState: initialState_user,
   reducers: {
     persistUserLogin: (state, { payload }) => {
-      const token = tokenManager.getToken();
-      state.user.info = payload;
+      const { user } = payload;
+      state.user.info = user;
     },
     resetStatus: (state, action) => {
       state.user.status = status.idle;
@@ -107,7 +104,6 @@ const userSlice = createSlice({
       const { userRegister_response, formik } = payload;
       state.user.status = status.succeded;
       state.user.info = userRegister_response.user;
-      localStorage.setItem('token', userRegister_response.token.token);
       formik.resetForm();
     },
     [createUser.rejected]: (state, action) => {
@@ -126,12 +122,10 @@ const userSlice = createSlice({
       state.user.status = status.loading;
     },
     [postUserLogin.fulfilled]: (state, { payload }) => {
-      const { userLogin_response, formik, token } = payload;
+      const { userLogin_response, formik } = payload;
       state.user.status = status.succeded;
       state.user.info = userLogin_response.user;
-      localStorage.setItem('token', userLogin_response.token.token);
       formik.resetForm();
-      // tokenManager.setToken(token);
     },
     [postUserLogin.rejected]: (state, action) => {
       state.user.status = status.failed;

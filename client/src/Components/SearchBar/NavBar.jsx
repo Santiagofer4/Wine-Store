@@ -18,14 +18,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { userSelector, userStatusSelector } from '../../selectors/index.js';
 import axios from 'axios';
-import tokenManager from '../utils/tokenManager';
 import { isLogged } from '../utils/index';
 import store from '../../store';
 import { userLogout } from '../../slices/userSlice.js';
 import { logout, getAllProductsCart } from '../../slices/productsCartSlice';
+import { useAuthContext } from '../ProtectRoute/authContext';
 //import { refresh } from "../../slices/productsCartSlice.js" // no existe esa función
 
 function NavBar() {
+  const auth = useAuthContext();
   const dispatch = useDispatch();
   const history = useHistory();
   const user = useSelector(userSelector);
@@ -115,7 +116,7 @@ function NavBar() {
               onClick={handleToggle}
             >
               <Avatar>
-                {isLogged()
+                {auth
                   ? user.firstName.charAt(0) + user.lastName.charAt(0)
                   : '?'}
               </Avatar>
@@ -142,7 +143,7 @@ function NavBar() {
                         id="menu-list-grow"
                         onKeyDown={handleListKeyDown}
                       >
-                        {isLogged() ? (
+                        {auth ? (
                           <>
                             {' '}
                             <MenuItem onClick={handleClose}>

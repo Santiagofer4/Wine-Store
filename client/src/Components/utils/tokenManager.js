@@ -1,13 +1,13 @@
 import store from '../../store';
 import {
-  setTokenRedux,
+  setToken,
   eraseToken,
   getRefreshedToken,
+  setRefreshTimeout,
 } from '../../slices/tokenSlice';
 
 const tokenManager = () => {
   const dispatch = store.dispatch;
-  console.log('DOIS', dispatch);
   let refreshTimeout = null;
   let refreshBefore = 5000;
   let logoutEventName = '_logout_';
@@ -20,18 +20,17 @@ const tokenManager = () => {
 
   const setToken = (token) => {
     console.log('SETTING TOKEN TOKENMANAGER');
-    dispatch(setTokenRedux(token));
+    dispatch(setToken(token));
+    // dispatch(setRefreshTimeout(token));
     refreshToken(token.expires);
     return true;
   };
 
   const refreshToken = (expires) => {
     console.log('SETTING REFRESH TOKENMANAGER');
-    let delay = expires - refreshBefore;
-    refreshTimeout = window.setTimeout(
-      store.dispatch(getRefreshedToken),
-      expires
-    );
+    // let delay = expires - refreshBefore;
+    let delay = 10000;
+    refreshTimeout = window.setTimeout(dispatch(getRefreshedToken), delay);
   };
 
   const clearRefreshToken = () => {

@@ -156,8 +156,8 @@ module.exports = function (passport) {
 
   const refreshCookieExtractor = (req) => {
     let token = null;
-    if (req && req.signedCookies) token = req.signedCookies.refreshToken.token;
-    // console.log('REFRESH COOKIE EXTRACTOR->TOKEN', token);
+    if (req.signedCookies && req.signedCookies.refreshToken)
+      token = req.signedCookies.refreshToken.token;
     return token;
   };
 
@@ -169,10 +169,10 @@ module.exports = function (passport) {
   passport.use(
     'jwt-refresh',
     new JWTstrategy(jwtRefresh_options, async (jwt_payload, done) => {
-      // console.log('REFRESHING STRAT', jwt_payload);
       try {
         return done(null, jwt_payload.user, { message: 'Token Autorizado' });
       } catch (error) {
+        console.error('CATCHING REFRESH');
         return done(error);
       }
     })

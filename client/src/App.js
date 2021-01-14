@@ -42,9 +42,9 @@ function App() {
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
         crossOrigin="anonymous"
       />
-      <NavBar></NavBar>
       <Notifier />
       <AuthProvider>
+        <NavBar></NavBar>
         <Switch>
           <Route exact path="/" component={Inicio}></Route>
           <Route exact path="/catalogue" component={Catalogue}></Route>

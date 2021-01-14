@@ -6,4 +6,4 @@ export const useAuthContext = () => {
   return React.useContext(AuthContext);
 };
 
-export const useProvideAuth = () => {};
+export const useAuthProvider = () => {};

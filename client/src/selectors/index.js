@@ -97,6 +97,8 @@ export const myCartSelector = (state) =>
 
 export const notificationListSelector = (state) => state.notifications.list;
 
-export const tokenSelector = (state) => state.token;
+export const tokenSelector = (state) => state.token.inMemoryToken;
+
+export const tokenStatusSelector = (state) => state.token.status;
 
 export const checkoutInfoSelector = (state) => state.checkout.checkout;
