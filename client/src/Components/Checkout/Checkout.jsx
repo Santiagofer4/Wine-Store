@@ -9,15 +9,12 @@ import Typography from '@material-ui/core/Typography';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
-import FinCompra from './FinCompra';
 import { useDispatch, useSelector } from 'react-redux';
 import { allProductsCartSelector, userSelector, myCartSelector } from '../../selectors/index';
-import { modificateOrder, resetState } from '../../slices/productsCartSlice';
+import { modificateOrder, resetCart } from '../../slices/productsCartSlice';
 import { deleteAddressInfo, deletePaymentInfo} from '../../Components/utils/index';
 import { sendEmail } from '../../slices/userSlice';
 import { total } from '../utils/index';
-import { useHistory } from 'react-router-dom';
-
 
 
 // Estilos de los "steps" del checkout
@@ -65,62 +62,34 @@ function getStepContent(step) {
       return <PaymentForm />;
     case 2:
       return <Review />;
-      //  case 3:
-      //    return <FinCompra />;
     default:
       throw new Error('Paso incorrecto');
   }
 }
 
 export default function Checkout() {
-  const history = useHistory();
   const myCart = useSelector(myCartSelector);
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
-  //const order = useSelector(myCartSelector);
   const AllProductsCart = useSelector(allProductsCartSelector);
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
- // const [subTotal, setSubTotal] = useState(0);
   let suma = Math.ceil((total(AllProductsCart) * 121) / 100)
  
 
   const handleNext = (e) => {
     setActiveStep(activeStep + 1);
-    // if(e.target.innerText === 'COMPRAR') {
-    // }
+   
     if (activeStep === 2){
 
-  
-      // dispatch(modificateOrder({ myCart: myCart.orderId, total: suma, status: 'completed'}));
-      // deleteAddressInfo();
-      // deletePaymentInfo();
-      // dispatch(sendEmail({ name: user.firstName, email: user.email, type: 'Order', orderCod: order.orderId}));
-      // dispatch(resetState());
-
-      // dispatch(sendEmail({ name: user.firstName, email: user.email, type: 'Order', orderCod: order.orderId}))
-      // .then(dispatch(modificateOrder({ myCart: myCart.orderId, total: suma, status: 'completed'})))
-      // .then(deleteAddressInfo())
-      // .then( deletePaymentInfo())
-      // .then(dispatch(resetState()))
-      // .catch((err) => {
-      //   console.log(err);
-      // })
       dispatch(modificateOrder({ myCart: myCart.orderId, total: suma, status: 'completed'}))
       deleteAddressInfo()
       deletePaymentInfo()
       dispatch(sendEmail({ name: user.firstName, email: user.email, type: 'Order', orderCod: myCart.orderId}))
-      dispatch(resetState())
-      history.push(
-        {
-                   pathname: 'checkout/fincompra',
-                   state: {
-                     OrderId: myCart.orderId,
-                   },
-                 } 
-    ) }
-  };
+      dispatch(resetCart())
 
+  };
+  }
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
@@ -146,9 +115,9 @@ export default function Checkout() {
                 <Typography variant="h5" gutterBottom>
                   Muchas gracias por su compra!
                 </Typography>
-                {/* <Typography variant="subtitle1">
-                  Su número de orden es {order.orderId}
-                </Typography> */}
+                <Typography variant="subtitle1">
+                  Su número de orden es {myCart.orderId}
+                </Typography>
               </React.Fragment>
             ) : (
               <React.Fragment>

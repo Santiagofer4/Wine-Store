@@ -24,7 +24,6 @@ import { isLogged, isAdmin } from './Components/utils/index';
 import tokenManager from './Components/utils/tokenManager';
 import Notifier from './Components/Notifier/Notifier';
 import Checkout from './Components/Checkout/Checkout';
-import FinCompra from './Components/Checkout/FinCompra';
 import Profile from './Components/Profile/_Profile';
 
 function App() {
@@ -72,7 +71,6 @@ function App() {
         {/* <Route path="/user/profile" component={Profile} /> */}
         <Route path="/404" component={notFound} />
         <Route path="/checkout" component={Checkout} />
-        <Route path="/checkout/fincompra" component={FinCompra} />
         <Redirect to="/404" />
       </Switch>
     </div>
