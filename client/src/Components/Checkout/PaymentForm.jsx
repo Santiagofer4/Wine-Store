@@ -2,8 +2,6 @@ import React, {useEffect} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Checkbox from '@material-ui/core/Checkbox';
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 
@@ -42,7 +40,6 @@ export default function PaymentForm() {
      }
 
   
-
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -107,10 +104,10 @@ export default function PaymentForm() {
       </Grid>
       <div id="PaymentForm">
         <Cards
-          cvc={paymentInfoStorage.cvc}
-          expiry={paymentInfoStorage.expDate}
-          name={paymentInfoStorage.cardName}
-          number={paymentInfoStorage.cardNumber}
+          cvc={paymentInfo.cvc}
+          expiry={paymentInfo.expDate}
+          name={paymentInfo.cardName}
+          number={paymentInfo.cardNumber}
         />
        
       </div>

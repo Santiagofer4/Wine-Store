@@ -25,11 +25,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Review() {
   const user = useSelector(userSelector);
   const dispatch = useDispatch();
- 
-
-
   let addressInfoStorage = JSON.parse(localStorage.getItem('addressInfo'));
-const [addressInfo, setAddressInfo] = React.useState({  
+  const [addressInfo, setAddressInfo] = React.useState({  
             firstName: addressInfoStorage.firstName,
             lastName: addressInfoStorage.lastName,
             address1: addressInfoStorage.address1,
@@ -51,7 +48,6 @@ const [addressInfo, setAddressInfo] = React.useState({
 
     const payments = [
       //Info del formulario anterior
-      { name: 'Tarjeta', detail: 'VISA' },
       { name: 'Titular', detail: paymentInfo.cardName },
       { name: 'Número de Tarjeta', detail: paymentInfo.cardNumber },
       { name: 'Válida hasta:', detail: paymentInfo.cvv },

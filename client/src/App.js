@@ -16,7 +16,7 @@ import Failure from './Components/Contenido/Failure';
 import notFound from './Components/notFound/notFound';
 import UserForm from './Components/Forms/User/UserForm';
 import UserLogin from './Components/Forms/User/UserLogin';
-import Profile from './Components/Profile/Profile';
+// import Profile from './Components/Profile/Profile';
 import axios from 'axios';
 import ProtectRoute from './Components/ProtectRoute/ProtectRoute';
 import Logout from './Components/Contenido/Logout';
@@ -24,6 +24,7 @@ import { isLogged, isAdmin } from './Components/utils/index';
 import tokenManager from './Components/utils/tokenManager';
 import Notifier from './Components/Notifier/Notifier';
 import Checkout from './Components/Checkout/Checkout';
+import Profile from './Components/Profile/_Profile';
 
 function App() {
   // //!SOLUCION CAVERNICOLA!
@@ -60,6 +61,8 @@ function App() {
         <Route path="/welcome" component={Welcome} />
         <Route path="/logout" component={Logout} />
         <Route path="/failure" component={Failure} />
+        {/* <Route path="/prueba" component={CollapsibleTable} /> */}
+
         <ProtectRoute
           path="/user/profile"
           component={Profile}
