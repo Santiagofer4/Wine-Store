@@ -74,6 +74,7 @@ function App() {
         <Route path="/checkout" component={Checkout} />
         <Redirect to="/404" />
       </Switch>
+
     </div>
   );
 }

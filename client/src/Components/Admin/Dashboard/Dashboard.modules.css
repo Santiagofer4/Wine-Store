@@ -1,3 +1,37 @@
+#dashboard{
+    display: flex;
+    flex-direction: row;
+}
+.list {
+    height: 2rem !important;
+    font-size: 1rem !important;
+    text-transform: capitalize !important;
+}
+#lateral{
+    /* margin-top: 6vh; */
+    display: flex;
+    flex-direction: column;
+    padding-top: 7rem;
+    width: 20rem;
+    border: solid 2px;
+    height: 89%;
+    position: relative;
+    position: fixed;
+    /* position: absolute; */
+}
+#menu{
+   
+    padding-top: 5rem;
+    margin-left: 20%;
+    /* padding-top: 5%; */
+    padding-left: 2%;
+    width: 80rem;
+    height: 100rem;
+    position: relative;
+    position: fixed;
+    border: solid 2px;
+    overflow: scroll;
+}
 .toolBar{
     background-color: black !important;
 }

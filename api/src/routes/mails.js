@@ -5,13 +5,13 @@ const nodemailer = require("nodemailer");
 
 const transport = {
   // OPCIÓN 1
-  //service: "gmail",
+  service: "gmail",
   //
 
   // OPCIÓN 2
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+  // host: "smtp.gmail.com",
+  // port: 587,
+  // secure: false,
   //
   auth: {
     user: process.env.THE_EMAIL,
