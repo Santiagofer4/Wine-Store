@@ -16,7 +16,7 @@ import Failure from './Components/Contenido/Failure';
 import notFound from './Components/notFound/notFound';
 import UserForm from './Components/Forms/User/UserForm';
 import UserLogin from './Components/Forms/User/UserLogin';
-import Profile from './Components/Profile/Profile';
+// import Profile from './Components/Profile/Profile';
 import axios from 'axios';
 import ProtectRoute from './Components/ProtectRoute/ProtectRoute';
 import Logout from './Components/Contenido/Logout';
@@ -25,6 +25,7 @@ import tokenManager from './Components/utils/tokenManager';
 import Notifier from './Components/Notifier/Notifier';
 import AuthProvider from './Components/ProtectRoute/AuthProvider';
 import Checkout from './Components/Checkout/Checkout';
+import Profile from './Components/Profile/_Profile';
 
 function App() {
   // //!SOLUCION CAVERNICOLA!
@@ -44,7 +45,7 @@ function App() {
       />
       <Notifier />
       <AuthProvider>
-        <NavBar></NavBar>
+        <NavBar />
         <Switch>
           <Route exact path="/" component={Inicio}></Route>
           <Route exact path="/catalogue" component={Catalogue}></Route>
@@ -62,6 +63,7 @@ function App() {
           <Route path="/welcome" component={Welcome} />
           <Route path="/logout" component={Logout} />
           <Route path="/failure" component={Failure} />
+          {/* <Route path="/prueba" component={CollapsibleTable} /> */}
           <ProtectRoute
             path="/user/profile"
             component={Profile}
@@ -69,7 +71,7 @@ function App() {
           />
           {/* <Route path="/user/profile" component={Profile} /> */}
           <Route path="/404" component={notFound} />
-          {/* <Route path="/checkout" component={Checkout} /> */}
+          <Route path="/checkout" component={Checkout} />
           <Redirect to="/404" />
         </Switch>
       </AuthProvider>

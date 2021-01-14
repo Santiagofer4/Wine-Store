@@ -130,6 +130,12 @@ const productsCartSlice = createSlice({
     DeleteProductFromCart: (state, { payload }) => {
       return;
     },
+    resetCart(state, action) {
+      state.allProductsCart.list = [];
+      state.allProductsCart.status = 'idle';
+      state.allProductsCart.sync = false;
+      state.allProductsCart.error = null;
+    },
   },
   extraReducers: {
     [getAllProductsCart.pending]: (state, action) => {
@@ -248,6 +254,7 @@ export const {
   AddProductToCart,
   RemoveProductFromCart,
   DeleteProductFromCart,
+  resetCart,
 } = productsCartSlice.actions;
 
 export default productsCartSlice;
