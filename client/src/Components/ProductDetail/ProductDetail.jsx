@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   Paper,
@@ -8,32 +8,33 @@ import {
   Typography,
   Button,
   CircularProgress,
-} from "@material-ui/core";
-import "./ProductDetail.modules.css";
-import { useDispatch, useSelector } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
-import { useHistory } from "react-router-dom";
-import { postProductToCart, sync } from "../../slices/productsCartSlice";
+} from '@material-ui/core';
+import './ProductDetail.modules.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
+import { postProductToCart, sync } from '../../slices/productsCartSlice';
 import {
   productDetailSelector,
   productDetailStatusSelector,
   reviewsListSelector,
   reviewsListStatusSelector,
   userSelector,
-} from "../../selectors/index";
-import Rating from "@material-ui/lab/Rating";
-import Box from "@material-ui/core/Box";
-import ReviewCard from "../Review/ReviewCard";
-import { average, functionCartGuest, isLogged } from "../utils/index";
+} from '../../selectors/index';
+import Rating from '@material-ui/lab/Rating';
+import Box from '@material-ui/core/Box';
+import ReviewCard from '../Review/ReviewCard';
+import { average, functionCartGuest } from '../utils/index';
+import { useAuthContext } from '../ProtectRoute/authContext';
 
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
   },
   bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
   },
   title: {
     fontSize: 14,
@@ -44,6 +45,8 @@ const useStyles = makeStyles({
 });
 
 function ProductDetail() {
+  const authStatus = useAuthContext();
+
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
   const productDetail = useSelector(productDetailSelector);
@@ -52,7 +55,6 @@ function ProductDetail() {
   const reviewStatus = useSelector(reviewsListStatusSelector);
   const history = useHistory();
   const classes = useStyles();
-  let logged = isLogged();
   //let value;
 
   const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
@@ -69,7 +71,7 @@ function ProductDetail() {
   } = productDetail;
 
   useEffect(() => {
-    if (reviewStatus === "succeded" && reviews.length !== 0) {
+    if (reviewStatus === 'succeded' && reviews.length !== 0) {
       let rs = average(reviews);
       setValue(rs);
     }
@@ -90,7 +92,7 @@ function ProductDetail() {
             },
           }
         : {
-            pathname: "/catalogue",
+            pathname: '/catalogue',
             state: {
               edit: false,
             },
@@ -128,11 +130,11 @@ function ProductDetail() {
     dispatch(sync(false));
   }
 
-  if (reviewStatus === "loading") {
+  if (reviewStatus === 'loading') {
     return (
       <div className="ProductDetail__containerCargando">
-          <h3>Cargando....</h3>
-          <CircularProgress />
+        <h3>Cargando....</h3>
+        <CircularProgress />
       </div>
     );
   }
@@ -168,7 +170,7 @@ function ProductDetail() {
               {description}
             </Typography>
             <Box component="fieldset" mt={3} borderColor="transparent">
-              <Rating value={value} readOnly />{" "}
+              <Rating value={value} readOnly />{' '}
               <div>{reviews.length} reviews</div>
             </Box>
           </CardContent>
@@ -179,7 +181,7 @@ function ProductDetail() {
               size="small"
               onClick={() => history.goBack()}
             >
-              {" "}
+              {' '}
               <img
                 id="backButtonImage"
                 src="https://static.thenounproject.com/png/251451-200.png"
@@ -190,7 +192,7 @@ function ProductDetail() {
             {user && user.isAdmin ? (
               <>
                 <Button size="small" onClick={editHandler}>
-                  {" "}
+                  {' '}
                   <img
                     id="editImage"
                     src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"
@@ -207,7 +209,7 @@ function ProductDetail() {
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  logged
+                  authStatus
                     ? handlerProductToCart(user.id)
                     : handlerProductToCartGuest(id);
                 }}

@@ -6,4 +6,6 @@ export const useAuthContext = () => {
   return React.useContext(AuthContext);
 };
 
-export const useAuthProvider = () => {};
+export const useAuthProvider = () => {
+  const isAdmin = () => {};
+};

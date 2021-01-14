@@ -27,6 +27,7 @@ import AuthProvider from './Components/ProtectRoute/AuthProvider';
 import Checkout from './Components/Checkout/Checkout';
 import Profile from './Components/Profile/Profile';
 import Dashboard from './Components/Admin/Dashboard/Dashboard';
+import GuestRoute from './Components/ProtectRoute/GuestRoute';
 
 function App() {
   // //!SOLUCION CAVERNICOLA!
@@ -45,35 +46,30 @@ function App() {
         crossOrigin="anonymous"
       />
       <Notifier />
-      <Switch>
-        <Route exact path="/" component={Inicio}></Route>
-        <Route exact path="/catalogue" component={Catalogue}></Route>
-        <Route path="/catalogue/:taste" render={() => <CatalogueByTaste />} />
-        <Route path="/product/:id" render={() => <ProductDetail />} />
-        <Route path="/admin/form-product" component={ProductForm} />
-        <Route path="/form/test" component={TestForm} />
-        {/* <ProtectRoute path="/admin" component={AdminPanel} isLogged={isAdmin} /> */}
-        <Route path="/admin" component={AdminPanel} />
-        <Route path="/cart" component={Cart} />
-        {/* <Route path="/cart" render={() => isLogged() ? <Cart logueado={true}/> : (<Cart logueado={true}/> )} /> */}
-        <Route path="/order-table" component={OrderTable} />
-        <Route path="/form/user/login" component={UserLogin} />
-        <Route path="/form/user" component={UserForm} />
-        <Route path="/welcome" component={Welcome} />
-        <Route path="/logout" component={Logout} />
-        <Route path="/failure" component={Failure} />
-        {/* <Route path="/prueba" component={CollapsibleTable} /> */}
-        <Route path="/dashboard" component={Dashboard} />
-        <ProtectRoute
-          path="/user/profile"
-          component={Profile}
-          isLogged={isLogged}
-        />
-        {/* <Route path="/user/profile" component={Profile} /> */}
-        <Route path="/404" component={notFound} />
-        <Route path="/checkout" component={Checkout} />
-        <Redirect to="/404" />
-      </Switch>
+      <AuthProvider>
+        <NavBar />
+        <Switch>
+          <Route exact path="/" component={Inicio}></Route>
+          <Route exact path="/catalogue" component={Catalogue}></Route>
+          <Route path="/catalogue/:taste" render={() => <CatalogueByTaste />} />
+          <Route path="/product/:id" render={() => <ProductDetail />} />
+          <Route path="/admin/form-product" component={ProductForm} />
+          <Route path="/form/test" component={TestForm} />
+          <Route path="/admin" component={AdminPanel} />
+          <Route path="/cart" component={Cart} />
+          <Route path="/order-table" component={OrderTable} />
+          <GuestRoute path="/form/user/login" component={UserLogin} />
+          <GuestRoute path="/form/user" component={UserForm} />
+          <ProtectRoute path="/welcome" component={Welcome} />
+          <Route path="/logout" component={Logout} />
+          <Route path="/failure" component={Failure} />
+          <Route path="/dashboard" component={Dashboard} />
+          <ProtectRoute path="/user/profile" component={Profile} />
+          <Route path="/404" component={notFound} />
+          <Route path="/checkout" component={Checkout} />
+          <Redirect to="/404" />
+        </Switch>
+      </AuthProvider>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './Cart.modules.css';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '@material-ui/core';
+import { Button, CircularProgress, Container } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import {
   allProductsCartSelector,
@@ -220,63 +220,76 @@ function Cart() {
       }
       setSubTotal(total(AllProductsCart));
     }
-  }, [sincronizar, user]);
+  }, [authStatus, sincronizar, user]);
 
   useEffect(() => {
     setSubTotal(total(AllProductsCart));
   }, [cartStatus, dispatch]);
 
-  if (cartStatus === 'succeded') {
+  let content;
+  if (cartStatus === 'loading') {
+    content = (
+      <Container>
+        <CircularProgress />
+        <h3 className="Cart__Cargando">Cargando... </h3>
+      </Container>
+    );
+  } else if (cartStatus === 'failed') {
+    content = (
+      <Container>
+        <CircularProgress />
+        <h3 className="Cart__Cargando">Ha ocurrido un error...</h3>
+      </Container>
+    );
+  } else if (cartStatus === 'succeded') {
     if (AllProductsCart.length > 0) {
-      return (
-        <div className="ShoppingCartBackImg">
-          <div className="ShoppingCart">
-            <div className="products">
-              <h2 className="titleCart">Carrito de compras</h2>
+      content = (
+        <>
+          <div className="products">
+            <h2 className="titleCart">Carrito de compras</h2>
+            <hr className="line" />
+            <ul>
+              {AllProductsCart.map((product) => {
+                return (
+                  <CartItem
+                    key={product && product.id}
+                    prod={product}
+                    handlers={handlers}
+                  />
+                );
+              })}
+            </ul>
+          </div>
+          <div className="detail">
+            <h2 className="titleCart">Detalle de compra</h2>
+            <hr className="line" />
+            <div className="Summary">
+              <p id="subtotal">SUBTOTAL $ {subTotal}</p>
+              <p id="iva">IVA $ {Math.ceil((subTotal * 21) / 100)}</p>
               <hr className="line" />
-              <ul>
-                {AllProductsCart.map((product) => {
-                  return (
-                    <CartItem
-                      key={product && product.id}
-                      prod={product}
-                      handlers={handlers}
-                    />
-                  );
-                })}
-              </ul>
+              <p id="total">TOTAL $ {Math.ceil((subTotal * 121) / 100)}</p>
             </div>
-            <div className="detail">
-              <h2 className="titleCart">Detalle de compra</h2>
-              <hr className="line" />
-              <div className="Summary">
-                <p id="subtotal">SUBTOTAL $ {subTotal}</p>
-                <p id="iva">IVA $ {Math.ceil((subTotal * 21) / 100)}</p>
-                <hr className="line" />
-                <p id="total">TOTAL $ {Math.ceil((subTotal * 121) / 100)}</p>
-              </div>
-              <div>
-                <Button
-                  id="confirmBtn"
-                  className="buttonCart"
-                  onClick={handleConfirm}
-                >
-                  Confirmar
-                </Button>
-                <Button
-                  id="cancelBtn"
-                  className="buttonCart"
-                  onClick={handleDelete}
-                >
-                  Cancelar
-                </Button>
-              </div>
+            <div>
+              <Button
+                id="confirmBtn"
+                className="buttonCart"
+                onClick={handleConfirm}
+              >
+                Confirmar
+              </Button>
+              <Button
+                id="cancelBtn"
+                className="buttonCart"
+                onClick={handleDelete}
+              >
+                Cancelar
+              </Button>
             </div>
           </div>
-        </div>
+        </>
       );
     } else {
-      return (
+      content = (
         <div className="ShoppingCartEmpty">
           <h1 className="titleCart">Carrito de compras</h1>
           <hr className="lineEmpty" />
@@ -294,9 +307,13 @@ function Cart() {
         </div>
       );
     }
-  } else {
-    return <h3 className="Cart__Cargando">Cargando... </h3>;
   }
+
+  return (
+    <div className="ShoppingCartBackImg">
+      <div className="ShoppingCart">{content}</div>
+    </div>
+  );
 }
 
 export default Cart;

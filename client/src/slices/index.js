@@ -14,7 +14,7 @@ const rootReducer = {
   products: productSlice.reducer,
   categories: categorySlice.reducer,
   wineDetail: productDetailSlice.reducer,
-  productsCart: productsCartSlice.reducer,
+  cart: productsCartSlice.reducer,
   strains: strainSlice.reducer,
   orderTable: orderTableSlice.reducer,
   user: userSlice.reducer,

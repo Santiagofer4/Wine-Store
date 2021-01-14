@@ -16,9 +16,6 @@ import {
 import { getUserOrders } from '../../slices/userSlice';
 import { getUserReviews } from '../../slices/reviewSlice';
 import OrderDetail from '../OrderTable/OrderDetail';
-import { userOrders } from '../../slices/userSlice';
-import { userReviews } from '../../slices/reviewSlice';
-import OrderDetail from '../OrderTable/OrderDetail';
 import Row from '../Profile/ProfileTable';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -30,8 +27,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 export default function Profile() {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
-  const status = useSelector(userOrdersStatusSelector);
+  const userStatus = useSelector(userOrdersStatusSelector);
   const orders = useSelector(userOrdersSelector);
+  const reviewStatus = useSelector(reviewsListStatusSelector);
   const [state, setState] = useState({
     created: true,
     canceled: true,
@@ -49,10 +47,11 @@ export default function Profile() {
       states.push(prop);
     }
   }
+
   useEffect(() => {
-    dispatch(userOrders(user.id));
-    dispatch(userReviews(user.id));
-  }, [dispatch, state]);
+    if (userStatus === 'idle') dispatch(getUserOrders(user.id));
+    if (reviewStatus === 'idle') dispatch(getUserReviews(user.id));
+  }, [userStatus, reviewStatus, dispatch]);
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
@@ -65,14 +64,14 @@ export default function Profile() {
       </h3>
     );
   } else {
-    if (status === 'loading') {
+    if (userStatus === 'loading' || reviewStatus === 'loading') {
       allUserOrders = (
         <>
           <h2>Cargando...</h2>
           <CircularProgress />
         </>
       );
-    } else if (status === 'succeded') {
+    } else if (userStatus === 'succeded' && reviewStatus === 'succeded') {
       return (
         <Paper className="profile">
           <div className="personalInfo">
@@ -180,7 +179,7 @@ export default function Profile() {
           </div>
         </Paper>
       );
-    } else if (status === 'failed') {
+    } else if (userStatus === 'failed' || reviewStatus === 'failed') {
       allUserOrders = (
         <>
           <h3>Ha ocurrido un error</h3>

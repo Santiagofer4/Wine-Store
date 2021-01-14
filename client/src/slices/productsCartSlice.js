@@ -20,10 +20,14 @@ const initialState_product = {
 
 export const getAllProductsCart = createAsyncThunk(
   'cart/getAllProductsCart',
-  async (id) => {
+  async (id, { rejectWithValue }) => {
     const resp = await axios.get(getAllProductsCartEnpoint + id + '/cart');
+    const cart = resp.data;
+    if (!cart) {
+      return rejectWithValue(resp);
+    }
     let cart_response = {
-      resp,
+      cart,
       id,
     };
     return cart_response;
@@ -144,6 +148,9 @@ const productsCartSlice = createSlice({
     [getAllProductsCart.fulfilled]: (state, { payload }) => {
       state.allProductsCart.list = [];
       state.allProductsCart.status = status.succeded;
+      console.log('GETTING CART', payload);
+      const { cart } = payload;
+
       payload.resp.data[0] &&
         payload.resp.data[0].orderLines.map((e, i) => {
           state.allProductsCart.orderId = e.orderId;

@@ -108,7 +108,6 @@ const tokenSlice = createSlice({
       const { token, expires } = payload;
       state.inMemoryToken = token;
       state.delay = expires - state.refreshTimeDelta;
-      state.logged = true;
       return;
     },
     eraseToken: (state, action) => {
@@ -121,7 +120,7 @@ const tokenSlice = createSlice({
       state.status = status.idle;
       state.refreshStatus = status.idle;
       state.error = null;
-      state.tryToLoginStatus = status.idle;
+      // state.tryToLoginStatus = status.idle;
 
       window.clearTimeout(delayTimeout);
       window.localStorage.setItem(state.logoutEventName, Date.now());

@@ -16,25 +16,20 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import {
-  userSelector,
-  userLoginStatusSelector,
-} from '../../selectors/index.js';
+import { userSelector, userStatusSelector } from '../../selectors/index.js';
 import axios from 'axios';
-import { isLogged } from '../utils/index';
-import store from '../../store';
+import tokenManager from '../utils/tokenManager';
 import { userLogout } from '../../slices/userSlice.js';
 import { logout, getAllProductsCart } from '../../slices/productsCartSlice';
-import { useAuthContext } from '../ProtectRoute/authContext';
-//import { refresh } from "../../slices/productsCartSlice.js" // no existe esa función
+import { useAuthContext, useAuthProvider } from '../ProtectRoute/authContext';
 
 function NavBar() {
-  const auth = useAuthContext();
-  console.log('AUTH NAVBAR', auth);
   const dispatch = useDispatch();
   const history = useHistory();
+  const authStatus = useAuthContext();
+  console.log('AUTHSTATUS', authStatus);
   const user = useSelector(userSelector);
-  const status = useSelector(userLoginStatusSelector);
+  const status = useSelector(userStatusSelector);
   const [logged, setLogin] = useState(false);
 
   const [open, setOpen] = useState(false);
@@ -59,12 +54,7 @@ function NavBar() {
   }
   const handleLogout = () => {
     dispatch(userLogout());
-    // dispatch(logout());
-    // localStorage.removeItem('token');
     history.push('/logout');
-    // if (status === 'idle') {
-    //   history.push('/logout')
-    // }
   };
 
   const prevOpen = useRef(open);
@@ -120,7 +110,7 @@ function NavBar() {
               onClick={handleToggle}
             >
               <Avatar>
-                {auth
+                {authStatus
                   ? user.firstName.charAt(0) + user.lastName.charAt(0)
                   : '?'}
               </Avatar>
@@ -147,7 +137,7 @@ function NavBar() {
                         id="menu-list-grow"
                         onKeyDown={handleListKeyDown}
                       >
-                        {auth ? (
+                        {authStatus ? (
                           <>
                             {' '}
                             <MenuItem onClick={handleClose}>
@@ -206,24 +196,10 @@ function NavBar() {
                 alt="Carrito"
               />
             </Link>
-            {/* {isLogged() ? (
-            )
-            : (
-              <Link id="cartGuest" to="/cartGuest" className="Nav__Link">
-              <img
-                id="imgCart"
-                src="https://i.ibb.co/FsngVZ5/carrito1.png"
-                alt="CarritoI"
-              />
-            </Link> 
-            )
-            }
-            */}
           </div>
         </div>
       </nav>
     </div>
   );
 }
-
 export default NavBar;

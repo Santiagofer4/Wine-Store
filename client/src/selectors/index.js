@@ -42,16 +42,16 @@ export const productDetailErrorSelector = (state) =>
   state.wineDetail.wineDetail.error;
 
 export const allProductsCartSelector = (state) =>
-  state.productsCart.allProductsCart.list;
+  state.cart.allProductsCart.list;
 
 export const allProductsCartSyncSelector = (state) =>
-  state.productsCart.allProductsCart.sync;
+  state.cart.allProductsCart.sync;
 
 export const allProductsCartStatusSelector = (state) =>
-  state.productsCart.allProductsCart.status;
+  state.cart.allProductsCart.status;
 
 export const allProductsCartErrorSelector = (state) =>
-  state.productsCart.allProductsCart.error;
+  state.cart.allProductsCart.error;
 
 export const allCatsOfProductSelector = (state) =>
   state.categories.allCatsOfProduct.list;
@@ -94,8 +94,7 @@ export const reviewsListSelector = (state) => state.reviews.reviews.info;
 export const reviewsListStatusSelector = (state) =>
   state.reviews.reviews.status;
 
-export const myCartSelector = (state) =>
-  state.productsCart.allProductsCart.orderId;
+export const myCartSelector = (state) => state.cart.allProductsCart.orderId;
 
 export const notificationListSelector = (state) => state.notifications.list;
 

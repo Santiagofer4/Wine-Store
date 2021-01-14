@@ -10,7 +10,6 @@ import { userStatusSelector } from '../../selectors/index';
 function AuthProvider({ children }) {
   const dispatch = useDispatch();
   const userStatus = useSelector(userStatusSelector);
-  // const token = useSelector(tokenSelector); //null
   const tryToLoginStatus = useSelector(tryToLoginStatusSelector); //idle
 
   const isLogged = () => {

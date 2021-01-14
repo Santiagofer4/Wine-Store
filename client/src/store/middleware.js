@@ -78,25 +78,27 @@ export const tokenMiddleware = (store) => (next) => (action) => {
   switch (ACTION_TYPE) {
     case 'user/login/fulfilled': {
       const { token } = action.payload;
+      dispatch(persistUserLogin(action.payload.userLogin_response));
       dispatch(setToken(token));
-      dispatch(setTryToLoginStatus(status.succeded));
       dispatch(setStopRefreshFalse());
       dispatch(setRefreshTokenTimeout());
+      dispatch(setTryToLoginStatus(status.succeded));
       break;
     }
     case 'user/register/fulfilled': {
       const { token } = action.payload;
+      dispatch(persistUserLogin(action.payload.userLogin_response));
       dispatch(setToken(token));
-      dispatch(setTryToLoginStatus(status.succeded));
       dispatch(setStopRefreshFalse());
       dispatch(setRefreshTokenTimeout());
+      dispatch(setTryToLoginStatus(status.succeded));
       break;
     }
     case 'token/tryToLogin/fulfilled': {
       // console.log('PAYLOAD TRY TO LOGIN OK', action.payload);
       const { newToken } = action.payload;
-      dispatch(setToken(newToken));
       dispatch(persistUserLogin(action.payload));
+      dispatch(setToken(newToken));
       dispatch(setRefreshTokenTimeout());
       break;
     }
@@ -110,6 +112,7 @@ export const tokenMiddleware = (store) => (next) => (action) => {
       break;
     case 'user/logout/fulfilled':
       dispatch(eraseToken());
+      dispatch(setTryToLoginStatus(status.idle));
       break;
     case 'token/getRefreshedToken/rejected':
       dispatch(eraseToken());
