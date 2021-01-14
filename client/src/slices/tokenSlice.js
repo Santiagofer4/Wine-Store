@@ -17,6 +17,12 @@ const initialState_token = {
   error: null,
 };
 
+// window.addEventListener('storage', (event) => {
+//   if (event.key === initialState_token.logoutEventName) {
+//     removeToken();
+//   }
+// });
+
 export const getRefreshedToken = createAsyncThunk(
   'token/getRefreshedToken',
   async (_, { rejectWithValue }) => {
@@ -32,7 +38,11 @@ export const getRefreshedToken = createAsyncThunk(
     condition: (payload, { getState }) => {
       const { token } = getState();
       console.log('Checking status before fetch', token.status);
-      if (token.status === status.loading || token.status === status.failed) {
+      if (
+        token.stopRefresh === true ||
+        token.status === status.loading ||
+        token.status === status.failed
+      ) {
         console.log('SHOULD NOT RUN IF TOKEN');
         return false;
       }
@@ -73,10 +83,15 @@ const tokenSlice = createSlice({
     },
     eraseToken: (state, action) => {
       console.log('ERASING TOKEN REDUX');
-      // state.inMemoryToken = null;
+
+      state.inMemoryToken = null;
+      state.refreshQueued = false;
+      state.status = status.idle;
+      state.stopRefresh = true;
+      state.error = null;
+
       window.localStorage.setItem(state.logoutEventName, Date.now());
-      state = initialState_token;
-      return true;
+      window.clearTimeout(delayTimeout);
     },
     setRefreshQueue: (state, { payload }) => {
       state.refreshQueued = payload;

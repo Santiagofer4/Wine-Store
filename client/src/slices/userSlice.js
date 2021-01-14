@@ -53,7 +53,6 @@ export const userLogout = createAsyncThunk(
     const userLogout_response = await axios.get(userLogoutEndpoint);
     console.log('LOGGIN OUT');
     return userLogout_response;
-    return;
   }
 );
 

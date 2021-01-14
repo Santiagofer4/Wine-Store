@@ -93,7 +93,7 @@ export const tokenMiddleware = (store) => (next) => (action) => {
       dispatch(persistUserLogin(action.payload));
       dispatch(setRefreshTokenTimeout());
       break;
-    case 'user/logout':
+    case 'user/logout/fulfilled':
       dispatch(eraseToken());
       break;
     default:

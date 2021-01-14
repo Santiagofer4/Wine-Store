@@ -55,8 +55,8 @@ function NavBar() {
   }
   const handleLogout = () => {
     dispatch(userLogout());
-    dispatch(logout());
-    localStorage.removeItem('token');
+    // dispatch(logout());
+    // localStorage.removeItem('token');
     history.push('/logout');
     // if (status === 'idle') {
     //   history.push('/logout')
