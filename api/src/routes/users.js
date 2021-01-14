@@ -176,14 +176,14 @@ server.post('/:userId/cart', async (req, res) => {
 
 server.put('/:id', (req, res) => {
   let { id } = req.params;
-  let { firstName, lastName, email, birthdate, cellphone, password } = req.body;
+  let { firstName, lastName, email, birthdate, cellphone, isAdmin, password } = req.body;
 
   if (!id) return res.status(400).send('El usuario no existe');
 
   User.findByPk(id)
     .then(
       User.update(
-        { firstName, lastName, email, birthdate, cellphone, password },
+        { firstName, lastName, email, birthdate, cellphone, isAdmin, password },
         { where: { id } }
       )
     )

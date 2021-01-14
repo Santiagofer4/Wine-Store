@@ -98,6 +98,11 @@ const userSlice = createSlice({
     resetStatus: (state, action) => {
       state.user.status = status.idle;
     },
+    resetUsers(state, action) {
+      state.user.usersList = [];
+      state.user.status = 'idle';
+      state.user.error = null;
+    },
   },
   extraReducers: {
     [createUser.pending]: (state, action) => {
@@ -195,6 +200,6 @@ const userSlice = createSlice({
     },
   },
 });
-export const { persistUserLogin, resetStatus } = userSlice.actions;
+export const { persistUserLogin, resetStatus, resetUsers } = userSlice.actions;
 
 export default userSlice;
