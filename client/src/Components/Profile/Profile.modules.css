@@ -1,5 +1,9 @@
-.profile {
-    padding: 10rem;
+.checkbox {
+    color: #be9063 !important;
+}
+
+.container {
+    width: 100%;
 }
 
 .orders {
@@ -7,4 +11,12 @@
     flex-direction: row;
     justify-content: space-around;
 }
+
+.profile {
+    display: flex;
+    flex-direction: row;
+    padding: 7rem 2rem 2rem 2rem;
+    margin: 0rem 1rem 0rem 1rem;
+}
+
 
