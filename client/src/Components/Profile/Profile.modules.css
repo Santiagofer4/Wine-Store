@@ -2,8 +2,12 @@
     color: #be9063 !important;
 }
 
-.container {
+.personalInfo {
     width: 100%;
+}
+
+.ordersInfo {
+    width: 90%;
 }
 
 .orders {
@@ -14,7 +18,7 @@
 
 .profile {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     padding: 7rem 2rem 2rem 2rem;
     margin: 0rem 1rem 0rem 1rem;
 }
