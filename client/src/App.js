@@ -25,6 +25,7 @@ import tokenManager from './Components/utils/tokenManager';
 import Notifier from './Components/Notifier/Notifier';
 import Checkout from './Components/Checkout/Checkout';
 import Profile from './Components/Profile/_Profile';
+import Dashboard from './Components/Admin/Dashboard/Dashboard';
 
 function App() {
   // //!SOLUCION CAVERNICOLA!
@@ -62,7 +63,7 @@ function App() {
         <Route path="/logout" component={Logout} />
         <Route path="/failure" component={Failure} />
         {/* <Route path="/prueba" component={CollapsibleTable} /> */}
-
+        <Route path="/dashboard" component={Dashboard} />
         <ProtectRoute
           path="/user/profile"
           component={Profile}
