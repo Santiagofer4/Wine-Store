@@ -2,11 +2,11 @@ import React from 'react';
 import { Button, Container } from '@material-ui/core';
 import { userSelector } from '../../../selectors';
 import { useSelector } from 'react-redux';
-import { isLogged } from '../../utils/index';
+import { useAuthContext } from '../../ProtectRoute/authContext';
 
 function CartItem(props) {
+  const authStatus = useAuthContext();
   const user = useSelector(userSelector);
-  let logged = isLogged();
   const { id, image, name, price, quantity, stock } = props.prod;
   const {
     deleteItemHandler,
@@ -34,7 +34,7 @@ function CartItem(props) {
               <i
                 class="fas fa-trash-alt"
                 onClick={
-                  logged
+                  authStatus
                     ? (e) => deleteItemHandler({ id, userId: user.id, name })
                     : (e) => deleteItemHandler({ id, name })
                 }

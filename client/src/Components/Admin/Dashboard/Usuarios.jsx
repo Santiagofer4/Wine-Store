@@ -1,12 +1,17 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import "./Dashboard.modules.css";
-import { allUsers, userPromote, sendEmail, resetUsers } from "../../../slices/userSlice";
-import { usersListSelector, userStatusSelector } from "../../../selectors";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import './Dashboard.modules.css';
+import {
+  allUsers,
+  userPromote,
+  sendEmail,
+  resetUsers,
+} from '../../../slices/userSlice';
+import { usersListSelector, userStatusSelector } from '../../../selectors';
 import EditIcon from '@material-ui/icons/Edit';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import { CircularProgress, Button } from "@material-ui/core";
+import { CircularProgress, Button } from '@material-ui/core';
 
 // Esta tabla es para el admin.
 // Tiene que mostrar todos los usuarios.
@@ -16,7 +21,7 @@ function Usuarios() {
   const history = useHistory();
   const users = useSelector(usersListSelector);
   const status = useSelector(userStatusSelector);
-  
+  console.log('USUARIOS');
   let content;
 
   const handleRetry = () => {
@@ -26,50 +31,63 @@ function Usuarios() {
   };
 
   const promoteUser = (id) => {
-    let user = users.filter(u => u.id === id)
+    let user = users.filter((u) => u.id === id);
     dispatch(userPromote(id));
     console.log('USER', user[0].firstName);
-    dispatch(sendEmail({ name: user[0].firstName, email: user[0].email, type: 'Promote' }));
-    dispatch(resetUsers())
+    dispatch(
+      sendEmail({
+        name: user[0].firstName,
+        email: user[0].email,
+        type: 'Promote',
+      })
+    );
+    // dispatch(resetUsers());
     //falta que vuelva a renderizar
   };
 
   useEffect(() => {
-    dispatch(allUsers());
-  }, [dispatch, usersListSelector]);
+    if (status === 'idle') dispatch(allUsers());
+  }, [dispatch, users]);
 
-  if (status === "loading") {
+  if (status === 'loading') {
     content = (
       <>
         <h2>Cargando...</h2>
         <CircularProgress />
       </>
     );
-  } else if (status === "succeded") {
+  } else if (status === 'succeded') {
     content = users.map((user) => {
-       
-      let even = user.id % 2 === 0 ? "white" : "beige";
+      let even = user.id % 2 === 0 ? 'white' : 'beige';
       return (
         <>
-          <div className="grid-item" style={{backgroundColor: even}}>{user.id}</div>
-          <div className="grid-item" style={{backgroundColor: even}}>{user.firstName + ' ' + user.lastName}</div>
-         { !user.isAdmin  ?
-         (
-          <Button className="editButton" style={{backgroundColor: even}} onClick={() => promoteUser(user.id)}>
-            <ArrowUpwardIcon className="grid-item"></ArrowUpwardIcon>
-          </Button>
-
-         ) :   <Button className="editButton" style={{backgroundColor: even}} disabled='true'>
-         <ArrowUpwardIcon className="grid-item"></ArrowUpwardIcon>
-       </Button>
-
-         
-         
-         }
+          <div className="grid-item" style={{ backgroundColor: even }}>
+            {user.id}
+          </div>
+          <div className="grid-item" style={{ backgroundColor: even }}>
+            {user.firstName + ' ' + user.lastName}
+          </div>
+          {!user.isAdmin ? (
+            <Button
+              className="editButton"
+              style={{ backgroundColor: even }}
+              onClick={() => promoteUser(user.id)}
+            >
+              <ArrowUpwardIcon className="grid-item"></ArrowUpwardIcon>
+            </Button>
+          ) : (
+            <Button
+              className="editButton"
+              style={{ backgroundColor: even }}
+              disabled="true"
+            >
+              <ArrowUpwardIcon className="grid-item"></ArrowUpwardIcon>
+            </Button>
+          )}
         </>
       );
     });
-  } else if (status === "failed") {
+  } else if (status === 'failed') {
     content = (
       <>
         <h3>Ha ocurrido un error</h3>
@@ -79,17 +97,21 @@ function Usuarios() {
   }
   return (
     <div class="grid-container">
-        <p className="grid-item" style={{fontWeight: "bold"}}>Id</p>
-        <p className="grid-item" style={{fontWeight: "bold"}}>Usuario</p>
-        <p className="grid-item" style={{fontWeight: "bold"}}>Promover</p>
-        {content}
-    </div> 
+      <p className="grid-item" style={{ fontWeight: 'bold' }}>
+        Id
+      </p>
+      <p className="grid-item" style={{ fontWeight: 'bold' }}>
+        Usuario
+      </p>
+      <p className="grid-item" style={{ fontWeight: 'bold' }}>
+        Promover
+      </p>
+      {content}
+    </div>
   );
 }
 
 export default Usuarios;
-
-
 
 // import React, { useEffect, useState } from "react";
 // import { useDispatch, useSelector } from "react-redux";

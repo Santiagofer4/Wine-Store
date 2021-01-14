@@ -11,7 +11,6 @@ import {
   mailsEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
-import tokenManager from '../Components/utils/tokenManager';
 
 const initialState_user = {
   user: {
@@ -65,22 +64,33 @@ export const getUserOrders = createAsyncThunk(
   }
 );
 
-export const userPromote = createAsyncThunk('user/promote', async (id) => {
-  const resp = await axios.put(userPromoteEndpoint + id);
-  return resp;
-});
+export const userPromote = createAsyncThunk(
+  'user/promote',
+  async (id, { dispatch }) => {
+    const resp = await axios.put(userPromoteEndpoint + id);
+    if (resp.status === 200) {
+      dispatch(allUsers());
+    }
+    return resp;
+  }
+);
 
 export const getUsers = createAsyncThunk('users/getUsers', async () => {
   const resp = await axios.get(usersEndpoint);
   return resp;
 });
 
-export const allUsers = createAsyncThunk('users/getAllUsers', async () => {
-  const resp = await axios.get(usersEndpoint, {
-    headers: { Authorization: tokenManager.getToken() },
-  });
-  return resp;
-});
+export const allUsers = createAsyncThunk(
+  'users/getAllUsers',
+  async (_, { getState }) => {
+    const state = getState();
+    const token = state.token.inMemoryToken;
+    const resp = await axios.get(usersEndpoint, {
+      headers: { Authorization: token },
+    });
+    return resp;
+  }
+);
 
 export const sendEmail = createAsyncThunk('user/sendMail', async (payload) => {
   const resp = await axios.post(mailsEndpoint, payload);

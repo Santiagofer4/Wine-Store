@@ -175,10 +175,10 @@ function Cart() {
   const handleConfirm = () => {
     if (authStatus) {
       let total = Math.ceil((subTotal * 121) / 100);
-      axios.put(`http://localhost:3000/orders/${myCart.orderId}`, {
-        total,
-        status: 'cart',
-      });
+      // axios.put(`http://localhost:3000/orders/${myCart.orderId}`, {
+      //   total,
+      //   status: 'cart',
+      // });
       //dispatch(modificateOrder({ myCart: myCart.orderId, total, status: 'completed'}));
       history.push('/checkout');
     }
@@ -197,6 +197,7 @@ function Cart() {
   };
 
   useEffect(() => {
+    if (cartStatus === 'loading') return;
     if (authStatus) {
       // info de DB
       setSubTotal(total(AllProductsCart));

@@ -22,12 +22,12 @@ export const getAllProductsCart = createAsyncThunk(
   'cart/getAllProductsCart',
   async (id, { rejectWithValue }) => {
     const resp = await axios.get(getAllProductsCartEnpoint + id + '/cart');
-    const cart = resp.data;
-    if (!cart) {
-      return rejectWithValue(resp);
-    }
+    // const cart = resp.data;
+    // if (!cart) {
+    //   return rejectWithValue(resp);
+    // }
     let cart_response = {
-      cart,
+      resp,
       id,
     };
     return cart_response;
@@ -58,8 +58,9 @@ export const postProductToCart = createAsyncThunk(
 
 export const deleteAllProductsFromCart = createAsyncThunk(
   'cart/deleteProductFromCart',
-  async (payload) => {
+  async (payload, { dispatch }) => {
     const { userId } = payload;
+    dispatch(clearCart());
     const deleted_cart = await axios.delete(usersEndpoint + userId + '/cart');
     return deleted_cart;
   }
@@ -140,6 +141,11 @@ const productsCartSlice = createSlice({
       state.allProductsCart.sync = false;
       state.allProductsCart.error = null;
     },
+    clearCart: (state, action) => {
+      state.allProductsCart.sync = true;
+      state.allProductsCart.list = [];
+      state.allProductsCart.orderId = null;
+    },
   },
   extraReducers: {
     [getAllProductsCart.pending]: (state, action) => {
@@ -149,7 +155,7 @@ const productsCartSlice = createSlice({
       state.allProductsCart.list = [];
       state.allProductsCart.status = status.succeded;
       console.log('GETTING CART', payload);
-      const { cart } = payload;
+      // const { cart } = payload;
 
       payload.resp.data[0] &&
         payload.resp.data[0].orderLines.map((e, i) => {
@@ -176,9 +182,9 @@ const productsCartSlice = createSlice({
     },
     [deleteAllProductsFromCart.fulfilled]: (state, action) => {
       state.allProductsCart.status = status.succeded;
-      state.allProductsCart.sync = true;
-      state.allProductsCart.list = [];
-      state.allProductsCart.orderId = null;
+      // state.allProductsCart.sync = true;
+      // state.allProductsCart.list = [];
+      // state.allProductsCart.orderId = null;
     },
     [deleteAllProductsFromCart.rejected]: (state, action) => {
       state.allProductsCart.status = status.failed;
@@ -262,6 +268,7 @@ export const {
   RemoveProductFromCart,
   DeleteProductFromCart,
   resetCart,
+  clearCart,
 } = productsCartSlice.actions;
 
 export default productsCartSlice;

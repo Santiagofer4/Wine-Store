@@ -5,11 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getRefreshedToken, tryToLogin } from '../../slices/tokenSlice';
 import { Container, CircularProgress } from '@material-ui/core';
 import { useState } from 'react';
-import { userStatusSelector } from '../../selectors/index';
+import { userLoginStatusSelector } from '../../selectors/index';
 
 function AuthProvider({ children }) {
   const dispatch = useDispatch();
-  const userStatus = useSelector(userStatusSelector);
+  const userStatus = useSelector(userLoginStatusSelector);
   const tryToLoginStatus = useSelector(tryToLoginStatusSelector); //idle
 
   const isLogged = () => {

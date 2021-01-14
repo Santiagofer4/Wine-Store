@@ -9,7 +9,7 @@ import {
   allStrainsSelector,
   allCategoriesStatusSelector,
   strainsStatusSelector,
-  productDetailStatusSelector
+  productDetailStatusSelector,
 } from '../../../selectors/index';
 import EditProduct from './EditProduct';
 import LoadProduct from './LoadProduct';
@@ -46,7 +46,14 @@ function AdminProduct(props) {
     if (strainStatus === 'idle') dispatch(getAllStrains());
     if (edit && wineDetailAsyncStatus === 'idle')
       dispatch(setWineDetailAsync(param_id));
-  }, [wineDetailAsyncStatus, allCatStatus, strainStatus, dispatch, edit, param_id]);
+  }, [
+    wineDetailAsyncStatus,
+    allCatStatus,
+    strainStatus,
+    dispatch,
+    edit,
+    param_id,
+  ]);
 
   useEffect(() => {
     //? Cleanup del status del detalle del vino
@@ -63,7 +70,7 @@ function AdminProduct(props) {
     if (allCatStatus === 'succeded' && strainStatus === 'succeded') {
       setOptions({
         tasteOption: formatArrayToOption(allCats, 'taste'),
-        strainOption: formatArrayToOption(allStrains),
+        strainOption: formatArrayToOption(allStrains, 'name'),
       });
     }
   }, [allCatStatus, strainStatus, dispatch, allCats, allStrains]);

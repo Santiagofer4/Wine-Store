@@ -10,12 +10,18 @@ import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
 import { useDispatch, useSelector } from 'react-redux';
-import { allProductsCartSelector, userSelector, myCartSelector } from '../../selectors/index';
+import {
+  allProductsCartSelector,
+  userSelector,
+  myCartSelector,
+} from '../../selectors/index';
 import { modificateOrder, resetCart } from '../../slices/productsCartSlice';
-import { deleteAddressInfo, deletePaymentInfo} from '../../Components/utils/index';
+import {
+  deleteAddressInfo,
+  deletePaymentInfo,
+} from '../../Components/utils/index';
 import { sendEmail } from '../../slices/userSlice';
 import { total } from '../utils/index';
-
 
 // Estilos de los "steps" del checkout
 
@@ -53,7 +59,6 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = ['Direccion de envio', 'Detalles de pago', 'Verificar la orden'];
 
-
 function getStepContent(step) {
   switch (step) {
     case 0:
@@ -74,30 +79,39 @@ export default function Checkout() {
   const AllProductsCart = useSelector(allProductsCartSelector);
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
-  let suma = Math.ceil((total(AllProductsCart) * 121) / 100)
- 
+  let suma = Math.ceil((total(AllProductsCart) * 121) / 100);
 
   const handleNext = (e) => {
     setActiveStep(activeStep + 1);
-   
-    if (activeStep === 2){
 
-      dispatch(modificateOrder({ myCart: myCart.orderId, total: suma, status: 'completed'}))
-      deleteAddressInfo()
-      deletePaymentInfo()
-      dispatch(sendEmail({ name: user.firstName, email: user.email, type: 'Order', orderCod: myCart.orderId}))
-      dispatch(resetCart())
-
+    if (activeStep === 2) {
+      dispatch(
+        modificateOrder({
+          myCart: myCart,
+          total: suma,
+          status: 'completed',
+        })
+      );
+      deleteAddressInfo();
+      deletePaymentInfo();
+      dispatch(
+        sendEmail({
+          name: user.firstName,
+          email: user.email,
+          type: 'Order',
+          orderCod: myCart,
+        })
+      );
+      dispatch(resetCart());
+    }
   };
-  }
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
 
-
   return (
     <React.Fragment>
-       <main className={classes.layout}>
+      <main className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h4" align="center">
             Checkout
@@ -116,7 +130,7 @@ export default function Checkout() {
                   Muchas gracias por su compra!
                 </Typography>
                 <Typography variant="subtitle1">
-                  Su número de orden es {myCart.orderId}
+                  Su número de orden es {myCart}
                 </Typography>
               </React.Fragment>
             ) : (

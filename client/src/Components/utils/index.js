@@ -33,7 +33,7 @@ export const formatArrayToOption = (array, property) => {
   let arrayKeys = [];
   let arrayIdProp = false;
 
-  let propName = property.toLowerCase();  // En el caso de tener una propiedad con mayúsculas es necesario hacer este paso previo para que la comparación en el includes (linea 60)
+  let propName = property.toLowerCase(); // En el caso de tener una propiedad con mayúsculas es necesario hacer este paso previo para que la comparación en el includes (linea 60)
 
   //*si recibe un objeto armamos un array con todas las propiedades propias del obj,
   //* y verificamos si existe una con nombre `id`
@@ -70,11 +70,11 @@ export const formatArrayToOption = (array, property) => {
             value: element,
           };
         });
-        case 'object':
-          if (!!arrayIdProp) {
+      case 'object':
+        if (!!arrayIdProp) {
           return array.map((element) => {
             return {
-              label: capitalize(element[property]),   // Busco con el nombre real de la property (con mayús)
+              label: capitalize(element[property]), // Busco con el nombre real de la property (con mayús)
               value: element[arrayIdProp] || THROW('Objetos NO equivalentes'),
             };
           });
@@ -190,7 +190,6 @@ export const functionCartGuest = (payload, decrement, erase) => {
   localStorage.setItem('cart', JSON.stringify(storage));
 };
 
-
 export const deleteAddressInfo = () => {
   let info = {
     firstName: '',
@@ -201,8 +200,8 @@ export const deleteAddressInfo = () => {
     stateAddress: '',
     zip: '',
     country: '',
-     };
-    localStorage.setItem('addressInfo', JSON.stringify(info))
+  };
+  localStorage.setItem('addressInfo', JSON.stringify(info));
 };
 
 export const deletePaymentInfo = () => {
@@ -211,13 +210,12 @@ export const deletePaymentInfo = () => {
     cardNumber: '',
     expDate: '',
     cvv: '',
-   
-     };
-    localStorage.setItem('paymentInfo', JSON.stringify(info))
+  };
+  localStorage.setItem('paymentInfo', JSON.stringify(info));
 };
 
 export const saveAddressInfo = () => {
-  let info = ({
+  let info = {
     firstName: document.getElementById('firstName'),
     lastName: document.getElementById('lastName'),
     address1: document.getElementById('address1Name'),
@@ -226,8 +224,8 @@ export const saveAddressInfo = () => {
     stateAddress: document.getElementById('firstName'),
     zip: document.getElementById('firstName'),
     country: document.getElementById('firstName'),
-     });
-    localStorage.setItem('addressInfo', JSON.stringify(info))
+  };
+  localStorage.setItem('addressInfo', JSON.stringify(info));
 };
 
 export const savePaymentInfo = () => {
@@ -236,7 +234,6 @@ export const savePaymentInfo = () => {
     cardNumber: document.getElementById('cardNumber'),
     expDate: document.getElementById('expDate'),
     cvv: document.getElementById('cvv'),
-   
-     };
-    localStorage.setItem('paymentInfo', JSON.stringify(info))
+  };
+  localStorage.setItem('paymentInfo', JSON.stringify(info));
 };

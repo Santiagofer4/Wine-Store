@@ -27,7 +27,6 @@ function NavBar() {
   const dispatch = useDispatch();
   const history = useHistory();
   const authStatus = useAuthContext();
-  console.log('AUTHSTATUS', authStatus);
   const user = useSelector(userSelector);
   const status = useSelector(userStatusSelector);
   const [logged, setLogin] = useState(false);
@@ -148,7 +147,7 @@ function NavBar() {
                             <hr className="line"></hr>
                             {user.isAdmin ? (
                               <>
-                                <Link to="/admin" className="menu">
+                                <Link to="/dashboard" className="menu">
                                   <MenuItem onClick={handleClose}>
                                     Panel admin
                                   </MenuItem>

@@ -1,7 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Divider, IconButton, Badge, Container, Grid, Paper, Button, Link, List, Toolbar, AppBar, Box, Drawer, CssBaseline, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core';
+import {
+  Typography,
+  Divider,
+  IconButton,
+  Badge,
+  Container,
+  Grid,
+  Paper,
+  Button,
+  Link,
+  List,
+  Toolbar,
+  AppBar,
+  Box,
+  Drawer,
+  CssBaseline,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
+} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -14,11 +33,11 @@ import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { userSelector, allProductsSelector } from '../../../selectors/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { allUsers } from "../../../slices/userSlice";
+import { allUsers } from '../../../slices/userSlice';
 import Usuarios from './Usuarios';
 import Deposits from './Deposits';
-import Orders from '../../OrderTable/OrderTable';
-import './Dashboard.modules.css'
+import OrderTable from '../../OrderTable/OrderTable';
+import './Dashboard.modules.css';
 import AdminStrain from '../LoadCategory/AdminStrain';
 import AdminCategory from '../LoadCategory/AdminCategory';
 import AdminProduct from './Products';
@@ -36,9 +55,7 @@ function Copyright() {
   );
 }
 
-
-
- const drawerWidth = 240;
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   // root: {
@@ -56,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
   // },
   // appBar: {
   //   zIndex: theme.zIndex.drawer + 1,
-  //   transition: theme.transitions.create(['width', 'margin'], 
+  //   transition: theme.transitions.create(['width', 'margin'],
   //   {
   //     easing: theme.transitions.easing.sharp,
   //     duration: theme.transitions.duration.leavingScreen,
@@ -128,23 +145,25 @@ export default function Dashboard() {
   const user = useSelector(userSelector);
   const products = useSelector(allProductsSelector);
 
-useEffect(() => {
-  dispatch(allUsers());
-}, []);
+  useEffect(() => {
+    // dispatch(allUsers());
+  }, []);
+
   const handleOnClick = (e) => {
     setMenu(parseInt(e.target.value));
-      return;
+    console.log('NRO', e.target.value);
+    return;
   };
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  
+
   function getMenu(menu) {
-    console.log('MENU', menu)
+    console.log('MENU', menu);
     switch (menu) {
       case 0:
         return <Deposits />;
       case 1:
-        return <Orders />;
+        return <OrderTable />;
       case 2:
         return <Usuarios />;
       case 3:
@@ -159,16 +178,15 @@ useEffect(() => {
   }
 
   useEffect(() => {
-    { getMenu(menu)}
-    
+    {
+      getMenu(menu);
     }
-  , [menu])
+  }, [menu]);
 
   return (
-  <div id='dashboard'>
-
-    <Paper id="lateral">
-        <Button value="0"className="list" button onClick={handleOnClick}>
+    <div id="dashboard">
+      <Paper id="lateral">
+        <Button value="0" className="list" button onClick={handleOnClick}>
           <ListItemIcon>
             <DashboardIcon />
           </ListItemIcon>
@@ -208,27 +226,22 @@ useEffect(() => {
             <BarChartIcon />
           </ListItemIcon>
           Cepas
-         {/*  <ListItemText primary="Cepas" /> */}
+          {/*  <ListItemText primary="Cepas" /> */}
         </Button>
-    </Paper>
+      </Paper>
 
-  
-    <div id="menu" >
-      <main >
-        <div  />
-        <Container >
-        
-              <Paper >
-        { getMenu(menu)}
-        </Paper>
-            
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>
-      </main>
-    </div>
+      <div id="menu">
+        <main>
+          <div />
+          <Container>
+            <Paper>{getMenu(menu)}</Paper>
 
+            <Box pt={4}>
+              <Copyright />
+            </Box>
+          </Container>
+        </main>
+      </div>
     </div>
   );
 }
