@@ -1,52 +1,53 @@
 import React, { useEffect } from 'react';
-import { tokenSelector, tokenStatusSelector } from '../../selectors';
+import { tokenSelector, tryToLoginStatusSelector } from '../../selectors';
 import { AuthContext, useAuthProvider } from './authContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { getRefreshedToken } from '../../slices/tokenSlice';
+import { getRefreshedToken, tryToLogin } from '../../slices/tokenSlice';
 import { Container, CircularProgress } from '@material-ui/core';
 import { useState } from 'react';
+import { userStatusSelector } from '../../selectors/index';
 
 function AuthProvider({ children }) {
   const dispatch = useDispatch();
+  const userStatus = useSelector(userStatusSelector);
+  // const token = useSelector(tokenSelector); //null
+  const tryToLoginStatus = useSelector(tryToLoginStatusSelector); //idle
 
-  const token = useSelector(tokenSelector);
-  const tokenStatus = useSelector(tokenStatusSelector);
-
-  const [auth, setAuth] = useState(null);
-
-  const isLogged = (token) => {
-    if (!token && tokenStatus === 'idle') {
+  const isLogged = () => {
+    if (tryToLoginStatus === 'idle') {
       console.log('IDLE AND NO TOKEN');
-      dispatch(getRefreshedToken());
+      dispatch(tryToLogin());
     }
   };
 
   useEffect(() => {
-    isLogged(token);
-    if (token) {
-      setAuth(true);
-    } else {
-      setAuth(false);
-    }
-  }, [tokenStatus, dispatch]);
+    console.log('TRY TO LOGIN STATUS', tryToLoginStatus);
+    isLogged();
+  }, [tryToLoginStatus, dispatch]);
 
-  let display;
-  if (tokenSelector === 'loading' && !token) {
-    console.log('LOADING AND NO TOKEN');
-    display = (
+  if (tryToLoginStatus === 'loading' || userStatus === 'loading') {
+    console.log('TRYING TO LOGIN = LOADING');
+    return (
       <Container>
-        <h2>Buscando sesion anterior</h2>
+        <CircularProgress />
+        <CircularProgress />
+        <CircularProgress />
+        <CircularProgress />
+        <CircularProgress />
         <CircularProgress />
       </Container>
     );
-  } else if (tokenSelector === 'failed' && !token) {
-    console.log('FAILED AND NO TOKEN');
-    display = children;
-  } else if (tokenSelector === 'succeded' && token) {
-    console.log('SUCCEDED AND TOKEN');
-    display = children;
+  } else if (tryToLoginStatus === 'failed') {
+    console.log('TRYING TO LOGIN = FAILED');
+    return (
+      <AuthContext.Provider value={false}>{children}</AuthContext.Provider>
+    );
+  } else if (tryToLoginStatus === 'succeded') {
+    console.log('TRYING TO LOGIN = OK');
+    return <AuthContext.Provider value={true}>{children}</AuthContext.Provider>;
   }
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+
+  return null;
 }
 
 export default AuthProvider;

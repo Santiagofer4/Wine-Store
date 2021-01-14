@@ -79,6 +79,8 @@ export const usersListSelector = (state) => state.user.user.usersList;
 
 export const userStatusSelector = (state) => state.user.user.status;
 
+export const userLoginStatusSelector = (state) => state.user.user.loginStatus;
+
 export const userErrorSelector = (state) => state.user.user.error;
 
 export const userOrdersSelector = (state) => state.user.user.orders;
@@ -99,6 +101,6 @@ export const notificationListSelector = (state) => state.notifications.list;
 
 export const tokenSelector = (state) => state.token.inMemoryToken;
 
-export const tokenStatusSelector = (state) => state.token.status;
+export const tryToLoginStatusSelector = (state) => state.token.tryToLoginStatus;
 
 export const checkoutInfoSelector = (state) => state.checkout.checkout;

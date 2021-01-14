@@ -32,27 +32,29 @@ import {
   deletePaymentInfo,
 } from '../../Components/utils/index.js';
 import axios from 'axios';
+import { useAuthContext } from '../ProtectRoute/authContext';
 
 function Cart() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const AllProductsCart = useSelector(allProductsCartSelector);  // tiene los prods del cart
+  const AllProductsCart = useSelector(allProductsCartSelector); // tiene los prods del cart
   const sincronizar = useSelector(allProductsCartSyncSelector);
-  const status = useSelector(allProductsCartStatusSelector);
+  const cartStatus = useSelector(allProductsCartStatusSelector);
   const user = useSelector(userSelector);
   const myCart = useSelector(myCartSelector);
   const statusUser = useSelector(userStatusSelector);
   const statusOrder = useSelector(allOrderStatusSelector);
   const [subTotal, setSubTotal] = useState(0);
-  const [login, setLogin] = useState(false);
-  let logged = isLogged();
+  // const [login, setLogin] = useState(false);
+  // let logged = isLogged();
+  const authStatus = useAuthContext();
 
   const handleDelete = () => {
-    if (login) {
+    if (authStatus) {
       dispatch(deleteAllProductsFromCart({ userId: user.id }));
       dispatch(sync(false));
     }
-    if (!login) {
+    if (!authStatus) {
       let storage = [];
       localStorage.removeItem('cart');
       localStorage.setItem('cart', JSON.stringify(storage));
@@ -65,7 +67,7 @@ function Cart() {
   // store se procede a reducir la cantidad, siempre comprobando que sea >= a 1
 
   const decrementHandler = (event, detail) => {
-    if (logged) {
+    if (authStatus) {
       let id = event.target.name * 1;
       const payload = {
         // orderline que se envia por post
@@ -85,7 +87,7 @@ function Cart() {
       }
     }
 
-    if (!logged) {
+    if (!authStatus) {
       //funciona pero no renderiza.
       let id = event.target.name * 1;
       const payload = {
@@ -121,7 +123,7 @@ function Cart() {
   // cambiando la cantidad en el Imput del Item
 
   const incrementHandler = (event, detail) => {
-    if (logged) {
+    if (authStatus) {
       let id = event.target.name * 1;
       let valueInput = document.getElementById(id).value; // cantidad de productos a comprar
       const payload = {
@@ -138,7 +140,7 @@ function Cart() {
       } // productCartSlice
     }
 
-    if (!logged) {
+    if (!authStatus) {
       let id = event.target.name * 1;
       let valueInput = document.getElementById(id).value;
       const payload = {
@@ -156,32 +158,35 @@ function Cart() {
   };
 
   const deleteItemHandler = ({ id, userId }) => {
-    if (logged){
-      const payload = {                                          
-        productId: id,                                         // id del producto a eliminar
-        userId,                                                // id del usuario para saber de que 
-      };                                                       // carrito eliminar el prod
-      dispatch(deleteSingleProdFromCart(payload));    
+    if (authStatus) {
+      const payload = {
+        productId: id, // id del producto a eliminar
+        userId, // id del usuario para saber de que
+      }; // carrito eliminar el prod
+      dispatch(deleteSingleProdFromCart(payload));
     }
-    if (!logged){
-      const payload = id;                                          
-       functionCartGuest(payload, null, true)                                             
-       dispatch(sync(false))
+    if (!authStatus) {
+      const payload = id;
+      functionCartGuest(payload, null, true);
+      dispatch(sync(false));
     }
   };
 
   const handleConfirm = () => {
-   if(login) {
-     let total = Math.ceil((subTotal * 121) / 100);
-     axios.put(`http://localhost:3000/orders/${myCart.orderId}`, { total, status: 'cart' });
-     //dispatch(modificateOrder({ myCart: myCart.orderId, total, status: 'completed'}));
-     history.push('/checkout')
-   }
-   if(!login) {
-    history.push('/form/user/login');
-   }
-   deleteAddressInfo();
-   deletePaymentInfo();
+    if (authStatus) {
+      let total = Math.ceil((subTotal * 121) / 100);
+      axios.put(`http://localhost:3000/orders/${myCart.orderId}`, {
+        total,
+        status: 'cart',
+      });
+      //dispatch(modificateOrder({ myCart: myCart.orderId, total, status: 'completed'}));
+      history.push('/checkout');
+    }
+    if (!authStatus) {
+      history.push('/form/user/login');
+    }
+    deleteAddressInfo();
+    deletePaymentInfo();
     //agregar total para guardar
   };
 
@@ -192,43 +197,36 @@ function Cart() {
   };
 
   useEffect(() => {
-    logged = isLogged();
-
-    if (user) {
-      if (logged) {
-        setLogin(true);
-        // info de DB
-        setSubTotal(total(AllProductsCart));
-        if (sincronizar === false) {
-           if(statusOrder === 'succeded') {
-            dispatch(resetState());
-            dispatch(sync(true));
-          }
-          dispatch(getAllProductsCart(user.id));
+    if (authStatus) {
+      // info de DB
+      setSubTotal(total(AllProductsCart));
+      if (sincronizar === false) {
+        if (statusOrder === 'succeded') {
+          dispatch(resetState());
           dispatch(sync(true));
         }
+        dispatch(getAllProductsCart(user.id));
+        dispatch(sync(true));
       }
-    } else {
-      if (!logged) {
-        setLogin(false);
-        // info de localStorage
-        let guest = localStorage.getItem('cart');
-        let guestParse = JSON.parse(guest);
-        setSubTotal(total(AllProductsCart));
-        dispatch(cartGuest(guestParse));
-        if (sincronizar === false) {
-          dispatch(sync(true))
-        }
-        setSubTotal(total(AllProductsCart));
+    }
+    if (!authStatus) {
+      // info de localStorage
+      let guest = localStorage.getItem('cart');
+      let guestParse = JSON.parse(guest);
+      setSubTotal(total(AllProductsCart));
+      dispatch(cartGuest(guestParse));
+      if (sincronizar === false) {
+        dispatch(sync(true));
       }
+      setSubTotal(total(AllProductsCart));
     }
   }, [sincronizar, user]);
 
   useEffect(() => {
     setSubTotal(total(AllProductsCart));
-  }, [status, dispatch]);
-  
-  if (status === 'succeded') {
+  }, [cartStatus, dispatch]);
+
+  if (cartStatus === 'succeded') {
     if (AllProductsCart.length > 0) {
       return (
         <div className="ShoppingCartBackImg">

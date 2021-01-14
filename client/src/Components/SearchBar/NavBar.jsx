@@ -16,7 +16,10 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import { userSelector, userStatusSelector } from '../../selectors/index.js';
+import {
+  userSelector,
+  userLoginStatusSelector,
+} from '../../selectors/index.js';
 import axios from 'axios';
 import { isLogged } from '../utils/index';
 import store from '../../store';
@@ -27,10 +30,11 @@ import { useAuthContext } from '../ProtectRoute/authContext';
 
 function NavBar() {
   const auth = useAuthContext();
+  console.log('AUTH NAVBAR', auth);
   const dispatch = useDispatch();
   const history = useHistory();
   const user = useSelector(userSelector);
-  const status = useSelector(userStatusSelector);
+  const status = useSelector(userLoginStatusSelector);
   const [logged, setLogin] = useState(false);
 
   const [open, setOpen] = useState(false);

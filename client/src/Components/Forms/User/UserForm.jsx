@@ -15,7 +15,7 @@ import { createUser, sendEmail } from '../../../slices/userSlice';
 import { useHistory } from 'react-router-dom';
 import {
   userErrorSelector,
-  userStatusSelector,
+  userLoginStatusSelector,
   userSelector,
 } from '../../../selectors/index.js';
 
@@ -23,7 +23,7 @@ function UserForm() {
   const dispatch = useDispatch();
   const history = useHistory();
   const [viewPassword, setViewPassword] = useState(false);
-  const status = useSelector(userStatusSelector);
+  const status = useSelector(userLoginStatusSelector);
   const error = useSelector(userErrorSelector);
   const info = useSelector(userSelector);
 
@@ -58,7 +58,9 @@ function UserForm() {
   useEffect(() => {
     if (status === 'succeded') {
       history.push('/welcome');
-      dispatch(sendEmail({ name: info.firstName, email: info.email, type: 'Welcome'}))
+      dispatch(
+        sendEmail({ name: info.firstName, email: info.email, type: 'Welcome' })
+      );
     }
     if (status === 'failed') {
       error.message.includes('409') ? emailTaken() : history.push('/failure');

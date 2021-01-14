@@ -12,8 +12,11 @@ import { productReviews } from '../../slices/reviewSlice';
 import { useHistory } from 'react-router-dom';
 import { isLogged, functionCartGuest } from '../../Components/utils/index.js';
 import { userSelector } from '../../selectors/index';
+import { useAuthContext } from '../ProtectRoute/authContext';
 
 function ProductCard(props) {
+  const auth = useAuthContext();
+  console.log('IN P CARD', auth);
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
   const { image, name, price, id, stock } = props.data;
@@ -87,7 +90,9 @@ function ProductCard(props) {
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  logged ? handlerProductToCart(user.id, id) : handlerProductToCartGuest(id);
+                  logged
+                    ? handlerProductToCart(user.id, id)
+                    : handlerProductToCartGuest(id);
                 }}
               >
                 Comprar

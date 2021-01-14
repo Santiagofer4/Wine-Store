@@ -15,13 +15,13 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { postUserLogin, resetStatus } from '../../../slices/userSlice.js';
 import { postProductToCart, login } from '../../../slices/productsCartSlice.js';
-import { userSelector, userStatusSelector } from '../../../selectors';
+import { userSelector, userLoginStatusSelector } from '../../../selectors';
 import axios from 'axios';
 
 function UserLogin() {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
-  const userStatus = useSelector(userStatusSelector);
+  const userStatus = useSelector(userLoginStatusSelector);
   const history = useHistory();
   const [viewPassword, setViewPassword] = useState(false);
   const emptyValues = {

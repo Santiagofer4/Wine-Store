@@ -6,9 +6,10 @@ import { refreshEndpoint } from '../constants/endpoints.js';
 import tokenManager from '../Components/utils/tokenManager';
 
 const initialState_token = {
+  tryToLoginStatus: status.idle,
   inMemoryToken: null,
-  status: status.idle,
   refreshQueued: false,
+  refreshStatus: status.idle,
   stopRefresh: false,
   delay: 60 * 15 * 1000, //15 min default
   refreshTimeDelta: 5000,
@@ -17,11 +18,39 @@ const initialState_token = {
   error: null,
 };
 
+//!NO OLVIDARSE DE PONER EN APP
 // window.addEventListener('storage', (event) => {
 //   if (event.key === initialState_token.logoutEventName) {
 //     removeToken();
 //   }
 // });
+
+export const tryToLogin = createAsyncThunk(
+  'token/tryToLogin',
+  async (_, { rejectWithValue }) => {
+    console.log('TRYING TO LOGIN');
+    const refreshed_token = await axios.get(refreshEndpoint, {
+      withCredentials: true,
+    });
+    if (refreshed_token.status !== 200) {
+      return rejectWithValue(refreshed_token);
+    } else return refreshed_token.data;
+  },
+  {
+    condition: (payload, { getState }) => {
+      const { token } = getState();
+      console.log('Checking status before fetch', token.status);
+      if (
+        token.stopRefresh === true ||
+        token.tryToLoginStatus === status.loading ||
+        token.tryToLoginStatus === status.failed
+      ) {
+        console.log('NO!!!!!!');
+        return false;
+      }
+    },
+  }
+);
 
 export const getRefreshedToken = createAsyncThunk(
   'token/getRefreshedToken',
@@ -40,10 +69,10 @@ export const getRefreshedToken = createAsyncThunk(
       console.log('Checking status before fetch', token.status);
       if (
         token.stopRefresh === true ||
-        token.status === status.loading ||
-        token.status === status.failed
+        token.refreshStatus === status.loading ||
+        token.refreshStatus === status.failed
       ) {
-        console.log('SHOULD NOT RUN IF TOKEN');
+        console.log('NO!!!!!!');
         return false;
       }
     },
@@ -65,7 +94,7 @@ export const setRefreshTokenTimeout = createAsyncThunk(
     console.log('SETTING TIMEOUT');
     const state = getState();
     // let delay = state.token.delay;
-    let delay = 10000;
+    let delay = 1000000;
     return await delayRefresh(delay);
   }
 );
@@ -79,19 +108,23 @@ const tokenSlice = createSlice({
       const { token, expires } = payload;
       state.inMemoryToken = token;
       state.delay = expires - state.refreshTimeDelta;
+      state.logged = true;
       return;
     },
     eraseToken: (state, action) => {
       console.log('ERASING TOKEN REDUX');
 
+      state.stopRefresh = true;
+
       state.inMemoryToken = null;
       state.refreshQueued = false;
       state.status = status.idle;
-      state.stopRefresh = true;
+      state.refreshStatus = status.idle;
       state.error = null;
+      state.tryToLoginStatus = status.idle;
 
-      window.localStorage.setItem(state.logoutEventName, Date.now());
       window.clearTimeout(delayTimeout);
+      window.localStorage.setItem(state.logoutEventName, Date.now());
     },
     setRefreshQueue: (state, { payload }) => {
       state.refreshQueued = payload;
@@ -99,19 +132,26 @@ const tokenSlice = createSlice({
     setRefreshTimeDelta: (state, { payload }) => {
       state.refreshTimeDelta = payload;
     },
+    setTryToLoginStatus: (state, { payload }) => {
+      state.tryToLoginStatus = payload;
+    },
+    setStopRefreshFalse: (state, { payload }) => {
+      state.stopRefresh = false;
+    },
   },
   extraReducers: {
     [getRefreshedToken.pending]: (state, action) => {
-      state.status = status.loading;
+      state.refreshStatus = status.loading;
     },
     [getRefreshedToken.fulfilled]: (state, { payload }) => {
       const { newToken, user } = payload;
-      state.status = status.succeded;
+      state.refreshStatus = status.succeded;
       state.inMemoryToken = newToken.token;
       state.delay = newToken.expires - state.refreshTimeDelta;
     },
     [getRefreshedToken.rejected]: (state, { payload }) => {
-      state.status = status.failed;
+      console.log('REJECTAMOS');
+      state.refreshStatus = status.failed;
       state.inMemoryToken = null;
       state.refreshQueued = false;
       state.error = payload;
@@ -120,19 +160,28 @@ const tokenSlice = createSlice({
     [setRefreshTokenTimeout.pending]: (state, { payload }) => {
       state.refreshQueued = true;
     },
-    [setRefreshTokenTimeout.succeded]: (state, { payload }) => {
-      // state.status = status.idle;
-      // state.refreshQueued = false;
-    },
     [setRefreshTokenTimeout.rejected]: (state, { payload }) => {
       state.status = status.failed;
       state.refreshQueued = false;
-      console.log('PAYLOAD', payload);
-      state.error = payload;
+    },
+    [tryToLogin.pending]: (state, action) => {
+      state.tryToLoginStatus = status.loading;
+    },
+    [tryToLogin.rejected]: (state, action) => {
+      state.tryToLoginStatus = status.failed;
+    },
+    [tryToLogin.fulfilled]: (state, action) => {
+      state.tryToLoginStatus = status.succeded;
     },
   },
 });
 
-export const { setToken, eraseToken, setRefreshQueue } = tokenSlice.actions;
+export const {
+  setToken,
+  eraseToken,
+  setRefreshQueue,
+  setTryToLoginStatus,
+  setStopRefreshFalse,
+} = tokenSlice.actions;
 
 export default tokenSlice;

@@ -20,6 +20,7 @@ const initialState_user = {
     usersList: [],
     status: 'idle',
     error: null,
+    loginStatus: status.idle,
   },
 };
 
@@ -56,10 +57,13 @@ export const userLogout = createAsyncThunk(
   }
 );
 
-export const userOrders = createAsyncThunk('user/getUserOrders', async (id) => {
-  const resp = await axios.get(userOrdersEndpoint + id + '/orders');
-  return resp;
-});
+export const getUserOrders = createAsyncThunk(
+  'user/getUserOrders',
+  async (id) => {
+    const resp = await axios.get(userOrdersEndpoint + id + '/orders');
+    return resp;
+  }
+);
 
 export const userPromote = createAsyncThunk('user/promote', async (id) => {
   const resp = await axios.put(userPromoteEndpoint + id);
@@ -97,11 +101,11 @@ const userSlice = createSlice({
   },
   extraReducers: {
     [createUser.pending]: (state, action) => {
-      state.user.status = status.loading;
+      state.user.loginStatus = status.loading;
     },
     [createUser.fulfilled]: (state, { payload }) => {
       const { userRegister_response, formik } = payload;
-      state.user.status = status.succeded;
+      state.user.loginStatus = status.succeded;
       state.user.info = userRegister_response.user;
       formik.resetForm();
     },
@@ -113,31 +117,31 @@ const userSlice = createSlice({
           email: infoComplete.user.email,
         },
       };
-      state.user.status = status.failed;
+      state.user.loginStatus = status.failed;
       state.user.error = action.error;
       state.user.info = info;
     },
     [postUserLogin.pending]: (state, action) => {
-      state.user.status = status.loading;
+      state.user.loginStatus = status.loading;
     },
     [postUserLogin.fulfilled]: (state, { payload }) => {
       const { userLogin_response, formik } = payload;
-      state.user.status = status.succeded;
+      state.user.loginStatus = status.succeded;
       state.user.info = userLogin_response.user;
       formik.resetForm();
     },
     [postUserLogin.rejected]: (state, action) => {
-      state.user.status = status.failed;
+      state.user.loginStatus = status.failed;
       state.user.error = action.error;
     },
-    [userOrders.pending]: (state, action) => {
+    [getUserOrders.pending]: (state, action) => {
       state.user.status = status.loading;
     },
-    [userOrders.fulfilled]: (state, { payload }) => {
+    [getUserOrders.fulfilled]: (state, { payload }) => {
       state.user.status = status.succeded;
       state.user.orders = payload.data;
     },
-    [userOrders.rejected]: (state, action) => {
+    [getUserOrders.rejected]: (state, action) => {
       state.user.status = status.failed;
       state.user.error = action.error;
     },

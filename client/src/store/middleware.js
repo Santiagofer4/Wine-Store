@@ -16,7 +16,10 @@ import {
   getRefreshedToken,
   eraseToken,
   setRefreshQueue,
+  setTryToLoginStatus,
+  setStopRefreshFalse,
 } from '../slices/tokenSlice';
+import { status } from '../constants/helpers';
 
 export const notificationMiddleware = (store) => (next) => (action) => {
   const dispatch = store.dispatch;
@@ -76,12 +79,24 @@ export const tokenMiddleware = (store) => (next) => (action) => {
     case 'user/login/fulfilled': {
       const { token } = action.payload;
       dispatch(setToken(token));
+      dispatch(setTryToLoginStatus(status.succeded));
+      dispatch(setStopRefreshFalse());
       dispatch(setRefreshTokenTimeout());
       break;
     }
     case 'user/register/fulfilled': {
       const { token } = action.payload;
       dispatch(setToken(token));
+      dispatch(setTryToLoginStatus(status.succeded));
+      dispatch(setStopRefreshFalse());
+      dispatch(setRefreshTokenTimeout());
+      break;
+    }
+    case 'token/tryToLogin/fulfilled': {
+      // console.log('PAYLOAD TRY TO LOGIN OK', action.payload);
+      const { newToken } = action.payload;
+      dispatch(setToken(newToken));
+      dispatch(persistUserLogin(action.payload));
       dispatch(setRefreshTokenTimeout());
       break;
     }
@@ -96,6 +111,8 @@ export const tokenMiddleware = (store) => (next) => (action) => {
     case 'user/logout/fulfilled':
       dispatch(eraseToken());
       break;
+    case 'token/getRefreshedToken/rejected':
+      dispatch(eraseToken());
     default:
       break;
   }
