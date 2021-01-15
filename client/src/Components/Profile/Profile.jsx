@@ -79,9 +79,9 @@ export default function Profile() {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
 
-  if (orders.length === 0) {
+  if (orders.length === 0 && userStatus !== "succeded") {
     allUserOrders = (
-      <h3 className="emptyOrders">
+      <h3 className="emptyOrders1">
         Aún no tiene compras realizadas o pendientes
       </h3>
     );
@@ -102,7 +102,7 @@ export default function Profile() {
               <EditIcon className="edit"></EditIcon>
             </Button>
           </h4>
-          <Container className="formUser">
+          <Container className="formUser1">
             <Formik
               initialValues={editValues}
               // validationSchema={validationSchemaUserRegister}
@@ -240,7 +240,7 @@ export default function Profile() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {
+                    { orders.length > 0 ? (
                       (allUserOrders = orders.map((row) =>
                         states.includes(row.status) ? (
                           <Row
@@ -250,7 +250,12 @@ export default function Profile() {
                             review={row.status === "completed" ? true : false}
                           />
                         ) : null
-                      ))
+                      ))) : 
+                      allUserOrders = (
+                        <h3 className="emptyOrders1">
+                          Aún no tiene compras realizadas o pendientes
+                        </h3>
+                      )
                     }
                   </TableBody>
                 </Table>
