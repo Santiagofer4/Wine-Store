@@ -130,11 +130,24 @@ server.get(
   (req, res) => {}
 );
 
-server.get('/github/callback', passport.authenticate('github'), (req, res) => {
-  console.log('REQUEST CALLBACK GITHUB', req);
-  res.redirect('http://localhost:3001/');
-});
+server.get(
+  '/github/callback',
+  passport.authenticate('github'),
+  async (req, res) => {
+    try {
+      const token = makeJWT(req.user, refreshTime, 'Bearer'); // guardar los tiempos de refresh en variable y aplicarselo a ambas
+      const refresh_token = makeJWT(req.user);
+      cookieMaker('refreshToken', refresh_token, res);
+      // res.send({
+      //   message: 'Login exitoso',
+      //   token,
+      //   user: req.user,
+      // });
+      return res.redirect('http://localhost:3001/');
+    } catch (error) {
+      console.error(`CATCH GIT`, error);
+    }
+  }
+);
 
 module.exports = server;
-
-//  query: { code: '17d493ba666ed14a5af8' },
