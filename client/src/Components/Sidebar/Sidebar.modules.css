@@ -10,7 +10,7 @@
   align-items: baseline;
   display: flex;
   flex-direction: column;
-  margin: 3rem auto;
+  margin: 2rem auto;
   width: 100%;
   padding: 0px;
   /* color: white !important; */
@@ -25,7 +25,7 @@
 
 .Sidebar__Text {
   margin-top: 2px !important;
-  margin-left: 3vw !important;
+  margin-left: 23% !important;
   text-transform: capitalize !important;
   font-size: 1rem !important;
   color: #dcdcdc !important;
@@ -35,7 +35,7 @@
   font-size: 18px;
   color: #000000;
   margin-top: 15px;
-  margin-left: 2vw !important;
+  margin-left: 14% !important;
   margin-bottom: 10px;
   background-color: #be9063;
   padding-left: 6px !important;
@@ -53,6 +53,6 @@ button > * {
 .Sidebar__CategoryName {
   font-size: 18px;
   font-weight: 600;
-  margin-left: 2vw !important;
+  margin-left: 14% !important;
   color: white;
 }
