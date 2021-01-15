@@ -1,12 +1,12 @@
-.CatalogueByTaste__containerCargando{
-    margin: 0px ;
-    margin-left: 17%;
-    padding-top: 200px;
-    height: 100vh;
-    width: 100%;
-    position: fixed;
-    background-color: black;
+.CatalogueByTaste__Div{
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 4.4rem;
+    margin-left: 13%;
+    margin-right: 2%;
     color: white;
+    width: 100%;
 }
 .CatalogueByTaste__text{
     color:white;
@@ -18,16 +18,21 @@
     background-size: cover;
   
 }
-.CatalogueByTaste__Div{
-    display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding-top: 8rem;
-  margin-left: 20%;
-  color: white;
+
+.CatalogueByTaste__containerCargando{
+    margin: 0px ;
+    margin-left: 17%;
+    padding-top: 200px;
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    background-color: black;
+    color: white;
 }
 .CatalogueByTaste__Pagination {
-    background-color: white;
     width: fit-content;
+    margin-inline: auto;
 }
+.CatalogueByTaste__Pagination nav ul li button{
+    background-color: #f7f7f7 !important;
+  }

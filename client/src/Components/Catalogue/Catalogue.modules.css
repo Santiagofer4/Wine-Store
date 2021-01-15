@@ -7,6 +7,7 @@
   margin-left: 13%;
   margin-right: 2%;
   color: white;
+  width: 100%;
 }
 
 .Catalogue__container {
@@ -25,7 +26,9 @@
   color: white;
 }
 .Catalogue__Pagination {
-  background-color: white;
   width: fit-content;
   margin-inline: auto;
+}
+.Catalogue__Pagination nav ul li button{
+  background-color: #f7f7f7 !important;
 }

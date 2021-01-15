@@ -72,6 +72,7 @@ export const deleteSingleProdFromCart = createAsyncThunk(
     const state = thunkApi.getState();
     const token = state.token.inMemoryToken;
     const { productId, userId } = payload;
+    console.log('INFO EN SLICES', payload)
     const deleted_item = await axios.delete(
       usersEndpoint + userId + '/cart/' + productId, {
         headers: { Authorization: token },
