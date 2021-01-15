@@ -9,6 +9,7 @@ import {
   userPromoteEndpoint,
   usersEndpoint,
   mailsEndpoint,
+  authEnpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 
@@ -46,6 +47,18 @@ export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   };
   return resPayload;
 });
+
+export const githubLogin = createAsyncThunk(
+  'user/githublogin',
+  async (_, { rejectWithValue }) => {
+    const resp = await axios.get(authEnpoint + 'github/');
+    console.log('resp', resp);
+    let redirectURL = resp.request.responseURL;
+    if (redirectURL) return window.location.replace(redirectURL);
+    else return rejectWithValue(resp);
+    return resp;
+  }
+);
 
 export const userLogout = createAsyncThunk(
   'user/logout',
@@ -107,11 +120,14 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
-export const editUsers = createAsyncThunk('users/editUsers', async ({ id, values }) => {
-  const resp = await axios.put(usersEndpoint + id, values);
-  console.log('RESP', resp)
-  return resp;
-});
+export const editUsers = createAsyncThunk(
+  'users/editUsers',
+  async ({ id, values }) => {
+    const resp = await axios.put(usersEndpoint + id, values);
+    console.log('RESP', resp);
+    return resp;
+  }
+);
 
 export const sendEmail = createAsyncThunk('user/sendMail', async (payload) => {
   const resp = await axios.post(mailsEndpoint, payload);
@@ -249,6 +265,16 @@ const userSlice = createSlice({
       state.user.info = payload.data;
     },
     [editUsers.rejected]: (state, action) => {
+      state.user.status = status.failed;
+      state.user.error = action.error;
+    },
+    [githubLogin.pending]: (state, action) => {
+      state.user.status = status.loading;
+    },
+    [githubLogin.fulfilled]: (state, { payload }) => {
+      state.user.status = status.succeded;
+    },
+    [githubLogin.rejected]: (state, action) => {
       state.user.status = status.failed;
       state.user.error = action.error;
     },

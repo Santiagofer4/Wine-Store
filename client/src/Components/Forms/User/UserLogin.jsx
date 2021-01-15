@@ -13,7 +13,11 @@ import './UserForm.modules.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
-import { postUserLogin, resetStatus } from '../../../slices/userSlice.js';
+import {
+  githubLogin,
+  postUserLogin,
+  resetStatus,
+} from '../../../slices/userSlice.js';
 import { postProductToCart, login } from '../../../slices/productsCartSlice.js';
 import { userSelector, userLoginStatusSelector } from '../../../selectors';
 import axios from 'axios';
@@ -61,11 +65,7 @@ function UserLogin() {
   };
 
   const githubLoginHandler = () => {
-    axios.get('http://localhost:3000/auth/github').then((response) => {
-      let redirectURL = response.request.responseURL;
-      if (redirectURL) return window.location.replace(redirectURL);
-      else console.log('xxxxxxx', response.request);
-    });
+    dispatch(githubLogin());
   };
 
   return (

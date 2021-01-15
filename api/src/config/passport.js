@@ -195,23 +195,19 @@ module.exports = function (passport) {
       },
       async (req, accessToken, refreshToken, profile, done) => {
         try {
-          console.log('github user', profile);
           const email = profile.emails[0].value;
-          console.log('EMAIL', email);
           let user = await User.findOne({ where: { email } }); //buscamos el email que devuelve github
-          console.log('USER', user);
           // si no hay user entonces creamos uno con datos `default`
           // si encontramos un user, entonces solamente devolvemos ese user
           if (!user) {
             const { _json: extra, displayName } = profile;
-            const [firstName, lastName ] = displayName.split(/(?<=^\S+)\s/);
+            const [firstName, lastName] = displayName.split(/(?<=^\S+)\s/);
             const birthdate = new Date('01-01-1000');
             const password = String(Date.now() + Math.random()).substring(0, 7);
             const cellphone = 123456789;
-            console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', password);
             const user_data = {
               firstName,
-              lastName: lastName||firstName,
+              lastName: lastName || firstName,
               email,
               birthdate,
               password,
@@ -219,14 +215,13 @@ module.exports = function (passport) {
               isAdmin: false,
             };
             const new_user = await User.create(user_data);
-            console.log('CREATED USER');
             if (!new_user)
               return done(null, false, {
                 message: 'no se pudo crear el usuario',
               });
             user = new_user;
           }
-          let user_obj = { ...user.dataValues };
+          let user_obj = { ...user.dataValues, accessToken };
           delete user_obj.password;
           return done(null, user_obj);
         } catch (error) {
