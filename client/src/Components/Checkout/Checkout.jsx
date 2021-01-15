@@ -22,6 +22,7 @@ import {
 } from '../../Components/utils/index';
 import { sendEmail } from '../../slices/userSlice';
 import { total } from '../utils/index';
+import axios from 'axios';
 
 // Estilos de los "steps" del checkout
 
@@ -92,16 +93,21 @@ export default function Checkout() {
           status: 'completed',
         })
       );
-      deleteAddressInfo();
-      deletePaymentInfo();
-      dispatch(
-        sendEmail({
-          name: user.firstName,
-          email: user.email,
-          type: 'Order',
-          orderCod: myCart,
-        })
-      );
+      AllProductsCart.map(async p =>{
+
+        if (p.stock >= p.quantity) await axios.put(`http://localhost:3000/products/${p.id}`, { stock: p.stock - p.quantity });
+      
+      })
+        deleteAddressInfo();
+        deletePaymentInfo();
+        dispatch(
+          sendEmail({
+            name: user.firstName,
+            email: user.email,
+            type: 'Order',
+            orderCod: myCart,
+          })
+        );
       dispatch(resetCart());
     }
   };
