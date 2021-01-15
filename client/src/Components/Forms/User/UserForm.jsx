@@ -80,7 +80,7 @@ function UserForm() {
   };
 
   return (
-    <Container className="formUser">
+    <Container className="formUserLogin">
       <Formik
         initialValues={emptyValues}
         // validationSchema={validationSchemaUserRegister}
