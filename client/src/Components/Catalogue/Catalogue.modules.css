@@ -1,10 +1,11 @@
 .Catalogue__Div {
-  display: flex;
+
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   padding-top: 4.4rem;
-  margin-left: 17%;
+  margin-left: 13%;
+  margin-right: 2%;
   color: white;
 }
 
@@ -22,4 +23,9 @@
   position: fixed;
   background-color: black;
   color: white;
+}
+.Catalogue__Pagination {
+  background-color: white;
+  width: fit-content;
+  margin-inline: auto;
 }
