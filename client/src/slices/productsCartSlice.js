@@ -36,15 +36,15 @@ export const getAllProductsCart = createAsyncThunk(
 
 export const postProductToCart = createAsyncThunk(
   'cart/postProductToCart',
-  async (payload, thunkApi) => {
+  async (payload, { dispatch }) => {
     const { userId, detail, increment } = payload;
     const cart_item = await axios.post(
       usersEndpoint + userId + '/cart',
       payload
     );
     increment
-      ? thunkApi.dispatch(AddProductToCart({ name: detail.name }))
-      : thunkApi.dispatch(RemoveProductFromCart({ name: detail.name }));
+      ? dispatch(AddProductToCart({ name: detail.name }))
+      : dispatch(RemoveProductFromCart({ name: detail.name }));
 
     const resPayload = {
       increment,
