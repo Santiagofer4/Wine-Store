@@ -7,6 +7,7 @@ import {
   userPromote,
   sendEmail,
   resetUsers,
+  deleteUser,
 } from '../../../slices/userSlice';
 import { usersListSelector, userStatusSelector } from '../../../selectors';
 import EditIcon from '@material-ui/icons/Edit';
@@ -21,7 +22,6 @@ function Usuarios() {
   const history = useHistory();
   const users = useSelector(usersListSelector);
   const status = useSelector(userStatusSelector);
-  console.log('USUARIOS');
   let content;
 
   const handleRetry = () => {
@@ -33,7 +33,6 @@ function Usuarios() {
   const promoteUser = (id) => {
     let user = users.filter((u) => u.id === id);
     dispatch(userPromote(id));
-    console.log('USER', user[0].firstName);
     dispatch(
       sendEmail({
         name: user[0].firstName,
@@ -41,8 +40,10 @@ function Usuarios() {
         type: 'Promote',
       })
     );
-    // dispatch(resetUsers());
-    //falta que vuelva a renderizar
+  };
+
+  const deleteUserHandler = (id) => {
+    dispatch(deleteUser(id));
   };
 
   useEffect(() => {
@@ -84,6 +85,14 @@ function Usuarios() {
               <ArrowUpwardIcon className="grid-item"></ArrowUpwardIcon>
             </Button>
           )}
+          <div className="grid-item" style={{ backgroundColor: even }}>
+            <a href="#" className="Cart__DeleteProduct">
+              <i
+                class="fas fa-trash-alt"
+                onClick={() => deleteUserHandler(user.id)}
+              ></i>
+            </a>
+          </div>
         </>
       );
     });
@@ -105,6 +114,9 @@ function Usuarios() {
       </p>
       <p className="grid-item" style={{ fontWeight: 'bold' }}>
         Promover
+      </p>
+      <p className="grid-item" style={{ fontWeight: 'bold' }}>
+        Borrar
       </p>
       {content}
     </div>
