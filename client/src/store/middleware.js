@@ -8,6 +8,7 @@ import {
   postProductToCart,
   deleteSingleProdFromCart,
   deleteAllProductsFromCart,
+  modificateOrder,
 } from '../slices/productsCartSlice';
 import { persistUserLogin, userPromote } from '../slices/userSlice';
 import {
@@ -28,6 +29,7 @@ export const notificationMiddleware = (store) => (next) => (action) => {
     RemoveProductFromCart.type,
     DeleteProductFromCart.type,
     userPromote.fulfilled.type,
+    modificateOrder.fulfilled.type,
     // postProductToCart.fulfilled.type,
     // deleteSingleProdFromCart.fulfilled.type,
     // deleteAllProductsFromCart.fulfilled.type,
@@ -64,6 +66,11 @@ export const notificationMiddleware = (store) => (next) => (action) => {
       snackbarContent.options.variant = 'warning';
     } else if (action.type.includes('user')) {
       snackbarContent.message = `Se promovio el usuario a ADMIN`;
+      snackbarContent.options.variant = 'success';
+    } else if (action.type.includes('modificateOrder')) {
+      const { myCart, status } = action.payload;
+
+      snackbarContent.message = `La orden N°${myCart} ha sido cambiada al estado ${status.toUpperCase()}`;
       snackbarContent.options.variant = 'success';
     }
     store.dispatch(enqueueSnackbar(snackbarContent));
