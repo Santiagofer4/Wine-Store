@@ -61,8 +61,8 @@ function Usuarios() {
       </>
     );
   } else if (status === 'succeded') {
-    content = users.map((user) => {
-      let even = user.id % 2 === 0 ? 'white' : 'beige';
+    content = users.map((user, idx) => {
+      let even = idx % 2 === 0 ? 'white' : 'beige';
       return (
         <>
           <div className="grid-item" style={{ backgroundColor: even }}>

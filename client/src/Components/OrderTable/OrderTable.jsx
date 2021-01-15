@@ -46,10 +46,15 @@ function OrderTable() {
       </>
     );
   } else if (status === 'succeded') {
-    content = orderTable.map((order) => {
+    content = orderTable.map((order, idx) => {
+      let rowColor = idx % 2 === 0 ? 'white' : 'beige';
       return (
         <>
-          <li key={order.id} className="OrderTable__li">
+          <li
+            key={order.id}
+            className="OrderTable__li"
+            style={{ backgroundColor: rowColor }}
+          >
             <div className="OrderTable__Text">{order.id}</div>
             <div className="OrderTable__Text">
               {Math.ceil((total(order.orderLines) * 121) / 100)}
