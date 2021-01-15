@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { tokenSelector, tryToLoginStatusSelector } from '../../selectors';
+import { tokenSelector, tryToLoginStatusSelector, refreshStatusSelector } from '../../selectors';
 import { AuthContext, useAuthProvider } from './authContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { getRefreshedToken, tryToLogin } from '../../slices/tokenSlice';
@@ -11,18 +11,20 @@ function AuthProvider({ children }) {
   const dispatch = useDispatch();
   const userStatus = useSelector(userLoginStatusSelector);
   const tryToLoginStatus = useSelector(tryToLoginStatusSelector); //idle
-
+  const [render,setRender]= useState(false)
   const isLogged = () => {
     if (tryToLoginStatus === 'idle') {
       console.log('IDLE AND NO TOKEN');
+      console.log('USER STATUS', userStatus);
       dispatch(tryToLogin());
+      setRender(true)
     }
   };
 
   useEffect(() => {
     console.log('TRY TO LOGIN STATUS', tryToLoginStatus);
     isLogged();
-  }, [tryToLoginStatus, dispatch]);
+  }, [tryToLoginStatus, dispatch, render]);
 
   if (tryToLoginStatus === 'loading' || userStatus === 'loading') {
     console.log('TRYING TO LOGIN = LOADING');
@@ -36,7 +38,7 @@ function AuthProvider({ children }) {
         <CircularProgress />
       </Container>
     );
-  } else if (tryToLoginStatus === 'failed') {
+  } else if (tryToLoginStatus !== 'succeded' ) {
     console.log('TRYING TO LOGIN = FAILED');
     return (
       <AuthContext.Provider value={false}>{children}</AuthContext.Provider>

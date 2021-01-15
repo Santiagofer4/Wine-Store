@@ -180,6 +180,7 @@ const userSlice = createSlice({
       state.user.orders = [];
       state.user.status = 'idle';
       state.user.error = null;
+      state.user.loginStatus= 'idle'
     },
     [userPromote.pending]: (state, action) => {
       state.user.status = status.loading;
