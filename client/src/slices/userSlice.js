@@ -122,6 +122,7 @@ const userSlice = createSlice({
     },
     resetStatus: (state, action) => {
       state.user.status = status.idle;
+      state.user.loginStatus = status.idle;
     },
     resetUsers(state, action) {
       state.user.usersList = [];
