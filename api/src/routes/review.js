@@ -60,9 +60,12 @@ server.get('/:productId', (req, res, next) => {
   Review.findAll({
     where: {
       productId,
-    },
-
-    include: { model: User },
+    }
+    // ,
+    // include: {
+    //   model: User
+    // },
+    //  paranoid: false
   })
     .then((revs) => {
       res.json(
@@ -73,8 +76,8 @@ server.get('/:productId', (req, res, next) => {
             description: r.description,
             productId,
             createdAt: r.createdAt,
-            firstName: r.user.firstName,
-            lastName: r.user.lastName,
+            // firstName: r.user.firstName,
+            // lastName: r.user.lastName,
           };
         })
       );

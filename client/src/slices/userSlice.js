@@ -30,6 +30,7 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
   const resPayload = {
     userRegister_response: user_response.data,
     formik,
+    token,
   };
   return resPayload;
 });
@@ -38,7 +39,6 @@ export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   const { user, formik } = payload;
   const userLogin_response = await axios.post(authLoginEndpoint, user);
   const { token } = userLogin_response.data;
-  console.log('TOken recibido', token);
   const resPayload = {
     userLogin_response: userLogin_response.data,
     token,
@@ -122,6 +122,7 @@ const userSlice = createSlice({
     },
     resetStatus: (state, action) => {
       state.user.status = status.idle;
+      state.user.loginStatus = status.idle;
     },
     resetUsers(state, action) {
       state.user.usersList = [];
@@ -180,6 +181,7 @@ const userSlice = createSlice({
       state.user.orders = [];
       state.user.status = 'idle';
       state.user.error = null;
+      state.user.loginStatus = 'idle';
     },
     [userPromote.pending]: (state, action) => {
       state.user.status = status.loading;

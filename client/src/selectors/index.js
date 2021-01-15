@@ -103,3 +103,5 @@ export const tokenSelector = (state) => state.token.inMemoryToken;
 export const tryToLoginStatusSelector = (state) => state.token.tryToLoginStatus;
 
 export const checkoutInfoSelector = (state) => state.checkout.checkout;
+
+export const refreshStatusSelector = (state)=> state.token.refreshStatus;
