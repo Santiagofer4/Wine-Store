@@ -59,6 +59,16 @@ export const githubLogin = createAsyncThunk(
     return resp;
   }
 );
+export const googleLogin = createAsyncThunk(
+  'user/googlelogin',
+  async (_, { rejectWithValue }) => {
+    const resp = await axios.get(authEnpoint + 'google/');
+    let redirectURL = resp.request.responseURL;
+    if (redirectURL) return window.location.replace(redirectURL);
+    else return rejectWithValue(resp);
+    return resp;
+  }
+);
 
 export const userLogout = createAsyncThunk(
   'user/logout',
@@ -275,6 +285,16 @@ const userSlice = createSlice({
       state.user.status = status.succeded;
     },
     [githubLogin.rejected]: (state, action) => {
+      state.user.status = status.failed;
+      state.user.error = action.error;
+    },
+    [googleLogin.pending]: (state, action) => {
+      state.user.status = status.loading;
+    },
+    [googleLogin.fulfilled]: (state, { payload }) => {
+      state.user.status = status.succeded;
+    },
+    [googleLogin.rejected]: (state, action) => {
       state.user.status = status.failed;
       state.user.error = action.error;
     },

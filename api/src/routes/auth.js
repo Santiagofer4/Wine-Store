@@ -138,14 +138,35 @@ server.get(
       const token = makeJWT(req.user, refreshTime, 'Bearer'); // guardar los tiempos de refresh en variable y aplicarselo a ambas
       const refresh_token = makeJWT(req.user);
       cookieMaker('refreshToken', refresh_token, res);
-      // res.send({
-      //   message: 'Login exitoso',
-      //   token,
-      //   user: req.user,
-      // });
       return res.redirect('http://localhost:3001/');
     } catch (error) {
       console.error(`CATCH GIT`, error);
+    }
+  }
+);
+
+server.get(
+  '/google',
+  passport.authenticate('google', {
+    scope: [
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/userinfo.email',
+    ],
+  }),
+  (req, res) => {}
+);
+
+server.get(
+  '/google/callback',
+  passport.authenticate('google'),
+  async (req, res) => {
+    try {
+      const token = makeJWT(req.user, refreshTime, 'Bearer'); // guardar los tiempos de refresh en variable y aplicarselo a ambas
+      const refresh_token = makeJWT(req.user);
+      cookieMaker('refreshToken', refresh_token, res);
+      return res.redirect('http://localhost:3001/');
+    } catch (error) {
+      console.error(`CATCH GOOGLE`, error);
     }
   }
 );
