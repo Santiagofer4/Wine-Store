@@ -121,11 +121,22 @@ function UserLogin() {
                 </Button>
                 <hr></hr>
                 <br></br>
-                <Button onClick={githubLoginHandler}>
+                <div className='Login__Externos'>
+                <Button onClick={githubLoginHandler}  variant="outlined">
                   {/* <a href="http://localhost:3000/auth/github"> */}
-                  <GitHubIcon />
+                  {/* <GitHubIcon fontSize={'large'}/> */}
+                  <i class="fab fa-github iconos" aria-hidden="true"></i>
+                  GitHub {' '}
                   {/* </a> */}
                 </Button>
+                <Button  variant="outlined" >
+                 
+                <i class="fab fa-google iconos"></i>
+                Google {' '}
+                {/* <Icon className={clsx( 'fab fa-google')} /> */}
+                </Button>
+
+                </div>
                 <br></br>
               </Container>
             </Form>

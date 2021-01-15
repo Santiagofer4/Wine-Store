@@ -41,3 +41,13 @@ height: 80px;
  .UserForm__lb label {
     transform: none !important;
  }
+ .iconos{
+   font-size: x-large;
+ }
+
+ .Login__Externos{
+   width: 40%;
+   margin: auto;
+   display: flex;
+   justify-content: space-around;
+ }
