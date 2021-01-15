@@ -131,7 +131,10 @@ server.get(
 );
 
 server.get('/github/callback', passport.authenticate('github'), (req, res) => {
+  console.log('REQUEST CALLBACK GITHUB', req);
   res.redirect('http://localhost:3001/');
 });
 
 module.exports = server;
+
+//  query: { code: '17d493ba666ed14a5af8' },
