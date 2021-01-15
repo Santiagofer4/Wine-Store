@@ -19,7 +19,7 @@ function Catalogue() {
   const allProdStatus = useSelector(allProductsStatusSelector);
   const allProdError = useSelector(allProductsErrorSelector);
   const [page, setPage] = useState(1);
-  const cantidadAMostrar = 4;
+  const cantidadAMostrar = 6;
   function handleClick(e, num) {
     setPage(num);
   }
