@@ -40,7 +40,7 @@ function UserLogin() {
     dispatch(postUserLogin(payload));
   };
   if (userStatus === 'succeded') {
-    history.push('/welcome');
+    history.push('/catalogue');
   }
 
   if (userStatus === 'failed') {
@@ -121,21 +121,17 @@ function UserLogin() {
                 </Button>
                 <hr></hr>
                 <br></br>
-                <div className='Login__Externos'>
-                <Button onClick={githubLoginHandler}  variant="outlined">
-                  {/* <a href="http://localhost:3000/auth/github"> */}
-                  {/* <GitHubIcon fontSize={'large'}/> */}
-                  <i class="fab fa-github iconos" aria-hidden="true"></i>
-                  GitHub {' '}
-                  {/* </a> */}
-                </Button>
-                <Button  variant="outlined" >
-                 
-                <i class="fab fa-google iconos"></i>
-                Google {' '}
-                {/* <Icon className={clsx( 'fab fa-google')} /> */}
-                </Button>
-
+                <div className="Login__Externos">
+                  <Button onClick={githubLoginHandler} variant="outlined">
+                    {/* <a href="http://localhost:3000/auth/github"> */}
+                    {/* <GitHubIcon fontSize={'large'}/> */}
+                    <i class="fab fa-github iconos" aria-hidden="true"></i>
+                    GitHub {/* </a> */}
+                  </Button>
+                  <Button variant="outlined">
+                    <i class="fab fa-google iconos"></i>
+                    Google {/* <Icon className={clsx( 'fab fa-google')} /> */}
+                  </Button>
                 </div>
                 <br></br>
               </Container>

@@ -7,7 +7,7 @@ module.exports = (sequelize) => {
   const User = sequelize.define(
     'user',
     {
-       firstName: {
+      firstName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -52,9 +52,10 @@ module.exports = (sequelize) => {
         },
       },
     },
-    
+
     {
       timestamps: true,
+
       paranoid: true,
       hooks: {
         beforeCreate(user) {

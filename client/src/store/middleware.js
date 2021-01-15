@@ -10,7 +10,13 @@ import {
   deleteAllProductsFromCart,
   modificateOrder,
 } from '../slices/productsCartSlice';
-import { persistUserLogin, userPromote, deleteUser } from '../slices/userSlice';
+import {
+  persistUserLogin,
+  userPromote,
+  deleteUser,
+  postUserLogin,
+  createUser,
+} from '../slices/userSlice';
 import {
   setRefreshTokenTimeout,
   setToken,
@@ -31,6 +37,10 @@ export const notificationMiddleware = (store) => (next) => (action) => {
     userPromote.fulfilled.type,
     modificateOrder.fulfilled.type,
     deleteUser.fulfilled.type,
+    postUserLogin.fulfilled.type,
+    createUser.fulfilled.type,
+    postUserLogin.rejected.type,
+    createUser.rejected.type,
   ];
   const snackbarContent = {
     message: '',
@@ -73,6 +83,14 @@ export const notificationMiddleware = (store) => (next) => (action) => {
       const { id, name } = action.payload.data;
       snackbarContent.message = `El usuario ${name} [ID:${id}] ha sido ELIMINADO`;
       snackbarContent.options.variant = 'error';
+    } else if (action.type.includes('user/login/fulfilled')) {
+      const { firstName, lastName } = action.payload.userLogin_response.user;
+      snackbarContent.message = `Bienvenido/a ${firstName} ${lastName}, has iniciado sesion`;
+      snackbarContent.options.variant = 'success';
+    } else if (action.type.includes('user/register/fulfilled')) {
+      const { firstName, lastName } = action.payload.userRegister_response.user;
+      snackbarContent.message = `Bienvenido/a ${firstName} ${lastName}, te has registrado`;
+      snackbarContent.options.variant = 'success';
     }
     store.dispatch(enqueueSnackbar(snackbarContent));
   }
@@ -95,7 +113,7 @@ export const tokenMiddleware = (store) => (next) => (action) => {
     }
     case 'user/register/fulfilled': {
       const { token } = action.payload;
-      dispatch(persistUserLogin(action.payload.userLogin_response));
+      dispatch(persistUserLogin(action.payload.userRegister_response));
       dispatch(setToken(token));
       dispatch(setStopRefreshFalse());
       dispatch(setRefreshTokenTimeout());
