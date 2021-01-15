@@ -45,6 +45,9 @@ function Usuarios() {
   const deleteUserHandler = (id) => {
     dispatch(deleteUser(id));
   };
+  const editUserHandler = (id) => {
+    history.push(`admin/edituser/${id}`);
+  };
 
   useEffect(() => {
     if (status === 'idle') dispatch(allUsers());
@@ -93,6 +96,15 @@ function Usuarios() {
               ></i>
             </a>
           </div>
+          <div className="grid-item" style={{ backgroundColor: even }}>
+            <Button
+              className="editButton"
+              style={{ backgroundColor: even }}
+              onClick={() => editUserHandler(user.id)}
+            >
+              <EditIcon className="grid-item"></EditIcon>
+            </Button>
+          </div>
         </>
       );
     });
@@ -105,7 +117,7 @@ function Usuarios() {
     );
   }
   return (
-    <div class="grid-container">
+    <div class="grid-container-usuarios">
       <p className="grid-item" style={{ fontWeight: 'bold' }}>
         Id
       </p>
@@ -117,6 +129,9 @@ function Usuarios() {
       </p>
       <p className="grid-item" style={{ fontWeight: 'bold' }}>
         Borrar
+      </p>
+      <p className="grid-item" style={{ fontWeight: 'bold' }}>
+        Editar
       </p>
       {content}
     </div>

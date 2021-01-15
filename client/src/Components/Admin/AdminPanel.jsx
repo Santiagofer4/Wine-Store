@@ -1,4 +1,4 @@
-import React,  { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Paper, Container } from '@material-ui/core';
 import './AdminPanel.modules.css';
 import { Link } from 'react-router-dom';
@@ -9,7 +9,8 @@ import AdminProduct from './LoadProduct/AdminProduct';
 import PromoteUser from './PromoteUser/PromoteUser';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector, userStatusSelector } from '../../selectors/index';
-import { allUsers } from "../../slices/userSlice";
+import { allUsers } from '../../slices/userSlice';
+import EditUser from './EditUser/EditUser';
 
 const AdminPanel = () => {
   const dispatch = useDispatch();
@@ -69,6 +70,7 @@ const AdminPanel = () => {
         <Route path="/admin/loadstrain" component={AdminStrain} />
         <Route path="/admin/edit/:id" component={AdminProduct} />
         <Route path="/admin/promoteuser" component={PromoteUser} />
+        <Route path="/admin/edituser/:id" component={EditUser} />
       </Container>
     </Container>
   );
