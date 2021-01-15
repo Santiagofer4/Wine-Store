@@ -23,7 +23,7 @@ const AdminPanel = () => {
 
   return (
     <Container className="AdminPanel">
-      {user.isAdmin ? (
+      {/* {user.isAdmin ? (
         <Paper id="backgroundPaper" className="AdminPanel__Panel">
           <h1 className="AdminPanel__Title">ADMIN PANEL</h1>
           <img
@@ -60,7 +60,7 @@ const AdminPanel = () => {
             </li>
           </ul>
         </Paper>
-      ) : null}
+      ) : null} */}
       <br></br>
       <h1 className="Admin__H1">Formularios del Administrador</h1>
       <br></br>

@@ -5,7 +5,7 @@ import './OrderTable.modules.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrderTable } from '../../slices/orderTableSlice';
 import { modificateOrder } from '../../slices/productsCartSlice';
-import { allOrderSelector, allOrderStatusSelector } from '../../selectors';
+import { allOrderSelector, allOrderStatusSelector, allProductsCartStatusSelector } from '../../selectors';
 import { CircularProgress, Button } from '@material-ui/core';
 
 import DoneIcon from '@material-ui/icons/Done';
@@ -17,14 +17,15 @@ function OrderTable() {
   const dispatch = useDispatch();
   const orderTable = useSelector(allOrderSelector);
   const status = useSelector(allOrderStatusSelector);
-
+  const statusCart = useSelector(allProductsCartStatusSelector);
   const orderStatus = ['created', 'canceled', 'pending', 'completed', 'cart'];
 
   let content;
 
   useEffect(() => {
+    console.log('GET ORDERS')
     dispatch(getOrderTable());
-  }, [dispatch]);
+  }, [dispatch, statusCart]);
 
   const handleRetry = () => {
     //func para reintentar y forzar refresh
@@ -90,7 +91,7 @@ function OrderTable() {
               </button>
             </div>
           </li>
-          <OrderDetail id={order.id} userId={order.userId} data={order.orderLines}></OrderDetail>
+          <OrderDetail id={order.id} userId={order.userId} data={order.orderLines} edit={order.status === 'pending'}></OrderDetail>
         </>
       );
     });
