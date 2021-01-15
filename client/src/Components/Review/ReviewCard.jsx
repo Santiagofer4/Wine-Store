@@ -12,7 +12,8 @@ function ReviewCard(props) {
     </Box>
     <h4 className="description">{props.data.description}</h4>
     <p className="date">{(props.data.createdAt).slice(0, 10)}</p>
-    <h5 className="client">{props.data.firstName + ' ' + props.data.lastName }</h5>
+    {/* <h5 className="client">{props.data.firstName + ' ' + props.data.lastName }</h5> */} 
+    {/* COMENTÉ EL NOMBRE PORQUE ESO HACER QUE ROMPA SI BORRAMOS UN USER */}
     </>
   );
 }
