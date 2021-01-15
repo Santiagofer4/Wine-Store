@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, CircularProgress } from '@material-ui/core';
 import './Catalogue.modules.css';
+import Pagination from '@material-ui/lab/Pagination';
 
 import ProductCard from '../ProductCard/ProductCard.jsx';
 import Sidebar from '../Sidebar/Sidebar.jsx';
@@ -17,6 +18,11 @@ function Catalogue() {
   const allProducts = useSelector(allProductsSelector);
   const allProdStatus = useSelector(allProductsStatusSelector);
   const allProdError = useSelector(allProductsErrorSelector);
+  const [page, setPage] = useState(1);
+  const cantidadAMostrar = 6;
+  function handleClick(e, num) {
+    setPage(num);
+  }
 
   useEffect(() => {
     if (allProdStatus === 'idle') dispatch(getAllProducts());
@@ -44,9 +50,10 @@ function Catalogue() {
         </>
       );
     } else {
-      content = allProducts.map((product, idx) => (
+      content = allProducts.slice((page-1)*cantidadAMostrar, page*cantidadAMostrar).map((product, idx) => (
         <ProductCard data={product} key={idx} />
       ));
+      content.push(<Pagination onChange={handleClick} count={allProducts.length/cantidadAMostrar} variant="outlined" shape="rounded" />);
     }
   } else if (allProdStatus === 'failed') {
     return (
@@ -61,7 +68,7 @@ function Catalogue() {
   }
   return (
     <div className="Catalogue__container">
-      <Sidebar></Sidebar>
+      <Sidebar pagina={setPage}></Sidebar>
       <h3>Viendo todos los vinos</h3>
       <div className="Catalogue__Div">{content}</div>
     </div>

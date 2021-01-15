@@ -40,11 +40,6 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         default: false,
       },
-      // active:{
-      //   type: DataTypes.BOOLEAN,
-      //   default: true,
-      //   // si se vuelve a registrar, cambiar estado a true
-      // },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -57,8 +52,11 @@ module.exports = (sequelize) => {
         },
       },
     },
+
     {
-      timestamps: false,
+      timestamps: true,
+
+      paranoid: true,
       hooks: {
         beforeCreate(user) {
           user.firstName = capitalize(user.firstName);
