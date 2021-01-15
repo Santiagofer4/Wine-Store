@@ -72,7 +72,7 @@ server.get(
   '/refresh',
   passport.authenticate('jwt-refresh', { session: false }),
   async (req, res) => {
-    const newToken = makeJWT(req.user, refreshTime);
+    const newToken = makeJWT(req.user, refreshTime, 'Bearer');
     const refresh_token = makeJWT(req.user);
     cookieMaker('refreshToken', refresh_token, res);
     return res.send({

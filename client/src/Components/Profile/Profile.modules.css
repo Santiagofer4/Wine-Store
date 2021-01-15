@@ -2,18 +2,39 @@
     color: #be9063 !important;
 }
 
-.personalInfo {
-    width: 100%;
+.data {
+    text-align: left;
+    padding: 0rem 1rem;
 }
 
-.ordersInfo {
-    width: 90%;
+.edit {
+    padding: 0rem 0.5rem;
+}
+
+.formUser {
+    width: 60% !important;
+    padding-top: 1rem !important;
+}
+
+.info {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    width: 60%;
+    background-color: #eccba9;
 }
 
 .orders {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+}
+
+.ordersInfo {
+    width: 90%;
+}
+
+.personalInfo {
+    width: 100%;
 }
 
 .profile {

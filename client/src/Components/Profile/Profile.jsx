@@ -1,28 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { Paper, CircularProgress, Button } from '@material-ui/core';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import './Profile.modules.css';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { Paper, CircularProgress, Button, Container } from "@material-ui/core";
+import FormLabel from "@material-ui/core/FormLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import "./Profile.modules.css";
+import { useDispatch, useSelector } from "react-redux";
 import {
   userOrdersStatusSelector,
   userOrdersSelector,
   userSelector,
   reviewsListStatusSelector,
-} from '../../selectors/index.js';
-import { getUserOrders } from '../../slices/userSlice';
-import { getUserReviews } from '../../slices/reviewSlice';
-import OrderDetail from '../OrderTable/OrderDetail';
-import Row from '../Profile/ProfileTable';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableContainer from '@material-ui/core/TableContainer';
+} from "../../selectors/index.js";
+import { getUserOrders, editUsers } from "../../slices/userSlice";
+import { getUserReviews } from "../../slices/reviewSlice";
+import OrderDetail from "../OrderTable/OrderDetail";
+import Row from "../Profile/ProfileTable";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableContainer from "@material-ui/core/TableContainer";
+import EditIcon from "@material-ui/icons/Edit";
+
+import { Formik, Form } from "formik";
+import FormField from "../FormComponents/FormField";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -37,6 +41,7 @@ export default function Profile() {
     completed: true,
     cart: true,
   });
+  const [edit, setEdit] = useState(false);
 
   const { cart, canceled, completed, created, pending } = state;
   let allUserOrders;
@@ -49,9 +54,26 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    if (userStatus === 'idle') dispatch(getUserOrders(user.id));
-    if (reviewStatus === 'idle') dispatch(getUserReviews(user.id));
-  }, [userStatus, reviewStatus, dispatch]);
+    dispatch(getUserOrders(user.id));
+    dispatch(getUserReviews(user.id));
+  }, [dispatch, state]);
+
+  const editValues = {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    cellphone: user.cellphone,
+    birthdate: new Date(user.birthdate),
+  };
+
+  const handleSubmit = (values, formik) => {
+    let payload = {
+      id: user.id,
+      values,
+    };
+    dispatch(editUsers(payload));
+    setEdit(false);
+  };
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
@@ -64,27 +86,85 @@ export default function Profile() {
       </h3>
     );
   } else {
-    if (userStatus === 'loading' || reviewStatus === 'loading') {
+    if (userStatus === "loading" || reviewStatus === "loading") {
       allUserOrders = (
         <>
           <h2>Cargando...</h2>
           <CircularProgress />
         </>
       );
-    } else if (userStatus === 'succeded' && reviewStatus === 'succeded') {
+    } else if (userStatus === "succeded" && reviewStatus === "succeded") {
       return (
         <Paper className="profile">
-          <div className="personalInfo">
-            <h4 className="title">Mi información</h4>
-            <div className="info">
-              <p className="data">
-                Nombre {user.firstName + ' ' + user.lastName}
-              </p>
-              <p className="data">email {user.email}</p>
-              <p className="data">Fecha de nacimiento {user.birthdate}</p>
-              <p className="data">Télefono/celular {user.cellphone}</p>
-            </div>
-          </div>
+          <h4 className="title">
+            Mi información
+            <Button className="editButton" onClick={() => setEdit(true)}>
+              <EditIcon className="edit"></EditIcon>
+            </Button>
+          </h4>
+          <Container className="formUser">
+            <Formik
+              initialValues={editValues}
+              // validationSchema={validationSchemaUserRegister}
+              onSubmit={handleSubmit}
+            >
+              {(formik) => (
+                <Container>
+                  <Form>
+                    <FormField
+                      fieldType="input"
+                      label="Nombre"
+                      name="firstName"
+                      disabled={edit ? false : true}
+                      required
+                      className="text__field UserForm__lb"
+                    />
+                    <FormField
+                      fieldType="input"
+                      label="Apellido"
+                      name="lastName"
+                      disabled={edit ? false : true}
+                      required
+                      className="text__field UserForm__lb"
+                    />
+                    <FormField
+                      fieldType="input"
+                      label="Correo Electronico"
+                      name="email"
+                      disabled={edit ? false : true}
+                      required
+                      className="text__field UserForm__lb"
+                    />
+                    <FormField
+                      fieldType="datepicker"
+                      label="Fecha de Nacimiento"
+                      name="birthdate"
+                      disabled={edit ? false : true}
+                      required
+                      className="text__field UserForm__lb"
+                      placeholder={"dd/mm/aaaa"}
+                    />
+                    <FormField
+                      fieldType="input"
+                      label="Teléfono"
+                      name="cellphone"
+                      disabled={edit ? false : true}
+                      className="text__field UserForm__lb"
+                    />
+                    <br></br>
+                    <Container
+                      className="center"
+                      style={{ display: edit ? "block" : "none" }}
+                    >
+                      <Button type="submit" id="btnUser">
+                        Actualizar
+                      </Button>
+                    </Container>
+                  </Form>
+                </Container>
+              )}
+            </Formik>
+          </Container>
           <h4 className="title">Mis compras</h4>
           <div className="orders">
             <FormControl>
@@ -167,7 +247,7 @@ export default function Profile() {
                             key={row.id}
                             row={row.orderLines}
                             order={row}
-                            review={row.status === 'completed' ? true : false}
+                            review={row.status === "completed" ? true : false}
                           />
                         ) : null
                       ))
@@ -179,7 +259,7 @@ export default function Profile() {
           </div>
         </Paper>
       );
-    } else if (userStatus === 'failed' || reviewStatus === 'failed') {
+    } else if (userStatus === "failed" || reviewStatus === "failed") {
       allUserOrders = (
         <>
           <h3>Ha ocurrido un error</h3>
@@ -187,207 +267,5 @@ export default function Profile() {
       );
     }
   }
-  return (
-    <Paper className="profile">
-      {' '}
-      <h4 className="title">Mi información</h4>
-      <div className="info">
-        <p className="data">Nombre {user.firstName + ' ' + user.lastName}</p>
-        <p className="data">email {user.email}</p>
-        <p className="data">Fecha de nacimiento {user.birthdate}</p>
-        <p className="data">Télefono/celular {user.cellphone}</p>
-      </div>
-      <h4 className="title">Mis compras</h4>
-      {allUserOrders}
-    </Paper>
-  );
+  return  <Paper>{allUserOrders}</Paper>;
 }
-
-/* 
-function Profile() {
-  const dispatch = useDispatch();
-  const user = useSelector(userSelector);
-  const orders = useSelector(userOrdersSelector);
-  const status = useSelector(userOrdersStatusSelector);
-
-  const [state, setState] = useState({
-    created: true,
-    canceled: true,
-    pending: true,
-    completed: true,
-    cart: true,
-  });
-
-  const { cart, canceled, completed, created, pending } = state;
-
-  let states = [];
-  for (const prop in state) {
-    if (state[prop] === true) {
-      states.push(prop);
-    }
-  }
-
-  let allUserOrders;
-
-  useEffect(() => {
-    dispatch(userOrders(user.id));
-    dispatch(userReviews(user.id));
-  }, [dispatch, state]);
-
-  const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
-  };
-
-  if (orders.length === 0) {
-    allUserOrders = (
-      <h3 className="emptyOrders">
-        Aún no tiene compras realizadas o pendientes
-      </h3>
-    );
-  } else {
-    if (userStatus === 'loading' || reviewStatus === 'loading') {
-      allUserOrders = (
-        <>
-          <h2>Cargando...</h2>
-          <CircularProgress />
-        </>
-      );
-    } else if (userStatus === 'succeded' || reviewStatus === 'succeded') {
-      allUserOrders = orders.map((order) => {
-        return (
-          <>
-            <li
-              key={order.id}
-              className="orders"
-              style={{
-                display: states.includes(order.status) ? "flex" : "none",
-              }}
-            >
-              <div className="order">{order.id}</div>
-              <div className="order">{order.total}</div>
-              <div className="order">{order.status}</div>
-              <div className="order">
-                {' '}
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => {
-                    hide(order.id);
-                  }}
-                >
-                  Detalle
-                </Button>
-              </div>
-            </li>
-            <OrderDetail
-              id={order.id}
-              data={order.orderLines}
-              review={order.status === "completed" ? true : false}
-            ></OrderDetail>
-          </>
-        );
-      });
-    } else if (userStatus === 'failed' || reviewStatus === 'failed') {
-      allUserOrders = (
-        <>
-          <h3>Ha ocurrido un error</h3>
-        </>
-      );
-    }
-  }
-
-  return (
-    <Paper className="profile">
-      <FormControl>
-        <FormLabel>Filtro de órdenes</FormLabel>
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Checkbox
-                className="checkbox"
-                checked={created}
-                onChange={handleChange}
-                name="created"
-              />
-            }
-            label="Created"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                className="checkbox"
-                checked={canceled}
-                onChange={handleChange}
-                name="canceled"
-              />
-            }
-            label="Canceled"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                className="checkbox"
-                checked={cart}
-                onChange={handleChange}
-                name="cart"
-              />
-            }
-            label="Cart"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                className="checkbox"
-                checked={pending}
-                onChange={handleChange}
-                name="pending"
-              />
-            }
-            label="Pending"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                className="checkbox"
-                checked={completed}
-                onChange={handleChange}
-                name="completed"
-              />
-            }
-            label="Completed"
-          />
-        </FormGroup>
-      </FormControl>
-      <div className="container">
-        <h4 className="title">Mi información</h4>
-        <div className="info">
-          <p className="data">Nombre {user.firstName + " " + user.lastName}</p>
-          <p className="data">email {user.email}</p>
-          <p className="data">Fecha de nacimiento {user.birthdate}</p>
-          <p className="data">Télefono/celular {user.cellphone}</p>
-        </div>
-        <h4 className="title">Mis compras</h4>
-        <div className="orders">
-          <div className="orderTitle">Código compra</div>
-          <div className="orderTitle">Total</div>
-          <div className="orderTitle">Status</div>
-          <div className="orderTitle">Detalle</div>
-        </div>
-        {allUserOrders}
-      </div>
-    </Paper>
-  );
-}
-
-function hide(id) {
-  *funcion para mostrar||ocultar el detalle de la orden
-  let OrderDetail = document.getElementById(id).style.display;
-  if (OrderDetail !== "inline") {
-    document.getElementById(id).style.display = "inline";
-  } else {
-    document.getElementById(id).style.display = "none";
-  }
-}
-
-export default Profile;
- */

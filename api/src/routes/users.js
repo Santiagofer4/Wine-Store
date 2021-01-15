@@ -1,24 +1,24 @@
-const server = require('express').Router();
-const { User, Order, Product, OrderLine, Review } = require('../db.js');
-const { checkAdmin } = require('../utils/authTools.js');
-const passport = require('passport');
+const server = require("express").Router();
+const { User, Order, Product, OrderLine, Review } = require("../db.js");
+const { checkAdmin } = require("../utils/authTools.js");
+const passport = require("passport");
 
 //Borrar un USER by ID
 
 server.delete(
-  '/:id',
+  "/:id",
   // passport.authenticate('jwt', { session: false }),
   // checkAdmin,
   async (req, res) => {
     let { id } = req.params;
-    if (!id) return res.status(400).send('No se recibio ID');
+    if (!id) return res.status(400).send("No se recibio ID");
     const userToDestroy = await User.findByPk(id);
     if (!userToDestroy)
-      return res.status(400).send('No existe el usuario a eliminar');
+      return res.status(400).send("No existe el usuario a eliminar");
     const user = { ...userToDestroy.dataValues };
     const payload = {
       id: user.id,
-      name: user.firstName + ' ' + user.lastName,
+      name: user.firstName + " " + user.lastName,
     };
     await userToDestroy.destroy();
     return res.status(200).send(payload);
@@ -27,13 +27,13 @@ server.delete(
 
 //Vaciar carrito
 
-server.delete('/:userId/cart', async (req, res) => {
+server.delete("/:userId/cart", async (req, res) => {
   let { userId } = req.params;
-  if (!userId) return res.send(400, 'No hay carrito asociado al usuario');
+  if (!userId) return res.send(400, "No hay carrito asociado al usuario");
   try {
     let cartFromUser = await Order.findOne({
       where: {
-        status: 'cart',
+        status: "cart",
         userId: userId,
       },
     });
@@ -45,7 +45,7 @@ server.delete('/:userId/cart', async (req, res) => {
       });
       return res.status(200).send(String(deletedOrderLines));
     } else {
-      return res.status(400).send('el usuario no tiene carrito');
+      return res.status(400).send("el usuario no tiene carrito");
     }
   } catch (error) {
     return res.status(500).send(error);
@@ -54,31 +54,73 @@ server.delete('/:userId/cart', async (req, res) => {
 
 // Borrar producto del carrito
 
-server.delete('/:idUser/cart/:productId', (req, res) => {
-  let { idUser, productId } = req.params;
-  if (!idUser) return res.send(400, 'No hay carrito asociado al usuario');
-  Order.findOne({
-    where: {
-      status: 'cart',
-      userId: idUser,
-    },
-  }).then((orders) => {
-    let id = orders.id;
-    OrderLine.destroy({
-      where: {
-        orderId: id,
-        productId,
-      },
-    }).then(() => {
-      return res.status(200).send('El producto ha sido eliminado del carrito');
-    });
-  });
-});
+server.delete(
+  "/:idUser/cart/:productId",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    let { idUser, productId } = req.params;
+    let user = req.user;
+    if (!idUser) return res.send(400, "No hay carrito asociado al usuario");
+
+    // Condición de entrada para admin
+    if (user.isAdmin) {
+      Order.findOne({
+        where: {
+          status: "pending",
+          userId: idUser,
+        },
+      })
+        .then((orders) => {
+          console.log('orders', orders)
+          let id = orders.id;
+          OrderLine.destroy({
+            where: {
+              orderId: id,
+              productId,
+            },
+          }).then(() => {
+            return res
+              .status(200)
+              .send("El producto ha sido eliminado del carrito");
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(500);
+        });
+    } else {
+      // Condición de entrada para cualquier user
+      Order.findOne({
+        where: {
+          status: "cart",
+          userId: idUser,
+        },
+      })
+        .then((orders) => {
+          let id = orders.id;
+          OrderLine.destroy({
+            where: {
+              orderId: id,
+              productId,
+            },
+          }).then(() => {
+            return res
+              .status(200)
+              .send("El producto ha sido eliminado del carrito");
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(500);
+        });
+    }
+  }
+);
 
 // Listar todos los USERS
 
 server.get(
-  '/',
+  "/",
   /*passport.authenticate('jwt', { session: false }),
   checkAdmin,*/
   (req, res, next) => {
@@ -92,10 +134,10 @@ server.get(
 
 // Ruta que retorna todos los items del carrito - GET a /users/:id/cart
 
-server.get('/:id/cart', (req, res) => {
+server.get("/:id/cart", (req, res) => {
   let { id } = req.params;
   Order.findAll({
-    where: { status: 'cart', userId: id },
+    where: { status: "cart", userId: id },
     include: { model: OrderLine, include: [{ model: Product }] },
   }).then((ord) => {
     return res.status(200).send(ord);
@@ -104,7 +146,7 @@ server.get('/:id/cart', (req, res) => {
 
 // Ruta que retorna todas las ordenes de un usuario
 
-server.get('/:id/orders', (req, res) => {
+server.get("/:id/orders", (req, res) => {
   let { id } = req.params;
   id = id * 1;
   Order.findAll({
@@ -124,17 +166,17 @@ server.get('/:id/orders', (req, res) => {
 
 // Agregar elemento al carrito
 
-server.post('/:userId/cart', async (req, res) => {
+server.post("/:userId/cart", async (req, res) => {
   let { userId } = req.params;
   let { id, price, quantity, increment, cartGuest } = req.body;
 
   if (!id || !userId)
-    return res.status(400).send('Id de usuario o producto faltante');
+    return res.status(400).send("Id de usuario o producto faltante");
   try {
     const [newOrder, newOrderCreated] = await Order.findOrCreate({
       where: {
         userId,
-        status: 'cart',
+        status: "cart",
       },
       defaults: {
         total: 0,
@@ -176,7 +218,7 @@ server.post('/:userId/cart', async (req, res) => {
 
 //Editar un USER by ID
 
-server.put('/:id', (req, res) => {
+server.put("/:id", async (req, res) => {
   let { id } = req.params;
   let {
     firstName,
@@ -188,32 +230,30 @@ server.put('/:id', (req, res) => {
     password,
   } = req.body;
 
-  if (!id) return res.status(400).send('El usuario no existe');
+  if (!id) return res.status(400).send("El usuario no existe");
 
-  User.findByPk(id)
-    .then(
-      User.update(
-        { firstName, lastName, email, birthdate, cellphone, isAdmin, password },
-        { where: { id } }
-      )
-    )
-    .then(() => {
-      return res.status(200).send('Se ha modificado el usuario');
-    });
+  const userToEdit = await User.findByPk(id);
+
+  const userEdited = await userToEdit.update(
+    { firstName, lastName, email, birthdate, cellphone, isAdmin, password },
+    { where: { id } }
+  );
+
+  return res.status(200).json(userEdited);
 });
 
 //Editar cantidades de producto
 
-server.put('/:idUser/cart', (req, res) => {
+server.put("/:idUser/cart", (req, res) => {
   let { idUser } = req.params;
   idUser = idUser * 1;
   let { productId, quantity } = req.body;
 
-  if (!idUser) return res.status(400).send('El usuario no existe');
+  if (!idUser) return res.status(400).send("El usuario no existe");
 
   Order.findOne({
     where: {
-      status: 'cart',
+      status: "cart",
       userId: idUser,
     },
   })
@@ -225,7 +265,7 @@ server.put('/:idUser/cart', (req, res) => {
       );
     })
     .then(() => {
-      return res.send(200, 'El carrito del usuario se ha actualizado');
+      return res.send(200, "El carrito del usuario se ha actualizado");
     });
 });
 
