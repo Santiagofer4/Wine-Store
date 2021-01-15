@@ -19,7 +19,7 @@ function Catalogue() {
   const allProdStatus = useSelector(allProductsStatusSelector);
   const allProdError = useSelector(allProductsErrorSelector);
   const [page, setPage] = useState(1);
-  const cantidadAMostrar = 6;
+  const cantidadAMostrar = 4;
   function handleClick(e, num) {
     setPage(num);
   }
@@ -53,7 +53,7 @@ function Catalogue() {
       content = allProducts.slice((page-1)*cantidadAMostrar, page*cantidadAMostrar).map((product, idx) => (
         <ProductCard data={product} key={idx} />
       ));
-      content.push(<Pagination onChange={handleClick} count={allProducts.length/cantidadAMostrar} variant="outlined" shape="rounded" />);
+      content.push(<div className="Catalogue__Pagination"><Pagination onChange={handleClick} count={Math.ceil(allProducts.length/cantidadAMostrar)} variant="outlined" shape="rounded" /></div>);
     }
   } else if (allProdStatus === 'failed') {
     return (

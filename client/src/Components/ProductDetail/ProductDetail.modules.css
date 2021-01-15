@@ -37,12 +37,12 @@
 }
 
 #detailsContainer{
-  height: 60rem !important;
-  width: 50rem !important;
+  min-height: 24rem !important;
 }
 #paper {
   width: 90%;
   height: 90%;
+  background-color: white !important;
 }
 
 #pageContainer {

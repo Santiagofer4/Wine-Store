@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, CircularProgress } from '@material-ui/core';
 import './CatalogueByTaste.modules.css';
+
+import Pagination from '@material-ui/lab/Pagination';
 
 import ProductCard from '../ProductCard/ProductCard.jsx';
 import Sidebar from '../Sidebar/Sidebar.jsx';
@@ -19,6 +21,13 @@ function CatalogueByTaste() {
   const allProdsByCat = useSelector(allProdsByCategorySelector);
   const allProdsByCatError = useSelector(allProdsByCategoryErrorSelector);
   const filteredTaste = useSelector(filteredTasteSelector);
+  const [page, setPage] = useState(1);
+  const cantidadAMostrar = 6;
+
+  function handleClick(e, num) {
+    setPage(num);
+  }
+
 
   useEffect(()=>{
     dispatch(getAllProducts())
@@ -42,9 +51,10 @@ function CatalogueByTaste() {
     if (allProdsByCat.length < 1) {
       content = <h3>No hay productos</h3>;
     } else {
-      content = allProdsByCat.map((product, idx) => (
+      content = allProdsByCat.slice((page-1)*cantidadAMostrar, page*cantidadAMostrar).map((product, idx) => (
         <ProductCard data={product} key={idx} />
       ));
+      content.push(<div className="CatalogueByTaste__Pagination"><Pagination onChange={handleClick} count={allProdsByCat.length/cantidadAMostrar} variant="outlined" shape="rounded" /></div>);
     }
   } else if (allProdsByCatStatus === 'failed') {
     return (

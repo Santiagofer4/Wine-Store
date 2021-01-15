@@ -144,9 +144,9 @@ function ProductDetail() {
   return (
     <Container id="pageContainer" className="ProductDetail__Container">
       <Paper id="paper" className="ProductDetail__Paper">
-        <Container id="imgContainer">
+        <div id="imgContainer">
           <img id="prodImg" src={image} alt={`imagen del vino ${name}`} />
-        </Container>
+        </div>
         <Card id="detailsContainer" className={classes.root} variant="outlined">
           <CardContent className="ProdDetail__CardText">
             <Typography
