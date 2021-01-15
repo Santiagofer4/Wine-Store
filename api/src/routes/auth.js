@@ -131,7 +131,7 @@ server.get(
 );
 
 server.get('/github/callback', passport.authenticate('github'), (req, res) => {
-  res.redirect('/login');
+  res.redirect('http://localhost:3001/');
 });
 
 module.exports = server;

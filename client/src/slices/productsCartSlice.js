@@ -36,15 +36,15 @@ export const getAllProductsCart = createAsyncThunk(
 
 export const postProductToCart = createAsyncThunk(
   'cart/postProductToCart',
-  async (payload, thunkApi) => {
+  async (payload, { dispatch }) => {
     const { userId, detail, increment } = payload;
     const cart_item = await axios.post(
       usersEndpoint + userId + '/cart',
       payload
     );
     increment
-      ? thunkApi.dispatch(AddProductToCart({ name: detail.name }))
-      : thunkApi.dispatch(RemoveProductFromCart({ name: detail.name }));
+      ? dispatch(AddProductToCart({ name: detail.name }))
+      : dispatch(RemoveProductFromCart({ name: detail.name }));
 
     const resPayload = {
       increment,
@@ -83,14 +83,14 @@ export const deleteSingleProdFromCart = createAsyncThunk(
 );
 
 export const modificateOrder = createAsyncThunk(
-  'cart/modifyStatusCart',
+  'cart/modificateOrder',
   async (payload) => {
     const { myCart, total, status } = payload;
     const modificatedOrder = await axios.put(
       getOrderTableEndpoint + myCart,
       payload
     );
-    return modificatedOrder;
+    return { modificatedOrder, myCart, status };
   }
 );
 

@@ -49,8 +49,8 @@ function Products() {
       </>
     );
   } else if (status === 'succeded') {
-    content = products.map((product) => {
-      let even = product.id % 2 === 0 ? 'white' : 'beige';
+    content = products.map((product, idx) => {
+      let even = idx % 2 === 0 ? 'white' : 'beige';
       return (
         <>
           <div className="grid-item" style={{ backgroundColor: even }}>

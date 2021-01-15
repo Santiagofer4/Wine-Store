@@ -7,6 +7,7 @@ import {
   userPromote,
   sendEmail,
   resetUsers,
+  deleteUser,
 } from '../../../slices/userSlice';
 import { usersListSelector, userStatusSelector } from '../../../selectors';
 import EditIcon from '@material-ui/icons/Edit';
@@ -21,7 +22,6 @@ function Usuarios() {
   const history = useHistory();
   const users = useSelector(usersListSelector);
   const status = useSelector(userStatusSelector);
-  console.log('USUARIOS');
   let content;
 
   const handleRetry = () => {
@@ -33,7 +33,6 @@ function Usuarios() {
   const promoteUser = (id) => {
     let user = users.filter((u) => u.id === id);
     dispatch(userPromote(id));
-    console.log('USER', user[0].firstName);
     dispatch(
       sendEmail({
         name: user[0].firstName,
@@ -41,8 +40,13 @@ function Usuarios() {
         type: 'Promote',
       })
     );
-    // dispatch(resetUsers());
-    //falta que vuelva a renderizar
+  };
+
+  const deleteUserHandler = (id) => {
+    dispatch(deleteUser(id));
+  };
+  const editUserHandler = (id) => {
+    history.push(`admin/edituser/${id}`);
   };
 
   useEffect(() => {
@@ -57,8 +61,8 @@ function Usuarios() {
       </>
     );
   } else if (status === 'succeded') {
-    content = users.map((user) => {
-      let even = user.id % 2 === 0 ? 'white' : 'beige';
+    content = users.map((user, idx) => {
+      let even = idx % 2 === 0 ? 'white' : 'beige';
       return (
         <>
           <div className="grid-item" style={{ backgroundColor: even }}>
@@ -84,6 +88,23 @@ function Usuarios() {
               <ArrowUpwardIcon className="grid-item"></ArrowUpwardIcon>
             </Button>
           )}
+          <div className="grid-item" style={{ backgroundColor: even }}>
+            <a href="#" className="Cart__DeleteProduct">
+              <i
+                class="fas fa-trash-alt"
+                onClick={() => deleteUserHandler(user.id)}
+              ></i>
+            </a>
+          </div>
+          <div className="grid-item" style={{ backgroundColor: even }}>
+            <Button
+              className="editButton"
+              style={{ backgroundColor: even }}
+              onClick={() => editUserHandler(user.id)}
+            >
+              <EditIcon className="grid-item"></EditIcon>
+            </Button>
+          </div>
         </>
       );
     });
@@ -96,7 +117,7 @@ function Usuarios() {
     );
   }
   return (
-    <div class="grid-container">
+    <div class="grid-container-usuarios">
       <p className="grid-item" style={{ fontWeight: 'bold' }}>
         Id
       </p>
@@ -105,6 +126,12 @@ function Usuarios() {
       </p>
       <p className="grid-item" style={{ fontWeight: 'bold' }}>
         Promover
+      </p>
+      <p className="grid-item" style={{ fontWeight: 'bold' }}>
+        Borrar
+      </p>
+      <p className="grid-item" style={{ fontWeight: 'bold' }}>
+        Editar
       </p>
       {content}
     </div>

@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { postProductToCart, sync } from '../../slices/productsCartSlice';
 import {
+  allProductsCartStatusSelector,
   productDetailSelector,
   productDetailStatusSelector,
   reviewsListSelector,
@@ -49,6 +50,7 @@ function ProductDetail() {
 
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
+  const cartStatus = useSelector(allProductsCartStatusSelector);
   const productDetail = useSelector(productDetailSelector);
   const statusProductDetail = useSelector(productDetailStatusSelector);
   const reviews = useSelector(reviewsListSelector);
@@ -213,6 +215,7 @@ function ProductDetail() {
                     ? handlerProductToCart(user.id)
                     : handlerProductToCartGuest(id);
                 }}
+                disabled={cartStatus === 'loading' ? true : false}
               >
                 Comprar
               </Button>

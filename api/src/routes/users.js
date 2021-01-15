@@ -7,19 +7,21 @@ const passport = require('passport');
 
 server.delete(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
-  checkAdmin,
-  (req, res) => {
+  // passport.authenticate('jwt', { session: false }),
+  // checkAdmin,
+  async (req, res) => {
     let { id } = req.params;
-    if (!id)
-      return res.status(400).send('No se encontró el usuario a eliminar');
-    User.destroy({
-      where: {
-        id,
-      },
-    }).then(() => {
-      return res.status(200).send(`Usuario ${id} borrado`);
-    });
+    if (!id) return res.status(400).send('No se recibio ID');
+    const userToDestroy = await User.findByPk(id);
+    if (!userToDestroy)
+      return res.status(400).send('No existe el usuario a eliminar');
+    const user = { ...userToDestroy.dataValues };
+    const payload = {
+      id: user.id,
+      name: user.firstName + ' ' + user.lastName,
+    };
+    await userToDestroy.destroy();
+    return res.status(200).send(payload);
   }
 );
 

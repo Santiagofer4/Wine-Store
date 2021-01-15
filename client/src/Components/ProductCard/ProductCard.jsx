@@ -11,13 +11,18 @@ import { postProductToCart, sync } from '../../slices/productsCartSlice';
 import { productReviews } from '../../slices/reviewSlice';
 import { useHistory } from 'react-router-dom';
 import { functionCartGuest } from '../../Components/utils/index.js';
-import { userSelector } from '../../selectors/index';
+import {
+  allProductsCartStatusSelector,
+  userSelector,
+  usersListSelector,
+} from '../../selectors/index';
 import { useAuthContext } from '../ProtectRoute/authContext';
 
 function ProductCard(props) {
   const authStatus = useAuthContext();
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
+  const cartStatus = useSelector(allProductsCartStatusSelector);
   const { image, name, price, id, stock } = props.data;
   const history = useHistory();
 
@@ -92,6 +97,7 @@ function ProductCard(props) {
                     ? handlerProductToCart(user.id, id)
                     : handlerProductToCartGuest(id);
                 }}
+                disabled={cartStatus === 'loading' ? true : false}
               >
                 Comprar
               </Button>

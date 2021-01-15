@@ -92,6 +92,21 @@ export const allUsers = createAsyncThunk(
   }
 );
 
+export const deleteUser = createAsyncThunk(
+  'users/deleteUsers',
+  async (id, { getState, dispatch }) => {
+    const state = getState();
+    const token = state.token.inMemoryToken;
+    const resp = await axios.delete(usersEndpoint + id, {
+      headers: { Authorization: token },
+    });
+    if (resp.status === 200) {
+      dispatch(allUsers());
+    }
+    return resp;
+  }
+);
+
 export const sendEmail = createAsyncThunk('user/sendMail', async (payload) => {
   const resp = await axios.post(mailsEndpoint, payload);
   return resp;
@@ -205,6 +220,16 @@ const userSlice = createSlice({
       state.user.usersList = payload.data;
     },
     [allUsers.rejected]: (state, action) => {
+      state.user.status = status.failed;
+      state.user.error = action.error;
+    },
+    [deleteUser.pending]: (state, action) => {
+      state.user.status = status.loading;
+    },
+    [deleteUser.fulfilled]: (state, { payload }) => {
+      state.user.status = status.succeded;
+    },
+    [deleteUser.rejected]: (state, action) => {
       state.user.status = status.failed;
       state.user.error = action.error;
     },

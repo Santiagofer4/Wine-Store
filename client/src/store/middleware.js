@@ -8,8 +8,9 @@ import {
   postProductToCart,
   deleteSingleProdFromCart,
   deleteAllProductsFromCart,
+  modificateOrder,
 } from '../slices/productsCartSlice';
-import { persistUserLogin, userPromote } from '../slices/userSlice';
+import { persistUserLogin, userPromote, deleteUser } from '../slices/userSlice';
 import {
   setRefreshTokenTimeout,
   setToken,
@@ -28,9 +29,8 @@ export const notificationMiddleware = (store) => (next) => (action) => {
     RemoveProductFromCart.type,
     DeleteProductFromCart.type,
     userPromote.fulfilled.type,
-    // postProductToCart.fulfilled.type,
-    // deleteSingleProdFromCart.fulfilled.type,
-    // deleteAllProductsFromCart.fulfilled.type,
+    modificateOrder.fulfilled.type,
+    deleteUser.fulfilled.type,
   ];
   const snackbarContent = {
     message: '',
@@ -49,22 +49,30 @@ export const notificationMiddleware = (store) => (next) => (action) => {
   };
   if (listenArray.includes(action.type)) {
     //cuando agrego producto al carrito
-    if (action.type.includes('Add')) {
+    if (action.type.includes('cart/Add')) {
       snackbarContent.message = `Se agrego ${action.payload.name} al carrito`;
       snackbarContent.options.variant = 'success';
     }
     //cuando ELIMINO un producto con todas las unidades del carrito
-    else if (action.type.includes('Delete')) {
+    else if (action.type.includes('cart/Delete')) {
       snackbarContent.message = `Se elimino ${action.payload.name} del carrito`;
       snackbarContent.options.variant = 'error';
     }
     //cuando saco UNA UNIDAD de un producto del carrito
-    else if (action.type.includes('Remove')) {
+    else if (action.type.includes('cart/Remove')) {
       snackbarContent.message = `Se quito (un) ${action.payload.name} del carrito`;
       snackbarContent.options.variant = 'warning';
-    } else if (action.type.includes('user')) {
+    } else if (action.type.includes('user/promote')) {
       snackbarContent.message = `Se promovio el usuario a ADMIN`;
       snackbarContent.options.variant = 'success';
+    } else if (action.type.includes('modificateOrder')) {
+      const { myCart, status } = action.payload;
+      snackbarContent.message = `La orden N°${myCart} ha sido cambiada al estado ${status.toUpperCase()}`;
+      snackbarContent.options.variant = 'success';
+    } else if (action.type.includes('users/delete')) {
+      const { id, name } = action.payload.data;
+      snackbarContent.message = `El usuario ${name} [ID:${id}] ha sido ELIMINADO`;
+      snackbarContent.options.variant = 'error';
     }
     store.dispatch(enqueueSnackbar(snackbarContent));
   }

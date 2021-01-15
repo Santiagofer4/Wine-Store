@@ -61,7 +61,11 @@ function UserLogin() {
   };
 
   const githubLoginHandler = () => {
-    axios.get('localhost:3000/github');
+    axios.get('http://localhost:3000/auth/github').then((response) => {
+      let redirectURL = response.request.responseURL;
+      if (redirectURL) return window.location.replace(redirectURL);
+      else console.log('xxxxxxx', response.request);
+    });
   };
 
   return (
@@ -118,7 +122,9 @@ function UserLogin() {
                 <hr></hr>
                 <br></br>
                 <Button onClick={githubLoginHandler}>
+                  {/* <a href="http://localhost:3000/auth/github"> */}
                   <GitHubIcon />
+                  {/* </a> */}
                 </Button>
                 <br></br>
               </Container>
