@@ -6,14 +6,17 @@ import { useHistory} from 'react-router-dom';
 import { useDispatch} from 'react-redux';
 import { getProductSearch } from '../../slices/productSlice';
  
-function SearchBar(props) {
+function SearchBar() {
   const [inputSearch, setInputSearch] = useState('');
 
   const history = useHistory();
   const dispatch = useDispatch();
-
+  
   const onSubmit = (e) => {
     e.preventDefault();
+    if(inputSearch.length === 0 || inputSearch === ' ') {
+      return;
+    }
     dispatch(getProductSearch(inputSearch));
     history.push(`/catalogue`);
     };

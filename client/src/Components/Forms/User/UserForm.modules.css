@@ -1,4 +1,4 @@
-.formUser {
+.formUserLogin {
   margin-bottom: 2rem;
   padding-top: 10rem !important;
   padding-left: 5rem !important;
@@ -6,48 +6,46 @@
   background-color: white;
 }
 
-.text__field{
-width: 100% !important;
-height: 80px;
+.text__field {
+  width: 100% !important;
+  height: 80px;
 }
 
-#form{
+#form {
   display: flex;
   flex-direction: column;
 }
 
 #btnUser {
-    background-color: #be9063;
-    color: black !important;
-    margin: 5px;
-    width: 140px;
-    height: 60px;
-    border-radius: 25px;
-  }
+  background-color: #be9063;
+  color: black !important;
+  margin: 5px;
+  width: 140px;
+  height: 60px;
+  border-radius: 25px;
+}
 
-  .center{
+.center {
   display: flex;
   justify-content: center;
   align-items: center;
-  
-  
-  }
+}
 
-  #fechaNac{
-    display: flex;
-    flex-direction: row;
-  }
+#fechaNac {
+  display: flex;
+  flex-direction: row;
+}
 
- .UserForm__lb label {
-    transform: none !important;
- }
- .iconos{
-   font-size: x-large;
- }
+.UserForm__lb label {
+  transform: none !important;
+}
+.iconos {
+  font-size: x-large;
+}
 
- .Login__Externos{
-   width: 40%;
-   margin: auto;
-   display: flex;
-   justify-content: space-around;
- }
+.Login__Externos {
+  width: 40%;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+}

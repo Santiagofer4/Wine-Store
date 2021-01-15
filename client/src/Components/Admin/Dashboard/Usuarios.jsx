@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 import './Dashboard.modules.css';
 import {
   allUsers,
@@ -10,7 +10,7 @@ import {
   deleteUser,
 } from '../../../slices/userSlice';
 import { usersListSelector, userStatusSelector } from '../../../selectors';
-import EditIcon from '@material-ui/icons/Edit';
+// import EditIcon from '@material-ui/icons/Edit';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import { CircularProgress, Button } from '@material-ui/core';
 
@@ -19,7 +19,7 @@ import { CircularProgress, Button } from '@material-ui/core';
 
 function Usuarios() {
   const dispatch = useDispatch();
-  const history = useHistory();
+  //const history = useHistory();
   const users = useSelector(usersListSelector);
   const status = useSelector(userStatusSelector);
   let content;
@@ -45,9 +45,11 @@ function Usuarios() {
   const deleteUserHandler = (id) => {
     dispatch(deleteUser(id));
   };
-  const editUserHandler = (id) => {
+
+// Deshabilité el edit de usuarios por parte del admin (si se deja así además de borrar lo comentado habría que eliminar el archivo "EditUser.jsx")
+/*   const editUserHandler = (id) => {
     history.push(`admin/edituser/${id}`);
-  };
+  }; */
 
   useEffect(() => {
     if (status === 'idle') dispatch(allUsers());
@@ -96,7 +98,7 @@ function Usuarios() {
               ></i>
             </a>
           </div>
-          <div className="grid-item" style={{ backgroundColor: even }}>
+{/*           <div className="grid-item" style={{ backgroundColor: even }}>
             <Button
               className="editButton"
               style={{ backgroundColor: even }}
@@ -104,7 +106,7 @@ function Usuarios() {
             >
               <EditIcon className="grid-item"></EditIcon>
             </Button>
-          </div>
+          </div> */}
         </>
       );
     });
@@ -117,7 +119,7 @@ function Usuarios() {
     );
   }
   return (
-    <div class="grid-container-usuarios">
+    <div className="grid-container-usuarios">
       <p className="grid-item" style={{ fontWeight: 'bold' }}>
         Id
       </p>
@@ -130,16 +132,14 @@ function Usuarios() {
       <p className="grid-item" style={{ fontWeight: 'bold' }}>
         Borrar
       </p>
-      <p className="grid-item" style={{ fontWeight: 'bold' }}>
+{/*       <p className="grid-item" style={{ fontWeight: 'bold' }}>
         Editar
-      </p>
+      </p> */}
       {content}
     </div>
   );
 }
-
 export default Usuarios;
-
 // import React, { useEffect, useState } from "react";
 // import { useDispatch, useSelector } from "react-redux";
 // import { CircularProgress, Container, Button } from "@material-ui/core";

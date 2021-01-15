@@ -72,7 +72,7 @@ server.get(
   '/refresh',
   passport.authenticate('jwt-refresh', { session: false }),
   async (req, res) => {
-    const newToken = makeJWT(req.user, refreshTime);
+    const newToken = makeJWT(req.user, refreshTime, 'Bearer');
     const refresh_token = makeJWT(req.user);
     cookieMaker('refreshToken', refresh_token, res);
     return res.send({
@@ -131,7 +131,10 @@ server.get(
 );
 
 server.get('/github/callback', passport.authenticate('github'), (req, res) => {
+  console.log('REQUEST CALLBACK GITHUB', req);
   res.redirect('http://localhost:3001/');
 });
 
 module.exports = server;
+
+//  query: { code: '17d493ba666ed14a5af8' },

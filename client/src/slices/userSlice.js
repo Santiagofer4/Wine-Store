@@ -107,6 +107,12 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
+export const editUsers = createAsyncThunk('users/editUsers', async ({ id, values }) => {
+  const resp = await axios.put(usersEndpoint + id, values);
+  console.log('RESP', resp)
+  return resp;
+});
+
 export const sendEmail = createAsyncThunk('user/sendMail', async (payload) => {
   const resp = await axios.post(mailsEndpoint, payload);
   return resp;
@@ -232,6 +238,17 @@ const userSlice = createSlice({
       state.user.status = status.succeded;
     },
     [deleteUser.rejected]: (state, action) => {
+      state.user.status = status.failed;
+      state.user.error = action.error;
+    },
+    [editUsers.pending]: (state, action) => {
+      state.user.status = status.loading;
+    },
+    [editUsers.fulfilled]: (state, { payload }) => {
+      state.user.status = status.succeded;
+      state.user.info = payload.data;
+    },
+    [editUsers.rejected]: (state, action) => {
       state.user.status = status.failed;
       state.user.error = action.error;
     },

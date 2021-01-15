@@ -14,7 +14,7 @@ import {
 } from '../../selectors';
 import { CircularProgress, Button } from '@material-ui/core';
 
-function Sidebar() {
+function Sidebar(props) {
   const dispatch = useDispatch();
   const history = useHistory();
   const allProducts = useSelector(allProductsSelector);
@@ -32,16 +32,19 @@ function Sidebar() {
   };
 
   const priceLessHandler = (e,f,g) => {
+    props.pagina(1)
     dispatch(getAllProducts()).then(() => {
       dispatch(productPriceLess(e));
     })
   };
   const priceBetweenHandler = (e,f,g) => {
+    props.pagina(1)
     dispatch(getAllProducts()).then(() => {
       dispatch(productPriceBetween({e , f}));
     })
   };
   const priceMoreHandler = (e) => {
+    props.pagina(1)
     dispatch(getAllProducts()).then(() => {
       dispatch(productPriceMore(e));
     })

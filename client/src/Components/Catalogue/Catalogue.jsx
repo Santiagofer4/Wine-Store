@@ -20,7 +20,6 @@ function Catalogue() {
   const allProdError = useSelector(allProductsErrorSelector);
   const [page, setPage] = useState(1);
   const cantidadAMostrar = 6;
-
   function handleClick(e, num) {
     setPage(num);
   }
@@ -69,7 +68,7 @@ function Catalogue() {
   }
   return (
     <div className="Catalogue__container">
-      <Sidebar></Sidebar>
+      <Sidebar pagina={setPage}></Sidebar>
       <h3>Viendo todos los vinos</h3>
       <div className="Catalogue__Div">{content}</div>
     </div>

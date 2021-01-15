@@ -90,7 +90,7 @@ function OrderTable() {
               </button>
             </div>
           </li>
-          <OrderDetail id={order.id} data={order.orderLines}></OrderDetail>
+          <OrderDetail id={order.id} userId={order.userId} data={order.orderLines}></OrderDetail>
         </>
       );
     });

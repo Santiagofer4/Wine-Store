@@ -1,13 +1,22 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./OrderDetail.modules.css";
 import UserReview from "../Review/UserReview";
-import { reviewsListSelector } from "../../selectors/index.js";
+import { reviewsListSelector, userSelector } from "../../selectors/index.js";
+import { deleteSingleProdFromCart } from "../../slices/productsCartSlice";
 import { search } from "../utils/index";
+import { Button } from '@material-ui/core';
 
 function OrderDetail(props) {
+  console.log('PROPS', props)
   // props va a ser un arreglo con todas las orderLines
+  const dispatch = useDispatch();
   const reviews = useSelector(reviewsListSelector);
+  const user = useSelector(userSelector);
+
+  const handlerClick = (productId, userId) => {
+    dispatch(deleteSingleProdFromCart({ productId, userId }));
+  };
 
   return (
     <div className="OrderDetail__Container" id={props.id}>
@@ -27,6 +36,7 @@ function OrderDetail(props) {
               {element.product.price * element.quantity}
             </div>
             <>{props.review && search(element.product.id, reviews) ? <UserReview data={element} /> : null}</>
+            <>{user && user.isAdmin ? <Button onClick={() => handlerClick(element.product.id, props.userId)}>Boton</Button> : null}</>
           </li>
         );
       })}

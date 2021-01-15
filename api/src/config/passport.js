@@ -204,14 +204,14 @@ module.exports = function (passport) {
           // si encontramos un user, entonces solamente devolvemos ese user
           if (!user) {
             const { _json: extra, displayName } = profile;
-            const [firstName, lastName] = displayName.split(/(?<=^\S+)\s/);
+            const [firstName, lastName ] = displayName.split(/(?<=^\S+)\s/);
             const birthdate = new Date('01-01-1000');
             const password = String(Date.now() + Math.random()).substring(0, 7);
             const cellphone = 123456789;
             console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', password);
             const user_data = {
               firstName,
-              lastName,
+              lastName: lastName||firstName,
               email,
               birthdate,
               password,
