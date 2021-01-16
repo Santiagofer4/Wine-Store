@@ -68,7 +68,7 @@ function Catalogue() {
   }
   return (
     <div className="Catalogue__container">
-      <Sidebar pagina={setPage}></Sidebar>
+      <Sidebar pagina={setPage} taste={false}></Sidebar>
       <h3>Viendo todos los vinos</h3>
       <div className="Catalogue__Div">{content}</div>
     </div>

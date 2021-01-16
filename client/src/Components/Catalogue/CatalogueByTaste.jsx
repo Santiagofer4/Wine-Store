@@ -69,8 +69,8 @@ function CatalogueByTaste() {
   }
   return (
     <div className="CatalogueByTaste__container">
-      <Sidebar></Sidebar>
-      <h2>Viendo vinos de sabor: {filteredTaste}</h2>
+    <Sidebar pagina={setPage} taste={true}></Sidebar>
+    <h2>Viendo vinos de sabor: {filteredTaste}</h2>
       <div className="CatalogueByTaste__Div">{content}</div>
     </div>
   );
