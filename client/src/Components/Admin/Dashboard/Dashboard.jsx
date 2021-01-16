@@ -191,42 +191,36 @@ export default function Dashboard() {
             <DashboardIcon />
           </ListItemIcon>
           Panel Admin
-          {/* <ListItemText primary="Panel Admin"/> */}
         </Button>
         <Button value="1" className="list" button onClick={handleOnClick}>
           <ListItemIcon>
             <ShoppingCartIcon />
           </ListItemIcon>
           Ordenes
-          {/* <ListItemText id="1" primary="Ordenes" /> */}
         </Button>
         <Button value="2" className="list" button onClick={handleOnClick}>
           <ListItemIcon>
             <PeopleIcon />
           </ListItemIcon>
           Usuarios
-          {/* <ListItemText primary="Usuarios" /> */}
         </Button>
         <Button value="3" className="list" button onClick={handleOnClick}>
           <ListItemIcon>
             <BarChartIcon />
           </ListItemIcon>
           Productos
-          {/* <ListItemText primary="Productos" /> */}
         </Button>
         <Button value="4" className="list" button onClick={handleOnClick}>
           <ListItemIcon>
             <LayersIcon />
           </ListItemIcon>
           Categorías
-          {/* <ListItemText primary="Categorías" /> */}
         </Button>
         <Button value="5" className="list" button onClick={handleOnClick}>
           <ListItemIcon>
             <BarChartIcon />
           </ListItemIcon>
           Cepas
-          {/*  <ListItemText primary="Cepas" /> */}
         </Button>
       </Paper>
 
