@@ -40,6 +40,11 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         default: false,
       },
+      guest: {
+        type: DataTypes.BOOLEAN,
+        default: null,
+        allowNull: true,
+      },
       password: {
         type: DataTypes.STRING,
         allowNull: false,

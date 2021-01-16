@@ -34,7 +34,7 @@ export default function Review() {
     firstName: addressInfoStorage.firstName,
     lastName: addressInfoStorage.lastName,
     address1: addressInfoStorage.address1,
-    address2: addressInfoStorage.address2,
+    email: addressInfoStorage.email,
     city: addressInfoStorage.city,
     stateAddress: addressInfoStorage.stateAddress,
     zip: addressInfoStorage.zip,
@@ -64,6 +64,7 @@ export default function Review() {
   useEffect(() => {
     dispatch(getAllProductsCart(user.id));
   }, []);
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -103,10 +104,10 @@ export default function Review() {
           <Typography gutterBottom>
             {addressInfo.firstName + ' ' + addressInfo.lastName}
           </Typography>
+          <Typography gutterBottom>{addressInfo.email}</Typography>
           <Typography gutterBottom>
             {addressInfo.address1 +
               ' ' +
-              addressInfo.address2 +
               ', ' +
               addressInfo.city +
               ', ' +

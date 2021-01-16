@@ -53,7 +53,6 @@ export default function Dashboard() {
 
   const handleOnClick = (e) => {
     setMenu(parseInt(e.target.value));
-    console.log('NRO', e.target.value);
     return;
   };
 

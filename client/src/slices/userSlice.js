@@ -36,6 +36,18 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
   return resPayload;
 });
 
+export const guestRegister = createAsyncThunk(
+  'user/guestRegister',
+  async (payload) => {
+    const { user } = payload;
+    const guestRegister_response = await axios.post(
+      addUserEndpoint + 'guest/',
+      user
+    );
+    return guestRegister_response.data;
+  }
+);
+
 export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   const { user, formik } = payload;
   const userLogin_response = await axios.post(authLoginEndpoint, user);
@@ -170,6 +182,16 @@ const userSlice = createSlice({
     },
   },
   extraReducers: {
+    [guestRegister.pending]: (state, action) => {
+      state.user.status = status.loading;
+    },
+    [guestRegister.fulfilled]: (state, { payload }) => {
+      state.user.status = status.succeded;
+    },
+    [guestRegister.rejected]: (state, action) => {
+      state.user.status = status.failed;
+      state.user.error = action.error;
+    },
     [createUser.pending]: (state, action) => {
       state.user.loginStatus = status.loading;
     },

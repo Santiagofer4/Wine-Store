@@ -25,6 +25,43 @@ server.get('/logout', (req, res) => {
   res.status(200).send('Cerrar sesión');
 });
 
+server.post('/register/guest', async (req, res) => {
+  try {
+    const { user } = req.body;
+    const email = user.email;
+    if (!user || email)
+      return res.status(400).send({ message: 'No se recibio usuario o email' });
+
+    const userDB = await User.findOne({ where: { email }, paranoid: false });
+
+    const birthdate = userDB.dataValues.birthdate || new Date('01-01-1250');
+    const password = String(Date.now() + Math.random()).substring(0, 7);
+    const cellphone = user.cellphone || 123456789;
+
+    const user_data = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email,
+      birthdate,
+      password,
+      cellphone,
+      isAdmin: false,
+      guest: true,
+    };
+    if (userDB) {
+      //fabricamos datos faltos
+      const updated_user = await userDB.update(user_data);
+      return res.status(200).send(updated_user);
+    } else {
+      const new_user = await User.create(user_data);
+      return res.status(200).send(new_user);
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('ERRRORRRRRR');
+  }
+});
+
 //Ruta para Registrarse
 server.post(
   '/register',
