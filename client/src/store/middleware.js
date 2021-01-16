@@ -18,6 +18,7 @@ import {
   deleteUser,
   postUserLogin,
   createUser,
+  userLogout
 } from '../slices/userSlice';
 import {
   setRefreshTokenTimeout,
@@ -43,6 +44,7 @@ export const notificationMiddleware = (store) => (next) => (action) => {
     createUser.fulfilled.type,
     postUserLogin.rejected.type,
     createUser.rejected.type,
+    userLogout.fulfilled.type,
   ];
   const snackbarContent = {
     message: '',
@@ -93,6 +95,10 @@ export const notificationMiddleware = (store) => (next) => (action) => {
       const { firstName, lastName } = action.payload.userRegister_response.user;
       snackbarContent.message = `Bienvenido/a ${firstName} ${lastName}, te has registrado`;
       snackbarContent.options.variant = 'success';
+    }else if (action.type.includes('user/logout/fulfilled')){
+      snackbarContent.message = `Deslogueado exitosamente`;
+      snackbarContent.options.variant = 'success';
+
     }
     store.dispatch(enqueueSnackbar(snackbarContent));
   }

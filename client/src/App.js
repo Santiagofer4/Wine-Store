@@ -11,15 +11,11 @@ import AdminPanel from './Components/Admin/AdminPanel';
 import ProductDetail from './Components/ProductDetail/ProductDetail';
 import Cart from './Components/Cart/Cart.jsx';
 import OrderTable from './Components/OrderTable/OrderTable.jsx';
-import Welcome from './Components/Contenido/Welcome';
-import Failure from './Components/Contenido/Failure';
 import notFound from './Components/notFound/notFound';
 import UserForm from './Components/Forms/User/UserForm';
 import UserLogin from './Components/Forms/User/UserLogin';
-// import Profile from './Components/Profile/Profile';
 import axios from 'axios';
 import ProtectRoute from './Components/ProtectRoute/ProtectRoute';
-import Logout from './Components/Contenido/Logout';
 import { isLogged, isAdmin } from './Components/utils/index';
 import tokenManager from './Components/utils/tokenManager';
 import Notifier from './Components/Notifier/Notifier';
@@ -60,9 +56,6 @@ function App() {
           <Route path="/order-table" component={OrderTable} />
           <GuestRoute path="/form/user/login" component={UserLogin} />
           <GuestRoute path="/form/user" component={UserForm} />
-          <ProtectRoute path="/welcome" component={Welcome} />
-          <Route path="/logout" component={Logout} />
-          <Route path="/failure" component={Failure} />
           <Route path="/dashboard" component={Dashboard} />
           <ProtectRoute path="/user/profile" component={Profile} />
           <Route path="/404" component={notFound} />
