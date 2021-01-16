@@ -75,7 +75,7 @@ export const LoadStrain = (props) => {
                 fieldType="textarea"
                 label="Descripcion de la cepa"
                 name="description"
-                rows={8}
+                rows={6}
                 required
               />
               <FormField

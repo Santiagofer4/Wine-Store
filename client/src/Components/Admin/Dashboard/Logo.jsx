@@ -18,18 +18,12 @@ export default function Deposits() {
   const classes = useStyles();
   return (
     <React.Fragment>
-      <Title>Recent Deposits</Title>
-      <Typography component="p" variant="h4">
-        $3,024.00
-      </Typography>
-      <Typography color="textSecondary" className={classes.depositContext}>
-        on 15 March, 2019
-      </Typography>
-      <div>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          View balance
-        </Link>
-      </div>
+      <h1>PANEL DE ADMINISTRADOR</h1>
+      <img
+            className="imgAdmin"
+            src="https://i.ibb.co/JKQk16V/racimo-de-uvas.png"
+            alt="No se puede cargar la imagen"
+          />
     </React.Fragment>
   );
 }
