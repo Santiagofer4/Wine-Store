@@ -15,7 +15,7 @@ import DoneIcon from '@material-ui/icons/Done';
 // Esta tabla es para el admin.
 // Tiene que mostrar todas las ordenes de todos los usuarios.
 
-function OrderTable() {
+function OrderTable(props) {
   const dispatch = useDispatch();
   const orderTable = useSelector(allOrderSelector);
   const status = useSelector(allOrderStatusSelector);
@@ -28,7 +28,14 @@ function OrderTable() {
     setPage(num);
   }
 
-
+  let states = [];
+   for (const prop in props.states) {
+    if (props.states[prop] === true) {
+      states.push(prop);
+    }
+  }
+  console.log('STATES', states)
+ 
   let content;
 
   useEffect(() => {
@@ -58,7 +65,7 @@ function OrderTable() {
   } else if (status === 'succeded') {
     content = orderTable.slice((page-1)*cantidadAMostrar, page*cantidadAMostrar).map((order, idx) => {
       let rowColor = idx % 2 === 0 ? 'white' : 'beige';
-      return (
+      return states.includes(order.status) ? (
         <>
           <li
             key={order.id}
@@ -69,7 +76,7 @@ function OrderTable() {
             <div className="OrderTable__Text">
               {Math.ceil((total(order.orderLines) * 121) / 100)}
             </div>
-            <select id={'option' + order.id}>
+             <select id={'option' + order.id}>
               {orderStatus.map((status) => {
                 return (
                   <option
@@ -102,7 +109,7 @@ function OrderTable() {
           </li>
           <OrderDetail id={order.id} userId={order.userId} data={order.orderLines} edit={order.status === 'pending'}></OrderDetail>
         </>
-      );
+      ) : null;
     });
     content.push(<div className="Catalogue__Pagination"><Pagination onChange={handleClickPagination} count={Math.ceil(orderTable.length/cantidadAMostrar)} variant="outlined" shape="rounded" /></div>);
 

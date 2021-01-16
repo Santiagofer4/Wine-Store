@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useEffect } from "react";
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
   Container,
@@ -9,31 +9,37 @@ import {
   Link,
   Box,
   ListItemIcon,
-} from '@material-ui/core';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
-import { userSelector, allProductsSelector } from '../../../selectors/index';
-import { useDispatch, useSelector } from 'react-redux';
-import Usuarios from './Usuarios';
-import Logo from './Logo';
-import OrderTable from '../../OrderTable/OrderTable';
-import AdminStrain from '../LoadCategory/AdminStrain';
-import AdminCategory from '../LoadCategory/AdminCategory';
-import AdminProduct from './Products';
-import './Dashboard.modules.css';
+} from "@material-ui/core";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import PeopleIcon from "@material-ui/icons/People";
+import BarChartIcon from "@material-ui/icons/BarChart";
+import LayersIcon from "@material-ui/icons/Layers";
+import { userSelector, allProductsSelector } from "../../../selectors/index";
+import { useDispatch, useSelector } from "react-redux";
+import Usuarios from "./Usuarios";
+import Logo from "./Logo";
+import OrderTable from "../../OrderTable/OrderTable";
+import AdminStrain from "../LoadCategory/AdminStrain";
+import AdminCategory from "../LoadCategory/AdminCategory";
+import AdminProduct from "./Products";
+import "./Dashboard.modules.css";
+
+import FormLabel from "@material-ui/core/FormLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
+      {"Copyright © "}
       <Link color="inherit" href="https://material-ui.com/">
         Wine Store
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
@@ -41,7 +47,7 @@ function Copyright() {
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-  display: 'flex',
+  display: "flex",
 }));
 
 export default function Dashboard() {
@@ -51,6 +57,15 @@ export default function Dashboard() {
   const user = useSelector(userSelector);
   const products = useSelector(allProductsSelector);
 
+  const [state, setState] = useState({
+    created: true,
+    canceled: true,
+    pending: true,
+    completed: true,
+    cart: true,
+  });
+  const { cart, canceled, completed, created, pending } = state;
+
   const handleOnClick = (e) => {
     setMenu(parseInt(e.target.value));
     return;
@@ -59,12 +74,12 @@ export default function Dashboard() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   function getMenu(menu) {
-    console.log('MENU', menu);
+    console.log("MENU", menu);
     switch (menu) {
       case 0:
         return <Logo />;
       case 1:
-        return <OrderTable />;
+        return <OrderTable states={state} />;
       case 2:
         return <Usuarios />;
       case 3:
@@ -84,6 +99,10 @@ export default function Dashboard() {
     }
   }, [menu]);
 
+  const handleChange = (event) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
+
   return (
     <div id="dashboard">
       <Paper id="lateral">
@@ -92,48 +111,107 @@ export default function Dashboard() {
             <DashboardIcon />
           </ListItemIcon>
           Panel Admin
-          {/* <ListItemText primary="Panel Admin"/> */}
         </Button>
-        <Button value="1" className="list" button onClick={handleOnClick}>
-          <ListItemIcon>
-            <ShoppingCartIcon />
-          </ListItemIcon>
-          Ordenes
-          {/* <ListItemText id="1" primary="Ordenes" /> */}
-        </Button>
+        <div id="ordersFilter">
+          <Button value="1" className="list" button onClick={handleOnClick}>
+            <ListItemIcon>
+              <ShoppingCartIcon />
+            </ListItemIcon>
+            Ordenes
+          </Button>
+          <div id="checkbox">
+            {menu === 1 ? (
+              <FormControl>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        className="checkbox"
+                        checked={created}
+                        onChange={handleChange}
+                        name="created"
+                      />
+                    }
+                    label="Created"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        className="checkbox"
+                        checked={canceled}
+                        onChange={handleChange}
+                        name="canceled"
+                      />
+                    }
+                    label="Canceled"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        className="checkbox"
+                        checked={cart}
+                        onChange={handleChange}
+                        name="cart"
+                      />
+                    }
+                    label="Cart"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        className="checkbox"
+                        checked={pending}
+                        onChange={handleChange}
+                        name="pending"
+                      />
+                    }
+                    label="Pending"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        className="checkbox"
+                        checked={completed}
+                        onChange={handleChange}
+                        name="completed"
+                      />
+                    }
+                    label="Completed"
+                  />
+                </FormGroup>
+              </FormControl>
+            ) : null}
+          </div>
+        </div>
         <Button value="2" className="list" button onClick={handleOnClick}>
           <ListItemIcon>
             <PeopleIcon />
           </ListItemIcon>
           Usuarios
-          {/* <ListItemText primary="Usuarios" /> */}
         </Button>
         <Button value="3" className="list" button onClick={handleOnClick}>
           <ListItemIcon>
             <BarChartIcon />
           </ListItemIcon>
           Productos
-          {/* <ListItemText primary="Productos" /> */}
         </Button>
         <Button value="4" className="list" button onClick={handleOnClick}>
           <ListItemIcon>
             <LayersIcon />
           </ListItemIcon>
           Categorías
-          {/* <ListItemText primary="Categorías" /> */}
         </Button>
         <Button value="5" className="list" button onClick={handleOnClick}>
           <ListItemIcon>
             <BarChartIcon />
           </ListItemIcon>
           Cepas
-          {/*  <ListItemText primary="Cepas" /> */}
         </Button>
       </Paper>
 
       <div id="menu">
-        <main>
-          <div />
+        {/* <main> */}
+          {/* <div /> */}
           <Container>
             <Paper>{getMenu(menu)}</Paper>
 
@@ -141,7 +219,7 @@ export default function Dashboard() {
               <Copyright />
             </Box>
           </Container>
-        </main>
+       {/*  </main> */}
       </div>
     </div>
   );
