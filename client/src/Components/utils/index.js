@@ -105,7 +105,11 @@ export const formatArrayToOption = (array, property) => {
 
 export function sliceTime(str) {
   return str.slice(8, 10) + '/' + str.slice(5, 7) + '/' + str.slice(0, 4);
-}
+};
+
+export function sliceHour(str) {
+  return str.slice(11, 19)
+};
 
 export const total = (arr) => {
   let x = 0;

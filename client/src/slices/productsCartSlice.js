@@ -86,7 +86,7 @@ export const deleteSingleProdFromCart = createAsyncThunk(
   }
 );
 
-export const modificateOrder = createAsyncThunk(
+/* export const modificateOrder = createAsyncThunk(
   'cart/modificateOrder',
   async (payload) => {
     const { myCart, total, status } = payload;
@@ -96,7 +96,7 @@ export const modificateOrder = createAsyncThunk(
     );
     return { modificatedOrder, myCart, status };
   }
-);
+); */
 
 const productsCartSlice = createSlice({
   name: 'cart',
@@ -244,7 +244,7 @@ const productsCartSlice = createSlice({
       state.allProductsCart.status = status.failed;
       state.allProductsCart.error = action.error;
     },
-    [modificateOrder.pending]: (state, action) => {
+/*     [modificateOrder.pending]: (state, action) => {
       state.allProductsCart.status = status.loading;
     },
     [modificateOrder.fulfilled]: (state, action) => {
@@ -253,7 +253,7 @@ const productsCartSlice = createSlice({
     [modificateOrder.rejected]: (state, action) => {
       state.allProductsCart.status = status.failed;
       state.allProductsCart.error = action.error;
-    },
+    }, */
   },
 });
 

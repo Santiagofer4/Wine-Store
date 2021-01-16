@@ -18,10 +18,13 @@ import {
   myCartSelector,
 } from '../../selectors/index';
 import {
-  modificateOrder,
+  //modificateOrder,
   resetCart,
   postProductToCart,
 } from '../../slices/productsCartSlice';
+import {
+  modificateOrder,
+} from '../../slices/orderTableSlice';
 import {
   deleteAddressInfo,
   deletePaymentInfo,

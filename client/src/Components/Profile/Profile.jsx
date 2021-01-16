@@ -15,7 +15,6 @@ import {
 } from "../../selectors/index.js";
 import { getUserOrders, editUsers } from "../../slices/userSlice";
 import { getUserReviews } from "../../slices/reviewSlice";
-import OrderDetail from "../OrderTable/OrderDetail";
 import Row from "../Profile/ProfileTable";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -24,7 +23,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableContainer from "@material-ui/core/TableContainer";
 import EditIcon from "@material-ui/icons/Edit";
-
 import { Formik, Form } from "formik";
 import FormField from "../FormComponents/FormField";
 
@@ -234,6 +232,7 @@ export default function Profile() {
                   <TableHead>
                     <TableRow>
                       <TableCell />
+                      <TableCell>Fecha de compra</TableCell>
                       <TableCell>Codigo Compra</TableCell>
                       <TableCell align="right">Total</TableCell>
                       <TableCell align="right">Status</TableCell>

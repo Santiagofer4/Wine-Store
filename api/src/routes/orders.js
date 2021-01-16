@@ -1,12 +1,12 @@
-const server = require('express').Router();
-const { Order, OrderLine, Product } = require('../db.js');
-const { checkAdmin } = require('../utils/authTools.js');
-const passport = require('passport');
+const server = require("express").Router();
+const { Order, OrderLine, Product } = require("../db.js");
+const { checkAdmin } = require("../utils/authTools.js");
+const passport = require("passport");
 
 // Devuelve todas las ordenes
 
 server.get(
-  '/',
+  "/",
   /*passport.authenticate('jwt', { session: false }),
   checkAdmin,*/
   (req, res, next) => {
@@ -38,12 +38,12 @@ server.get(
 //Ruta que retorna una orden en particular
 
 server.get(
-  '/:id',
-  passport.authenticate('jwt', { session: false }),
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
   checkAdmin,
   (req, res) => {
     const { id } = req.params;
-    if (!id) return res.status(400).send('No existe la orden seleccionada');
+    if (!id) return res.status(400).send("No existe la orden seleccionada");
     Order.findAll({
       where: {
         id,
@@ -56,9 +56,9 @@ server.get(
 
 //Ruta que retorna el total de una orden en particular
 
-server.get('/total/:id', (req, res) => {
+server.get("/total/:id", (req, res) => {
   const { id } = req.params;
-  if (!id) return res.status(400).send('No existe la orden seleccionada');
+  if (!id) return res.status(400).send("No existe la orden seleccionada");
 
   OrderLine.findAll({
     where: {
@@ -74,23 +74,22 @@ server.get('/total/:id', (req, res) => {
   });
 });
 
-
 //Ruta para crear una orden
 
-server.post('/', (req, res) => {
+server.post("/", (req, res) => {
   const { status, total, userId } = req.body;
 
   Order.findOrCreate({
-    where: { status: 'cart', userId: userId },
+    where: { status: "cart", userId: userId },
     defaults: { status, total },
   })
     .then((order) => {
       const [instance, wasCreated] = order;
       if (!wasCreated) {
-        return res.status(200).send('el usuario ya tiene un carrito');
+        return res.status(200).send("el usuario ya tiene un carrito");
       }
       instance.setUser(userId);
-      return res.status(201).send('se agrego una nueva orden');
+      return res.status(201).send("se agrego una nueva orden");
     })
     .catch((err) => {
       console.log(err);
@@ -99,7 +98,7 @@ server.post('/', (req, res) => {
 
 //Ver una Órden
 
-server.get('/:id', (req, res) => {
+server.get("/:id", (req, res) => {
   Order.findAll({
     where: {
       id: req.params.id,
@@ -111,18 +110,38 @@ server.get('/:id', (req, res) => {
 
 //Editar una orden
 
-server.put('/:id', (req, res) => {
+server.put("/:id", (req, res) => {
   const { id } = req.params;
   const { total, status } = req.body;
 
   Order.update({ status, total }, { where: { id } })
     .then(() => {
-      res.status(201).send('orden actualizada');
+      res.status(201).send("orden actualizada");
     })
     .catch((err) => {
       console.log(err);
       res.status(400);
     });
 });
+
+/* server.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const { total, status } = req.body;
+
+  Order.update(
+    {
+      status,
+      total,
+    },
+    { where: { id }, returning: true, plain: true }
+  )
+    .then((order) => {
+      res.status(201).send(order[1].dataValues.updatedAt);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400);
+    });
+}); */
 
 module.exports = server;

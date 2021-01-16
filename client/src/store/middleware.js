@@ -8,8 +8,10 @@ import {
   postProductToCart,
   deleteSingleProdFromCart,
   deleteAllProductsFromCart,
-  modificateOrder,
 } from '../slices/productsCartSlice';
+import {
+  modificateOrder,
+} from '../slices/orderTableSlice';
 import {
   persistUserLogin,
   userPromote,
@@ -75,7 +77,7 @@ export const notificationMiddleware = (store) => (next) => (action) => {
     } else if (action.type.includes('user/promote')) {
       snackbarContent.message = `Se promovio el usuario a ADMIN`;
       snackbarContent.options.variant = 'success';
-    } else if (action.type.includes('modificateOrder')) {
+    } else if (action.type.includes('cart/modificateOrder/fulfilled')) {
       const { myCart, status } = action.payload;
       snackbarContent.message = `La orden N°${myCart} ha sido cambiada al estado ${status.toUpperCase()}`;
       snackbarContent.options.variant = 'success';

@@ -5,8 +5,8 @@ import OrderDetail from './OrderDetail';
 import Pagination from '@material-ui/lab/Pagination';
 import './OrderTable.modules.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getOrderTable } from '../../slices/orderTableSlice';
-import { modificateOrder } from '../../slices/productsCartSlice';
+import { getOrderTable, modificateOrder } from '../../slices/orderTableSlice';
+//import { modificateOrder } from '../../slices/productsCartSlice';
 import { allOrderSelector, allOrderStatusSelector, allProductsCartStatusSelector } from '../../selectors';
 import { CircularProgress, Button } from '@material-ui/core';
 
@@ -131,7 +131,6 @@ function OrderTable(props) {
         <div className="OrderTable__index">Fecha</div>
         <div className="OrderTable__index">Detalle</div>
       </li>
-
       {content}
     </div>
   );

@@ -26,6 +26,18 @@ export const getOrderTable = createAsyncThunk(
   }
 );
 
+export const modificateOrder = createAsyncThunk(
+  'cart/modificateOrder',
+  async (payload) => {
+    const { myCart, total, status } = payload;
+    const modificatedOrder = await axios.put(
+      getOrderTableEndpoint + myCart,
+      payload
+    );
+    return { myCart, status };
+  }
+);
+
 const orderTableSlice = createSlice({
   name: 'orderTable',
   initialState: initialState_orders,
@@ -39,6 +51,16 @@ const orderTableSlice = createSlice({
       state.orderTable.orders = payload.data;
     },
     [getOrderTable.rejected]: (state, action) => {
+      state.orderTable.status = status.failed;
+      state.orderTable.error = action.error;
+    },
+    [modificateOrder.pending]: (state, action) => {
+      state.orderTable.status = status.loading;
+    },
+    [modificateOrder.fulfilled]: (state, { payload }) => {
+      state.orderTable.status = status.succeded;
+    },
+    [modificateOrder.rejected]: (state, action) => {
       state.orderTable.status = status.failed;
       state.orderTable.error = action.error;
     },
