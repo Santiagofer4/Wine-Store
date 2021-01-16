@@ -8,7 +8,6 @@ import { search } from "../utils/index";
 import { Button } from '@material-ui/core';
 
 function OrderDetail(props) {
-  console.log('PROPS', props)
   // props va a ser un arreglo con todas las orderLines
   const dispatch = useDispatch();
   const reviews = useSelector(reviewsListSelector);
