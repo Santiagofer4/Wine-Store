@@ -29,7 +29,6 @@ export default function PaymentForm() {
      
        });
       localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo))
-     
     });
 
     const handleInputChange = function(e) {
@@ -38,7 +37,6 @@ export default function PaymentForm() {
          [e.target.name]: e.target.value 
        });
      }
-
   
   return (
     <React.Fragment>
@@ -109,7 +107,6 @@ export default function PaymentForm() {
           name={paymentInfo.cardName}
           number={paymentInfo.cardNumber}
         />
-       
       </div>
     </React.Fragment>
   );

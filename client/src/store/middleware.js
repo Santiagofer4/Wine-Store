@@ -95,10 +95,12 @@ export const notificationMiddleware = (store) => (next) => (action) => {
       const { firstName, lastName } = action.payload.userRegister_response.user;
       snackbarContent.message = `Bienvenido/a ${firstName} ${lastName}, te has registrado`;
       snackbarContent.options.variant = 'success';
-    }else if (action.type.includes('user/logout/fulfilled')){
+    } else if (action.type.includes('user/logout/fulfilled')){
       snackbarContent.message = `Deslogueado exitosamente`;
       snackbarContent.options.variant = 'success';
-
+    } else if (action.type.includes('user/login/rejected')){
+      snackbarContent.message = `Error al iniciar sesión`;
+      snackbarContent.options.variant = 'error';
     }
     store.dispatch(enqueueSnackbar(snackbarContent));
   }

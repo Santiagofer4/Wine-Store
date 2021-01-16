@@ -34,7 +34,6 @@ function OrderTable(props) {
       states.push(prop);
     }
   }
-  console.log('STATES', states)
  
   let content;
 

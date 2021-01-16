@@ -49,7 +49,6 @@ function UserLogin() {
   }
 
   if (userStatus === 'failed') {
-    history.push('/failure');
     dispatch(resetStatus());
   }
 
