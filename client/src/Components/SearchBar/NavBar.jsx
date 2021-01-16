@@ -53,7 +53,7 @@ function NavBar() {
   }
   const handleLogout = () => {
     dispatch(userLogout());
-    history.push('/logout');
+    history.push('/catalogue');
   };
 
   const prevOpen = useRef(open);
