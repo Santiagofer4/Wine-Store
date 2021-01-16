@@ -16,17 +16,15 @@ function AuthProvider({ children }) {
   const userStatus = useSelector(userLoginStatusSelector);
   const tryToLoginStatus = useSelector(tryToLoginStatusSelector); //idle
 
-  const [render, setRender] = useState(false);
   const isLogged = () => {
     if (tryToLoginStatus === 'idle') {
       dispatch(tryToLogin());
-      setRender(true);
     }
   };
 
   useEffect(() => {
     isLogged();
-  }, [tryToLoginStatus, dispatch, render]);
+  }, [tryToLoginStatus, dispatch]);
 
   if (tryToLoginStatus === 'loading' || userStatus === 'loading') {
     return (

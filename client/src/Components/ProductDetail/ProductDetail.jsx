@@ -79,6 +79,13 @@ function ProductDetail() {
     }
   }, [reviewStatus]);
 
+  useEffect(() => {
+    if (typeof id === 'undefined') {
+      // window.location.replace('http://localhost:3001/catalogue');
+      history.push('/catalogue');
+    }
+  }, []);
+
   //* EDITHANDLER, redirect a form para editar producto
   const editHandler = () => {
     // dispatch(wineDetails(productDetail));

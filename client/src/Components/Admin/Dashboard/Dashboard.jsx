@@ -145,10 +145,6 @@ export default function Dashboard() {
   const user = useSelector(userSelector);
   const products = useSelector(allProductsSelector);
 
-  useEffect(() => {
-    // dispatch(allUsers());
-  }, []);
-
   const handleOnClick = (e) => {
     setMenu(parseInt(e.target.value));
     console.log('NRO', e.target.value);

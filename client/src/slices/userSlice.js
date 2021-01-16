@@ -112,6 +112,13 @@ export const allUsers = createAsyncThunk(
       headers: { Authorization: token },
     });
     return resp;
+  },
+  {
+    condition: (payload, { getState }) => {
+      const state = getState();
+      const userStatus = state.user.user.status;
+      if (userStatus === 'loading') return false;
+    },
   }
 );
 

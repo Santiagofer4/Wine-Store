@@ -46,14 +46,14 @@ function Usuarios() {
     dispatch(deleteUser(id));
   };
 
-// Deshabilité el edit de usuarios por parte del admin (si se deja así además de borrar lo comentado habría que eliminar el archivo "EditUser.jsx")
-/*   const editUserHandler = (id) => {
+  // Deshabilité el edit de usuarios por parte del admin (si se deja así además de borrar lo comentado habría que eliminar el archivo "EditUser.jsx")
+  /*   const editUserHandler = (id) => {
     history.push(`admin/edituser/${id}`);
   }; */
 
   useEffect(() => {
-    if (status === 'idle') dispatch(allUsers());
-  }, [dispatch, users]);
+    dispatch(allUsers());
+  }, [users, dispatch]);
 
   if (status === 'loading') {
     content = (
@@ -98,7 +98,7 @@ function Usuarios() {
               ></i>
             </a>
           </div>
-{/*           <div className="grid-item" style={{ backgroundColor: even }}>
+          {/*           <div className="grid-item" style={{ backgroundColor: even }}>
             <Button
               className="editButton"
               style={{ backgroundColor: even }}
@@ -132,7 +132,7 @@ function Usuarios() {
       <p className="grid-item" style={{ fontWeight: 'bold' }}>
         Borrar
       </p>
-{/*       <p className="grid-item" style={{ fontWeight: 'bold' }}>
+      {/*       <p className="grid-item" style={{ fontWeight: 'bold' }}>
         Editar
       </p> */}
       {content}

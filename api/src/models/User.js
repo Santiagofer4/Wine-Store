@@ -55,7 +55,6 @@ module.exports = (sequelize) => {
 
     {
       timestamps: true,
-
       paranoid: true,
       hooks: {
         beforeCreate(user) {
