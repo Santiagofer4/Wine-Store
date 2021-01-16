@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -7,54 +7,50 @@ import TextField from '@material-ui/core/TextField';
 // import FormField from '../FormComponents/FormField';
 
 export default function AddressForm() {
-  
   // Traemos la info de la dirección de facturación del local storage
 
   let addressInfoStorage = JSON.parse(localStorage.getItem('addressInfo'));
 
-  const [addressInfo, setAddressInfo] = React.useState({  
-              firstName: addressInfoStorage.firstName,
-              lastName: addressInfoStorage.lastName,
-              address1: addressInfoStorage.address1,
-              address2: addressInfoStorage.address2,
-              city: addressInfoStorage.city,
-              stateAddress: addressInfoStorage.stateAddress,
-              zip: addressInfoStorage.zip,
-              country: addressInfoStorage.country,
-    });
-    
- useEffect(() => {
-   //guardamos la info de la dirección de facturación en el local storage
-     localStorage.setItem('addressInfo', JSON.stringify(addressInfo))
- }, [addressInfo])
+  const [addressInfo, setAddressInfo] = useState({
+    firstName: addressInfoStorage.firstName,
+    lastName: addressInfoStorage.lastName,
+    address1: addressInfoStorage.address1,
+    email: addressInfoStorage.email,
+    city: addressInfoStorage.city,
+    stateAddress: addressInfoStorage.stateAddress,
+    zip: addressInfoStorage.zip,
+    country: addressInfoStorage.country,
+  });
 
- 
-// Antes de refrescar, guardamos la info en el localstorage, para evitar que tenga que volver a cargar los datos
+  useEffect(() => {
+    //guardamos la info de la dirección de facturación en el local storage
+    localStorage.setItem('addressInfo', JSON.stringify(addressInfo));
+  }, [addressInfo]);
+
+  // Antes de refrescar, guardamos la info en el localstorage, para evitar que tenga que volver a cargar los datos
 
   window.addEventListener('beforeunload', (event) => {
     setAddressInfo({
-    firstName: document.getElementById('firstName'),
-    lastName: document.getElementById('lastName'),
-    address1: document.getElementById('address1Name'),
-    address2: document.getElementById('address2Name'),
-    city: document.getElementById('firstName'),
-    stateAddress: document.getElementById('firstName'),
-    zip: document.getElementById('firstName'),
-    country: document.getElementById('firstName'),
-     });
-    localStorage.setItem('addressInfo', JSON.stringify(addressInfo))
-   
+      firstName: document.getElementById('firstName'),
+      lastName: document.getElementById('lastName'),
+      address1: document.getElementById('address1Name'),
+      email: document.getElementById('email'),
+      city: document.getElementById('firstName'),
+      stateAddress: document.getElementById('stateAddress'),
+      zip: document.getElementById('zip'),
+      country: document.getElementById('country'),
+    });
+    localStorage.setItem('addressInfo', JSON.stringify(addressInfo));
   });
 
-  const handleInputChange = function(e) {
+  const handleInputChange = function (e) {
     setAddressInfo({
-       ...addressInfo, 
-       [e.target.name]: e.target.value 
-     });
-   }
+      ...addressInfo,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-
-   return (
+  return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Direccion de envio
@@ -98,10 +94,12 @@ export default function AddressForm() {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="address2"
-            name="address2"
-            label="Dirección (línea 2)"
-            defaultValue={addressInfoStorage.address2}
+            required
+            id="email"
+            name="email"
+            label="email"
+            type="email"
+            defaultValue={addressInfoStorage.email}
             onChange={handleInputChange}
             fullWidth
             autoComplete="shipping address-line2"
@@ -162,6 +160,6 @@ export default function AddressForm() {
           />
         </Grid> */}
       </Grid>
-     </React.Fragment>
+    </React.Fragment>
   );
 }

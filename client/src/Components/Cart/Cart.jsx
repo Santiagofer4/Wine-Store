@@ -173,18 +173,13 @@ function Cart() {
   };
 
   const handleConfirm = () => {
-    if (authStatus) {
+    // if (authStatus) {
       let total = Math.ceil((subTotal * 121) / 100);
-      // axios.put(`http://localhost:3000/orders/${myCart.orderId}`, {
-      //   total,
-      //   status: 'cart',
-      // });
-      //dispatch(modificateOrder({ myCart: myCart.orderId, total, status: 'completed'}));
-      history.push('/checkout');
-    }
-    if (!authStatus) {
-      history.push('/form/user/login');
-    }
+        history.push('/checkout');
+    // }
+    // if (!authStatus) {
+    //   history.push('/form/user/login');
+    // }
     deleteAddressInfo();
     deletePaymentInfo();
     //agregar total para guardar

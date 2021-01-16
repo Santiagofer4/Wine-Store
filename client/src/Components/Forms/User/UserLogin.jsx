@@ -15,6 +15,7 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import {
   githubLogin,
+  googleLogin,
   postUserLogin,
   resetStatus,
 } from '../../../slices/userSlice.js';
@@ -66,6 +67,9 @@ function UserLogin() {
 
   const githubLoginHandler = () => {
     dispatch(githubLogin());
+  };
+  const googleLoginHandler = () => {
+    dispatch(googleLogin());
   };
 
   return (
@@ -123,14 +127,12 @@ function UserLogin() {
                 <br></br>
                 <div className="Login__Externos">
                   <Button onClick={githubLoginHandler} variant="outlined">
-                    {/* <a href="http://localhost:3000/auth/github"> */}
-                    {/* <GitHubIcon fontSize={'large'}/> */}
                     <i class="fab fa-github iconos" aria-hidden="true"></i>
                     GitHub {/* </a> */}
                   </Button>
-                  <Button variant="outlined">
+                  <Button variant="outlined" onClick={googleLoginHandler}>
                     <i class="fab fa-google iconos"></i>
-                    Google {/* <Icon className={clsx( 'fab fa-google')} /> */}
+                    Google
                   </Button>
                 </div>
                 <br></br>

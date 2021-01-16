@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { sliceTime, total } from '../utils';
 import OrderDetail from './OrderDetail';
+
+import Pagination from '@material-ui/lab/Pagination';
 import './OrderTable.modules.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrderTable } from '../../slices/orderTableSlice';
 import { modificateOrder } from '../../slices/productsCartSlice';
-import { allOrderSelector, allOrderStatusSelector } from '../../selectors';
+import { allOrderSelector, allOrderStatusSelector, allProductsCartStatusSelector } from '../../selectors';
 import { CircularProgress, Button } from '@material-ui/core';
 
 import DoneIcon from '@material-ui/icons/Done';
@@ -17,14 +19,22 @@ function OrderTable() {
   const dispatch = useDispatch();
   const orderTable = useSelector(allOrderSelector);
   const status = useSelector(allOrderStatusSelector);
-
+  const statusCart = useSelector(allProductsCartStatusSelector);
   const orderStatus = ['created', 'canceled', 'pending', 'completed', 'cart'];
+  const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
+  const [page, setPage] = useState(1);
+  const cantidadAMostrar = 4;
+  function handleClickPagination(e, num) {
+    setPage(num);
+  }
+
 
   let content;
 
   useEffect(() => {
+    console.log('GET ORDERS')
     dispatch(getOrderTable());
-  }, [dispatch]);
+  }, [dispatch, statusCart]);
 
   const handleRetry = () => {
     //func para reintentar y forzar refresh
@@ -46,7 +56,7 @@ function OrderTable() {
       </>
     );
   } else if (status === 'succeded') {
-    content = orderTable.map((order, idx) => {
+    content = orderTable.slice((page-1)*cantidadAMostrar, page*cantidadAMostrar).map((order, idx) => {
       let rowColor = idx % 2 === 0 ? 'white' : 'beige';
       return (
         <>
@@ -90,10 +100,12 @@ function OrderTable() {
               </button>
             </div>
           </li>
-          <OrderDetail id={order.id} userId={order.userId} data={order.orderLines}></OrderDetail>
+          <OrderDetail id={order.id} userId={order.userId} data={order.orderLines} edit={order.status === 'pending'}></OrderDetail>
         </>
       );
     });
+    content.push(<div className="Catalogue__Pagination"><Pagination onChange={handleClickPagination} count={Math.ceil(orderTable.length/cantidadAMostrar)} variant="outlined" shape="rounded" /></div>);
+
   } else if (status === 'failed') {
     content = (
       <>

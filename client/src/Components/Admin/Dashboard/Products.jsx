@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import Pagination from '@material-ui/lab/Pagination';
 import './Products.modules.css';
 import { getAllProducts } from '../../../slices/productSlice';
 import {
@@ -19,6 +20,13 @@ function Products() {
   const history = useHistory();
   const products = useSelector(allProductsSelector);
   const status = useSelector(allProductsStatusSelector);
+
+  const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
+  const [page, setPage] = useState(1);
+  const cantidadAMostrar = 5;
+  function handleClick(e, num) {
+    setPage(num);
+  }
 
   let content;
 
@@ -49,7 +57,7 @@ function Products() {
       </>
     );
   } else if (status === 'succeded') {
-    content = products.map((product, idx) => {
+    content = products.slice((page-1)*cantidadAMostrar, page*cantidadAMostrar).map((product, idx) => {
       let even = idx % 2 === 0 ? 'white' : 'beige';
       return (
         <>
@@ -69,6 +77,7 @@ function Products() {
         </>
       );
     });
+    content.push(<div className="Catalogue__Pagination"><Pagination onChange={handleClick} count={Math.ceil(products.length/cantidadAMostrar)} variant="outlined" shape="rounded" /></div>);
   } else if (status === 'failed') {
     content = (
       <>

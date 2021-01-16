@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import {
+  Paper,
+  Stepper,
+  Step,
+  makeStyles,
+  StepLabel,
+  Button,
+  Typography,
+} from '@material-ui/core';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
@@ -15,7 +17,11 @@ import {
   userSelector,
   myCartSelector,
 } from '../../selectors/index';
-import { modificateOrder, resetCart } from '../../slices/productsCartSlice';
+import {
+  modificateOrder,
+  resetCart,
+  postProductToCart,
+} from '../../slices/productsCartSlice';
 import {
   deleteAddressInfo,
   deletePaymentInfo,
@@ -86,6 +92,33 @@ export default function Checkout() {
     setActiveStep(activeStep + 1);
 
     if (activeStep === 2) {
+      if (myCart === null) {
+        //guestRegister
+        //->crear cart
+        //->cargar datos de memoria al cart (order y orderlines)
+        //*LA MISMA LOGICA QUE YA ESTA
+        //->modificar la orden a confirmada
+        //->actualziar la DB
+        //borra data local
+        //->manda email
+        //resetea el cart
+        // axios.post('http://localhost:3000/orders', {
+        //   status: 'cart',
+        //   total: 0,
+        //   userId: 1,
+        // });
+        // //Recibir el id de la orden
+        // AllProductsCart.map((p) => {
+        //   console.log(p);
+        //   const payload = {
+        //     id: parseInt(p.id),
+        //     price: parseInt(p.price),
+        //     quantity: parseInt(p.quantity),
+        //   };
+        //   dispatch(postProductToCart(payload));
+        //   //Revisar porqué no crea las orderlines
+        // });
+      }
       dispatch(
         modificateOrder({
           myCart: myCart,
@@ -93,21 +126,23 @@ export default function Checkout() {
           status: 'completed',
         })
       );
-      AllProductsCart.map(async p =>{
-
-        if (p.stock >= p.quantity) await axios.put(`http://localhost:3000/products/${p.id}`, { stock: p.stock - p.quantity });
-      
-      })
-        deleteAddressInfo();
-        deletePaymentInfo();
-        dispatch(
-          sendEmail({
-            name: user.firstName,
-            email: user.email,
-            type: 'Order',
-            orderCod: myCart,
-          })
-        );
+      AllProductsCart.map(async (p) => {
+        //Actualiza stock en DB
+        if (p.stock >= p.quantity)
+          await axios.put(`http://localhost:3000/products/${p.id}`, {
+            stock: p.stock - p.quantity,
+          });
+      });
+      deleteAddressInfo();
+      deletePaymentInfo();
+      dispatch(
+        sendEmail({
+          name: user.firstName,
+          email: user.email,
+          type: 'Order',
+          orderCod: myCart,
+        })
+      );
       dispatch(resetCart());
     }
   };

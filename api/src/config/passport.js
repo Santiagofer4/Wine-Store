@@ -3,6 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 const GitHubStrategy = require('passport-github2').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const { User } = require('../db.js');
 const { capitalize } = require('../utils');
 const makeJWT = require('../utils');
@@ -12,6 +13,26 @@ const SECRET_KEY = require('./jwt').SECRET_KEY;
 const BASE_URL = process.env.BASE_URL;
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+
+/**
+ * Funcion para determinar si user fue borrado, en caso true,
+ * lo restora, de otra manera devuelve el mismo usuario
+ * @param {user} user
+ */
+
+const checkAndRestoreUser = async (user) => {
+  if (!user) {
+    return null;
+  }
+  if (user.dataValues.deletedAt !== null) {
+    const restored_user = await user.restore();
+    return restored_user;
+  } else {
+    return await user;
+  }
+};
 
 module.exports = function (passport) {
   passport.serializeUser(function (user, done) {
@@ -39,7 +60,6 @@ module.exports = function (passport) {
             password,
             cellphone,
           } = req.body;
-
           const user_data = {
             firstName,
             lastName,
@@ -49,7 +69,18 @@ module.exports = function (passport) {
             cellphone,
             isAdmin: false,
           };
-          const user = await User.create(user_data);
+          let user = await User.findOne({ where: { email }, paranoid: false });
+
+          if (!user) {
+            user = await User.create(user_data);
+          } else if (user.dataValues.deletedAt !== null) {
+            user = await user.restore();
+            user = await user.update(user_data);
+            console.log('USER', user);
+          } else {
+            return done(null, false, { message: 'EL usuario ya existe' });
+          }
+
           //clonamos el objeto user, eliminamos el campo password y devolvemos el obj user
           let user_obj = { ...user.dataValues };
           delete user_obj.password;
@@ -196,15 +227,70 @@ module.exports = function (passport) {
       async (req, accessToken, refreshToken, profile, done) => {
         try {
           const email = profile.emails[0].value;
-          let user = await User.findOne({ where: { email } }); //buscamos el email que devuelve github
+          let user = await User.findOne({ where: { email }, paranoid: false }); //buscamos el email que devuelve github
           // si no hay user entonces creamos uno con datos `default`
           // si encontramos un user, entonces solamente devolvemos ese user
+
+          user = await checkAndRestoreUser(user);
           if (!user) {
             const { _json: extra, displayName } = profile;
             const [firstName, lastName] = displayName.split(/(?<=^\S+)\s/);
             const birthdate = new Date('01-01-1000');
             const password = String(Date.now() + Math.random()).substring(0, 7);
             const cellphone = 123456789;
+
+            const user_data = {
+              firstName,
+              lastName: lastName || firstName,
+              email,
+              birthdate,
+              password,
+              cellphone,
+              isAdmin: false,
+            };
+
+            const new_user = await User.create(user_data);
+            if (!new_user)
+              return done(null, false, {
+                message: 'no se pudo crear el usuario',
+              });
+            user = new_user;
+          }
+          let user_obj = { ...user.dataValues, accessToken };
+          delete user_obj.password;
+          return done(null, user_obj);
+        } catch (error) {
+          return done('CATCHING', error);
+        }
+      }
+    )
+  );
+
+  passport.use(
+    'google',
+    new GoogleStrategy(
+      {
+        clientID: GOOGLE_CLIENT_ID,
+        clientSecret: GOOGLE_CLIENT_SECRET,
+        callbackURL: BASE_URL + 'auth/google/callback',
+        passReqToCallback: true,
+        // scope: ['email'],
+      },
+      async (req, accessToken, refreshToken, profile, done) => {
+        try {
+          const email = profile.emails[0].value;
+          let user = await User.findOne({ where: { email }, paranoid: false }); //buscamos el email que devuelve github
+          // si no hay user entonces creamos uno con datos `default`
+          // si encontramos un user, entonces solamente devolvemos ese user
+
+          user = await checkAndRestoreUser(user);
+
+          if (!user) {
+            const { _json: extra, displayName } = profile;
+            const [firstName, lastName] = displayName.split(/(?<=^\S+)\s/);
+            const birthdate = new Date('01-01-1500');
+            const password = String(Date.now() + Math.random()).substring(0, 7);
+            const cellphone = 987654321;
             const user_data = {
               firstName,
               lastName: lastName || firstName,

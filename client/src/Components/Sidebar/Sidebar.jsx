@@ -2,7 +2,12 @@ import React, { useEffect } from 'react';
 import './Sidebar.modules.css';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllProducts, productPriceLess,productPriceMore, productPriceBetween } from '../../slices/productSlice';
+import {
+  getAllProducts,
+  productPriceLess,
+  productPriceMore,
+  productPriceBetween,
+} from '../../slices/productSlice';
 import {
   getAllCategories,
   getAllProdsByCategory,
@@ -31,27 +36,24 @@ function Sidebar(props) {
     dispatch(getAllProdsByCategory(taste));
   };
 
-  const priceLessHandler = (e,f,g) => {
-    props.pagina(1)
+  const priceLessHandler = (e, f, g) => {
+    props.pagina(1);
     dispatch(getAllProducts()).then(() => {
       dispatch(productPriceLess(e));
-    })
+    });
   };
-  const priceBetweenHandler = (e,f,g) => {
-    props.pagina(1)
+  const priceBetweenHandler = (e, f, g) => {
+    props.pagina(1);
     dispatch(getAllProducts()).then(() => {
-      dispatch(productPriceBetween({e , f}));
-    })
+      dispatch(productPriceBetween({ e, f }));
+    });
   };
   const priceMoreHandler = (e) => {
-    props.pagina(1)
+    props.pagina(1);
     dispatch(getAllProducts()).then(() => {
       dispatch(productPriceMore(e));
-    })
+    });
   };
-
-
-
 
   let content;
   if (allCatsStatus === 'loading') {
@@ -84,30 +86,42 @@ function Sidebar(props) {
   return (
     <div className="Sidebar__container">
       <div className="Sidebar__lista">
+        <Button
+          variant="text"
+          className=""
+          id="verTodos"
+          onClick={() => {
+            history.push(`/catalogue`);
+            dispatch(getAllProducts());
+          }}
+        >
+          {' '}
+          Ver Todos
+        </Button>
         {allProducts.length > 0 ? (
           <>
-          <Button
-            variant="text"
-            className=""
-            id="verTodos"
-
-            onClick={() => {
-              history.push(`/catalogue`);
-              dispatch(getAllProducts());
-            }}
-          >
-            {' '}
-            Ver Todos
-          </Button>
-          <p className="Sidebar__CategoryName">Precio</p>
-            <Button className="Sidebar__Text" onClick={() => priceLessHandler(350)}>Hasta $350</Button>
-            <Button className="Sidebar__Text" onClick={() => priceBetweenHandler(350,600)}>$350 a $600</Button>
-            <Button className="Sidebar__Text" onClick={() => priceMoreHandler(600)}>Más de $600</Button>
-          <p className="Sidebar__CategoryName">Sabores</p>
+            <p className="Sidebar__CategoryName">Precio</p>
+            <Button
+              className="Sidebar__Text"
+              onClick={() => priceLessHandler(350)}
+            >
+              Hasta $350
+            </Button>
+            <Button
+              className="Sidebar__Text"
+              onClick={() => priceBetweenHandler(350, 600)}
+            >
+              $350 a $600
+            </Button>
+            <Button
+              className="Sidebar__Text"
+              onClick={() => priceMoreHandler(600)}
+            >
+              Más de $600
+            </Button>
+            <p className="Sidebar__CategoryName">Sabores</p>
           </>
-        )  : (
-          <p>No hay productos</p>
-        )}{' '}
+        ) : null}{' '}
         {content}
       </div>
     </div>

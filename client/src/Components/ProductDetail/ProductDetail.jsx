@@ -9,6 +9,8 @@ import {
   Button,
   CircularProgress,
 } from '@material-ui/core';
+
+import Pagination from '@material-ui/lab/Pagination';
 import './ProductDetail.modules.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -60,6 +62,13 @@ function ProductDetail() {
   //let value;
 
   const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
+  const [page, setPage] = useState(1);
+  const cantidadAMostrar = 2;
+  function handleClick(e, num) {
+    setPage(num);
+  }
+
+
 
   const {
     id,
@@ -79,6 +88,13 @@ function ProductDetail() {
     }
   }, [reviewStatus]);
 
+  useEffect(() => {
+    if (typeof id === 'undefined') {
+      // window.location.replace('http://localhost:3001/catalogue');
+      history.push('/catalogue');
+    }
+  }, []);
+
   //* EDITHANDLER, redirect a form para editar producto
   const editHandler = () => {
     // dispatch(wineDetails(productDetail));
@@ -88,17 +104,17 @@ function ProductDetail() {
     history.push(
       id
         ? {
-            pathname: `/admin/edit/${id}`,
-            state: {
-              edit: true,
-            },
-          }
+          pathname: `/admin/edit/${id}`,
+          state: {
+            edit: true,
+          },
+        }
         : {
-            pathname: '/catalogue',
-            state: {
-              edit: false,
-            },
-          }
+          pathname: '/catalogue',
+          state: {
+            edit: false,
+          },
+        }
     );
   };
 
@@ -130,6 +146,15 @@ function ProductDetail() {
 
     functionCartGuest(payload, null, null);
     dispatch(sync(false));
+  }
+  let contentRev = []
+  if (reviews.length > 0) {
+    contentRev = reviews.slice((page-1)*cantidadAMostrar, page*cantidadAMostrar).map((review) => {
+      return <ReviewCard data={review} />;
+    })
+    contentRev.push(<div className="Catalogue__Pagination"><Pagination onChange={handleClick} count={Math.ceil(reviews.length/cantidadAMostrar)} variant="outlined" shape="rounded" /></div>);
+  } else {
+    contentRev = null
   }
 
   if (reviewStatus === 'loading') {
@@ -208,23 +233,20 @@ function ProductDetail() {
             {stock === 0 ? (
               <h3>No hay STOCK</h3>
             ) : (
-              <Button
-                id="Button__Buy"
-                onClick={() => {
-                  authStatus
-                    ? handlerProductToCart(user.id)
-                    : handlerProductToCartGuest(id);
-                }}
-                disabled={cartStatus === 'loading' ? true : false}
-              >
-                Comprar
-              </Button>
-            )}
+                <Button
+                  id="Button__Buy"
+                  onClick={() => {
+                    authStatus
+                      ? handlerProductToCart(user.id)
+                      : handlerProductToCartGuest(id);
+                  }}
+                  disabled={cartStatus === 'loading' ? true : false}
+                >
+                  Comprar
+                </Button>
+              )}
           </CardActions>
-          {reviews.length > 0 &&
-            reviews.map((review) => {
-              return <ReviewCard data={review} />;
-            })}
+          {contentRev}
         </Card>
       </Paper>
     </Container>

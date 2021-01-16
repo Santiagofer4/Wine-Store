@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./OrderDetail.modules.css";
 import UserReview from "../Review/UserReview";
-import { reviewsListSelector, userSelector } from "../../selectors/index.js";
+import { reviewsListSelector, userSelector, allProductsCartStatusSelector } from "../../selectors/index.js";
 import { deleteSingleProdFromCart } from "../../slices/productsCartSlice";
 import { search } from "../utils/index";
 import { Button } from '@material-ui/core';
@@ -13,10 +13,13 @@ function OrderDetail(props) {
   const dispatch = useDispatch();
   const reviews = useSelector(reviewsListSelector);
   const user = useSelector(userSelector);
+  // const statusCart = useSelector(allProductsCartStatusSelector);
 
   const handlerClick = (productId, userId) => {
-    dispatch(deleteSingleProdFromCart({ productId, userId }));
+      dispatch(deleteSingleProdFromCart({ productId, userId }));
   };
+
+ 
 
   return (
     <div className="OrderDetail__Container" id={props.id}>
@@ -36,7 +39,8 @@ function OrderDetail(props) {
               {element.product.price * element.quantity}
             </div>
             <>{props.review && search(element.product.id, reviews) ? <UserReview data={element} /> : null}</>
-            <>{user && user.isAdmin ? <Button onClick={() => handlerClick(element.product.id, props.userId)}>Boton</Button> : null}</>
+            <>{user && user.isAdmin && props.edit ?   <a href="#"> <i class="fas fa-trash-alt" onClick={() => handlerClick(element.product.id, props.userId)}></i></a> : null}</>
+           
           </li>
         );
       })}

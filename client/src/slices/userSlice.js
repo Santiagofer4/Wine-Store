@@ -36,6 +36,18 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
   return resPayload;
 });
 
+export const guestRegister = createAsyncThunk(
+  'user/guestRegister',
+  async (payload) => {
+    const { user } = payload;
+    const guestRegister_response = await axios.post(
+      addUserEndpoint + 'guest/',
+      user
+    );
+    return guestRegister_response.data;
+  }
+);
+
 export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
   const { user, formik } = payload;
   const userLogin_response = await axios.post(authLoginEndpoint, user);
@@ -53,6 +65,16 @@ export const githubLogin = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     const resp = await axios.get(authEnpoint + 'github/');
     console.log('resp', resp);
+    let redirectURL = resp.request.responseURL;
+    if (redirectURL) return window.location.replace(redirectURL);
+    else return rejectWithValue(resp);
+    return resp;
+  }
+);
+export const googleLogin = createAsyncThunk(
+  'user/googlelogin',
+  async (_, { rejectWithValue }) => {
+    const resp = await axios.get(authEnpoint + 'google/');
     let redirectURL = resp.request.responseURL;
     if (redirectURL) return window.location.replace(redirectURL);
     else return rejectWithValue(resp);
@@ -102,6 +124,13 @@ export const allUsers = createAsyncThunk(
       headers: { Authorization: token },
     });
     return resp;
+  },
+  {
+    condition: (payload, { getState }) => {
+      const state = getState();
+      const userStatus = state.user.user.status;
+      if (userStatus === 'loading') return false;
+    },
   }
 );
 
@@ -153,6 +182,16 @@ const userSlice = createSlice({
     },
   },
   extraReducers: {
+    [guestRegister.pending]: (state, action) => {
+      state.user.status = status.loading;
+    },
+    [guestRegister.fulfilled]: (state, { payload }) => {
+      state.user.status = status.succeded;
+    },
+    [guestRegister.rejected]: (state, action) => {
+      state.user.status = status.failed;
+      state.user.error = action.error;
+    },
     [createUser.pending]: (state, action) => {
       state.user.loginStatus = status.loading;
     },
@@ -275,6 +314,16 @@ const userSlice = createSlice({
       state.user.status = status.succeded;
     },
     [githubLogin.rejected]: (state, action) => {
+      state.user.status = status.failed;
+      state.user.error = action.error;
+    },
+    [googleLogin.pending]: (state, action) => {
+      state.user.status = status.loading;
+    },
+    [googleLogin.fulfilled]: (state, { payload }) => {
+      state.user.status = status.succeded;
+    },
+    [googleLogin.rejected]: (state, action) => {
       state.user.status = status.failed;
       state.user.error = action.error;
     },

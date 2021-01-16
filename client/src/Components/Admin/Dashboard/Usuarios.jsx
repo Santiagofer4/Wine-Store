@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import { useHistory } from 'react-router-dom';
 import './Dashboard.modules.css';
@@ -9,6 +9,7 @@ import {
   resetUsers,
   deleteUser,
 } from '../../../slices/userSlice';
+import Pagination from '@material-ui/lab/Pagination';
 import { usersListSelector, userStatusSelector } from '../../../selectors';
 // import EditIcon from '@material-ui/icons/Edit';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
@@ -22,7 +23,14 @@ function Usuarios() {
   //const history = useHistory();
   const users = useSelector(usersListSelector);
   const status = useSelector(userStatusSelector);
+  const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
+  const [page, setPage] = useState(1);
+  const cantidadAMostrar = 3;
   let content;
+
+  function handleClickPagination(e, num) {
+    setPage(num);
+  }
 
   const handleRetry = () => {
     //func para reintentar y forzar refresh
@@ -46,8 +54,8 @@ function Usuarios() {
     dispatch(deleteUser(id));
   };
 
-// Deshabilité el edit de usuarios por parte del admin (si se deja así además de borrar lo comentado habría que eliminar el archivo "EditUser.jsx")
-/*   const editUserHandler = (id) => {
+  // Deshabilité el edit de usuarios por parte del admin (si se deja así además de borrar lo comentado habría que eliminar el archivo "EditUser.jsx")
+  /*   const editUserHandler = (id) => {
     history.push(`admin/edituser/${id}`);
   }; */
 
@@ -63,7 +71,7 @@ function Usuarios() {
       </>
     );
   } else if (status === 'succeded') {
-    content = users.map((user, idx) => {
+    content = users.slice((page-1)*cantidadAMostrar, page*cantidadAMostrar).map((user, idx) => {
       let even = idx % 2 === 0 ? 'white' : 'beige';
       return (
         <>
@@ -98,7 +106,7 @@ function Usuarios() {
               ></i>
             </a>
           </div>
-{/*           <div className="grid-item" style={{ backgroundColor: even }}>
+          {/*           <div className="grid-item" style={{ backgroundColor: even }}>
             <Button
               className="editButton"
               style={{ backgroundColor: even }}
@@ -110,6 +118,7 @@ function Usuarios() {
         </>
       );
     });
+    content.push(<div className="Catalogue__Pagination"><Pagination onChange={handleClickPagination} count={Math.ceil(users.length/cantidadAMostrar)} variant="outlined" shape="rounded" /></div>);
   } else if (status === 'failed') {
     content = (
       <>
@@ -132,7 +141,7 @@ function Usuarios() {
       <p className="grid-item" style={{ fontWeight: 'bold' }}>
         Borrar
       </p>
-{/*       <p className="grid-item" style={{ fontWeight: 'bold' }}>
+      {/*       <p className="grid-item" style={{ fontWeight: 'bold' }}>
         Editar
       </p> */}
       {content}
@@ -140,79 +149,3 @@ function Usuarios() {
   );
 }
 export default Usuarios;
-// import React, { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { CircularProgress, Container, Button } from "@material-ui/core";
-// import { Formik, Form } from "formik";
-// import FormField from "../../FormComponents/FormField";
-// import { formatArrayToOption } from "../../utils/index";
-// import { userStatusSelector, usersListSelector } from "../../../selectors/index";
-// import { userPromote, sendEmail } from "../../../slices/userSlice";
-// import './Dashboard.modules.css';
-
-// export default function PromoteUser() {
-//   const dispatch = useDispatch();
-//   const userStatus = useSelector(userStatusSelector);
-//   const users = useSelector(usersListSelector);
-//   const [usersOption, setUsersOption] = useState([]);
-
-//   const handleSubmit = (values) => {
-//     let userId = values.usersToPromote;
-//     let userToPromote = users.filter(u => u.id === userId)
-//     dispatch(userPromote(userId));
-//     dispatch(sendEmail({ name: userToPromote[0].firstName, email: userToPromote[0].email, type: 'Promote' }));
-//   };
-
-//   const initialValues = {
-//     usersToPromote: "",
-//   };
-
-//   let content;
-
-//   useEffect(() => {
-//     if (userStatus === "succeded") {
-//       setUsersOption(formatArrayToOption(users, 'firstName'));
-//     }
-//   }, []);
-
-//   if (userStatus === "loading") {
-//     //* si loading renderizamos `Cargando...`
-//     content = (
-//       <>
-//         <h2>Cargando....</h2>
-//         <CircularProgress />
-//       </>
-//     );
-//   } else if (userStatus === "succeded") {
-//     content = (
-//       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-//         {(formik) => (
-//           <Container>
-//             <Form id="form" >
-//               <FormField
-//                 fieldType="select"
-//                 label="Listado de usuarios"
-//                 name="usersToPromote"
-//                 options={usersOption}
-//                 required
-//               />
-
-//               <br></br>
-//               <Container>
-//                 <Button
-//                   variant="contained"
-//                   color="primary"
-//                   disabled={!formik.isValid}
-//                   type="submit"
-//                 >
-//                   Promover
-//                   </Button>
-//                 </Container>
-//                 </Form>
-//               </Container>
-//           )
-//         }
-//       </Formik>
-//     )
-//   };
-// }
