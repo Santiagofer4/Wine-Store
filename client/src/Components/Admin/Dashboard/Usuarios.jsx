@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import { useHistory } from 'react-router-dom';
 import './Dashboard.modules.css';
@@ -9,6 +9,7 @@ import {
   resetUsers,
   deleteUser,
 } from '../../../slices/userSlice';
+import Pagination from '@material-ui/lab/Pagination';
 import { usersListSelector, userStatusSelector } from '../../../selectors';
 // import EditIcon from '@material-ui/icons/Edit';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
@@ -22,7 +23,14 @@ function Usuarios() {
   //const history = useHistory();
   const users = useSelector(usersListSelector);
   const status = useSelector(userStatusSelector);
+  const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
+  const [page, setPage] = useState(1);
+  const cantidadAMostrar = 3;
   let content;
+
+  function handleClickPagination(e, num) {
+    setPage(num);
+  }
 
   const handleRetry = () => {
     //func para reintentar y forzar refresh
@@ -52,8 +60,8 @@ function Usuarios() {
   }; */
 
   useEffect(() => {
-    dispatch(allUsers());
-  }, [users, dispatch]);
+    if (status === 'idle') dispatch(allUsers());
+  }, [dispatch, users]);
 
   if (status === 'loading') {
     content = (
@@ -63,7 +71,7 @@ function Usuarios() {
       </>
     );
   } else if (status === 'succeded') {
-    content = users.map((user, idx) => {
+    content = users.slice((page-1)*cantidadAMostrar, page*cantidadAMostrar).map((user, idx) => {
       let even = idx % 2 === 0 ? 'white' : 'beige';
       return (
         <>
@@ -110,6 +118,7 @@ function Usuarios() {
         </>
       );
     });
+    content.push(<div className="Catalogue__Pagination"><Pagination onChange={handleClickPagination} count={Math.ceil(users.length/cantidadAMostrar)} variant="outlined" shape="rounded" /></div>);
   } else if (status === 'failed') {
     content = (
       <>

@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { sliceTime, total } from '../utils';
 import OrderDetail from './OrderDetail';
+
+import Pagination from '@material-ui/lab/Pagination';
 import './OrderTable.modules.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrderTable } from '../../slices/orderTableSlice';
@@ -19,6 +21,13 @@ function OrderTable() {
   const status = useSelector(allOrderStatusSelector);
   const statusCart = useSelector(allProductsCartStatusSelector);
   const orderStatus = ['created', 'canceled', 'pending', 'completed', 'cart'];
+  const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
+  const [page, setPage] = useState(1);
+  const cantidadAMostrar = 4;
+  function handleClickPagination(e, num) {
+    setPage(num);
+  }
+
 
   let content;
 
@@ -47,7 +56,7 @@ function OrderTable() {
       </>
     );
   } else if (status === 'succeded') {
-    content = orderTable.map((order, idx) => {
+    content = orderTable.slice((page-1)*cantidadAMostrar, page*cantidadAMostrar).map((order, idx) => {
       let rowColor = idx % 2 === 0 ? 'white' : 'beige';
       return (
         <>
@@ -95,6 +104,8 @@ function OrderTable() {
         </>
       );
     });
+    content.push(<div className="Catalogue__Pagination"><Pagination onChange={handleClickPagination} count={Math.ceil(orderTable.length/cantidadAMostrar)} variant="outlined" shape="rounded" /></div>);
+
   } else if (status === 'failed') {
     content = (
       <>
