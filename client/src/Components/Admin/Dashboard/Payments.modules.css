@@ -1,0 +1,10 @@
+img {
+    width: 7rem;
+}
+
+.pagos {
+    display: inline-grid;
+    align-self: center;
+    margin-top: 10rem;
+    padding: 7rem !important;
+}

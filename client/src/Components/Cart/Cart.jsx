@@ -175,7 +175,8 @@ function Cart() {
   const handleConfirm = () => {
     // if (authStatus) {
       let total = Math.ceil((subTotal * 121) / 100);
-        history.push('/checkout');
+        //history.push('/checkout');
+        history.push('/payments');
     // }
     // if (!authStatus) {
     //   history.push('/form/user/login');

@@ -24,6 +24,7 @@ import Checkout from './Components/Checkout/Checkout';
 import Profile from './Components/Profile/Profile';
 import Dashboard from './Components/Admin/Dashboard/Dashboard';
 import GuestRoute from './Components/ProtectRoute/GuestRoute';
+import Payments from './Components/Admin/Dashboard/Payments';
 
 function App() {
   // //!SOLUCION CAVERNICOLA!
@@ -56,6 +57,7 @@ function App() {
           <Route path="/order-table" component={OrderTable} />
           <GuestRoute path="/form/user/login" component={UserLogin} />
           <GuestRoute path="/form/user" component={UserForm} />
+          <Route path="/payments" component={Payments} />
           <Route path="/dashboard" component={Dashboard} />
           <ProtectRoute path="/user/profile" component={Profile} />
           <Route path="/404" component={notFound} />
