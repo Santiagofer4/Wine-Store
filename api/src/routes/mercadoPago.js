@@ -11,7 +11,7 @@ mercadopago.configure({
 
 //Ruta que genera la URL de MercadoPago
 server.post("/", (req, res, next) => {
-  let orderDetails = req.body;
+  let { orderDetails, orderId } = req.body;
 
   const items = orderDetails.map((item) => ({
     title: item.name,
@@ -22,7 +22,7 @@ server.post("/", (req, res, next) => {
   // Crea un objeto de preferencia
   let preference = {
     items,
-    external_reference: `${orderDetails.orderId}`,
+    external_reference: `${orderId}`,
     payment_methods: {
       excluded_payment_types: [
         {
@@ -54,15 +54,16 @@ server.post("/", (req, res, next) => {
 //Ruta que recibe la información del pago
 server.get("/pagos", (req, res) => {
   console.info("EN LA RUTA PAGOS ", req);
-  const payment_id = req.query.payment_id;
+  const payment_id = parseInt(req.query.payment_id);
   const payment_status = req.query.status;
-  const external_reference = req.query.external_reference;
-  const merchant_order_id = req.query.merchant_order_id;
+  const external_reference = parseInt(req.query.external_reference);
+  const merchant_order_id = parseInt(req.query.merchant_order_id);
   console.log("EXTERNAL REFERENCE ", external_reference);
 
   //Aquí edito el status de mi orden
   Order.findByPk(external_reference)
     .then((order) => {
+      console.log("order 1", order);
       order.payment_id = payment_id;
       order.payment_status = payment_status;
       order.merchant_order_id = merchant_order_id;
@@ -70,7 +71,8 @@ server.get("/pagos", (req, res) => {
       console.info("Salvando order");
       order
         .save()
-        .then((_) => {
+        .then((orderUpdated) => {
+          console.log("order 2", orderUpdated);
           console.info("redirect success");
 
           return res.redirect("http://localhost:3001");

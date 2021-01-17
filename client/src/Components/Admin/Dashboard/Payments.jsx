@@ -4,18 +4,18 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { myCartSelector, allProductsCartSelector } from "../../../selectors";
-import MercadoPago from "./MercadoPago";
 import "./Payments.modules.css";
 
 export default function Payments() {
   const history = useHistory();
   const orderDetails = useSelector(allProductsCartSelector);
+  const orderId = useSelector(myCartSelector);
 
   const handleOnClick = (e) => {
     e.target.name === "checkout"
       ? history.push("/checkout")
       : axios
-          .post("http://localhost:3000/mercadopago", orderDetails)
+          .post("http://localhost:3000/mercadopago", { orderDetails, orderId })
           .then((payload) => {
             console.log('payload', payload.data.init_point)
             window.location.replace(payload.data.init_point);
@@ -23,7 +23,6 @@ export default function Payments() {
           .catch((err) => console.error(err));
   };
 
-/*   if (datos === "") { */
     return (
       <Paper className="pagos">
         <Button
@@ -50,11 +49,4 @@ export default function Payments() {
         </Button>
       </Paper>
     );
-  /*}  else {
-    return (
-      <Paper id="panelPago">
-        <MercadoPago data={datos} />
-      </Paper>
-    );
-  } */
 }
