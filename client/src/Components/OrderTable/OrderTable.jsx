@@ -38,7 +38,6 @@ function OrderTable(props) {
   let content;
 
   useEffect(() => {
-    console.log('GET ORDERS')
     dispatch(getOrderTable());
   }, [dispatch, statusCart]);
 

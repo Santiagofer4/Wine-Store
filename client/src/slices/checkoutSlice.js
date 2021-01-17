@@ -39,8 +39,7 @@ const checkoutSlice = createSlice({
         //     zip,
         //     country,
         // } = payload;
-        console.log('PAYLOAD', payload)
-        state.addressInfo = { payload };
+       state.addressInfo = { payload };
       },
       paymentInfoAction: (state, { payload }) => {
         const { key, dismissAll } = payload;

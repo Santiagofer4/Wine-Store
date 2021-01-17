@@ -28,7 +28,6 @@ const initialState_token = {
 export const tryToLogin = createAsyncThunk(
   'token/tryToLogin',
   async (_, { rejectWithValue }) => {
-    console.log('TRYING TO LOGIN');
     const refreshed_token = await axios.get(refreshEndpoint, {
       withCredentials: true,
     });
@@ -39,13 +38,11 @@ export const tryToLogin = createAsyncThunk(
   {
     condition: (payload, { getState }) => {
       const { token } = getState();
-      console.log('Checking status before fetch', token.status);
       if (
         token.stopRefresh === true ||
         token.tryToLoginStatus === status.loading ||
         token.tryToLoginStatus === status.failed
       ) {
-        console.log('NO!!!!!!');
         return false;
       }
     },
@@ -55,7 +52,6 @@ export const tryToLogin = createAsyncThunk(
 export const getRefreshedToken = createAsyncThunk(
   'token/getRefreshedToken',
   async (_, { rejectWithValue }) => {
-    console.log('REFRESHING');
     const refreshed_token = await axios.get(refreshEndpoint, {
       withCredentials: true,
     });
@@ -66,13 +62,11 @@ export const getRefreshedToken = createAsyncThunk(
   {
     condition: (payload, { getState }) => {
       const { token } = getState();
-      console.log('Checking status before fetch', token.status);
       if (
         token.stopRefresh === true ||
         token.refreshStatus === status.loading ||
         token.refreshStatus === status.failed
       ) {
-        console.log('NO!!!!!!');
         return false;
       }
     },
@@ -91,7 +85,6 @@ const delayRefresh = (delay) => {
 export const setRefreshTokenTimeout = createAsyncThunk(
   'token/refreshTimeout',
   async (payload, { dispatch, getState }) => {
-    console.log('SETTING TIMEOUT');
     const state = getState();
     // let delay = state.token.delay;
     let delay = 1000000;
@@ -104,17 +97,13 @@ const tokenSlice = createSlice({
   initialState: initialState_token,
   reducers: {
     setToken: (state, { payload }) => {
-      console.log('SETTING TOKEN REDUX');
       const { token, expires } = payload;
       state.inMemoryToken = token;
       state.delay = expires - state.refreshTimeDelta;
       return;
     },
     eraseToken: (state, action) => {
-      console.log('ERASING TOKEN REDUX');
-
       state.stopRefresh = true;
-
       state.inMemoryToken = null;
       state.refreshQueued = false;
       state.status = status.idle;
@@ -149,7 +138,6 @@ const tokenSlice = createSlice({
       state.delay = newToken.expires - state.refreshTimeDelta;
     },
     [getRefreshedToken.rejected]: (state, { payload }) => {
-      console.log('REJECTAMOS');
       state.refreshStatus = status.failed;
       state.inMemoryToken = null;
       state.refreshQueued = false;

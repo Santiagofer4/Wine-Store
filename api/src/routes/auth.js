@@ -112,7 +112,6 @@ server.get(
   passport.authenticate('jwt-refresh', { session: false }),
   async (req, res) => {
     const user = req.user;
-    console.log('ASDASDASd', user);
     const newToken = makeJWT(user, refreshTime, 'Bearer');
     const refresh_token = makeJWT(user);
     cookieMaker('refreshToken', refresh_token, res);
@@ -129,8 +128,7 @@ server.get(
   '/test',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    console.log('INGRESO A RUTA PROTEGIDA', req.body);
-    return res.send('prueba de ruta protegia');
+   return res.send('prueba de ruta protegia');
     // return res.send(req.user);
   }
 );
@@ -176,7 +174,6 @@ server.get(
   passport.authenticate('github'),
   async (req, res) => {
     try {
-      console.log('requser', req.user);
       const token = makeJWT(req.user, refreshTime, 'Bearer'); // guardar los tiempos de refresh en variable y aplicarselo a ambas
       const refresh_token = makeJWT(req.user);
       cookieMaker('refreshToken', refresh_token, res);

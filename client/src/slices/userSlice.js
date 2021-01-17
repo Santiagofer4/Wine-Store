@@ -1,4 +1,3 @@
-import { responsiveFontSizes } from '@material-ui/core';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
@@ -54,7 +53,6 @@ export const githubLogin = createAsyncThunk(
   'user/githublogin',
   async (_, { rejectWithValue }) => {
     const resp = await axios.get(authEnpoint + 'github/');
-    console.log('resp', resp);
     let redirectURL = resp.request.responseURL;
     if (redirectURL) return window.location.replace(redirectURL);
     else return rejectWithValue(resp);
@@ -76,7 +74,6 @@ export const userLogout = createAsyncThunk(
   'user/logout',
   async (payload, thunkApi) => {
     const userLogout_response = await axios.get(userLogoutEndpoint);
-    console.log('LOGGIN OUT');
     return userLogout_response;
   }
 );
@@ -143,7 +140,6 @@ export const editUsers = createAsyncThunk(
   'users/editUsers',
   async ({ id, values }) => {
     const resp = await axios.put(usersEndpoint + id, values);
-    console.log('RESP', resp);
     return resp;
   }
 );

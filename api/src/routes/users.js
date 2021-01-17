@@ -71,7 +71,6 @@ server.delete(
         },
       })
         .then((orders) => {
-          console.log('orders', orders);
           let id = orders.id;
           OrderLine.destroy({
             where: {
@@ -85,8 +84,7 @@ server.delete(
           });
         })
         .catch((err) => {
-          console.log(err);
-          return res.status(500);
+           return res.status(500);
         });
     } else {
       // Condición de entrada para cualquier user
@@ -110,8 +108,7 @@ server.delete(
           });
         })
         .catch((err) => {
-          console.log(err);
-          return res.status(500);
+         return res.status(500);
         });
     }
   }
@@ -211,7 +208,6 @@ server.post('/:userId/cart', async (req, res) => {
 
     return res.status(200).send({ newOrder, newOrderLine });
   } catch (error) {
-    console.log(error);
     return res.status(500).send(error);
   }
 });

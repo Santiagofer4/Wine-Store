@@ -5,9 +5,6 @@ import {
   AddProductToCart,
   RemoveProductFromCart,
   DeleteProductFromCart,
-  postProductToCart,
-  deleteSingleProdFromCart,
-  deleteAllProductsFromCart,
 } from '../slices/productsCartSlice';
 import {
   modificateOrder,
@@ -131,7 +128,6 @@ export const tokenMiddleware = (store) => (next) => (action) => {
       break;
     }
     case 'token/tryToLogin/fulfilled': {
-      // console.log('PAYLOAD TRY TO LOGIN OK', action.payload);
       const { newToken } = action.payload;
       dispatch(persistUserLogin(action.payload));
       dispatch(setToken(newToken));

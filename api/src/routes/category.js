@@ -63,7 +63,6 @@ server.delete(
         id,
       },
     }).then((category) => {
-      console.log('200 OK - DELETED');
       return res.status(200).send(category);
     });
   }
@@ -85,7 +84,6 @@ server.post(
         taste,
       },
     }).then((category) => {
-      console.log('200 OK - POSTED');
       return res.status(200).send(category);
     });
   }

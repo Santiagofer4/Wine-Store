@@ -76,7 +76,6 @@ module.exports = function (passport) {
           } else if (user.dataValues.deletedAt !== null) {
             user = await user.restore();
             user = await user.update(user_data);
-            console.log('USER', user);
           } else {
             return done(null, false, { message: 'EL usuario ya existe' });
           }
@@ -84,7 +83,6 @@ module.exports = function (passport) {
           //clonamos el objeto user, eliminamos el campo password y devolvemos el obj user
           let user_obj = { ...user.dataValues };
           delete user_obj.password;
-          // console.log('REGISTER STRATEGY', user_obj);
           return done(null, user_obj);
         } catch (error) {
           console.error(error);
@@ -111,8 +109,7 @@ module.exports = function (passport) {
         try {
           const user = await User.findOne({ where: { email } });
           if (!user) {
-            console.log('NO SUCH USER');
-            return done(null, false, { message: 'No se encontro el usuario' });
+           return done(null, false, { message: 'No se encontro el usuario' });
           }
           const validate = await user.compare(password);
           if (!validate) {
@@ -120,7 +117,6 @@ module.exports = function (passport) {
           }
           let user_obj = { ...user.dataValues };
           delete user_obj.password;
-          console.log('RETURN LOCAL_LOGIN', user_obj);
           return done(null, user_obj, { message: 'Login correcto' });
         } catch (error) {
           return done(error);
@@ -145,7 +141,6 @@ module.exports = function (passport) {
   passport.use(
     'jwt-cookie',
     new JWTstrategy(jwtCookies_options, async (jwt_payload, done) => {
-      console.log('jwtCookie_PAYLOAD', jwt_payload);
       try {
         const user = await User.findOne({
           where: { email: jwt_payload.sub },
@@ -157,7 +152,6 @@ module.exports = function (passport) {
         }
         let user_obj = { ...user.dataValues };
         delete user_obj.password;
-        console.log('RETURN JWT', user_obj);
         return done(null, user_obj, { message: 'Token Autorizado' });
       } catch (error) {
         return done('CATCHING', error);
@@ -183,7 +177,6 @@ module.exports = function (passport) {
         }
         let user_obj = { ...user.dataValues };
         delete user_obj.password;
-        console.log('RETURN JWT', user_obj);
         return done(null, user_obj, { message: 'Token Autorizado' });
       } catch (error) {
         return done(error);

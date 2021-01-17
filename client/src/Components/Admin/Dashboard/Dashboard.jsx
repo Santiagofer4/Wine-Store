@@ -74,8 +74,7 @@ export default function Dashboard() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   function getMenu(menu) {
-    console.log("MENU", menu);
-    switch (menu) {
+     switch (menu) {
       case 0:
         return <Logo />;
       case 1:

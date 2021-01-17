@@ -19,7 +19,6 @@ const tokenManager = () => {
   });
 
   const setToken = (token) => {
-    console.log('SETTING TOKEN TOKENMANAGER');
     dispatch(setToken(token));
     // dispatch(setRefreshTimeout(token));
     refreshToken(token.expires);
@@ -27,7 +26,6 @@ const tokenManager = () => {
   };
 
   const refreshToken = (expires) => {
-    console.log('SETTING REFRESH TOKENMANAGER');
     // let delay = expires - refreshBefore;
     let delay = 10000;
     refreshTimeout = window.setTimeout(dispatch(getRefreshedToken), delay);

@@ -42,7 +42,6 @@ function AuthProvider({ children }) {
       <AuthContext.Provider value={false}>{children}</AuthContext.Provider>
     );
   } else if (tryToLoginStatus === 'succeded') {
-    console.log('TRYING TO LOGIN = OK');
     return <AuthContext.Provider value={true}>{children}</AuthContext.Provider>;
   }
 
