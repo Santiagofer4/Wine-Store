@@ -9,7 +9,7 @@ const authRouter = require('./auth.js');
 const searchRouter = require('./search.js');
 const reviewRouter = require('./review.js');
 const mailsRouter = require('./mails.js');
-const mercadoPago = require ('./mercadoPago.js');
+const mercadoPagoRouter = require ('./mercadoPago.js');
 
 const router = Router();
 
@@ -26,6 +26,6 @@ router.use('/auth', authRouter);
 router.use('/search', searchRouter);
 router.use('/review', reviewRouter);
 router.use('/mails', mailsRouter);
-router.use('/mercadopago', mercadoPago);
+router.use('/mercadopago', mercadoPagoRouter);
 
 module.exports = router;

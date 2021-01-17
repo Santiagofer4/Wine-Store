@@ -9,7 +9,6 @@ import "./Payments.modules.css";
 
 export default function Payments() {
   const history = useHistory();
-  const [datos, setDatos] = useState("");
   const orderDetails = useSelector(allProductsCartSelector);
 
   const handleOnClick = (e) => {
@@ -18,12 +17,13 @@ export default function Payments() {
       : axios
           .post("http://localhost:3000/mercadopago", orderDetails)
           .then((payload) => {
-            setDatos(payload.data);
+            console.log('payload', payload.data.init_point)
+            window.location.replace(payload.data.init_point);
           })
           .catch((err) => console.error(err));
   };
 
-  if (datos === "") {
+/*   if (datos === "") { */
     return (
       <Paper className="pagos">
         <Button
@@ -50,11 +50,11 @@ export default function Payments() {
         </Button>
       </Paper>
     );
-  } else {
+  /*}  else {
     return (
-      <Paper id="lateral">
+      <Paper id="panelPago">
         <MercadoPago data={datos} />
       </Paper>
     );
-  }
+  } */
 }

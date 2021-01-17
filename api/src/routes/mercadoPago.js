@@ -15,7 +15,7 @@ server.post("/", (req, res, next) => {
 
   const items = orderDetails.map((item) => ({
     title: item.name,
-    unit_price: item.price,
+    unit_price: parseInt(item.price),
     quantity: item.quantity,
   }));
 
@@ -32,23 +32,21 @@ server.post("/", (req, res, next) => {
       installments: 3,
     },
     back_urls: {
-      success: "http://localhost:3001/mercadopago/pagos",
-      failure: "http://localhost:3001/mercadopago/pagos",
-      pending: "http://localhost:3001/mercadopago/pagos",
+      success: "http://localhost:3000/mercadopago/pagos",
+      failure: "http://localhost:3000/mercadopago/pagos",
+      pending: "http://localhost:3000/mercadopago/pagos",
     },
   };
 
   mercadopago.preferences
     .create(preference)
 
-    .then(function (response) {
-      console.info("respuesta");
-
-      global.id = response.body.id;
+    .then((response) => {
+      global.init_point = response.body.init_point;
       console.log("Response body", response.body);
-      res.json({ id: global.id });
+      res.json({ init_point: global.init_point });
     })
-    .catch(function (error) {
+    .catch((error) => {
       console.log(error);
     });
 });
@@ -75,19 +73,19 @@ server.get("/pagos", (req, res) => {
         .then((_) => {
           console.info("redirect success");
 
-          return res.redirect("http://localhost:3000");
+          return res.redirect("http://localhost:3001");
         })
         .catch((err) => {
           console.error("error al salvar", err);
           return res.redirect(
-            `http://localhost:3000/?error=${err}&where=al+salvar`
+            `http://localhost:3001/?error=${err}&where=al+salvar`
           );
         });
     })
     .catch((err) => {
       console.error("error al buscar", err);
       return res.redirect(
-        `http://localhost:3000/?error=${err}&where=al+buscar`
+        `http://localhost:3001/?error=${err}&where=al+buscar`
       );
     });
 

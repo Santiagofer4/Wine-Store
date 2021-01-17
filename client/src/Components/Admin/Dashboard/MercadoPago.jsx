@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { allProductsCartSelector } from "../../../selectors";
+import './Payments.modules.css';
 
 export default function MercadoPago(props) {
   console.log("props", props);
@@ -18,26 +19,26 @@ export default function MercadoPago(props) {
     script.setAttributeNode(attr_data_preference);
 
     //Agrega el script como nodo hijo del elemento form
-    document.getElementById("form1").appendChild(script);
+    document.getElementById("form2").appendChild(script);
     return () => {
       //Elimina el script como nodo hijo del elemento form
-      document.getElementById("form1").removeChild(script);
+      document.getElementById("form2").removeChild(script);
     };
   }, [props.data]);
 
   return (
     <div>
-      <form id="form1">
+      <form id="form2">
         <h4>Checkout MercadoPago</h4>
         <div>
           {orderDetails.map((product, i) => {
             return (
               <div key={i}>
-                <ul>
-                  <li>{product.name}</li>
-                  <li>{"$" + product.price}</li>
-                  <li>{product.quantity}</li>
-                </ul>
+                <div>
+                  <p className="productItem">{product.name}</p>
+                  <p className="productItem">{"$" + product.price}</p>
+                  <p className="productItem">{product.quantity}</p>
+                </div>
               </div>
             );
           })}
