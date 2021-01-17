@@ -15,7 +15,7 @@ server.post("/", (req, res, next) => {
 
   const items = orderDetails.map((item) => ({
     title: item.name,
-    unit_price: parseInt(item.price),
+    unit_price: Math.ceil((parseInt(item.price) * 121) / 100),
     quantity: item.quantity,
   }));
 
