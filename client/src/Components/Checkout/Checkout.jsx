@@ -44,6 +44,7 @@ import {
 } from './checkoutHelpers';
 import { Formik, Form, useFormikContext } from 'formik';
 import FinalMessage from './FinalMessage';
+import { useHistory } from 'react-router-dom';
 
 // Estilos de los "steps" del checkout
 
@@ -65,6 +66,7 @@ function getStepContent(step, formik, myCart) {
 export default function Checkout() {
   const classes = checkoutStyles();
   const formikContext = useFormikContext();
+  const history = useHistory();
 
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
@@ -97,6 +99,12 @@ export default function Checkout() {
       dispatch(resetOrderstatus());
     }
   }, [orderStatus]);
+
+  useEffect(() => {
+    if (AllProductsCart.length === 0) {
+      history.push('/catalogue');
+    }
+  }, []);
 
   const handleSubmit = (values, formik) => {
     console.log('laststep', isLastStep);

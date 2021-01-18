@@ -4,6 +4,7 @@ import { create } from 'yup/lib/Reference';
 import tokenManager from '../Components/utils/tokenManager';
 import { getOrderTableEndpoint, productEndpoint } from '../constants/endpoints';
 import { status } from '../constants/helpers';
+import { sendEmail } from './userSlice';
 
 const initialState_orders = {
   orderTable: {
@@ -29,12 +30,24 @@ export const getOrderTable = createAsyncThunk(
 
 export const modificateOrder = createAsyncThunk(
   'cart/modificateOrder',
-  async (payload) => {
+  async (payload, { dispatch, getState }) => {
     const { myCart, total, status } = payload;
+    const state = getState();
     const modificatedOrder = await axios.put(
       getOrderTableEndpoint + myCart,
       payload
     );
+    if (status === 'dispatched') {
+      const name = state.user.user.info.firstName;
+      const email = state.user.user.info.email;
+      dispatch(
+        sendEmail({
+          name,
+          email,
+          type: 'Dispatch',
+        })
+      );
+    }
     return { myCart, status };
   }
 );

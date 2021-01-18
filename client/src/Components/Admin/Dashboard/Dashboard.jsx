@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState, useEffect } from 'react';
+import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Typography,
   Container,
@@ -9,37 +9,37 @@ import {
   Link,
   Box,
   ListItemIcon,
-} from "@material-ui/core";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import PeopleIcon from "@material-ui/icons/People";
-import BarChartIcon from "@material-ui/icons/BarChart";
-import LayersIcon from "@material-ui/icons/Layers";
-import { userSelector, allProductsSelector } from "../../../selectors/index";
-import { useDispatch, useSelector } from "react-redux";
-import Usuarios from "./Usuarios";
-import Logo from "./Logo";
-import OrderTable from "../../OrderTable/OrderTable";
-import AdminStrain from "../LoadCategory/AdminStrain";
-import AdminCategory from "../LoadCategory/AdminCategory";
-import AdminProduct from "./Products";
-import "./Dashboard.modules.css";
+} from '@material-ui/core';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import PeopleIcon from '@material-ui/icons/People';
+import BarChartIcon from '@material-ui/icons/BarChart';
+import LayersIcon from '@material-ui/icons/Layers';
+import { userSelector, allProductsSelector } from '../../../selectors/index';
+import { useDispatch, useSelector } from 'react-redux';
+import Usuarios from './Usuarios';
+import Logo from './Logo';
+import OrderTable from '../../OrderTable/OrderTable';
+import AdminStrain from '../LoadCategory/AdminStrain';
+import AdminCategory from '../LoadCategory/AdminCategory';
+import AdminProduct from './Products';
+import './Dashboard.modules.css';
 
-import FormLabel from "@material-ui/core/FormLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
+      {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
         Wine Store
-      </Link>{" "}
+      </Link>{' '}
       {new Date().getFullYear()}
-      {"."}
+      {'.'}
     </Typography>
   );
 }
@@ -47,7 +47,7 @@ function Copyright() {
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-  display: "flex",
+  display: 'flex',
 }));
 
 export default function Dashboard() {
@@ -58,13 +58,14 @@ export default function Dashboard() {
   const products = useSelector(allProductsSelector);
 
   const [state, setState] = useState({
-    created: true,
+    dispatched: true,
     canceled: true,
     pending: true,
     completed: true,
     cart: true,
+    finished: true,
   });
-  const { cart, canceled, completed, created, pending } = state;
+  const { cart, canceled, completed, dispatched, pending, finished } = state;
 
   const handleOnClick = (e) => {
     setMenu(parseInt(e.target.value));
@@ -74,7 +75,7 @@ export default function Dashboard() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   function getMenu(menu) {
-     switch (menu) {
+    switch (menu) {
       case 0:
         return <Logo />;
       case 1:
@@ -126,12 +127,12 @@ export default function Dashboard() {
                     control={
                       <Checkbox
                         className="checkbox"
-                        checked={created}
+                        checked={dispatched}
                         onChange={handleChange}
-                        name="created"
+                        name="dispatched"
                       />
                     }
-                    label="Created"
+                    label="Dispatched"
                   />
                   <FormControlLabel
                     control={
@@ -177,6 +178,17 @@ export default function Dashboard() {
                     }
                     label="Completed"
                   />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        className="checkbox"
+                        checked={finished}
+                        onChange={handleChange}
+                        name="finished"
+                      />
+                    }
+                    label="Finished"
+                  />
                 </FormGroup>
               </FormControl>
             ) : null}
@@ -210,15 +222,15 @@ export default function Dashboard() {
 
       <div id="menu">
         {/* <main> */}
-          {/* <div /> */}
-          <Container>
-            <Paper>{getMenu(menu)}</Paper>
+        {/* <div /> */}
+        <Container>
+          <Paper>{getMenu(menu)}</Paper>
 
-            <Box pt={4}>
-              <Copyright />
-            </Box>
-          </Container>
-       {/*  </main> */}
+          <Box pt={4}>
+            <Copyright />
+          </Box>
+        </Container>
+        {/*  </main> */}
       </div>
     </div>
   );

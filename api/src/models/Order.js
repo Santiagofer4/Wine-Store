@@ -9,25 +9,26 @@ module.exports = (sequelize) => {
     },
     status: {
       type: DataTypes.ENUM([
-        'created',
-        'canceled',
+        'cart',
         'pending',
         'completed',
-        'cart',
+        'dispatched',
+        'finished',
+        'canceled',
       ]),
       defaultValue: 'cart',
     },
     payment_id: {
       type: DataTypes.INTEGER,
-      defaultValue: 0
+      defaultValue: 0,
     },
     payment_status: {
       type: DataTypes.STRING,
-      defaultValue: ""
+      defaultValue: '',
     },
     merchant_order_id: {
       type: DataTypes.BIGINT,
-      defaultValue: 0
-    }
+      defaultValue: 0,
+    },
   });
 };

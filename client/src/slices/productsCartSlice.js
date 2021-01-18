@@ -37,7 +37,7 @@ export const getAllProductsCart = createAsyncThunk(
 export const postProductToCart = createAsyncThunk(
   'cart/postProductToCart',
   async (payload, { dispatch }) => {
-    console.log('datos', payload)
+    console.log('datos', payload);
     const { userId, detail, increment } = payload;
     const cart_item = await axios.post(
       usersEndpoint + userId + '/cart',
@@ -73,10 +73,13 @@ export const deleteSingleProdFromCart = createAsyncThunk(
     const state = thunkApi.getState();
     const token = state.token.inMemoryToken;
     const { productId, userId } = payload;
+    console.log('PAYLOAd', payload);
     const deleted_item = await axios.delete(
-      usersEndpoint + userId + '/cart/' + productId, {
+      usersEndpoint + userId + '/cart/' + productId,
+      {
         headers: { Authorization: token },
-      });
+      }
+    );
     thunkApi.dispatch(DeleteProductFromCart({ name: payload.name }));
     const resPayload = {
       deleted_item,
@@ -243,7 +246,7 @@ const productsCartSlice = createSlice({
       state.allProductsCart.status = status.failed;
       state.allProductsCart.error = action.error;
     },
-/*     [modificateOrder.pending]: (state, action) => {
+    /*     [modificateOrder.pending]: (state, action) => {
       state.allProductsCart.status = status.loading;
     },
     [modificateOrder.fulfilled]: (state, action) => {

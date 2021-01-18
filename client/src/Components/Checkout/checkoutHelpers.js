@@ -96,10 +96,6 @@ export const checkoutFields = {
     label: 'Pais*',
     requiredErrorMsg: 'Debe indicar el pais',
   },
-  //   useAddressForPaymentDetails: {
-  //     name: 'useAddressForPaymentDetails',
-  //     label: 'Use this address for payment details',
-  //   },
   cardName: {
     name: 'cardName',
     label: 'Nombre de titular*',
@@ -134,7 +130,6 @@ const {
   state,
   zip,
   country,
-  useAddressForPaymentDetails,
   cardName,
   cardNumber,
   expiryDate,
@@ -151,7 +146,6 @@ export const initialState_Checkout = {
   [state.name]: '',
   [zip.name]: '',
   [country.name]: '',
-  //   [useAddressForPaymentDetails.name]: false,
   //?PAYMENT FORM
   [cardName.name]: '',
   [cardNumber.name]: '',

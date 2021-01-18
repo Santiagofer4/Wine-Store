@@ -24,39 +24,67 @@ export default function AddressForm() {
 
   // Traemos la info de la dirección de facturación del local storage
 
-  // let addressInfoStorage = JSON.parse(localStorage.getItem('addressInfo'));
+  let addressInfoStorage = JSON.parse(localStorage.getItem('addressInfo'));
 
-  // const [addressInfo, setAddressInfo] = useState({
-  //   firstName: addressInfoStorage.firstName,
-  //   lastName: addressInfoStorage.lastName,
-  //   address1: addressInfoStorage.address,
-  //   email: addressInfoStorage.email,
-  //   city: addressInfoStorage.city,
-  //   state: addressInfoStorage.state,
-  //   zip: addressInfoStorage.zip,
-  //   country: addressInfoStorage.country,
-  // });
+  const [addressInfo, setAddressInfo] = useState({
+    firstName: addressInfoStorage.firstName,
+    lastName: addressInfoStorage.lastName,
+    address1: addressInfoStorage.address,
+    email: addressInfoStorage.email,
+    city: addressInfoStorage.city,
+    state: addressInfoStorage.state,
+    zip: addressInfoStorage.zip,
+    country: addressInfoStorage.country,
+  });
 
-  // useEffect(() => {
-  //   //guardamos la info de la dirección de facturación en el local storage
-  //   localStorage.setItem('addressInfo', JSON.stringify(addressInfo));
-  // }, [addressInfo]);
+  useEffect(() => {
+    //guardamos la info de la dirección de facturación en el local storage
+    // localStorage.setItem('addressInfo', JSON.stringify(addressInfo));
+    // return () => {
+    //   console.log('UNMOUNT', formValues.firstName);
+    //   localStorage.setItem(
+    //     'addressInfo',
+    //     JSON.stringify({
+    //       firstName: formValues.firstName,
+    //       lastName: formValues.lastName,
+    //       address1: formValues.address,
+    //       email: formValues.email,
+    //       city: formValues.city,
+    //       state: formValues.state,
+    //       zip: formValues.zip,
+    //       country: formValues.country,
+    //     })
+    //   );
+    // };
+  }, [addressInfo]);
 
   // Antes de refrescar, guardamos la info en el localstorage, para evitar que tenga que volver a cargar los datos
 
-  // window.addEventListener('beforeunload', (event) => {
-  //   setAddressInfo({
-  //     firstName: formValues.firstName,
-  //     lastName: formValues.lastName,
-  //     address1: formValues.address,
-  //     email: formValues.email,
-  //     city: formValues.city,
-  //     state: formValues.state,
-  //     zip: formValues.zip,
-  //     country: formValues.country,
-  //   });
-  //   localStorage.setItem('addressInfo', JSON.stringify(addressInfo));
-  // });
+  window.addEventListener('beforeunload', (event) => {
+    // setAddressInfo({
+    //   firstName: formValues.firstName,
+    //   lastName: formValues.lastName,
+    //   address1: formValues.address,
+    //   email: formValues.email,
+    //   city: formValues.city,
+    //   state: formValues.state,
+    //   zip: formValues.zip,
+    //   country: formValues.country,
+    // });
+    localStorage.setItem(
+      'addressInfo',
+      JSON.stringify({
+        firstName: formValues.firstName,
+        lastName: formValues.lastName,
+        address1: formValues.address,
+        email: formValues.email,
+        city: formValues.city,
+        state: formValues.state,
+        zip: formValues.zip,
+        country: formValues.country,
+      })
+    );
+  });
 
   return (
     <React.Fragment>
