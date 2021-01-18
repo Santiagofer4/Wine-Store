@@ -13,20 +13,24 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { total } from '../utils/index';
 import { getAllProductsCart } from '../../slices/productsCartSlice';
-
-const useStyles = makeStyles((theme) => ({
-  listItem: {
-    padding: theme.spacing(1, 0),
-  },
-  total: {
-    fontWeight: 700,
-  },
-  title: {
-    marginTop: theme.spacing(2),
-  },
-}));
+import { reviewStyles } from './checkoutHelpers';
+import { useFormikContext } from 'formik';
 
 export default function Review() {
+  const { values: formValues } = useFormikContext();
+  const {
+    firstName,
+    lastName,
+    email,
+    address,
+    city,
+    country,
+    zip,
+    cardName,
+    cardNumber,
+    expDate,
+  } = formValues;
+
   const user = useSelector(userSelector);
   const dispatch = useDispatch();
   let addressInfoStorage = JSON.parse(localStorage.getItem('addressInfo'));
@@ -51,12 +55,12 @@ export default function Review() {
 
   const payments = [
     //Info del formulario anterior
-    { name: 'Titular', detail: paymentInfo.cardName },
-    { name: 'Número de Tarjeta', detail: paymentInfo.cardNumber },
-    { name: 'Válida hasta:', detail: paymentInfo.cvv },
+    { name: 'Titular', detail: cardName },
+    { name: 'Número de Tarjeta', detail: cardNumber },
+    { name: 'Válida hasta:', detail: expDate },
   ];
 
-  const classes = useStyles();
+  const classes = reviewStyles();
   const AllProductsCart = useSelector(allProductsCartSelector);
   const myCart = useSelector(myCartSelector);
   const [subTotal, setSubTotal] = useState(0);
@@ -101,19 +105,10 @@ export default function Review() {
           <Typography variant="h6" gutterBottom className={classes.title}>
             Envio{' '}
           </Typography>
+          <Typography gutterBottom>{firstName + ' ' + lastName}</Typography>
+          <Typography gutterBottom>{email}</Typography>
           <Typography gutterBottom>
-            {addressInfo.firstName + ' ' + addressInfo.lastName}
-          </Typography>
-          <Typography gutterBottom>{addressInfo.email}</Typography>
-          <Typography gutterBottom>
-            {addressInfo.address1 +
-              ' ' +
-              ', ' +
-              addressInfo.city +
-              ', ' +
-              addressInfo.country +
-              '. CP: ' +
-              addressInfo.zip}
+            {address + ' ' + ', ' + city + ', ' + country + '. CP: ' + zip}
           </Typography>
         </Grid>
         <Grid item container direction="column" xs={12} sm={6}>
@@ -121,8 +116,8 @@ export default function Review() {
             Detalle de pago{' '}
           </Typography>
           <Grid container>
-            {payments.map((payment) => (
-              <React.Fragment key={payment.name}>
+            {payments.map((payment, idx) => (
+              <React.Fragment key={idx}>
                 <Grid item xs={6}>
                   <Typography gutterBottom>{payment.name}</Typography>
                 </Grid>
