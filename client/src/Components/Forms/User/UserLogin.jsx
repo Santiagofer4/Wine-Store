@@ -6,7 +6,7 @@ import {
   InputAdornment,
   IconButton,
 } from '@material-ui/core';
-import GitHubIcon from '@material-ui/icons/GitHub';
+//import GitHubIcon from '@material-ui/icons/GitHub';
 import FormField from '../../FormComponents/FormField';
 import './UserForm.modules.css';
 //import { validationSchemaUserRegister } from './userValidations';
@@ -19,13 +19,13 @@ import {
   postUserLogin,
   resetStatus,
 } from '../../../slices/userSlice.js';
-import { postProductToCart, login } from '../../../slices/productsCartSlice.js';
+//import { postProductToCart, login } from '../../../slices/productsCartSlice.js';
 import { userSelector, userLoginStatusSelector } from '../../../selectors';
-import axios from 'axios';
+//import axios from 'axios';
 
 function UserLogin() {
   const dispatch = useDispatch();
-  const user = useSelector(userSelector);
+  //const user = useSelector(userSelector);
   const userStatus = useSelector(userLoginStatusSelector);
   const history = useHistory();
   const [viewPassword, setViewPassword] = useState(false);
