@@ -42,15 +42,17 @@ function UserLogin() {
       },
       formik,
     };
-    dispatch(postUserLogin(payload));
+    dispatch(postUserLogin(payload))
+    .then(() => {
+      if (userStatus === 'succeded') {
+       history.push('/catalogue');
+     } else if  (userStatus === 'failed') {
+      dispatch(resetStatus());
+    }
+    } );
   };
-  if (userStatus === 'succeded') {
-    history.push('/catalogue');
-  }
-
-  if (userStatus === 'failed') {
-    dispatch(resetStatus());
-  }
+  
+ 
 
   const handleReset = (formik) => {
     //func para resetear el form
