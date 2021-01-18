@@ -100,6 +100,7 @@ export const checkoutFields = {
     name: 'cardName',
     label: 'Nombre de titular*',
     requiredErrorMsg: 'Nombre y apellido de titular requerido',
+    invalidErrorMsg: 'Nombre y apellido del titular inválido',
   },
   cardNumber: {
     name: 'cardNumber',
@@ -175,12 +176,17 @@ export const checkoutValidationSchema = [
       .required(`${country.requiredErrorMsg}`),
   }),
   Yup.object().shape({
-    [cardName.name]: Yup.string().required(`${cardName.requiredErrorMsg}`),
-    [cardNumber.name]: Yup.string().required(`${cardNumber.requiredErrorMsg}`),
-    //   .matches(visaRegEx, cardNumber.invalidErrorMsg),
+    [cardName.name]: Yup.string().required(`${cardName.requiredErrorMsg}`)
+    .matches(/^[a-z ,.'-]+$/i, cardName.invalidErrorMsg),
+    // .test(/^[a-z ,.'-]+$/i),
+    [cardNumber.name]: Yup.string().required(`${cardNumber.requiredErrorMsg}`)
+    .test('len', `${cardNumber.invalidErrorMsg}`, (val) => val && val.length === 16),
+      // .matches(visaRegEx, cardNumber.invalidErrorMsg),
     [expiryDate.name]: Yup.string()
       .nullable()
-      .required(`${expiryDate.requiredErrorMsg}`),
+      .required(`${expiryDate.requiredErrorMsg}`)
+      .matches(/^\d{2}\/\d{2}$/g, expiryDate.invalidErrorMsg),
+      
     //   .test('expDate', expiryDate.invalidErrorMsg, (val) => {
     //     if (val) {
     //       const startDate = new Date();
