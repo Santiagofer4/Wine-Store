@@ -58,12 +58,7 @@ export const postUserLogin = createAsyncThunk('user/login', async (payload, { di
 export const githubLogin = createAsyncThunk(
   'user/githublogin',
   async (_, { rejectWithValue }) => {
-<<<<<<< HEAD
-    const resp = await axios.get(authEnpoint + 'github/');
-    console.log('LOGEADO CON GIT', resp)
-=======
     const resp = await axios.get(authEndpoint + 'github/');
->>>>>>> bc0b9e0b396e357d1e9d936bf1f589c6e04c8f8b
     let redirectURL = resp.request.responseURL;
     if (redirectURL) return window.location.replace(redirectURL);
     else return rejectWithValue(resp);
@@ -73,12 +68,7 @@ export const githubLogin = createAsyncThunk(
 export const googleLogin = createAsyncThunk(
   'user/googlelogin',
   async (_, { rejectWithValue }) => {
-<<<<<<< HEAD
-    const resp = await axios.get(authEnpoint + 'google/');
-    
-=======
     const resp = await axios.get(authEndpoint + 'google/');
->>>>>>> bc0b9e0b396e357d1e9d936bf1f589c6e04c8f8b
     let redirectURL = resp.request.responseURL;
     if (redirectURL) return window.location.replace(redirectURL);
     else return rejectWithValue(resp);
