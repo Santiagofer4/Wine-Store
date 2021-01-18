@@ -12,15 +12,20 @@ function Footer() {
         ></img>
       </div>
       <div className="rrssContainer">
-        <div className="rrssImgContainer"> 
-        <a href="http://facebook.com" className='red' ><i className="fab fa-facebook-f"></i></a>
-
+        <div className="rrssImgContainer">
+          <a href="http://facebook.com" className="red__instagram">
+            <i className="fab fa-facebook-f"></i>
+          </a>
         </div>
         <div className="rrssImgContainer">
-          <a href="http://instagram.com" className='red__instagram'><i className="fab fa-instagram"></i></a>
+          <a href="http://instagram.com" className="red__instagram">
+            <i className="fab fa-instagram"></i>
+          </a>
         </div>
         <div className="rrssImgContainer">
-          <a href="http://twitter.com" className='red__instagram'><i className="fab fa-twitter"></i></a>
+          <a href="http://twitter.com" className="red__instagram">
+            <i className="fab fa-twitter"></i>
+          </a>
         </div>
       </div>
     </div>

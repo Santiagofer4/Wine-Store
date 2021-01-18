@@ -84,7 +84,7 @@ server.delete(
           });
         })
         .catch((err) => {
-           return res.status(500);
+          return res.status(500);
         });
     } else {
       // Condición de entrada para cualquier user
@@ -108,7 +108,7 @@ server.delete(
           });
         })
         .catch((err) => {
-         return res.status(500);
+          return res.status(500);
         });
     }
   }
