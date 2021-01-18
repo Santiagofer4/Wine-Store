@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
-  getAllProductsCartEnpoint,
+  getAllProductsCartEndpoint,
   getOrderTableEndpoint,
   usersEndpoint,
 } from '../constants/endpoints';
@@ -21,7 +21,7 @@ const initialState_product = {
 export const getAllProductsCart = createAsyncThunk(
   'cart/getAllProductsCart',
   async (id, { rejectWithValue }) => {
-    const resp = await axios.get(getAllProductsCartEnpoint + id + '/cart');
+    const resp = await axios.get(getAllProductsCartEndpoint + id + '/cart');
     // const cart = resp.data;
     // if (!cart) {
     //   return rejectWithValue(resp);

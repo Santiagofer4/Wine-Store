@@ -8,7 +8,7 @@ import {
   userPromoteEndpoint,
   usersEndpoint,
   mailsEndpoint,
-  authEnpoint,
+  authEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 
@@ -52,7 +52,7 @@ export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
 export const githubLogin = createAsyncThunk(
   'user/githublogin',
   async (_, { rejectWithValue }) => {
-    const resp = await axios.get(authEnpoint + 'github/');
+    const resp = await axios.get(authEndpoint + 'github/');
     let redirectURL = resp.request.responseURL;
     if (redirectURL) return window.location.replace(redirectURL);
     else return rejectWithValue(resp);
@@ -62,7 +62,7 @@ export const githubLogin = createAsyncThunk(
 export const googleLogin = createAsyncThunk(
   'user/googlelogin',
   async (_, { rejectWithValue }) => {
-    const resp = await axios.get(authEnpoint + 'google/');
+    const resp = await axios.get(authEndpoint + 'google/');
     let redirectURL = resp.request.responseURL;
     if (redirectURL) return window.location.replace(redirectURL);
     else return rejectWithValue(resp);

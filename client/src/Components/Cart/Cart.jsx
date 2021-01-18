@@ -268,18 +268,18 @@ function Cart() {
             </div>
             <div>
               <Button
-                id="confirmBtn"
-                className="buttonCart"
-                onClick={handleConfirm}
-              >
-                Confirmar
-              </Button>
-              <Button
                 id="cancelBtn"
                 className="buttonCart"
                 onClick={handleDelete}
               >
                 Cancelar
+              </Button>
+              <Button
+                id="confirmBtn"
+                className="buttonCart"
+                onClick={handleConfirm}
+              >
+                Confirmar
               </Button>
             </div>
           </div>
