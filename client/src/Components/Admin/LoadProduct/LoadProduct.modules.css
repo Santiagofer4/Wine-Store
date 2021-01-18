@@ -4,4 +4,8 @@
 
 button > * {
   pointer-events: none;
+  }
+
+#contenedor {
+  padding-top: 5rem !important;
 }

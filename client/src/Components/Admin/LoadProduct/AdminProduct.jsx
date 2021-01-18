@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CircularProgress, Container } from '@material-ui/core';
+import { CircularProgress, Container, Paper } from '@material-ui/core';
 import './LoadProduct.modules.css';
 import { getAllCategories } from '../../../slices/categorySlice';
 import { getAllStrains } from '../../../slices/strainSlice';
@@ -94,14 +94,19 @@ function AdminProduct(props) {
       content = <EditProduct options={options} />;
     } else {
       //* si !edit entonces renderizamos el form `vacio` para cargar un nuevo producto
+    
       content = <LoadProduct options={options} />;
+     
     }
   }
 
   return (
-    <Container>
+    <Container id="contenedor">
+      <Paper>
+
       {edit ? <h1>Edicion de producto</h1> : <h1>Carga de producto</h1>}
       {content}
+      </Paper>
     </Container>
   );
 }
