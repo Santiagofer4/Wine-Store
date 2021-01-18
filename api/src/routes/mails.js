@@ -27,7 +27,6 @@ sendMailRouter.post('/', (req, res) => {
   let text;
   let subject;
   let { name, email, type, orderCod } = req.body;
-
   if (type === 'Welcome') {
     subject = `Bienvenid@, ${name} a WineStore`;
     text =

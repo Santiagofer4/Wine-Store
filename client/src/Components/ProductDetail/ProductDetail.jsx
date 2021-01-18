@@ -14,7 +14,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import './ProductDetail.modules.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { postProductToCart, sync } from '../../slices/productsCartSlice';
 import {
   allProductsCartStatusSelector,
@@ -29,6 +29,7 @@ import Box from '@material-ui/core/Box';
 import ReviewCard from '../Review/ReviewCard';
 import { average, functionCartGuest } from '../utils/index';
 import { useAuthContext } from '../ProtectRoute/authContext';
+import { setWineDetailAsync } from '../../slices/productDetailSlice';
 
 const useStyles = makeStyles({
   root: {
@@ -47,11 +48,13 @@ const useStyles = makeStyles({
   },
 });
 
-function ProductDetail() {
+function ProductDetail(props) {
   const authStatus = useAuthContext();
 
+  const location = useLocation();
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
+  const detailStatus = useSelector(productDetailStatusSelector);
   const cartStatus = useSelector(allProductsCartStatusSelector);
   const productDetail = useSelector(productDetailSelector);
   const statusProductDetail = useSelector(productDetailStatusSelector);
@@ -59,6 +62,7 @@ function ProductDetail() {
   const reviewStatus = useSelector(reviewsListStatusSelector);
   const history = useHistory();
   const classes = useStyles();
+
   //let value;
 
   const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
@@ -67,8 +71,6 @@ function ProductDetail() {
   function handleClick(e, num) {
     setPage(num);
   }
-
-
 
   const {
     id,
@@ -82,6 +84,11 @@ function ProductDetail() {
   } = productDetail;
 
   useEffect(() => {
+    // if (typeof productDetail.id === 'undefined') {
+    //   let fullUrl = location.pathname.split('/');
+    //   let urlId = fullUrl.slice(fullUrl.length - 1);
+    //   dispatch(setWineDetailAsync(urlId));
+    // }
     if (reviewStatus === 'succeded' && reviews.length !== 0) {
       let rs = average(reviews);
       setValue(rs);
@@ -90,8 +97,10 @@ function ProductDetail() {
 
   useEffect(() => {
     if (typeof id === 'undefined') {
-      // window.location.replace('http://localhost:3001/catalogue');
-      history.push('/catalogue');
+      let fullUrl = location.pathname.split('/');
+      let urlId = fullUrl.slice(fullUrl.length - 1);
+      dispatch(setWineDetailAsync(urlId));
+      // history.push('/catalogue');
     }
   }, []);
 
@@ -104,17 +113,17 @@ function ProductDetail() {
     history.push(
       id
         ? {
-          pathname: `/admin/edit/${id}`,
-          state: {
-            edit: true,
-          },
-        }
+            pathname: `/admin/edit/${id}`,
+            state: {
+              edit: true,
+            },
+          }
         : {
-          pathname: '/catalogue',
-          state: {
-            edit: false,
-          },
-        }
+            pathname: '/catalogue',
+            state: {
+              edit: false,
+            },
+          }
     );
   };
 
@@ -147,17 +156,28 @@ function ProductDetail() {
     functionCartGuest(payload, null, null);
     dispatch(sync(false));
   }
-  let contentRev = []
+  let contentRev = [];
   if (reviews.length > 0) {
-    contentRev = reviews.slice((page-1)*cantidadAMostrar, page*cantidadAMostrar).map((review) => {
-      return <ReviewCard data={review} />;
-    })
-    contentRev.push(<div className="Catalogue__Pagination"><Pagination onChange={handleClick} count={Math.ceil(reviews.length/cantidadAMostrar)} variant="outlined" shape="rounded" /></div>);
+    contentRev = reviews
+      .slice((page - 1) * cantidadAMostrar, page * cantidadAMostrar)
+      .map((review) => {
+        return <ReviewCard data={review} />;
+      });
+    contentRev.push(
+      <div className="Catalogue__Pagination">
+        <Pagination
+          onChange={handleClick}
+          count={Math.ceil(reviews.length / cantidadAMostrar)}
+          variant="outlined"
+          shape="rounded"
+        />
+      </div>
+    );
   } else {
-    contentRev = null
+    contentRev = null;
   }
 
-  if (reviewStatus === 'loading') {
+  if (reviewStatus === 'loading' || detailStatus === 'loading') {
     return (
       <div className="ProductDetail__containerCargando">
         <h3>Cargando....</h3>
@@ -230,18 +250,18 @@ function ProductDetail() {
             {stock === 0 ? (
               <h3>No hay STOCK</h3>
             ) : (
-                <Button
-                  id="Button__Buy"
-                  onClick={() => {
-                    authStatus
-                      ? handlerProductToCart(user.id)
-                      : handlerProductToCartGuest(id);
-                  }}
-                  disabled={cartStatus === 'loading' ? true : false}
-                >
-                  Comprar
-                </Button>
-              )}
+              <Button
+                id="Button__Buy"
+                onClick={() => {
+                  authStatus
+                    ? handlerProductToCart(user.id)
+                    : handlerProductToCartGuest(id);
+                }}
+                disabled={cartStatus === 'loading' ? true : false}
+              >
+                Comprar
+              </Button>
+            )}
           </CardActions>
           {contentRev}
         </Card>

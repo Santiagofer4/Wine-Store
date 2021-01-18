@@ -11,10 +11,11 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import { reviewsListSelector } from "../../selectors/index.js";
-import { useSelector } from "react-redux";
-import { search, sliceTime, sliceHour } from "../utils/index";
-import UserReview from "../Review/UserReview";
+import { reviewsListSelector } from '../../selectors/index.js';
+import { useSelector } from 'react-redux';
+import { search, sliceTime, sliceHour } from '../utils/index';
+import UserReview from '../Review/UserReview';
+import { Link } from 'react-router-dom';
 
 const useRowStyles = makeStyles({
   root: {
@@ -25,7 +26,7 @@ const useRowStyles = makeStyles({
 });
 
 function Row(props) {
-  const { row , order, review} = props;
+  const { row, order, review } = props;
   const [open, setOpen] = useState(false);
   const classes = useRowStyles();
   const reviews = useSelector(reviewsListSelector);
@@ -34,7 +35,11 @@ function Row(props) {
     <React.Fragment>
       <TableRow className={classes.root}>
         <TableCell>
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
@@ -44,7 +49,7 @@ function Row(props) {
         <TableCell component="th" scope="row">
           {order.id}
         </TableCell>
-        <TableCell align="right">{order.total}</TableCell> 
+        <TableCell align="right">{order.total}</TableCell>
         <TableCell align="right">{order.status}</TableCell>
       </TableRow>
       <TableRow>
@@ -61,21 +66,31 @@ function Row(props) {
                     <TableCell>Producto</TableCell>
                     <TableCell align="right">Precio unitario</TableCell>
                     <TableCell align="right"> Precio total</TableCell>
-
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {row.map((historyRow) => (
-                      <TableRow key={historyRow.id}>
+                    <TableRow key={historyRow.id}>
                       <TableCell component="th" scope="row">
                         {historyRow.quantity}
                       </TableCell>
-                      <TableCell>{historyRow.product.name}</TableCell>
-                      <TableCell align="right">{historyRow.product.price}</TableCell>
+                      <TableCell>
+                        {' '}
+                        <Link to={`/product/${historyRow.product.id}`}>
+                          {historyRow.product.name}
+                        </Link>
+                      </TableCell>
+                      <TableCell align="right">
+                        {historyRow.product.price}
+                      </TableCell>
                       <TableCell align="right">
                         {historyRow.product.price * historyRow.quantity}
                       </TableCell>
-                        <TableCell align="right">{review && search(historyRow.product.id, reviews) ? <UserReview data={historyRow} /> : null}</TableCell>
+                      <TableCell align="right">
+                        {review && search(historyRow.product.id, reviews) ? (
+                          <UserReview data={historyRow} />
+                        ) : null}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

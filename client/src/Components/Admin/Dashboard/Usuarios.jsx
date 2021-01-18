@@ -71,42 +71,44 @@ function Usuarios() {
       </>
     );
   } else if (status === 'succeded') {
-    content = users.slice((page-1)*cantidadAMostrar, page*cantidadAMostrar).map((user, idx) => {
-      let even = idx % 2 === 0 ? 'white' : 'beige';
-      return (
-        <>
-          <div className="grid-item" style={{ backgroundColor: even }}>
-            {user.id}
-          </div>
-          <div className="grid-item" style={{ backgroundColor: even }}>
-            {user.firstName + ' ' + user.lastName}
-          </div>
-          {!user.isAdmin ? (
-            <Button
-              className="editButton"
-              style={{ backgroundColor: even }}
-              onClick={() => promoteUser(user.id)}
-            >
-              <ArrowUpwardIcon className="grid-item"></ArrowUpwardIcon>
-            </Button>
-          ) : (
-            <Button
-              className="editButton"
-              style={{ backgroundColor: even }}
-              disabled="true"
-            >
-              <ArrowUpwardIcon className="grid-item"></ArrowUpwardIcon>
-            </Button>
-          )}
-          <div className="grid-item" style={{ backgroundColor: even }}>
-            <a href="#" className="Cart__DeleteProduct">
-              <i
-                class="fas fa-trash-alt"
-                onClick={() => deleteUserHandler(user.id)}
-              ></i>
-            </a>
-          </div>
-          {/*           <div className="grid-item" style={{ backgroundColor: even }}>
+    content = users
+      .slice((page - 1) * cantidadAMostrar, page * cantidadAMostrar)
+      .map((user, idx) => {
+        let even = idx % 2 === 0 ? 'white' : 'beige';
+        return (
+          <>
+            <div className="grid-item" style={{ backgroundColor: even }}>
+              {user.id}
+            </div>
+            <div className="grid-item" style={{ backgroundColor: even }}>
+              {user.firstName + ' ' + user.lastName}
+            </div>
+            {!user.isAdmin ? (
+              <Button
+                className="editButton"
+                style={{ backgroundColor: even }}
+                onClick={() => promoteUser(user.id)}
+              >
+                <ArrowUpwardIcon className="grid-item"></ArrowUpwardIcon>
+              </Button>
+            ) : (
+              <Button
+                className="editButton"
+                style={{ backgroundColor: even }}
+                disabled="true"
+              >
+                <ArrowUpwardIcon className="grid-item"></ArrowUpwardIcon>
+              </Button>
+            )}
+            <div className="grid-item" style={{ backgroundColor: even }}>
+              <a href="#" className="Cart__DeleteProduct">
+                <i
+                  class="fas fa-trash-alt"
+                  onClick={() => deleteUserHandler(user.id)}
+                ></i>
+              </a>
+            </div>
+            {/*           <div className="grid-item" style={{ backgroundColor: even }}>
             <Button
               className="editButton"
               style={{ backgroundColor: even }}
@@ -115,10 +117,19 @@ function Usuarios() {
               <EditIcon className="grid-item"></EditIcon>
             </Button>
           </div> */}
-        </>
-      );
-    });
-    content.push(<div className="Catalogue__Pagination"><Pagination onChange={handleClickPagination} count={Math.ceil(users.length/cantidadAMostrar)} variant="outlined" shape="rounded" /></div>);
+          </>
+        );
+      });
+    content.push(
+      <div className="Catalogue__Pagination">
+        <Pagination
+          onChange={handleClickPagination}
+          count={Math.ceil(users.length / cantidadAMostrar)}
+          variant="outlined"
+          shape="rounded"
+        />
+      </div>
+    );
   } else if (status === 'failed') {
     content = (
       <>
