@@ -37,9 +37,15 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
 
 
 
-export const postUserLogin = createAsyncThunk('user/login', async (payload) => {
+export const postUserLogin = createAsyncThunk('user/login', async (payload, { dispatch }) => {
   const { user, formik } = payload;
   const userLogin_response = await axios.post(authLoginEndpoint, user);
+  if (userLogin_response){
+  let storageSTRG = localStorage.getItem('cart');
+  let storage = JSON.parse(storageSTRG);
+  console.log('DATOS USER',userLogin_response.data)
+  await storage.map(product =>{axios.post( usersEndpoint + userLogin_response.data.user.id + '/cart',product)})
+  }
   const { token } = userLogin_response.data;
   const resPayload = {
     userLogin_response: userLogin_response.data,
@@ -53,6 +59,7 @@ export const githubLogin = createAsyncThunk(
   'user/githublogin',
   async (_, { rejectWithValue }) => {
     const resp = await axios.get(authEnpoint + 'github/');
+    console.log('LOGEADO CON GIT', resp)
     let redirectURL = resp.request.responseURL;
     if (redirectURL) return window.location.replace(redirectURL);
     else return rejectWithValue(resp);
@@ -63,6 +70,7 @@ export const googleLogin = createAsyncThunk(
   'user/googlelogin',
   async (_, { rejectWithValue }) => {
     const resp = await axios.get(authEnpoint + 'google/');
+    
     let redirectURL = resp.request.responseURL;
     if (redirectURL) return window.location.replace(redirectURL);
     else return rejectWithValue(resp);
@@ -196,6 +204,7 @@ const userSlice = createSlice({
       const { userLogin_response, formik } = payload;
       state.user.loginStatus = status.succeded;
       state.user.info = userLogin_response.user;
+      localStorage.removeItem('cart')
       formik.resetForm();
     },
     [postUserLogin.rejected]: (state, action) => {

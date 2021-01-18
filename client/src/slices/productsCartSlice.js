@@ -37,6 +37,7 @@ export const getAllProductsCart = createAsyncThunk(
 export const postProductToCart = createAsyncThunk(
   'cart/postProductToCart',
   async (payload, { dispatch }) => {
+    console.log('datos', payload)
     const { userId, detail, increment } = payload;
     const cart_item = await axios.post(
       usersEndpoint + userId + '/cart',
