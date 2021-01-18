@@ -69,7 +69,6 @@ export default function AddressForm() {
             component={TextField}
             name={firstName.name}
             label={firstName.label}
-            defaultValue={addressInfoStorage.firstName}
             fullWidth
           />
         </Grid>
