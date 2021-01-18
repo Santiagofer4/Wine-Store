@@ -3,15 +3,10 @@ img {
 }
 
 .pagos {
-    display: inline-grid;
-    align-self: center;
-    margin-top: 10rem;
+    display: grid;
+    margin: 0rem 10rem;
     padding: 7rem !important;
 }
-
-/* #form2 {
-    width: 70rem;
-} */
 
 #panelPago {
     padding: 10rem;

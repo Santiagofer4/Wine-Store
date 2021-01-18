@@ -24,7 +24,7 @@ import Checkout from './Components/Checkout/Checkout';
 import Profile from './Components/Profile/Profile';
 import Dashboard from './Components/Admin/Dashboard/Dashboard';
 import GuestRoute from './Components/ProtectRoute/GuestRoute';
-import Payments from './Components/Admin/Dashboard/Payments';
+import Payments from './Components/Checkout/Payments';
 
 function App() {
   // //!SOLUCION CAVERNICOLA!
