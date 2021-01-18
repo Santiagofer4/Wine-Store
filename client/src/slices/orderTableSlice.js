@@ -94,7 +94,12 @@ const orderTableSlice = createSlice({
       state.orderTable.status = status.loading;
     },
     [modificateOrder.fulfilled]: (state, { payload }) => {
+      const { myCart } = payload;
       state.orderTable.status = status.succeded;
+      const orderToUpdate = state.orderTable.orders.find(
+        ({ id }) => id === myCart
+      );
+      if (orderToUpdate) orderToUpdate.status = payload.status;
     },
     [modificateOrder.rejected]: (state, action) => {
       state.orderTable.status = status.failed;

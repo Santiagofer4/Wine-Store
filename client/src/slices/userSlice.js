@@ -42,12 +42,14 @@ export const postUserLogin = createAsyncThunk(
     const { user, formik } = payload;
     const userLogin_response = await axios.post(authLoginEndpoint, user);
     if (userLogin_response) {
-      let storageSTRG =
-        localStorage.getItem('cart') ||
+      let storageSTRG = localStorage.getItem('cart');
+
+      if (!storageSTRG) {
         localStorage.setItem('cart', JSON.stringify(empty_storage));
-      // if (!storageSTRG) localStorage.setItem('cart')
+        storageSTRG = localStorage.getItem('cart');
+      }
+
       let storage = JSON.parse(storageSTRG);
-      console.log('DATOS USER', userLogin_response.data);
       await storage.map((product) => {
         axios.post(
           usersEndpoint + userLogin_response.data.user.id + '/cart',
