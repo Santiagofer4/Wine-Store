@@ -173,14 +173,14 @@ function Cart() {
   };
 
   const handleConfirm = () => {
-    // if (authStatus) {
+    if (authStatus) {
       let total = Math.ceil((subTotal * 121) / 100);
         //history.push('/checkout');
         history.push('/payments');
-    // }
-    // if (!authStatus) {
-    //   history.push('/form/user/login');
-    // }
+    }
+    if (!authStatus) {
+      history.push('/form/user/login');
+    }
     deleteAddressInfo();
     deletePaymentInfo();
     //agregar total para guardar
@@ -268,18 +268,18 @@ function Cart() {
             </div>
             <div>
               <Button
-                id="confirmBtn"
-                className="buttonCart"
-                onClick={handleConfirm}
-              >
-                Confirmar
-              </Button>
-              <Button
                 id="cancelBtn"
                 className="buttonCart"
                 onClick={handleDelete}
               >
                 Cancelar
+              </Button>
+              <Button
+                id="confirmBtn"
+                className="buttonCart"
+                onClick={handleConfirm}
+              >
+                Confirmar
               </Button>
             </div>
           </div>

@@ -6,11 +6,11 @@ export const categoryEndpoint = productEndpoint + 'category/';
 
 export const usersEndpoint = baseEndpoint + 'users/';
 
-export const getAllProductsCartEnpoint = usersEndpoint; // ${id}/cart
+export const getAllProductsCartEndpoint = usersEndpoint; // ${id}/cart
 
-export const getCatsOfProductEnpoint = categoryEndpoint + 'product/'; // ${productId}'
+export const getCatsOfProductEndpoint = categoryEndpoint + 'product/'; // ${productId}'
 
-export const getAllProdsByCategoryEnpoint =
+export const getAllProdsByCategoryEndpoint =
   productEndpoint + 'productsByCategory/';
 
 export const strainsEndpoint = baseEndpoint + 'strain/';
@@ -21,7 +21,7 @@ export const searchProductEndpoint = baseEndpoint + 'search?word=';
 
 export const addUserEndpoint = baseEndpoint + 'auth/register/';
 
-export const authEnpoint = baseEndpoint + 'auth/';
+export const authEndpoint = baseEndpoint + 'auth/';
 
 export const authLoginEndpoint = baseEndpoint + 'auth/login/';
 
