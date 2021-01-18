@@ -3,8 +3,8 @@ import axios from 'axios';
 
 import {
   categoryEndpoint,
-  getAllProdsByCategoryEnpoint,
-  getCatsOfProductEnpoint,
+  getAllProdsByCategoryEndpoint,
+  getCatsOfProductEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 
@@ -40,14 +40,14 @@ export const getAllCategories = createAsyncThunk(
 export const getAllProdsByCategory = createAsyncThunk(
   'category/getAllProdsByCategory',
   async (taste) => {
-    const resp = await axios.get(getAllProdsByCategoryEnpoint + taste);
+    const resp = await axios.get(getAllProdsByCategoryEndpoint + taste);
     return resp;
   }
 );
 export const getAllCatsOfProduct = createAsyncThunk(
   'category/getAllCatsOfProduct',
   async (productId) => {
-    const resp = await axios.get(getCatsOfProductEnpoint + productId);
+    const resp = await axios.get(getCatsOfProductEndpoint + productId);
     return resp;
   }
 );

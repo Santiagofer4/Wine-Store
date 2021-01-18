@@ -8,6 +8,7 @@ import {
   allProductsSelector,
   allProductsStatusSelector,
 } from '../../../selectors';
+// import LoadProduct from '../LoadProduct/LoadProduct';
 
 import EditIcon from '@material-ui/icons/Edit';
 import { CircularProgress, Button } from '@material-ui/core';
@@ -57,7 +58,7 @@ function Products() {
       </>
     );
   } else if (status === 'succeded') {
-    content = products.slice((page-1)*cantidadAMostrar, page*cantidadAMostrar).map((product, idx) => {
+    content = products.slice((page - 1) * cantidadAMostrar, page * cantidadAMostrar).map((product, idx) => {
       let even = idx % 2 === 0 ? 'white' : 'beige';
       return (
         <>
@@ -77,7 +78,7 @@ function Products() {
         </>
       );
     });
-    content.push(<div className="Catalogue__Pagination"><Pagination onChange={handleClick} count={Math.ceil(products.length/cantidadAMostrar)} variant="outlined" shape="rounded" /></div>);
+    content.push(<div className="Catalogue__Pagination"><Pagination onChange={handleClick} count={Math.ceil(products.length / cantidadAMostrar)} variant="outlined" shape="rounded" /></div>);
   } else if (status === 'failed') {
     content = (
       <>
@@ -87,17 +88,31 @@ function Products() {
     );
   }
   return (
-    <div class="grid-container">
-      <p className="grid-item" style={{ fontWeight: 'bold' }}>
-        Código
+    <div>
+      <Button id="btnCargar" onClick={() =>
+ 
+        history.push({
+          pathname: '/dashboard/loadproduct',
+          state: {
+            edit: false,
+          }
+        })
+      }
+      > CARGAR PRODUCTO </Button>
+
+      <div class="grid-container">
+
+        <p className="grid-item" style={{ fontWeight: 'bold' }}>
+          Código
       </p>
-      <p className="grid-item" style={{ fontWeight: 'bold' }}>
-        Producto
+        <p className="grid-item" style={{ fontWeight: 'bold' }}>
+          Producto
       </p>
-      <p className="grid-item" style={{ fontWeight: 'bold' }}>
-        Editar/Borrar
+        <p className="grid-item" style={{ fontWeight: 'bold' }}>
+          Editar/Borrar
       </p>
-      {content}
+        {content}
+      </div >
     </div>
   );
 }

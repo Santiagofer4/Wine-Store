@@ -61,7 +61,7 @@ server.delete(
     let { idUser, productId } = req.params;
     let user = req.user;
     if (!idUser) return res.send(400, 'No hay carrito asociado al usuario');
-
+    console.log('recibimos', user, idUser, productId);
     // Condición de entrada para admin
     if (user.isAdmin) {
       Order.findOne({
@@ -84,7 +84,7 @@ server.delete(
           });
         })
         .catch((err) => {
-           return res.status(500);
+          return res.status(500);
         });
     } else {
       // Condición de entrada para cualquier user
@@ -108,7 +108,7 @@ server.delete(
           });
         })
         .catch((err) => {
-         return res.status(500);
+          return res.status(500);
         });
     }
   }

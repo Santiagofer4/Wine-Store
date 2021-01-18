@@ -7,7 +7,9 @@ import {
   StepLabel,
   Button,
   Typography,
+  CircularProgress,
 } from '@material-ui/core';
+import StepButton from './StepButton';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
@@ -16,6 +18,7 @@ import {
   allProductsCartSelector,
   userSelector,
   myCartSelector,
+  allOrderStatusSelector,
 } from '../../selectors/index';
 import {
   //modificateOrder,
@@ -24,6 +27,8 @@ import {
 } from '../../slices/productsCartSlice';
 import {
   modificateOrder,
+  confirmOrder,
+  resetOrderstatus,
 } from '../../slices/orderTableSlice';
 import {
   deleteAddressInfo,
@@ -32,49 +37,25 @@ import {
 import { sendEmail } from '../../slices/userSlice';
 import { total } from '../utils/index';
 import axios from 'axios';
+import {
+  checkoutStyles,
+  initialState_Checkout,
+  checkoutValidationSchema,
+} from './checkoutHelpers';
+import { Formik, Form, useFormikContext } from 'formik';
+import FinalMessage from './FinalMessage';
+import { useHistory } from 'react-router-dom';
 
 // Estilos de los "steps" del checkout
 
-const useStyles = makeStyles((theme) => ({
-  layout: {
-    width: 'auto',
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 600,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-  paper: {
-    marginBottom: theme.spacing(3),
-    padding: theme.spacing(2),
-    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-      marginBottom: theme.spacing(6),
-      padding: theme.spacing(3),
-    },
-  },
-  stepper: {
-    padding: theme.spacing(3, 0, 5),
-  },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-  button: {
-    marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(1),
-  },
-}));
-
 const steps = ['Direccion de envio', 'Detalles de pago', 'Verificar la orden'];
 
-function getStepContent(step) {
+function getStepContent(step, formik, myCart) {
   switch (step) {
     case 0:
       return <AddressForm />;
     case 1:
-      return <PaymentForm />;
+      return <PaymentForm formik={formik} />;
     case 2:
       return <Review />;
     default:
@@ -83,61 +64,29 @@ function getStepContent(step) {
 }
 
 export default function Checkout() {
-  const myCart = useSelector(myCartSelector);
+  const classes = checkoutStyles();
+  const formikContext = useFormikContext();
+  const history = useHistory();
+
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
+  const myCart = useSelector(myCartSelector);
   const AllProductsCart = useSelector(allProductsCartSelector);
-  const classes = useStyles();
+  const orderStatus = useSelector(allOrderStatusSelector);
+
   const [activeStep, setActiveStep] = useState(0);
+  const currentValidationSchema = checkoutValidationSchema[activeStep];
+  const isLastStep = activeStep === steps.length - 1;
   let suma = Math.ceil((total(AllProductsCart) * 121) / 100);
 
-  const handleNext = (e) => {
-    setActiveStep(activeStep + 1);
+  const handleBack = () => {
+    setActiveStep(activeStep - 1);
+  };
 
-    if (activeStep === 2) {
-      if (myCart === null) {
-        //guestRegister
-        //->crear cart
-        //->cargar datos de memoria al cart (order y orderlines)
-        //*LA MISMA LOGICA QUE YA ESTA
-        //->modificar la orden a confirmada
-        //->actualziar la DB
-        //borra data local
-        //->manda email
-        //resetea el cart
-        // axios.post('http://localhost:3000/orders', {
-        //   status: 'cart',
-        //   total: 0,
-        //   userId: 1,
-        // });
-        // //Recibir el id de la orden
-        // AllProductsCart.map((p) => {
-        //   console.log(p);
-        //   const payload = {
-        //     id: parseInt(p.id),
-        //     price: parseInt(p.price),
-        //     quantity: parseInt(p.quantity),
-        //   };
-        //   dispatch(postProductToCart(payload));
-        //   //Revisar porqué no crea las orderlines
-        // });
-      }
-      dispatch(
-        modificateOrder({
-          myCart: myCart,
-          total: suma,
-          status: 'completed',
-        })
-      );
-      AllProductsCart.map(async (p) => {
-        //Actualiza stock en DB
-        if (p.stock >= p.quantity)
-          await axios.put(`http://localhost:3000/products/${p.id}`, {
-            stock: p.stock - p.quantity,
-          });
-      });
-      deleteAddressInfo();
-      deletePaymentInfo();
+  useEffect(() => {
+    if (orderStatus === 'succeded') {
+      setActiveStep((step) => step + 1);
+      // formikContext.isSubmitting(false);
       dispatch(
         sendEmail({
           name: user.firstName,
@@ -147,10 +96,62 @@ export default function Checkout() {
         })
       );
       dispatch(resetCart());
+      dispatch(resetOrderstatus());
+    }
+  }, [orderStatus]);
+
+  useEffect(() => {
+    if (AllProductsCart.length === 0) {
+      history.push('/catalogue');
+    }
+  }, []);
+
+  const handleSubmit = (values, formik) => {
+    console.log('laststep', isLastStep);
+    if (isLastStep) {
+      realSubmit(values, formik);
+    } else {
+      setActiveStep((step) => step + 1);
+      formik.setTouched({});
+      formik.setSubmitting(false);
     }
   };
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
+  const realSubmit = (values, formik) => {
+    const order_payload = {
+      myCart,
+      total: suma,
+      status: 'completed',
+    };
+    const cart_payload = AllProductsCart;
+    const payload = { cart_payload, order_payload };
+    dispatch(confirmOrder(payload));
+    // dispatch(
+    //   modificateOrder({
+    //     myCart: myCart,
+    //     total: suma,
+    //     status: 'completed',
+    //   })
+    // );
+    // AllProductsCart.map(async (p) => {
+    //   //Actualiza stock en DB
+    //   if (p.stock >= p.quantity)
+    //     await axios.put(`http://localhost:3000/products/${p.id}`, {
+    //       stock: p.stock - p.quantity,
+    //     });
+    // });
+    // // deleteAddressInfo();
+    // // deletePaymentInfo();
+    // formik.isSubmitting(false);
+    // setActiveStep((step) => step + 1);
+    // dispatch(
+    //   sendEmail({
+    //     name: user.firstName,
+    //     email: user.email,
+    //     type: 'Order',
+    //     orderCod: myCart,
+    //   })
+    // );
+    // dispatch(resetCart());
   };
 
   return (
@@ -161,43 +162,46 @@ export default function Checkout() {
             Checkout
           </Typography>
           <Stepper activeStep={activeStep} className={classes.stepper}>
-            {steps.map((label) => (
-              <Step key={label}>
+            {steps.map((label, idx) => (
+              <Step key={idx}>
                 <StepLabel>{label}</StepLabel>
               </Step>
             ))}
           </Stepper>
           <React.Fragment>
             {activeStep === steps.length ? (
-              <React.Fragment>
-                <Typography variant="h5" gutterBottom>
-                  Muchas gracias por su compra!
-                </Typography>
-                <Typography variant="subtitle1">
-                  Su número de orden es {myCart}
-                </Typography>
-              </React.Fragment>
+              <FinalMessage myCart={myCart} />
             ) : (
               <React.Fragment>
-                {getStepContent(activeStep)}
-                <div className={classes.buttons}>
-                  {activeStep !== 0 && (
-                    <Button onClick={handleBack} className={classes.button}>
-                      Atras
-                    </Button>
+                <Formik
+                  initialValues={initialState_Checkout}
+                  validationSchema={currentValidationSchema}
+                  onSubmit={handleSubmit}
+                >
+                  {(formik) => (
+                    <Form>
+                      {getStepContent(activeStep, formik)}
+                      <div className={classes.buttons}>
+                        {activeStep !== 0 && activeStep < steps.length && (
+                          <Button
+                            onClick={handleBack}
+                            className={classes.button}
+                            disabled={formik.isSubmitting}
+                          >
+                            Atras
+                          </Button>
+                        )}
+                        <StepButton step={activeStep} formik={formik} />
+                        {formik.isSubmitting && (
+                          <CircularProgress
+                            size={24}
+                            className={classes.buttonProgress}
+                          />
+                        )}
+                      </div>
+                    </Form>
                   )}
-                  <Button
-                    id="button"
-                    variant="contained"
-                    color="primary"
-                    onClick={(e) => handleNext(e)}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1
-                      ? 'Comprar'
-                      : 'Siguiente   '}
-                  </Button>
-                </div>
+                </Formik>
               </React.Fragment>
             )}
           </React.Fragment>

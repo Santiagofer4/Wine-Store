@@ -1,43 +1,45 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
+import { checkoutFields } from './checkoutHelpers';
+import InputField from '../FormComponents/FieldComponents/InputField';
+import { useState, Component } from 'react';
+import { TextField } from 'formik-material-ui';
+import { Field } from 'formik';
 
-export default function PaymentForm() {
+export default function PaymentForm({ formik }) {
+  const { cardName, cardNumber, expiryDate, cvv } = checkoutFields;
+  // let paymentInfoStorage = JSON.parse(localStorage.getItem('paymentInfo'));
+  // const [paymentInfo, setPaymentInfo] = React.useState({
+  //   cardName: paymentInfoStorage.cardName,
+  //   cardNumber: paymentInfoStorage.cardNumber,
+  //   expDate: paymentInfoStorage.expDate,
+  //   cvv: paymentInfoStorage.cvv,
+  // });
 
-  let paymentInfoStorage = JSON.parse(localStorage.getItem('paymentInfo'));
-  const [paymentInfo, setPaymentInfo] = React.useState({  
-              cardName: paymentInfoStorage.cardName,
-              cardNumber: paymentInfoStorage.cardNumber,
-              expDate: paymentInfoStorage.expDate,
-              cvv: paymentInfoStorage.cvv,
-            
-    });
-    
-    useEffect(() => {
-      localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo))
-    }, [paymentInfo])
-    
-    window.addEventListener('beforeunload', (event) => {
-      setPaymentInfo({
-        cardName: document.getElementById('cardName'),
-        cardNumber: document.getElementById('cardNumber'),
-        expDate: document.getElementById('expDate'),
-        cvv: document.getElementById('cvv'),
-     
-       });
-      localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo))
-    });
+  // useEffect(() => {
+  //   localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo));
+  // }, [paymentInfo]);
 
-    const handleInputChange = function(e) {
-      setPaymentInfo({
-         ...paymentInfo, 
-         [e.target.name]: e.target.value 
-       });
-     }
-  
+  // window.addEventListener('beforeunload', (event) => {
+  //   setPaymentInfo({
+  //     cardName: document.getElementById('cardName'),
+  //     cardNumber: document.getElementById('cardNumber'),
+  //     expDate: document.getElementById('expDate'),
+  //     cvv: document.getElementById('cvv'),
+  //   });
+  //   localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo));
+  // });
+
+  // const handleInputChange = function (e) {
+  //   setPaymentInfo({
+  //     ...paymentInfo,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -45,67 +47,44 @@ export default function PaymentForm() {
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <TextField
-            required
-            id="cardName"
-            name="cardName"
-            label="Nombre en la Tarjeta"
-            onChange={handleInputChange}
-            defaultValue={paymentInfoStorage.cardName}
+          <Field
+            component={TextField}
+            name={cardName.name}
+            label={cardName.label}
             fullWidth
-            autoComplete="cc-name"
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField
-            required
-            id="cardNumber"
-            name="cardNumber"
-            label="Número de Tarjeta"
-            onChange={handleInputChange}
-            defaultValue={paymentInfoStorage.cardNumber}
+          <Field
+            component={TextField}
+            name={cardNumber.name}
+            label={cardNumber.label}
             fullWidth
-            autoComplete="cc-number"
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField
-            required
-            id="expDate"
-            name="expDate"
-            label="Válida hasta:"
-            onChange={handleInputChange}
-            defaultValue={paymentInfoStorage.expDate}
+          <Field
+            component={TextField}
+            name={expiryDate.name}
+            label={expiryDate.label}
             fullWidth
-            autoComplete="cc-exp"
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField
-            required
-            id="cvv"
-            name="cvv"
-            label="CVV"
-            helperText="Código de seguridad"
-            defaultValue={paymentInfoStorage.cvv}
-            onChange={handleInputChange}
+          <Field
+            component={TextField}
+            name={cvv.name}
+            label={cvv.label}
             fullWidth
-            autoComplete="cc-csc"
           />
         </Grid>
-        {/* <Grid item xs={12}>
-          <FormControlLabel
-            control={<Checkbox color="secondary" name="saveCard" value="yes" />}
-            label="Recordar los datos de la tarjeta de crédito"
-          />
-        </Grid> */}
       </Grid>
       <div id="PaymentForm">
         <Cards
-          cvc={paymentInfo.cvc}
-          expiry={paymentInfo.expDate}
-          name={paymentInfo.cardName}
-          number={paymentInfo.cardNumber}
+          cvc={formik.values.cvv}
+          expiry={formik.values.expDate}
+          name={formik.values.cardName}
+          number={formik.values.cardNumber}
         />
       </div>
     </React.Fragment>

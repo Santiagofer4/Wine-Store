@@ -5,7 +5,7 @@ import { useAuthContext } from './authContext';
 
 function GuestRoute({ component: Component, ...rest }) {
   const authStatus = useAuthContext();
-  const PROFILE = '/user/profile';
+  const PROFILE = '/catalogue';
   return (
     <Route
       {...rest}

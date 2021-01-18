@@ -40,6 +40,29 @@ server.get('/productsByCategory/:category', (req, res) => {
   });
 });
 
+//Modificar varios productos
+server.put('/stockupdate', async (req, res) => {
+  let dataToUpdate = [];
+  try {
+    let cart = req.body;
+    cart.forEach((item) => {
+      dataToUpdate.push({ id: item.id, quantity: item.quantity });
+    });
+    const updatedStock = await Promise.all(
+      dataToUpdate.map(({ id, quantity }) =>
+        Product.findByPk(id).then((product) =>
+          product.update({ stock: product.dataValues.stock - quantity })
+        )
+      )
+    );
+
+    return res.status(200).send(updatedStock);
+  } catch (error) {
+    console.error(error);
+    return res.send(500).send({ message: 'error al confirmar la orden' });
+  }
+});
+
 //Modificar Producto
 
 server.put(

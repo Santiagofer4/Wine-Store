@@ -184,9 +184,6 @@ function ProductDetail() {
             <Typography variant="h5" component="h2">
               {name}
             </Typography>
-            <Typography variant="h5" component="h2">
-              Codigo #{id}
-            </Typography>
             <Typography className={classes.pos} color="textSecondary">
               {categories}
             </Typography>

@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { Paper, CircularProgress, Button, Container } from "@material-ui/core";
-import FormLabel from "@material-ui/core/FormLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import "./Profile.modules.css";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import { Paper, CircularProgress, Button, Container } from '@material-ui/core';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import './Profile.modules.css';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   userOrdersStatusSelector,
   userOrdersSelector,
   userSelector,
   reviewsListStatusSelector,
-} from "../../selectors/index.js";
-import { getUserOrders, editUsers } from "../../slices/userSlice";
-import { getUserReviews } from "../../slices/reviewSlice";
-import Row from "../Profile/ProfileTable";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableContainer from "@material-ui/core/TableContainer";
-import EditIcon from "@material-ui/icons/Edit";
-import { Formik, Form } from "formik";
-import FormField from "../FormComponents/FormField";
+} from '../../selectors/index.js';
+import { getUserOrders, editUsers } from '../../slices/userSlice';
+import { getUserReviews } from '../../slices/reviewSlice';
+import Row from '../Profile/ProfileTable';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TableContainer from '@material-ui/core/TableContainer';
+import EditIcon from '@material-ui/icons/Edit';
+import { Formik, Form } from 'formik';
+import FormField from '../FormComponents/FormField';
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -33,15 +33,16 @@ export default function Profile() {
   const orders = useSelector(userOrdersSelector);
   const reviewStatus = useSelector(reviewsListStatusSelector);
   const [state, setState] = useState({
-    created: true,
+    dispatched: true,
     canceled: true,
     pending: true,
     completed: true,
     cart: true,
+    finished: true,
   });
   const [edit, setEdit] = useState(false);
 
-  const { cart, canceled, completed, created, pending } = state;
+  const { cart, canceled, completed, dispatched, pending, finished } = state;
   let allUserOrders;
 
   let states = [];
@@ -77,21 +78,21 @@ export default function Profile() {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
 
-  if (orders.length === 0 && userStatus !== "succeded") {
+  if (orders.length === 0 && userStatus !== 'succeded') {
     allUserOrders = (
       <h3 className="emptyOrders1">
         Aún no tiene compras realizadas o pendientes
       </h3>
     );
   } else {
-    if (userStatus === "loading" || reviewStatus === "loading") {
+    if (userStatus === 'loading' || reviewStatus === 'loading') {
       allUserOrders = (
         <>
           <h2>Cargando...</h2>
           <CircularProgress />
         </>
       );
-    } else if (userStatus === "succeded" && reviewStatus === "succeded") {
+    } else if (userStatus === 'succeded' && reviewStatus === 'succeded') {
       return (
         <Paper className="profile">
           <h4 className="title">
@@ -140,7 +141,7 @@ export default function Profile() {
                       disabled={edit ? false : true}
                       required
                       className="text__field UserForm__lb"
-                      placeholder={"dd/mm/aaaa"}
+                      placeholder={'dd/mm/aaaa'}
                     />
                     <FormField
                       fieldType="input"
@@ -152,7 +153,7 @@ export default function Profile() {
                     <br></br>
                     <Container
                       className="center"
-                      style={{ display: edit ? "block" : "none" }}
+                      style={{ display: edit ? 'block' : 'none' }}
                     >
                       <Button type="submit" id="btnUser">
                         Actualizar
@@ -172,12 +173,12 @@ export default function Profile() {
                   control={
                     <Checkbox
                       className="checkbox"
-                      checked={created}
+                      checked={dispatched}
                       onChange={handleChange}
-                      name="created"
+                      name="dispatched"
                     />
                   }
-                  label="Created"
+                  label="Dispatched"
                 />
                 <FormControlLabel
                   control={
@@ -223,6 +224,17 @@ export default function Profile() {
                   }
                   label="Completed"
                 />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      className="checkbox"
+                      checked={finished}
+                      onChange={handleChange}
+                      name="finished"
+                    />
+                  }
+                  label="Finished"
+                />
               </FormGroup>
             </FormControl>
             <div className="ordersInfo">
@@ -239,23 +251,22 @@ export default function Profile() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    { orders.length > 0 ? (
-                      (allUserOrders = orders.map((row) =>
-                        states.includes(row.status) ? (
-                          <Row
-                            key={row.id}
-                            row={row.orderLines}
-                            order={row}
-                            review={row.status === "completed" ? true : false}
-                          />
-                        ) : null
-                      ))) : 
-                      allUserOrders = (
-                        <h3 className="emptyOrders1">
-                          Aún no tiene compras realizadas o pendientes
-                        </h3>
-                      )
-                    }
+                    {orders.length > 0
+                      ? (allUserOrders = orders.map((row) =>
+                          states.includes(row.status) ? (
+                            <Row
+                              key={row.id}
+                              row={row.orderLines}
+                              order={row}
+                              review={row.status === 'completed' ? true : false}
+                            />
+                          ) : null
+                        ))
+                      : (allUserOrders = (
+                          <h3 className="emptyOrders1">
+                            Aún no tiene compras realizadas o pendientes
+                          </h3>
+                        ))}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -263,7 +274,7 @@ export default function Profile() {
           </div>
         </Paper>
       );
-    } else if (userStatus === "failed" || reviewStatus === "failed") {
+    } else if (userStatus === 'failed' || reviewStatus === 'failed') {
       allUserOrders = (
         <>
           <h3>Ha ocurrido un error</h3>
@@ -271,5 +282,5 @@ export default function Profile() {
       );
     }
   }
-  return  <Paper>{allUserOrders}</Paper>;
+  return <Paper>{allUserOrders}</Paper>;
 }
