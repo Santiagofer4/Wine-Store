@@ -6,7 +6,7 @@ import {
   allUsers,
   userPromote,
   sendEmail,
-  resetUsers,
+  //resetUsers,
   deleteUser,
 } from '../../../slices/userSlice';
 import Pagination from '@material-ui/lab/Pagination';
@@ -23,7 +23,7 @@ function Usuarios() {
   //const history = useHistory();
   const users = useSelector(usersListSelector);
   const status = useSelector(userStatusSelector);
-  const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
+  //const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
   const [page, setPage] = useState(1);
   const cantidadAMostrar = 3;
   let content;
