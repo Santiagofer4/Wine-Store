@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { allProductsCartSelector } from "../../../selectors";
+import { allProductsCartSelector } from "../../selectors";
 import './Payments.modules.css';
 
 export default function MercadoPago(props) {
-  console.log("props", props);
   const orderDetails = useSelector(allProductsCartSelector);
 
   useEffect(() => {

@@ -104,7 +104,9 @@ function AdminProduct(props) {
   return (
     <Container id="contenedor">
       <Paper>
-        {edit ? <h1>Edicion de producto</h1> : <h1>Carga de producto</h1>}
+        <div id="barraSuperior">
+
+       
         <Button id="backButton" size="small" onClick={() => history.goBack()}>
           {' '}
           <img
@@ -114,6 +116,8 @@ function AdminProduct(props) {
           ></img>
           VOLVER
         </Button>
+        {edit ? <h1 id="titleH1">Edicion de producto</h1> : <h1>Carga de producto</h1>}
+        </div>
         <hr></hr>
         {content}
       </Paper>

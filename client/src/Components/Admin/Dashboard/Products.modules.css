@@ -7,3 +7,10 @@
   font-size: 1rem;
   text-align: center;
 }
+
+#btnCargar{
+  background-color: #be9063 !important;
+  height: 40px;
+  width: 100px;
+
+}

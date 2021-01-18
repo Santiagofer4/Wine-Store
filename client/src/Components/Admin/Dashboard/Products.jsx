@@ -89,7 +89,7 @@ function Products() {
   }
   return (
     <div>
-      <Button onClick={() =>
+      <Button id="btnCargar" onClick={() =>
  
         history.push({
           pathname: '/dashboard/loadproduct',
