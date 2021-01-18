@@ -35,25 +35,35 @@ export const createUser = createAsyncThunk('user/register', async (payload) => {
   return resPayload;
 });
 
-
-
-export const postUserLogin = createAsyncThunk('user/login', async (payload, { dispatch }) => {
-  const { user, formik } = payload;
-  const userLogin_response = await axios.post(authLoginEndpoint, user);
-  if (userLogin_response){
-  let storageSTRG = localStorage.getItem('cart');
-  let storage = JSON.parse(storageSTRG);
-  console.log('DATOS USER',userLogin_response.data)
-  await storage.map(product =>{axios.post( usersEndpoint + userLogin_response.data.user.id + '/cart',product)})
+export const postUserLogin = createAsyncThunk(
+  'user/login',
+  async (payload, { dispatch }) => {
+    let empty_storage = [];
+    const { user, formik } = payload;
+    const userLogin_response = await axios.post(authLoginEndpoint, user);
+    if (userLogin_response) {
+      let storageSTRG =
+        localStorage.getItem('cart') ||
+        localStorage.setItem('cart', JSON.stringify(empty_storage));
+      // if (!storageSTRG) localStorage.setItem('cart')
+      let storage = JSON.parse(storageSTRG);
+      console.log('DATOS USER', userLogin_response.data);
+      await storage.map((product) => {
+        axios.post(
+          usersEndpoint + userLogin_response.data.user.id + '/cart',
+          product
+        );
+      });
+    }
+    const { token } = userLogin_response.data;
+    const resPayload = {
+      userLogin_response: userLogin_response.data,
+      token,
+      formik,
+    };
+    return resPayload;
   }
-  const { token } = userLogin_response.data;
-  const resPayload = {
-    userLogin_response: userLogin_response.data,
-    token,
-    formik,
-  };
-  return resPayload;
-});
+);
 
 export const githubLogin = createAsyncThunk(
   'user/githublogin',
@@ -202,7 +212,7 @@ const userSlice = createSlice({
       const { userLogin_response, formik } = payload;
       state.user.loginStatus = status.succeded;
       state.user.info = userLogin_response.user;
-      localStorage.removeItem('cart')
+      localStorage.removeItem('cart');
       formik.resetForm();
     },
     [postUserLogin.rejected]: (state, action) => {
