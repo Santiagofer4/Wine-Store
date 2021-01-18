@@ -65,7 +65,8 @@ function getStepContent(step, formik, myCart) {
 
 export default function Checkout() {
   const classes = checkoutStyles();
-  const formikContext = useFormikContext();
+  // const { values: formValues } = useFormikContext();
+
   const history = useHistory();
 
   const dispatch = useDispatch();

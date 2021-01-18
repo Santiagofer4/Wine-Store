@@ -175,7 +175,9 @@ export const checkoutValidationSchema = [
       .required(`${country.requiredErrorMsg}`),
   }),
   Yup.object().shape({
-    [cardName.name]: Yup.string().required(`${cardName.requiredErrorMsg}`),
+    [cardName.name]: Yup.string()
+      .min(2)
+      .required(`${cardName.requiredErrorMsg}`),
     [cardNumber.name]: Yup.string().required(`${cardNumber.requiredErrorMsg}`),
     //   .matches(visaRegEx, cardNumber.invalidErrorMsg),
     [expiryDate.name]: Yup.string()

@@ -14,7 +14,7 @@ function SearchBar() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (inputSearch.length === 0 || inputSearch === ' ') {
+    if (inputSearch.length === 0 || inputSearch.trim().length === 0) {
       return;
     }
     dispatch(getProductSearch(inputSearch));
