@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CircularProgress, Container, Button } from '@material-ui/core';
 import FormField from '../../FormComponents/FormField';
 import '../LoadProduct/LoadProduct.modules.css';
-import { formatArrayToOption } from '../../utils.js';
+import { formatArrayToOption } from '../../utils';
 import { Formik, Form } from 'formik';
 import {
   allStrainsSelector,

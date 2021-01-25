@@ -3,8 +3,8 @@ import axios from 'axios';
 
 import {
   categoryEndpoint,
-  getAllProdsByCategoryEnpoint,
-  getCatsOfProductEnpoint,
+  getAllProdsByCategoryEndpoint,
+  getCatsOfProductEndpoint,
 } from '../constants/endpoints';
 import { status } from '../constants/helpers';
 
@@ -40,14 +40,14 @@ export const getAllCategories = createAsyncThunk(
 export const getAllProdsByCategory = createAsyncThunk(
   'category/getAllProdsByCategory',
   async (taste) => {
-    const resp = await axios.get(getAllProdsByCategoryEnpoint + taste);
+    const resp = await axios.get(getAllProdsByCategoryEndpoint + taste);
     return resp;
   }
 );
 export const getAllCatsOfProduct = createAsyncThunk(
   'category/getAllCatsOfProduct',
   async (productId) => {
-    const resp = await axios.get(getCatsOfProductEnpoint + productId);
+    const resp = await axios.get(getCatsOfProductEndpoint + productId);
     return resp;
   }
 );
@@ -73,7 +73,22 @@ export const postNewCategory = createAsyncThunk(
 const categorySlice = createSlice({
   name: 'category',
   initialState: initialState_category,
-  reducers: {},
+  reducers: {
+    productPriceLessCategory: (state, action) => {
+      state.allProdsByCategory.list = state.allProdsByCategory.list.filter((product) => {
+        return product.price <= action.payload
+      })
+    },
+    productPriceBetweenCategory : (state, action) => {
+      state.allProdsByCategory.list = state.allProdsByCategory.list.filter((product) => {
+        return product.price > action.payload.e && product.price < action.payload.f
+      })
+    },
+    productPriceMoreCategory: (state, action) => {
+      state.allProdsByCategory.list = state.allProdsByCategory.list.filter((product) => {
+        return product.price >= action.payload
+      })}
+  },
   extraReducers: {
     [getAllCategories.pending]: (state, action) => {
       state.allCategories.status = status.loading;
@@ -147,5 +162,6 @@ const categorySlice = createSlice({
     
   }
   });
+  export const { productPriceLessCategory, productPriceBetweenCategory, productPriceMoreCategory } = categorySlice.actions;
 
 export default categorySlice;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CircularProgress, Container } from '@material-ui/core';
+import { CircularProgress, Container, Paper, Button } from '@material-ui/core';
 import './LoadProduct.modules.css';
 import { getAllCategories } from '../../../slices/categorySlice';
 import { getAllStrains } from '../../../slices/strainSlice';
@@ -9,7 +9,7 @@ import {
   allStrainsSelector,
   allCategoriesStatusSelector,
   strainsStatusSelector,
-  productDetailStatusSelector
+  productDetailStatusSelector,
 } from '../../../selectors/index';
 import EditProduct from './EditProduct';
 import LoadProduct from './LoadProduct';
@@ -18,9 +18,11 @@ import {
   setWineDetailAsync,
 } from '../../../slices/productDetailSlice';
 import { formatArrayToOption } from '../../utils';
+import { useHistory } from 'react-router-dom';
 
 function AdminProduct(props) {
   const dispatch = useDispatch();
+  const history = useHistory();
   let param_id;
   const edit = props.location.state ? props.location.state.edit : false; //?booleano para determinar si se desea EDITAR la instancia
   if (edit) {
@@ -46,7 +48,14 @@ function AdminProduct(props) {
     if (strainStatus === 'idle') dispatch(getAllStrains());
     if (edit && wineDetailAsyncStatus === 'idle')
       dispatch(setWineDetailAsync(param_id));
-  }, [wineDetailAsyncStatus, allCatStatus, strainStatus, dispatch, edit, param_id]);
+  }, [
+    wineDetailAsyncStatus,
+    allCatStatus,
+    strainStatus,
+    dispatch,
+    edit,
+    param_id,
+  ]);
 
   useEffect(() => {
     //? Cleanup del status del detalle del vino
@@ -63,7 +72,7 @@ function AdminProduct(props) {
     if (allCatStatus === 'succeded' && strainStatus === 'succeded') {
       setOptions({
         tasteOption: formatArrayToOption(allCats, 'taste'),
-        strainOption: formatArrayToOption(allStrains),
+        strainOption: formatArrayToOption(allStrains, 'name'),
       });
     }
   }, [allCatStatus, strainStatus, dispatch, allCats, allStrains]);
@@ -87,14 +96,31 @@ function AdminProduct(props) {
       content = <EditProduct options={options} />;
     } else {
       //* si !edit entonces renderizamos el form `vacio` para cargar un nuevo producto
+
       content = <LoadProduct options={options} />;
     }
   }
 
   return (
-    <Container>
-      {edit ? <h1>Edicion de producto</h1> : <h1>Carga de producto</h1>}
-      {content}
+    <Container id="contenedor">
+      <Paper>
+        <div id="barraSuperior">
+
+       
+        <Button id="backButton" size="small" onClick={() => history.goBack()}>
+          {' '}
+          <img
+            id="backButtonImage"
+            src="https://static.thenounproject.com/png/251451-200.png"
+            alt="backBtn"
+          ></img>
+          VOLVER
+        </Button>
+        {edit ? <h1 id="titleH1">Edicion de producto</h1> : <h1>Carga de producto</h1>}
+        </div>
+        <hr></hr>
+        {content}
+      </Paper>
     </Container>
   );
 }

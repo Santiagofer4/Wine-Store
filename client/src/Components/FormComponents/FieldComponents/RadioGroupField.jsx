@@ -17,7 +17,6 @@ function RadioGroupField({
   ...props
 }) {
   const handleChange = (e) => {
-    // console.log('RADIO CHANGE',form.error)
     console.log(e);
   };
 

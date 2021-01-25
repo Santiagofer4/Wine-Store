@@ -42,16 +42,16 @@ export const productDetailErrorSelector = (state) =>
   state.wineDetail.wineDetail.error;
 
 export const allProductsCartSelector = (state) =>
-  state.productsCart.allProductsCart.list;
+  state.cart.allProductsCart.list;
 
 export const allProductsCartSyncSelector = (state) =>
-  state.productsCart.allProductsCart.sync;
+  state.cart.allProductsCart.sync;
 
 export const allProductsCartStatusSelector = (state) =>
-  state.productsCart.allProductsCart.status;
+  state.cart.allProductsCart.status;
 
 export const allProductsCartErrorSelector = (state) =>
-  state.productsCart.allProductsCart.error;
+  state.cart.allProductsCart.error;
 
 export const allCatsOfProductSelector = (state) =>
   state.categories.allCatsOfProduct.list;
@@ -70,4 +70,37 @@ export const strainsErrorSelector = (state) => state.strains.error;
 
 export const allOrderSelector = (state) => state.orderTable.orderTable.orders;
 
-export const allOrderStatusSelector = (state) => state.orderTable.orderTable.status;
+export const allOrderStatusSelector = (state) =>
+  state.orderTable.orderTable.status;
+
+export const userSelector = (state) => state.user.user.info;
+
+export const usersListSelector = (state) => state.user.user.usersList;
+
+export const userStatusSelector = (state) => state.user.user.status;
+
+export const userLoginStatusSelector = (state) => state.user.user.loginStatus;
+
+export const userErrorSelector = (state) => state.user.user.error;
+
+export const userOrdersSelector = (state) => state.user.user.orders;
+
+export const userOrdersStatusSelector = (state) => state.user.user.status;
+
+export const userOrdersErrorSelector = (state) => state.user.user.error;
+
+export const reviewsListSelector = (state) => state.reviews.reviews.info;
+
+export const reviewsListStatusSelector = (state) => state.reviews.reviews.status;
+
+export const myCartSelector = (state) => state.cart.allProductsCart.orderId;
+
+export const notificationListSelector = (state) => state.notifications.list;
+
+export const tokenSelector = (state) => state.token.inMemoryToken;
+
+export const tryToLoginStatusSelector = (state) => state.token.tryToLoginStatus;
+
+export const checkoutInfoSelector = (state) => state.checkout.checkout;
+
+export const refreshStatusSelector = (state)=> state.token.refreshStatus;

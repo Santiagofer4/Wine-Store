@@ -1,128 +1,182 @@
-import React, { useState } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import React, { useState, useEffect } from 'react';
+import { Formik, Form, Field } from 'formik';
+import {
+  Button,
+  Container,
+  InputAdornment,
+  IconButton,
+} from '@material-ui/core';
+import FormField from '../../FormComponents/FormField';
 import './UserForm.modules.css';
-import { useDispatch } from 'react-redux';
-import { createUser } from '../../../slices/userSlice';
+import { validationSchemaUserRegister } from './userValidations';
+import { useDispatch, useSelector } from 'react-redux';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { createUser, sendEmail } from '../../../slices/userSlice';
 import { useHistory } from 'react-router-dom';
+import {
+  userErrorSelector,
+  userLoginStatusSelector,
+  userSelector,
+} from '../../../selectors/index.js';
 
 function UserForm() {
-    const history = useHistory();
-    const [state, setState] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        birthdate: "",
-        cellphone: "",
-        password: ""
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const [viewPassword, setViewPassword] = useState(false);
+  const status = useSelector(userLoginStatusSelector);
+  const error = useSelector(userErrorSelector);
+  const info = useSelector(userSelector);
+
+  const emptyValues = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    cellphone: '',
+    birthdate: new Date('01/01/2000'),
+    password: '',
+    confirmPassword: '',
+  };
+
+  const handleSubmit = (values, formik) => {
+    const payload = {
+      user: { ...values },
+      formik,
+    };
+    dispatch(createUser(payload));
+  };
+
+  const emailTaken = () => {
+    info.formik.setSubmitting(false);
+    info.formik.setErrors({ email: 'El email ya está registrado' });
+
+    info.formik.setFieldValue('password', '', false);
+    info.formik.setFieldTouched('password', true);
+    info.formik.setFieldValue('confirmPassword', '', false);
+    info.formik.setFieldTouched('confirmPassword', true);
+  };
+
+  useEffect(() => {
+    if (status === 'succeded') {
+      history.push('/welcome');
+      dispatch(
+        sendEmail({ name: info.firstName, email: info.email, type: 'Welcome' })
+      );
+    }
+    if (status === 'failed') {
+      error.message.includes('409') ? emailTaken() : history.push('/failure');
+    }
+  }, [status]);
+
+  const handleReset = (formik) => {
+    //func para resetear el form
+    formik.resetForm({
+      values: { ...emptyValues },
+      errors: { ...emptyValues },
     });
+  };
 
-    const dispatch = useDispatch();
+  const handleClickShowPassword = () => {
+    setViewPassword(!viewPassword);
+  };
 
-    function handleOnChange(e){
-      setState({
-        ...state,
-        [e.target.name]: e.target.value
-      })
-    };
-
-    function handleOnSubmit(e){
-      e.preventDefault();
-      dispatch(createUser(state))
-      .then((payload) => {
-        if (payload.type === "user/register/fulfilled") {history.push('/welcome')}
-        else { history.push('/failure')}
-      }); //En el futuro puede redireccionar a /me
-    };
-
-    return (
-        <div className = "formUser">
-            <form id="form"
-            //action='/users'
-            method='POST'
-        onSubmit={(e) => {
-          handleOnSubmit(e);
-        }}
-        noValidate
-        autoComplete="off"
+  return (
+    <Container className="formUserLogin">
+      <Formik
+        initialValues={emptyValues}
+        // validationSchema={validationSchemaUserRegister}
+        onSubmit={handleSubmit}
       >
-        <TextField
-          className="text__field UserForm__lb"
-          /* id={state.firstName ? 'accepted' : 'error'} */
-          error={!state.firstName}
-          name="firstName"
-          label="Nombre"
-          type="string"
-          required
-          onChange={(e) => {
-            handleOnChange(e);
-          }}
-        />
-        <TextField
-          className="text__field UserForm__lb"
-          /* id={state.lastName ? 'accepted' : 'error'} */
-          error={!state.lastName}
-          name="lastName"
-          label="Apellido"
-          type="string"
-          required
-          onChange={(e) => {
-            handleOnChange(e);
-          }}
-        />
-        <TextField
-          className="text__field UserForm__lb"
-          /* id={state.email ? 'accepted' : 'error'} */
-          error={!state.email}
-          name="email"
-          label="Correo electrónico"
-          type="email"
-          onChange={(e) => {
-            handleOnChange(e);
-          }}
-        />
-        <TextField
-          className="text__field UserForm__lb"
-          /* id={state.birthdate ? 'accepted' : 'error'} */
-          error={!state.birthdate}
-          name="birthdate"
-          label="Fecha de nacimiento"
-          type="date"
-          required
-          onChange={(e) => {
-            handleOnChange(e);
-          }}
-          />
-
-        <TextField
-          className="text__field UserForm__lb"
-          /* id={state.cellphone ? 'accepted' : 'error'} */
-          error={!state.cellphone}
-          name="cellphone"
-          label="Teléfono"
-          type="tel"
-          onChange={(e) => {
-            handleOnChange(e);
-          }}
-        />
-        <TextField
-          className="text__field UserForm__lb"
-          /* id={state.password ? 'accepted' : 'error'} */
-          error={!state.password}
-          name="password"
-          label="Contraseña"
-          type="password"
-          required
-          onChange={(e) => {
-            handleOnChange(e);
-          }}
-        />
-        <div className="center">
-        <Button id="btnUser" type="submit">Registrarse</Button>
-        </div>
-      </form>
-        </div>
-    )
+        {(formik) => (
+          <Container>
+            <Form>
+              {/* <Field>
+                {({ field, meta, form }) => <>{console.log(form)}</>}
+              </Field> */}
+              <FormField
+                fieldType="input"
+                label="Nombre"
+                name="firstName"
+                required
+                className="text__field UserForm__lb"
+              />
+              <FormField
+                fieldType="input"
+                label="Apellido"
+                name="lastName"
+                required
+                className="text__field UserForm__lb"
+              />
+              <FormField
+                fieldType="input"
+                label="Correo Electronico"
+                name="email"
+                required
+                className="text__field UserForm__lb"
+              />
+              <FormField
+                fieldType="datepicker"
+                label="Fecha de Nacimiento"
+                name="birthdate"
+                required
+                className="text__field UserForm__lb"
+                placeholder={'dd/mm/aaaa'}
+              />
+              <FormField
+                fieldType="input"
+                label="Teléfono"
+                name="cellphone"
+                className="text__field UserForm__lb"
+              />
+              <FormField
+                fieldType="input"
+                label="Contraseña"
+                name="password"
+                required
+                className="text__field UserForm__lb"
+                type={viewPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                      >
+                        {viewPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <FormField
+                fieldType="input"
+                label="Repetir Contraseña"
+                name="confirmPassword"
+                required
+                className="text__field UserForm__lb"
+                type="password"
+                type={viewPassword ? 'text' : 'password'}
+              />
+              <br></br>
+              <Container className="center">
+                <Button type="submit" id="btnUser">
+                  Registrarse
+                </Button>
+                <br></br>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => handleReset(formik)}
+                  type="reset"
+                >
+                  RESET
+                </Button>
+              </Container>
+            </Form>
+          </Container>
+        )}
+      </Formik>
+    </Container>
+  );
 }
 
-export default UserForm
+export default UserForm;

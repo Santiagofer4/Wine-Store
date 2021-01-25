@@ -48,8 +48,6 @@ export const deleteProduct = createAsyncThunk(
 export const getProductSearch = createAsyncThunk(
   'product/getProductSearch',
   async (inputSearch) => {
-    //console.log('INPUT SEARCH', inputSearch);
-    //console.log('ENDPOINT', searchProductEndpoint + `${inputSearch}`);
     const resp = await axios.get(searchProductEndpoint + `${inputSearch}`);
     return resp;
   }
@@ -85,6 +83,21 @@ const productsSlice = createSlice({
       if (vinoEncontrado) {
         state.vinoEncontrado = vinoEncontrado;
       }
+    },
+    productPriceLess: (state, action) => {
+      state.allProducts.list = state.allProducts.list.filter((product) => {
+        return product.price <= action.payload
+      })
+    },
+    productPriceBetween : (state, action) => {
+      state.allProducts.list = state.allProducts.list.filter((product) => {
+        return product.price > action.payload.e && product.price < action.payload.f
+      })
+    },
+    productPriceMore: (state, action) => {
+      state.allProducts.list = state.allProducts.list.filter((product) => {
+        return product.price >= action.payload
+      })
     },
   },
   extraReducers: {
@@ -173,6 +186,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const { findWine, addWine } = productsSlice.actions;
+export const { findWine, addWine, productPriceLess, productPriceBetween, productPriceMore } = productsSlice.actions;
 
 export default productsSlice;

@@ -9,7 +9,7 @@ server.post('/', (req, res) => {
   let { id } = req.params;
   let { productId, quantity, price } = req.body;
 
-  if (!productId || id)
+  if (!productId || !id)
     return res.status(400).send('No se puede agregar el producto al carrito');
 
   Order.findAll({
@@ -26,11 +26,9 @@ server.post('/', (req, res) => {
         orderId: order.id,
       },
     }).then((result) => {
-      console.log('RESULT', result);
       const [instance, wasCreated] = result;
     });
   });
-  //con esta orden ir a buscar el orderId
   res.status(200).send('Entré a agregar item al carrito');
 });
 

@@ -6,12 +6,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   strainsStatusSelector,
   allCategoriesStatusSelector,
+  allStrainsSelector,
+  allCategoriesSelector,
 } from '../../../selectors';
 import FormField from '../../FormComponents/FormField';
 import { postNewProduct } from '../../../slices/productSlice';
 
 function LoadProduct(props) {
-  const { tasteOption, strainOption } = props.options;
+  const tasteOption = useSelector(allCategoriesSelector);
+  const strainOption = useSelector(allStrainsSelector);
   const dispatch = useDispatch();
 
   //*valores iniciales del form

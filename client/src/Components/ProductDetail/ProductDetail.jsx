@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   Paper,
@@ -7,15 +7,29 @@ import {
   Card,
   Typography,
   Button,
+  CircularProgress,
 } from '@material-ui/core';
+
+import Pagination from '@material-ui/lab/Pagination';
 import './ProductDetail.modules.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import { postProductToCart, sync } from '../../slices/productsCartSlice';
 import {
-  postProductToCart,
-} from '../../slices/productsCartSlice';
-import { productDetailSelector } from '../../selectors/index';
+  allProductsCartStatusSelector,
+  productDetailSelector,
+  productDetailStatusSelector,
+  reviewsListSelector,
+  reviewsListStatusSelector,
+  userSelector,
+} from '../../selectors/index';
+import Rating from '@material-ui/lab/Rating';
+import Box from '@material-ui/core/Box';
+import ReviewCard from '../Review/ReviewCard';
+import { average, functionCartGuest } from '../utils/index';
+import { useAuthContext } from '../ProtectRoute/authContext';
+import { setWineDetailAsync } from '../../slices/productDetailSlice';
 
 const useStyles = makeStyles({
   root: {
@@ -34,12 +48,29 @@ const useStyles = makeStyles({
   },
 });
 
-function ProductDetail() {
-  const productDetail = useSelector(productDetailSelector);
-  const dispatch = useDispatch();
+function ProductDetail(props) {
+  const authStatus = useAuthContext();
 
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const user = useSelector(userSelector);
+  const detailStatus = useSelector(productDetailStatusSelector);
+  const cartStatus = useSelector(allProductsCartStatusSelector);
+  const productDetail = useSelector(productDetailSelector);
+  const statusProductDetail = useSelector(productDetailStatusSelector);
+  const reviews = useSelector(reviewsListSelector);
+  const reviewStatus = useSelector(reviewsListStatusSelector);
   const history = useHistory();
   const classes = useStyles();
+
+  //let value;
+
+  const [value, setValue] = useState(0); // Rating traer promedio de calificación de base de datos según producto
+  const [page, setPage] = useState(1);
+  const cantidadAMostrar = 2;
+  function handleClick(e, num) {
+    setPage(num);
+  }
 
   const {
     id,
@@ -51,6 +82,28 @@ function ProductDetail() {
     stock,
     categories,
   } = productDetail;
+
+  useEffect(() => {
+    // if (typeof productDetail.id === 'undefined') {
+    //   let fullUrl = location.pathname.split('/');
+    //   let urlId = fullUrl.slice(fullUrl.length - 1);
+    //   dispatch(setWineDetailAsync(urlId));
+    // }
+    if (reviewStatus === 'succeded' && reviews.length !== 0) {
+      let rs = average(reviews);
+      setValue(rs);
+    }
+  }, [reviewStatus]);
+
+  useEffect(() => {
+    if (typeof id === 'undefined') {
+      let fullUrl = location.pathname.split('/');
+      let urlId = fullUrl.slice(fullUrl.length - 1);
+      dispatch(setWineDetailAsync(urlId));
+      // history.push('/catalogue');
+    }
+  }, []);
+
   //* EDITHANDLER, redirect a form para editar producto
   const editHandler = () => {
     // dispatch(wineDetails(productDetail));
@@ -74,11 +127,7 @@ function ProductDetail() {
     );
   };
 
-  // esta funcion debe ser refactorizada
   function handlerProductToCart(userId) {
-    // dispatch(addToCart({ userId, productDetail }));
-    // let e = { id, price, quantity: 1 };
-    // dispatch(postProductsCar({ e, userId: 1 }));
     const payload = {
       id,
       price,
@@ -90,12 +139,59 @@ function ProductDetail() {
     dispatch(postProductToCart(payload));
   }
 
+  function handlerProductToCartGuest(id) {
+    // Carrito de guest en el local storage
+    const payload = {
+      id,
+      price,
+      name: productDetail.name,
+      description: productDetail.description,
+      stock: productDetail.stock,
+      yearHarvest: productDetail.yearHarvest,
+      image: productDetail.image,
+      strainId: productDetail.strainId,
+      quantity: 1,
+    };
+
+    functionCartGuest(payload, null, null);
+    dispatch(sync(false));
+  }
+  let contentRev = [];
+  if (reviews.length > 0) {
+    contentRev = reviews
+      .slice((page - 1) * cantidadAMostrar, page * cantidadAMostrar)
+      .map((review) => {
+        return <ReviewCard data={review} />;
+      });
+    contentRev.push(
+      <div className="Catalogue__Pagination">
+        <Pagination
+          onChange={handleClick}
+          count={Math.ceil(reviews.length / cantidadAMostrar)}
+          variant="outlined"
+          shape="rounded"
+        />
+      </div>
+    );
+  } else {
+    contentRev = null;
+  }
+
+  if (reviewStatus === 'loading' || detailStatus === 'loading') {
+    return (
+      <div className="ProductDetail__containerCargando">
+        <h3>Cargando....</h3>
+        <CircularProgress />
+      </div>
+    );
+  }
+
   return (
     <Container id="pageContainer" className="ProductDetail__Container">
       <Paper id="paper" className="ProductDetail__Paper">
-        <Container id="imgContainer">
+        <div id="imgContainer">
           <img id="prodImg" src={image} alt={`imagen del vino ${name}`} />
-        </Container>
+        </div>
         <Card id="detailsContainer" className={classes.root} variant="outlined">
           <CardContent className="ProdDetail__CardText">
             <Typography
@@ -108,9 +204,6 @@ function ProductDetail() {
             <Typography variant="h5" component="h2">
               {name}
             </Typography>
-            <Typography variant="h5" component="h2">
-              Codigo #{id}
-            </Typography>
             <Typography className={classes.pos} color="textSecondary">
               {categories}
             </Typography>
@@ -120,6 +213,10 @@ function ProductDetail() {
             <Typography variant="body2" component="p">
               {description}
             </Typography>
+            <Box component="fieldset" mt={3} borderColor="transparent">
+              <Rating value={value} readOnly />{' '}
+              <div>{reviews.length} reviews</div>
+            </Box>
           </CardContent>
 
           <CardActions id="buttons">
@@ -136,29 +233,37 @@ function ProductDetail() {
               ></img>
               VOLVER
             </Button>
-            <Button size="small" onClick={editHandler}>
-              {' '}
-              <img
-                id="editImage"
-                src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"
-                alt="editBtn"
-              ></img>
-              {/* <i class="fa fa-pencil-square-o" aria-hidden="true"></i> */}
-              EDITAR
-            </Button>
+            {user && user.isAdmin ? (
+              <>
+                <Button size="small" onClick={editHandler}>
+                  {' '}
+                  <img
+                    id="editImage"
+                    src="https://download.tomtom.com/open/manuals/TomTom_GO_PREMIUM/html/es-mx/reordericons.png"
+                    alt="editBtn"
+                  ></img>
+                  {/* <i class="fa fa-pencil-square-o" aria-hidden="true"></i> */}
+                  EDITAR
+                </Button>
+              </>
+            ) : null}
             {stock === 0 ? (
               <h3>No hay STOCK</h3>
             ) : (
               <Button
                 id="Button__Buy"
                 onClick={() => {
-                  handlerProductToCart(1);
+                  authStatus
+                    ? handlerProductToCart(user.id)
+                    : handlerProductToCartGuest(id);
                 }}
+                disabled={cartStatus === 'loading' ? true : false}
               >
                 Comprar
               </Button>
             )}
           </CardActions>
+          {contentRev}
         </Card>
       </Paper>
     </Container>

@@ -1,7 +1,12 @@
 import React from 'react';
 import { Button, Container } from '@material-ui/core';
+import { userSelector } from '../../../selectors';
+import { useSelector } from 'react-redux';
+import { useAuthContext } from '../../ProtectRoute/authContext';
 
 function CartItem(props) {
+  const authStatus = useAuthContext();
+  const user = useSelector(userSelector);
   const { id, image, name, price, quantity, stock } = props.prod;
   const {
     deleteItemHandler,
@@ -28,13 +33,17 @@ function CartItem(props) {
             <a href="#" className="Cart__DeleteProduct">
               <i
                 class="fas fa-trash-alt"
-                onClick={(e) => deleteItemHandler({ id, userId: 1 })}
+                onClick={
+                  authStatus
+                    ? (e) => deleteItemHandler({ id, userId: user.id, name })
+                    : (e) => deleteItemHandler({ id, name })
+                }
               ></i>
             </a>
             <Button
               name={id}
               className="button"
-              onClick={(e) => decrementHandler(e, price, quantity)}
+              onClick={(e) => decrementHandler(e, props.prod)}
             >
               -
             </Button>
@@ -42,7 +51,7 @@ function CartItem(props) {
             <Button
               name={id}
               className="button"
-              onClick={(e) => incrementHandler(e, price, quantity, stock)}
+              onClick={(e) => incrementHandler(e, props.prod)}
             >
               +
             </Button>

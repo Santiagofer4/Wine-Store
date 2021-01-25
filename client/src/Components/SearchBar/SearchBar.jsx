@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import './SearchBar.modules.css';
-import { useHistory} from 'react-router-dom';
-import { useDispatch} from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { getProductSearch } from '../../slices/productSlice';
- 
-function SearchBar(props) {
+
+function SearchBar() {
   const [inputSearch, setInputSearch] = useState('');
 
   const history = useHistory();
@@ -14,9 +14,12 @@ function SearchBar(props) {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    if (inputSearch.length === 0 || inputSearch.trim().length === 0) {
+      return;
+    }
     dispatch(getProductSearch(inputSearch));
     history.push(`/catalogue`);
-    };
+  };
 
   return (
     <div className="searchBar">
@@ -41,7 +44,6 @@ function SearchBar(props) {
     </div>
   );
 }
-
 
 export default SearchBar;
 

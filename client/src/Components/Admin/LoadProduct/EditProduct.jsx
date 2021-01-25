@@ -8,10 +8,12 @@ import {
   strainsStatusSelector,
   productDetailStatusSelector,
   wineDetailSelector,
+  userSelector,
 } from '../../../selectors';
 import FormField from '../../FormComponents/FormField';
 import { validationSchemaLoadProducts } from '../adminValidations';
 import { deleteProduct, updateProduct } from '../../../slices/productSlice';
+import userSlice from '../../../slices/userSlice';
 
 function EditProduct(props) {
   const { strainOption, tasteOption } = props.options; //opciones para los dropdown
@@ -22,6 +24,7 @@ function EditProduct(props) {
   const strainStatus = useSelector(strainsStatusSelector);
   const wineDetail = useSelector(wineDetailSelector);
   const wineDetailStatus = useSelector(productDetailStatusSelector);
+  const user = useSelector(userSelector);
 
   let content;
 
@@ -53,6 +56,10 @@ function EditProduct(props) {
         stock: values.stock,
         image: values.image,
         categories: [values.taste1, values.taste2, values.taste3],
+      },
+      user: {
+        id: user.id,
+        isAdmin: user.isAdmin,
       },
       emptyValues,
       formik,
@@ -138,7 +145,7 @@ function EditProduct(props) {
                 label="Cepa"
                 name="strain"
                 options={strainOption}
-                value={editValues.strain}
+                // value={editValues.strain}
               />
               <FormField
                 fieldType="input"
